@@ -1,0 +1,9 @@
+OpenCode Math Copilot
+
+The generated file `.opencode/plugins/math-toolkit/data/math-index.json` is derived from the OpenAI math repository:
+
+  https://github.com/openai/math
+
+That repository is licensed under the Apache License, Version 2.0. The full license text is included in `LICENSE`.
+
+The plugin code, index builder, tests, skill, and command in this repository are provided under the Apache License, Version 2.0.
