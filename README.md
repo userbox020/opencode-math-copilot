@@ -144,7 +144,7 @@ The benchmark compares the same prompts with and without the plugin on a cheap m
 
 - `opencode plugin add` accepts npm or Git package specs, not local directories/tarballs. For local use, keep the plugin under `.opencode/plugins/`.
 - `npm pack --dry-run` verifies the package contents.
-- `RELEASING.md` documents the npm publish flow. npm authentication is the only external gate.
+- `RELEASING.md` documents the npm publish flow. The registry currently requires an OTP or a granular token with bypass 2FA; the built tarball is ready.
 
 ## Limitations
 

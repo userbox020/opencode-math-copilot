@@ -32,16 +32,26 @@ complete `.opencode/plugins/math-toolkit/` implementation and prebuilt index,
 CI performs these checks on Node 24, on Linux and Windows, without installing
 Lean, SymPy, or the math corpus.
 
-npm authentication is currently missing on the preparation machine. Publishing
-(including authentication) is the only remaining external release step; no
-publish is performed by CI. An authorized maintainer can run:
+The preparation machine is authenticated as `userbox020`, but the npm registry
+requires **two-factor authentication** for publishing. A direct
+`npm publish --access public` returns:
 
-```sh
-npm login
-npm publish --access public
+```text
+403 Forbidden — Two-factor authentication or granular access token with bypass
+2FA is required to publish packages.
 ```
 
-After publication, users can install the released version with:
+No publish is performed by CI. An authorized maintainer can run one of:
+
+```sh
+npm publish --access public --otp=<current-6-digit-code>
+```
+
+or configure a granular access token with publish permission and bypass 2FA,
+then use it as `NPM_TOKEN`.
+
+The GitHub release `v0.1.0` is available even while npm publishing is gated.
+After npm publication, users can install the released version with:
 
 ```sh
 opencode plugin add opencode-math-copilot@<version>

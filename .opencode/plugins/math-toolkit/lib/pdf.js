@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { mathPath, relativeMath, safePath } from "./paths.js";
 
 const MAX_BYTES = 80 * 1024 * 1024;
@@ -77,21 +78,61 @@ function parsePages(value, total) {
   return { pages: [...pages], capped: false };
 }
 
+async function loadPdfEngine() {
+  try {
+    const direct = await import("unpdf");
+    if (direct.getDocumentProxy) return direct;
+  } catch { /* Try local package locations below. */ }
+  const here = path.dirname(fileURLToPath(import.meta.url));
+  const roots = [
+    path.resolve(here, "..", "..", "..", "node_modules", "unpdf"),
+    path.resolve(here, "..", "..", "..", "..", "node_modules", "unpdf"),
+  ];
+  for (const root of roots) {
+    // Prefer the bundled PDF.js entry: it has no "unpdf/pdfjs" self-reference.
+    const bundle = path.join(root, "dist", "pdfjs.mjs");
+    if (fs.existsSync(bundle)) {
+      try {
+        const engine = await import(pathToFileURL(bundle).href);
+        if (engine.getDocument) return engine;
+      } catch { /* Try the package entry next. */ }
+    }
+    const index = path.join(root, "dist", "index.mjs");
+    if (fs.existsSync(index)) {
+      try {
+        const engine = await import(pathToFileURL(index).href);
+        if (engine.getDocumentProxy) return engine;
+      } catch { /* Try the next location. */ }
+    }
+  }
+  return null;
+}
+
 export async function pdfText(roots, args = {}) {
   const { path: requested, pages, maxChars = 12000 } = args;
   if (!Number.isInteger(maxChars) || maxChars < 1000 || maxChars > 50000) return "PDF extraction error: maxChars must be an integer between 1000 and 50000.";
-  let getDocumentProxy;
-  try {
-    ({ getDocumentProxy } = await import("unpdf"));
-  } catch {
-    return "PDF extraction error: the `unpdf` package is not installed. Run `npm install` in the repo root, then reload the plugin.";
+  const engine = await loadPdfEngine();
+  if (!engine) {
+    return "PDF extraction error: the `unpdf` package is not installed. Run `npm install` in the repo root (or `.opencode`), then reload the plugin.";
   }
   let pdf;
+  let destroyPdf;
   try {
     if (typeof requested !== "string" || !requested.trim()) throw new Error("Provide a PDF path relative to math/, a preprint directory, or a unique title substring.");
     const filename = resolvePdf(roots, requested);
     if (fs.statSync(filename).size > MAX_BYTES) throw new Error("PDF exceeds the 80 MB extraction limit. Provide a smaller PDF.");
-    pdf = await getDocumentProxy(new Uint8Array(fs.readFileSync(filename)));
+    const data = new Uint8Array(fs.readFileSync(filename));
+    if (engine.getDocumentProxy) {
+      pdf = await engine.getDocumentProxy(data);
+      destroyPdf = async () => {
+        if (typeof pdf.destroy === "function") await pdf.destroy();
+        else if (pdf.loadingTask?.destroy) await pdf.loadingTask.destroy();
+      };
+    } else {
+      const task = engine.getDocument({ data });
+      pdf = await task.promise;
+      destroyPdf = async () => task.destroy();
+    }
     const selection = parsePages(pages, pdf.numPages);
     let output = `# PDF text: ${relativeMath(roots, filename)}\n\nPDF pages: ${pdf.numPages}. Selected pages: ${selection.pages.join(", ")}. Text extraction only; no OCR.\n`;
     if (selection.capped) output += "\n[Page selection capped at 50 pages; request remaining pages separately.]\n";
@@ -117,10 +158,6 @@ export async function pdfText(roots, args = {}) {
     }
     return clipOutput(`PDF extraction error: ${message}`, maxChars);
   } finally {
-    if (pdf) {
-      // unpdf 2.1 exposes destruction on loadingTask, not on the proxy.
-      if (typeof pdf.destroy === "function") await pdf.destroy();
-      else await pdf.loadingTask.destroy();
-    }
+    if (destroyPdf) await destroyPdf();
   }
 }
