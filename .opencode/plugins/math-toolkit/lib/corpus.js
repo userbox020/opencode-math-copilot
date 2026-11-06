@@ -139,7 +139,7 @@ export function grepCorpus(roots, { query, path: requested = "preprints", glob =
   if (excluded(relative)) return "This path is excluded from text searches (generated, dependency, or sensitive files).";
   if (fs.statSync(target).isFile() && fs.statSync(target).size > MAX_FILE) return "File exceeds the 2 MB search limit.";
   const options = { query, glob, literal, limit, context };
-  const rg = findExecutable("rg");
+  const rg = process.env.MATH_TOOLKIT_DISABLE_RG ? null : findExecutable("rg");
   if (!rg || /\.(cmd|bat)$/i.test(rg)) return grepFallback(roots, target, options);
   const args = ["--json", "--no-config", "--color", "never", "--max-filesize", "2M", "--max-count", String(limit + 1), "--context", String(context), "--glob", glob];
   for (const pattern of EXCLUSIONS) args.push("--iglob", "!" + pattern);

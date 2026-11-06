@@ -2,5 +2,7 @@ math/
 node_modules/
 .opencode/node_modules/
 .opencode/package-lock.json
+.opencode/state/
+bench/results/
 *.log
 .DS_Store

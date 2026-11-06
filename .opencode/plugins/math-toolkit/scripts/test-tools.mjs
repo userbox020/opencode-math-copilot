@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
+import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import plugin from "../../math-toolkit.js";
 import { createSearch } from "../lib/search.js";
@@ -41,7 +42,7 @@ await plugin.setup({
     },
   },
 });
-assert.equal(tools.size, 8);
+assert.equal(tools.size, 11);
 
 const call = async (name, args = {}) => {
   const result = await tools.get(name).execute(args, {});
@@ -75,6 +76,37 @@ if (corpusAvailable) {
   console.log("SKIP: math/ corpus clone not present; skipping manuscript/section/grep tests.");
 }
 
+const leanAvailable = fs.existsSync(path.join(workspace, "math", "lean"));
+if (leanAvailable) {
+  const lean = await call("math_lean_search", { query: "linearizedMA_critical_density", limit: 5 });
+  assert(lean.includes("linearizedMA_critical_density"), lean);
+  assert(lean.includes("ABPCriticalDensity.lean"), lean);
+} else {
+  console.log("SKIP: math/lean not present; skipping Lean declaration search test.");
+}
+
+const pdfAvailable = fs.existsSync(path.join(workspace, "math", "overview.pdf"));
+if (pdfAvailable) {
+  const pdf = await call("math_pdf_text", { path: "overview.pdf", pages: "1", maxChars: 2000 });
+  assert(pdf.includes("## Page 1"), pdf);
+  assert(pdf.length > 100, pdf);
+} else {
+  console.log("SKIP: math/overview.pdf not present; skipping PDF extraction test.");
+}
+
+const python = findExecutable("python") || findExecutable("python3");
+const sympyAvailable = Boolean(python) && spawnSync(python, ["-c", "import sympy"], { encoding: "utf8" }).status === 0;
+if (sympyAvailable) {
+  const simplify = await call("math_compute", { operation: "simplify", expression: "sin(x)^2 + cos(x)^2" });
+  assert(simplify.includes("Result: 1"), simplify);
+  const det = await call("math_compute", { operation: "det", matrix: [[1, 2], [3, 4]] });
+  assert(det.includes("Result: -2"), det);
+  const rejected = await call("math_compute", { operation: "simplify", expression: "__import__('os')" });
+  assert(/SymPy error|forbidden|Unknown|allowlist/i.test(rejected), rejected);
+} else {
+  console.log("SKIP: Python/SymPy not present; skipping math_compute tests.");
+}
+
 assert.match(await call("math_manuscript", { path: "../README.md" }), /traversal/i);
 assert.match(await call("math_grep", { query: "test", path: "../" }), /traversal/i);
 assert.match(await call("math_lean_check", { file: "../README.lean" }), /traversal/i);
@@ -91,8 +123,12 @@ assert(status.includes("Lean toolchain:"));
 assert.equal(findExecutable("definitely-not-a-math-tool", { PATH: "" }), null);
 
 const originalPath = process.env.PATH;
+const originalDisableRg = process.env.MATH_TOOLKIT_DISABLE_RG;
+const originalDisableExtras = process.env.MATH_TOOLKIT_DISABLE_EXTRAS;
 try {
   process.env.PATH = "";
+  process.env.MATH_TOOLKIT_DISABLE_RG = "1";
+  process.env.MATH_TOOLKIT_DISABLE_EXTRAS = "1";
   if (corpusAvailable) {
     const fallback = await call("math_grep", grepArgs);
     assert(fallback.includes("Node fallback:"), fallback);
@@ -106,6 +142,10 @@ try {
 } finally {
   if (originalPath === undefined) delete process.env.PATH;
   else process.env.PATH = originalPath;
+  if (originalDisableRg === undefined) delete process.env.MATH_TOOLKIT_DISABLE_RG;
+  else process.env.MATH_TOOLKIT_DISABLE_RG = originalDisableRg;
+  if (originalDisableExtras === undefined) delete process.env.MATH_TOOLKIT_DISABLE_EXTRAS;
+  else process.env.MATH_TOOLKIT_DISABLE_EXTRAS = originalDisableExtras;
 }
 
 if (corpusAvailable) {

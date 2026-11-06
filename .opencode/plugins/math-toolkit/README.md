@@ -7,10 +7,12 @@ A project-local OpenCode math copilot using the bundled `math/` clone of `openai
 - Node.js 24.
 - OpenCode 2.0.29+ with the V2 plugin API. The entry point uses `Plugin.define` from `@opencode/plugin`; V1 plugin implementations do not run in OpenCode 2.x.
 - `@opencode/plugin@2.0.29` available from the repo's `npm install` (OpenCode also provides it at runtime).
-- A clone of `openai/math` at `math/` for manuscript reads, grep, and the Lean tools. The prebuilt index makes `math_search` usable without it.
-- Optional: elan with the pinned Lean/Lake toolchain; Comparator, landrun, and lean4export for challenge checks; LaTeX for document builds; Python/SymPy for computations.
+- A clone of `openai/math` at `math/` for manuscript reads, grep, PDF extraction, Lean search, and the Lean tools. The prebuilt index makes `math_search` usable without it.
+- `npm install` installs `unpdf` for PDF extraction.
+- Recommended: `ripgrep` (`rg`) for fast Lean declaration search. Without it, a bounded Node fallback is used.
+- Optional: elan with the pinned Lean/Lake toolchain; Comparator, landrun, and lean4export on Linux/WSL for challenge checks; LaTeX for document builds; Python 3 + SymPy for computations.
 
-Lean, Lake, Comparator, and LaTeX are optional. Missing prerequisites must be reported, not treated as successful verification. Run `math_status` for current availability.
+Lean, Lake, Comparator, and LaTeX are optional. Missing prerequisites must be reported, not treated as successful verification. Run `math_status` for current availability. Native Windows Lean builds can be blocked by an NTFS-invalid path in the pinned dependency set; see the root `README.md` and `docs/comparator-wsl.md`.
 
 ## Install / verify
 
@@ -33,6 +35,9 @@ Confirm the project-local plugin appears in the list, then use `math_status` in 
 | `math_grep` | Search TeX, Markdown, and Lean text under `math/`. |
 | `math_lean_check` | Type-check a Lean 4 snippet or file with `lake env lean`. |
 | `math_lean_build` | Build a focused Lake target such as `OAI.Analysis`. |
+| `math_lean_search` | Search declaration lines in `math/lean` and Mathlib by name or regex. |
+| `math_pdf_text` | Extract bounded text from a manuscript PDF (no OCR). |
+| `math_compute` | Restricted SymPy operations over allowlisted expressions/matrices. |
 | `math_comparator` | Run an existing Comparator challenge JSON. |
 | `math_status` | Report index counts and toolchain availability. |
 | `math_reindex` | Rebuild the manuscript index after `math/` changes. |
@@ -53,7 +58,8 @@ Restart OpenCode or reload the project session after rebuilding so the active pl
 
 1. Ask: “Use `math_search` to find manuscripts about concentration inequalities.”
 2. Choose a returned manuscript identifier and ask: “Use `math_manuscript` to read its outline, then only the section containing the relevant theorem.”
-3. Ask: “Use `math_lean_check` to check this Lean snippet.”
+3. If the TeX source is missing, ask: “Use `math_pdf_text` on this preprint directory, pages 1–3.”
+4. Ask: “Use `math_lean_search` for `linearizedMA_critical_density`, then `math_lean_check` this snippet.”
 
    ```lean
    import Mathlib
@@ -61,6 +67,8 @@ Restart OpenCode or reload the project session after rebuilding so the active pl
    ```
 
 Report the actual check result, or the missing-toolchain error. This snippet checks only its stated identity, not the manuscript's theorem.
+
+For symbolic work, use `math_compute` (for example `simplify sin(x)^2+cos(x)^2` or `det [[1,2],[3,4]]`). It is not a general Python executor.
 
 ## Limitations
 

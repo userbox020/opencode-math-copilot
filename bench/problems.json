@@ -1,0 +1,18 @@
+[
+  {
+    "id": "quasi-riemann",
+    "prompt": "In the local openai/math corpus, identify the three-digit family number for the quasi-Riemann hypothesis and whether its results are formalized in Lean. Give a paper title and cite the corpus catalog or Lean documentation. Use available retrieval tools; do not modify files or install anything.",
+    "keywords": ["003"],
+    "anyKeywords": ["formalized", "The Quasi-Riemann Hypothesis: A Zero-Free Half-Plane"]
+  },
+  {
+    "id": "landau-siegel",
+    "prompt": "Find the paper titled Uniform exclusion of Landau–Siegel zeros in the local openai/math corpus. Report its three-digit family number and Lean status (formalized or not formalized), citing the relevant corpus or Lean documentation. Use available retrieval tools; do not modify files or install anything.",
+    "keywords": ["003", "formalized"]
+  },
+  {
+    "id": "computation",
+    "prompt": "Simplify sin(x)^2+cos(x)^2 for real x and compute det([[1,2],[3,4]]). State both results with a brief justification. Do not modify files or install anything.",
+    "keywords": ["1", "-2"]
+  }
+]

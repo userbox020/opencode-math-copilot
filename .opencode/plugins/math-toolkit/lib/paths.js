@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 
 export const REBUILD = "Rebuild with `node .opencode/plugins/math-toolkit/scripts/build-index.mjs` from the workspace root, then reload/restart the plugin.";
@@ -58,7 +59,38 @@ export function findExecutable(name, env = process.env) {
   const pathValue = env.PATH ?? env.Path ?? "";
   const extensions = windows ? (env.PATHEXT || ".COM;.EXE;.BAT;.CMD").split(";") : [""];
   const names = windows && !path.extname(name) ? extensions.map(ext => name + ext.toLowerCase()) : [name];
-  for (const directory of pathValue.split(path.delimiter).filter(Boolean)) {
+  const home = env.USERPROFILE || os.homedir();
+  const local = env.LOCALAPPDATA || (windows ? path.join(home, "AppData", "Local") : "");
+  const allowExtras = !env.MATH_TOOLKIT_DISABLE_EXTRAS;
+  // The OpenCode server may have started before elan/ripgrep/cargo updated PATH.
+  const extras = allowExtras ? [
+    path.join(home, ".elan", "bin"),
+    path.join(home, ".cargo", "bin"),
+    local && path.join(local, "Microsoft", "WinGet", "Links"),
+    env.ProgramFiles && path.join(env.ProgramFiles, "ripgrep"),
+    env.ProgramFiles && path.join(env.ProgramFiles, "nodejs"),
+  ].filter(Boolean) : [];
+  // WinGet package installs are not always linked into PATH.
+  if (allowExtras && name === "rg" && local) {
+    const packages = path.join(local, "Microsoft", "WinGet", "Packages");
+    try {
+      for (const entry of fs.readdirSync(packages)) {
+        if (!/ripgrep/i.test(entry)) continue;
+        const base = path.join(packages, entry);
+        for (const child of fs.readdirSync(base)) extras.push(path.join(base, child));
+      }
+    } catch { /* WinGet may not be installed. */ }
+  }
+  // User-level Python installs are common on Windows and may be absent from
+  // the server process PATH.
+  if (allowExtras && local) {
+    const pythonRoot = path.join(local, "Programs", "Python");
+    try {
+      for (const entry of fs.readdirSync(pythonRoot)) extras.push(path.join(pythonRoot, entry));
+    } catch { /* Optional. */ }
+  }
+  const directories = [...new Set([...pathValue.split(path.delimiter), ...extras].filter(Boolean))];
+  for (const directory of directories) {
     for (const filename of names) {
       const candidate = path.resolve(directory.replace(/^"|"$/g, ""), filename);
       try {
