@@ -21,9 +21,6 @@ export function rejectTraversal(value) {
 export function safePath(root, value = "") {
   rejectTraversal(value);
   const normalized = slash(value);
-  if (process.platform !== "win32" && path.win32.isAbsolute(normalized)) {
-    throw new Error("Absolute Windows paths are not allowed on this platform.");
-  }
   const base = path.resolve(root);
   const candidate = path.resolve(base, normalized);
   if (!inside(base, candidate)) throw new Error(`Path must stay inside ${base}.`);
