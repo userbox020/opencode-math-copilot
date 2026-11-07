@@ -30,6 +30,7 @@
     "bench": "node bench/run.mjs",
     "check": "node scripts/check-syntax.mjs",
     "index": "node .opencode/plugins/math-toolkit/scripts/build-index.mjs",
+    "index:lean": "node .opencode/plugins/math-toolkit/scripts/build-lean-index.mjs",
     "test": "node .opencode/plugins/math-toolkit/scripts/test-tools.mjs"
   },
   "devDependencies": {

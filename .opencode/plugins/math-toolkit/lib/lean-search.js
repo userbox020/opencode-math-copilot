@@ -1,15 +1,66 @@
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import { gunzipSync } from "node:zlib";
 import { clip, fence } from "./format.js";
-import { findExecutable, mathPath, relativeMath, safePath, slash } from "./paths.js";
+import { findExecutable, inside, mathPath, relativeMath, safePath, slash } from "./paths.js";
 
-const DECLARATION = /^\s*(?:@\[[^\]]*\]\s*)*(?:private\s+|protected\s+|noncomputable\s+|partial\s+|unsafe\s+)*(theorem|lemma|def|abbrev|class|structure|inductive|instance)\s+([A-Za-z0-9_'.]+)/;
+export const DECLARATION = /^\s*(?:@\[[^\]]*\]\s*)*(?:private\s+|protected\s+|noncomputable\s+|partial\s+|unsafe\s+)*(theorem|lemma|def|abbrev|class|structure|inductive|instance)\s+([A-Za-z0-9_'.]+)/;
 const KINDS = new Set(["theorem", "lemma", "def", "abbrev", "class", "structure", "inductive", "instance", "all"]);
 const MAX_FILE = 2 * 1024 * 1024;
 const MAX_FILES = 30000;
 const MAX_BYTES = 200 * 1024 * 1024;
 const MAX_ENTRIES = 300000;
+const INDEX_FILE = fileURLToPath(new URL("../data/lean-index.json.gz", import.meta.url));
+let cachedIndex;
+
+function indexSearch(roots, targets, { query, kind, literal, limit, context }) {
+  if (!cachedIndex) {
+    const index = JSON.parse(gunzipSync(fs.readFileSync(INDEX_FILE)).toString("utf8"));
+    if (index.version !== 1 || !Array.isArray(index.files)) throw new Error("Unsupported Lean index format.");
+    cachedIndex = index;
+  }
+  const needle = query.toLowerCase();
+  const regex = literal ? null : new RegExp(query, "i");
+  const matches = [];
+  for (const file of cachedIndex.files) {
+    const filename = path.resolve(roots.math, file.path);
+    if (!targets.some(target => inside(target.directory, filename))) continue;
+    for (const declaration of file.declarations) {
+      if (kind !== "all" && declaration.kind !== kind) continue;
+      if (literal ? declaration.name.toLowerCase().includes(needle) : regex.test(declaration.name)) {
+        matches.push({ ...declaration, path: file.path });
+      }
+    }
+  }
+  const compare = (a, b) => a < b ? -1 : a > b ? 1 : 0;
+  matches.sort((a, b) => compare(a.name, b.name) || compare(a.path, b.path) || a.line - b.line);
+  const hits = [];
+  let skipped = 0, outputSize = 0, truncated = "";
+  for (const match of matches) {
+    let lines;
+    try {
+      const filename = safePath(roots.math, match.path);
+      if (fs.statSync(filename).size > MAX_FILE) { skipped++; continue; }
+      lines = fs.readFileSync(filename, "utf8").split(/\r?\n/);
+      const declaration = DECLARATION.exec(lines[match.line - 1] || "");
+      if (!declaration || declaration[1] !== match.kind || declaration[2] !== match.name) { skipped++; continue; }
+    } catch { skipped++; continue; }
+    const snippet = [clip(lines[match.line - 1], 500)];
+    for (let j = match.line; j < lines.length && snippet.length <= context; j++) {
+      if (lines[j].trim()) snippet.push(clip(lines[j], 500));
+    }
+    const hit = `### ${match.kind} ${match.name}\n- Source: \`${match.path}:${match.line}\`\n\n${fence(snippet.join("\n"), "lean")}`;
+    if (outputSize + hit.length > 58000) { truncated = "output cap (~60,000 characters)"; break; }
+    hits.push(hit);
+    outputSize += hit.length + 2;
+    if (hits.length >= limit) { truncated = `result limit (${limit}); more matches may exist`; break; }
+  }
+  const status = "Precomputed Lean index: project sources only; .lake dependencies are not indexed.";
+  const skippedNote = skipped ? ` Skipped ${skipped} stale, missing, oversized, or unsafe entries; rebuild with npm run index:lean.` : "";
+  return clip(`${status}${skippedNote}${truncated ? `\nTruncated: ${truncated}.` : ""}\n\n${hits.length ? hits.join("\n\n") : "No Lean declarations found."}`, 60000);
+}
 
 function excluded(filename, defaultRoot) {
   const name = slash(filename);
@@ -210,6 +261,11 @@ export function searchLean(roots, args = {}) {
       const result = rgSearch(roots, targets, { query, kind, literal, limit, context, rg });
       if (result !== null) return clip(result, 60000);
     }
-    return nodeSearch(roots, targets, { query, kind, literal, limit, context });
+    try {
+      return indexSearch(roots, targets, { query, kind, literal, limit, context });
+    } catch (error) {
+      const note = error.code === "ENOENT" ? "Lean declaration index is missing" : `Lean declaration index could not be loaded: ${error.message}`;
+      return clip(`${note}. Rebuild with npm run index:lean. Using bounded Node walk.\n\n${nodeSearch(roots, targets, { query, kind, literal, limit, context })}`, 60000);
+    }
   } catch (error) { return clip(`Lean search error: ${error.message}`, 60000); }
 }
