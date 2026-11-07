@@ -24,6 +24,15 @@ function indexSearch(roots, targets, { query, kind, literal, limit, context }) {
   const needle = query.toLowerCase();
   const regex = literal ? null : new RegExp(query, "i");
   const matches = [];
+  // The precomputed index covers the real project tree. If the caller points
+  // at a fixture or another tree, the indexed relative paths will not exist on
+  // disk; let searchLean use the bounded Node walk instead.
+  let candidate = null;
+  for (const file of cachedIndex.files) {
+    const filename = path.resolve(roots.math, file.path);
+    if (targets.some(target => inside(target.directory, filename))) { candidate = filename; break; }
+  }
+  if (!candidate || !fs.existsSync(candidate)) return null;
   for (const file of cachedIndex.files) {
     const filename = path.resolve(roots.math, file.path);
     if (!targets.some(target => inside(target.directory, filename))) continue;
@@ -261,11 +270,15 @@ export function searchLean(roots, args = {}) {
       const result = rgSearch(roots, targets, { query, kind, literal, limit, context, rg });
       if (result !== null) return clip(result, 60000);
     }
+    let indexNote = "";
     try {
-      return indexSearch(roots, targets, { query, kind, literal, limit, context });
+      const indexed = indexSearch(roots, targets, { query, kind, literal, limit, context });
+      if (indexed !== null) return clip(indexed, 60000);
     } catch (error) {
-      const note = error.code === "ENOENT" ? "Lean declaration index is missing" : `Lean declaration index could not be loaded: ${error.message}`;
-      return clip(`${note}. Rebuild with npm run index:lean. Using bounded Node walk.\n\n${nodeSearch(roots, targets, { query, kind, literal, limit, context })}`, 60000);
+      indexNote = error.code === "ENOENT"
+        ? "Lean declaration index is missing. Rebuild with npm run index:lean."
+        : `Lean declaration index could not be loaded: ${error.message}`;
     }
+    return clip(`${indexNote ? `${indexNote}\n\n` : ""}${nodeSearch(roots, targets, { query, kind, literal, limit, context })}`, 60000);
   } catch (error) { return clip(`Lean search error: ${error.message}`, 60000); }
 }

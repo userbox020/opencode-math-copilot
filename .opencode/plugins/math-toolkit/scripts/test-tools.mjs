@@ -88,12 +88,20 @@ if (leanAvailable) {
 }
 
 // Always exercise fixture roots, including on local workspaces with the corpus.
-const fixtureLean = searchLean({ math: path.join(workspace, "test/fixtures/math"), workspace }, {
-  query: "fixture_theorem_one", path: "lean",
-});
-assert(fixtureLean.includes("fixture_theorem_one"), fixtureLean);
-assert(fixtureLean.includes("theorem"), fixtureLean);
-assert(fixtureLean.includes("Sample.lean"), fixtureLean);
+// Force the non-rg path so this covers the precomputed-index coverage check.
+const fixtureDisableRg = process.env.MATH_TOOLKIT_DISABLE_RG;
+try {
+  process.env.MATH_TOOLKIT_DISABLE_RG = "1";
+  const fixtureLean = searchLean({ math: path.join(workspace, "test/fixtures/math"), workspace }, {
+    query: "fixture_theorem_one", path: "lean",
+  });
+  assert(fixtureLean.includes("fixture_theorem_one"), fixtureLean);
+  assert(fixtureLean.includes("theorem"), fixtureLean);
+  assert(fixtureLean.includes("Sample.lean"), fixtureLean);
+} finally {
+  if (fixtureDisableRg === undefined) delete process.env.MATH_TOOLKIT_DISABLE_RG;
+  else process.env.MATH_TOOLKIT_DISABLE_RG = fixtureDisableRg;
+}
 
 const pdfAvailable = fs.existsSync(path.join(workspace, "math", "overview.pdf"));
 if (pdfAvailable) {
