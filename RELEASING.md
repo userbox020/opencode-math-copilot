@@ -27,30 +27,44 @@ npm pack --dry-run
 
 Confirm the package includes `index.js`, `.opencode/plugins/math-toolkit.js`, the
 complete `.opencode/plugins/math-toolkit/` implementation and prebuilt index,
-`.opencode/skills/`, `.opencode/commands/`, `docs/`, `scripts/setup-lean.ps1`,
-`README.md`, `LICENSE`, and `NOTICE`.
+`.opencode/skills/`, `.opencode/commands/`, `docker/`, `docs/`,
+`scripts/lean-docker.ps1`, `scripts/setup-lean.ps1`, `README.md`, `LICENSE`, and
+`NOTICE`.
 CI performs these checks on Node 24, on Linux and Windows, without installing
 Lean, SymPy, or the math corpus.
 
-The preparation machine is authenticated as `userbox020`, but the npm registry
-requires **two-factor authentication** for publishing. A direct
-`npm publish --access public` returns:
+### GitHub Actions publishing
 
-```text
-403 Forbidden — Two-factor authentication or granular access token with bypass
-2FA is required to publish packages.
-```
+Configure the repository's GitHub Actions secret `NPM_TOKEN` with an npm
+**granular access token with publish permission and bypass 2FA** (or an automation
+token). The workflow fails explicitly if the secret is missing.
 
-No publish is performed by CI. An authorized maintainer can run one of:
+1. Bump the version in `package.json` and `package-lock.json`, then commit the change.
+2. Tag that commit as `vX.Y.Z`, matching the package version.
+3. Push the commit and tag to GitHub.
+4. Create and publish a GitHub release for that tag.
+
+`.github/workflows/publish.yml` runs on a published GitHub release or manual
+`workflow_dispatch`, never on normal pushes or pull requests. Pushing a tag alone
+does not publish. The workflow installs dependencies with `npm ci`, runs the
+checks above on Node 24 / Ubuntu, then runs
+`npm publish --access public --provenance` using `NPM_TOKEN` as `NODE_AUTH_TOKEN`.
+Provenance requires the workflow's `id-token: write` permission.
+
+For a manual run, select the intended release tag/ref in GitHub Actions. The
+workflow publishes the version in that ref's `package.json`; it does not bump
+versions or enforce that the tag matches. An already-published version cannot
+be published again.
+
+### Local publishing
+
+Without a suitable token configured for npm authentication, local publishing
+still requires a two-factor authentication code:
 
 ```sh
 npm publish --access public --otp=<current-6-digit-code>
 ```
 
-or configure a granular access token with publish permission and bypass 2FA,
-then use it as `NPM_TOKEN`.
-
-The GitHub release `v0.1.0` is available even while npm publishing is gated.
 After npm publication, users can install the released version with:
 
 ```sh

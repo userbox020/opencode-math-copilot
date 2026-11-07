@@ -5,6 +5,8 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import plugin from "../../math-toolkit.js";
 import { createSearch } from "../lib/search.js";
+import { pdfText } from "../lib/pdf.js";
+import { searchLean } from "../lib/lean-search.js";
 import { findExecutable, resolveRoots, safePath } from "../lib/paths.js";
 
 const workspace = fileURLToPath(new URL("../../../../", import.meta.url));
@@ -82,8 +84,16 @@ if (leanAvailable) {
   assert(lean.includes("linearizedMA_critical_density"), lean);
   assert(lean.includes("ABPCriticalDensity.lean"), lean);
 } else {
-  console.log("SKIP: math/lean not present; skipping Lean declaration search test.");
+  console.log("SKIP: math/lean not present; skipping real-corpus Lean search (fixture tested below).");
 }
+
+// Always exercise fixture roots, including on local workspaces with the corpus.
+const fixtureLean = searchLean({ math: path.join(workspace, "test/fixtures/math"), workspace }, {
+  query: "fixture_theorem_one", path: "lean",
+});
+assert(fixtureLean.includes("fixture_theorem_one"), fixtureLean);
+assert(fixtureLean.includes("theorem"), fixtureLean);
+assert(fixtureLean.includes("Sample.lean"), fixtureLean);
 
 const pdfAvailable = fs.existsSync(path.join(workspace, "math", "overview.pdf"));
 if (pdfAvailable) {
@@ -91,8 +101,16 @@ if (pdfAvailable) {
   assert(pdf.includes("## Page 1"), pdf);
   assert(pdf.length > 100, pdf);
 } else {
-  console.log("SKIP: math/overview.pdf not present; skipping PDF extraction test.");
+  console.log("SKIP: math/overview.pdf not present; skipping real-corpus PDF extraction (fixture tested below).");
 }
+
+const fixturePdf = await pdfText({ math: path.join(workspace, "test/fixtures"), workspace }, {
+  path: "overview.pdf", pages: "1", maxChars: 2000,
+});
+assert.match(fixturePdf, /## Page 1\b/);
+const fixturePageText = fixturePdf.split("## Page 1")[1].trim();
+assert(fixturePageText.length > 0, "Expected non-empty fixture page text");
+assert.doesNotMatch(fixturePageText, /No extractable text found|PDF extraction error/);
 
 const python = findExecutable("python") || findExecutable("python3");
 const sympyAvailable = Boolean(python) && spawnSync(python, ["-c", "import sympy"], { encoding: "utf8" }).status === 0;
@@ -152,4 +170,4 @@ if (corpusAvailable) {
   assert.equal(resolveRoots({ directory: path.join(workspace, "math") }).math, path.join(workspace, "math"));
 }
 assert((await call("math_search", { query: "Riemann hypothesis" })).includes("003"));
-console.log("PASS: index counts, BM25/filters, schema, path safety, status and missing-tool behavior. Lean/LaTeX/Comparator/network are not required.");
+console.log("PASS: index counts, BM25/filters, schema, PDF/Lean fixtures, path safety, status and missing-tool behavior. Lean/LaTeX/Comparator/network are not required.");

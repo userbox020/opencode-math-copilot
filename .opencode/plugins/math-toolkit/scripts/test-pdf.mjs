@@ -6,7 +6,7 @@ import { mathPath, resolveRoots } from "../lib/paths.js";
 
 const roots = resolveRoots({ directory: fileURLToPath(new URL("../../../../", import.meta.url)) });
 if (!fs.existsSync(mathPath(roots, "overview.pdf"))) {
-  console.log("SKIP: math/overview.pdf is absent; install the math corpus to test PDF extraction.");
+  console.log("SKIP: math/overview.pdf is absent; skipping real-corpus PDF tests. test-tools.mjs covers fixture extraction.");
   process.exit(0);
 }
 

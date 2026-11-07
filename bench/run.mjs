@@ -7,13 +7,13 @@ import { performance } from 'node:perf_hooks';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const options = {
-  model: 'opencode-go/deepseek-v4.1-flash',
+  models: 'opencode-go/deepseek-v4.1-flash',
   problems: path.join(root, 'bench/problems.json'),
   repeats: 1,
   timeout: 180,
 };
 const flags = new Set(['standalone', 'json', 'md', 'dry-run']);
-const values = new Set(['model', 'problems', 'repeats', 'timeout']);
+const values = new Set(['models', 'model', 'problems', 'repeats', 'timeout']);
 
 function parseArgs() {
   const args = process.argv.slice(2);
@@ -24,9 +24,14 @@ function parseArgs() {
     else if (values.has(key)) {
       const value = args[++i];
       if (!value || value.startsWith('--')) throw new Error(`Missing value for --${key}`);
-      options[key] = ['repeats', 'timeout'].includes(key) ? Number(value) : value;
+      options[key === 'model' ? 'models' : key] = ['repeats', 'timeout'].includes(key) ? Number(value) : value;
     } else throw new Error(`Unknown option: --${key}`);
   }
+  options.models = options.models.split(',').map((model) => model.trim());
+  if (options.models.some((model) => !/^[^\s/,]+\/[^\s,]+$/.test(model))) {
+    throw new Error('--models must contain comma-separated provider/model IDs');
+  }
+  options.models = [...new Set(options.models)];
   if (!Number.isInteger(options.repeats) || options.repeats < 1) {
     throw new Error('--repeats must be a positive integer');
   }
@@ -72,6 +77,12 @@ function displayCommand(command, args) {
   return [command, ...args].map((arg) => JSON.stringify(arg)).join(' ');
 }
 
+function countToolCalls(output) {
+  // Count visible Code Mode invocations, not nested math calls or echoed code.
+  const plain = output.replace(/\x1b\[[0-?]*[ -/]*[@-~]/g, '');
+  return [...plain.matchAll(/⚙\uFE0F?\s+execute\b/g)].length;
+}
+
 function main() {
   parseArgs();
   const problems = JSON.parse(readFileSync(path.resolve(options.problems), 'utf8'));
@@ -100,71 +111,78 @@ function main() {
     }, null, 2)}\n`);
   }
   const results = [];
-  for (const problem of problems) {
-    for (let repeat = 1; repeat <= options.repeats; repeat++) {
-      for (const condition of conditions) {
-        const args = ['run', '--model', options.model, '--agent', 'build', '--format', 'default'];
-        if (options.standalone) args.push('--standalone');
-        args.push(problem.prompt);
-        if (options['dry-run']) {
-          console.log(`[${condition.name}] ${problem.id} #${repeat} cwd=${condition.cwd}`);
-          console.log(displayCommand(process.platform === 'win32' ? 'opencode.cmd' : 'opencode', args));
-          if (executable && process.platform === 'win32') {
-            console.log(`  shell:false target: ${displayCommand(executable.command, executable.prefix)}`);
+  for (const model of options.models) {
+    for (const problem of problems) {
+      for (let repeat = 1; repeat <= options.repeats; repeat++) {
+        for (const condition of conditions) {
+          const args = ['run', '--model', model, '--agent', 'build', '--format', 'default'];
+          if (options.standalone) args.push('--standalone');
+          args.push(problem.prompt);
+          if (options['dry-run']) {
+            console.log(`[${model}] [${condition.name}] ${problem.id} #${repeat} cwd=${condition.cwd}`);
+            console.log(displayCommand(process.platform === 'win32' ? 'opencode.cmd' : 'opencode', args));
+            if (executable && process.platform === 'win32') {
+              console.log(`  shell:false target: ${displayCommand(executable.command, executable.prefix)}`);
+            }
+            continue;
           }
-          continue;
-        }
-        const started = performance.now();
-        let child;
-        try {
-          if (resolutionError) throw new Error(resolutionError);
-          child = spawnSync(executable.command, [...executable.prefix, ...args], {
-            cwd: condition.cwd,
-            shell: false,
-            encoding: 'utf8',
-            timeout: options.timeout * 1000,
-            maxBuffer: 16 * 1024 * 1024,
-            windowsHide: true,
+          const started = performance.now();
+          let child;
+          try {
+            if (resolutionError) throw new Error(resolutionError);
+            child = spawnSync(executable.command, [...executable.prefix, ...args], {
+              cwd: condition.cwd,
+              shell: false,
+              encoding: 'utf8',
+              timeout: options.timeout * 1000,
+              maxBuffer: 16 * 1024 * 1024,
+              windowsHide: true,
+            });
+          } catch (error) {
+            child = { error, status: null };
+          }
+          const stdout = child.stdout || '';
+          const stderr = child.stderr || '';
+          const output = `${stdout}\n${stderr}`;
+          const durationMs = Math.round(performance.now() - started);
+          results.push({
+            model, problem: problem.id, condition: condition.name, repeat,
+            seconds: durationMs / 1000,
+            exit: child.status ?? 'error',
+            durationMs,
+            exitCode: child.status ?? null,
+            signal: child.signal ?? null,
+            error: child.error?.message ?? null,
+            timedOut: child.error?.code === 'ETIMEDOUT',
+            score: !child.error && child.status === 0 && score(problem, output),
+            toolCalls: countToolCalls(output),
+            stdout, stderr, output,
           });
-        } catch (error) {
-          child = { error, status: null };
         }
-        const stdout = child.stdout || '';
-        const stderr = child.stderr || '';
-        const output = `${stdout}\n${stderr}`;
-        results.push({
-          problem: problem.id, condition: condition.name, repeat,
-          durationMs: Math.round(performance.now() - started),
-          exitCode: child.status ?? null,
-          signal: child.signal ?? null,
-          error: child.error?.message ?? null,
-          timedOut: child.error?.code === 'ETIMEDOUT',
-          score: !child.error && child.status === 0 && score(problem, output),
-          stdout, stderr, output,
-        });
       }
     }
   }
   if (options['dry-run']) {
     if (resolutionError) console.log(`Resolution warning: ${resolutionError}`);
-    console.log(`Dry run: ${problems.length * options.repeats * conditions.length} commands; no inference or files written.`);
+    console.log(`Dry run: ${options.models.length * problems.length * options.repeats * conditions.length} commands (${options.models.length} models × ${problems.length} problems × ${options.repeats} repeats × ${conditions.length} conditions); no inference or files written.`);
     return;
   }
   const rows = results.map((result) => ({
-    problem: result.problem, condition: result.condition, repeat: result.repeat,
-    seconds: (result.durationMs / 1000).toFixed(2),
-    exit: result.exitCode ?? 'error', score: result.score ? 'PASS' : 'FAIL',
+    model: result.model, problem: result.problem, condition: result.condition, repeat: result.repeat,
+    seconds: result.seconds.toFixed(2),
+    exit: result.exit, score: result.score ? 'PASS' : 'FAIL', toolCalls: result.toolCalls,
   }));
   console.table(rows);
-  const summary = conditions.map(({ name }) => {
-    const runs = results.filter((result) => result.condition === name);
+  const summary = options.models.flatMap((model) => conditions.map(({ name }) => {
+    const runs = results.filter((result) => result.model === model && result.condition === name);
     return {
-      condition: name, passed: runs.filter((run) => run.score).length, total: runs.length,
+      model, condition: name, passed: runs.filter((run) => run.score).length, total: runs.length,
       errors: runs.filter((run) => run.error || run.exitCode !== 0).length,
       meanDurationMs: Math.round(runs.reduce((sum, run) => sum + run.durationMs, 0) / runs.length),
+      meanToolCalls: runs.reduce((sum, run) => sum + run.toolCalls, 0) / runs.length,
     };
-  });
-  const summaryLines = summary.map((item) => `${item.condition}: ${item.passed}/${item.total} passed, ${item.errors} errors, ${(item.meanDurationMs / 1000).toFixed(2)}s mean`);
+  }));
+  const summaryLines = summary.map((item) => `${item.model} | ${item.condition}: ${item.passed}/${item.total} passed, ${item.errors} errors, ${(item.meanDurationMs / 1000).toFixed(2)}s mean, ${item.meanToolCalls.toFixed(2)} mean tool calls`);
   console.log(summaryLines.join('\n'));
   if (options.json || options.md) {
     const dir = path.join(root, 'bench/results');
@@ -175,9 +193,9 @@ function main() {
     if (options.md) {
       const cell = (value) => String(value).replace(/\|/g, '\\|').replace(/[\r\n]/g, ' ');
       const lines = [
-        '# Math plugin benchmark', '', `Model: ${cell(options.model)}`, '',
-        '| Problem | Condition | Repeat | Seconds | Exit | Score |',
-        '| --- | --- | --- | --- | --- | --- |',
+        '# Math plugin benchmark', '', `Models: ${cell(options.models.join(', '))}`, '',
+        '| Model | Problem | Condition | Repeat | Seconds | Exit | Score | Tool calls |',
+        '| --- | --- | --- | --- | --- | --- | --- | --- |',
         ...rows.map((row) => `| ${Object.values(row).map(cell).join(' | ')} |`),
         '', ...summaryLines, '',
       ];

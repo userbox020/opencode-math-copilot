@@ -1,18 +1,58 @@
 [
   {
     "id": "quasi-riemann",
-    "prompt": "In the local openai/math corpus, identify the three-digit family number for the quasi-Riemann hypothesis and whether its results are formalized in Lean. Give a paper title and cite the corpus catalog or Lean documentation. Use available retrieval tools; do not modify files or install anything.",
-    "keywords": ["003"],
-    "anyKeywords": ["formalized", "The Quasi-Riemann Hypothesis: A Zero-Free Half-Plane"]
+    "prompt": "In the local openai/math corpus, identify the three-digit family number for the quasi-Riemann hypothesis. Give the main paper's full title, the zero-free half-plane bound as a fraction, and a citation to a local source. Use available retrieval tools; do not modify files or install anything.",
+    "keywords": ["003", "7/8", "A Zero-Free Half-Plane"],
+    "anyKeywords": ["CONTENTS.md", "003.md", "paper.pdf", "main.tex", "paper.tex"]
   },
   {
     "id": "landau-siegel",
-    "prompt": "Find the paper titled Uniform exclusion of Landau–Siegel zeros in the local openai/math corpus. Report its three-digit family number and Lean status (formalized or not formalized), citing the relevant corpus or Lean documentation. Use available retrieval tools; do not modify files or install anything.",
-    "keywords": ["003", "formalized"]
+    "prompt": "Find the paper titled Uniform exclusion of Landau–Siegel zeros in the local openai/math corpus. Report its three-digit family number, whether its main result is cataloged as Lean-formalized, and the basename of the Comparator statement linked in its Lean scope documentation. Cite that documentation; do not run Lean, modify files, or install anything.",
+    "keywords": ["003", "SiegelZeros.lean"],
+    "anyKeywords": ["formalized", "formalised"]
   },
   {
-    "id": "computation",
-    "prompt": "Simplify sin(x)^2+cos(x)^2 for real x and compute det([[1,2],[3,4]]). State both results with a brief justification. Do not modify files or install anything.",
-    "keywords": ["1", "-2"]
+    "id": "family-lookup",
+    "prompt": "Look up result family 325 in the local openai/math corpus. Give its subject and the exact title of one associated manuscript, with a citation to the corpus catalog. Do not substitute general mathematical background for the catalog entry. Use available retrieval tools; do not modify files or install anything.",
+    "keywords": ["Crouzeix"],
+    "anyKeywords": ["A direct proof of the complete Crouzeix inequality", "The complete Crouzeix theorem: optimal similarity and a common positive boundary representation"]
+  },
+  {
+    "id": "lean-declaration",
+    "prompt": "In the local openai/math corpus, check the cataloged Lean formalization of A quadratic bound for Jacobsthal's function. Report its status, the fully qualified declaration name and the implementation file recorded for the quadratic bound in the formalization catalog. Cite the catalog and distinguish recorded status from a fresh proof check. Do not run Lean, modify files, or install anything.",
+    "keywords": ["OAI.Erdos970.Erdos970Final.erdos_970_quadratic", "QuadraticBound.lean", "formalization.yaml"]
+  },
+  {
+    "id": "pdf-overview",
+    "prompt": "Extract page 1 of the local openai/math overview.pdf itself (not a TeX source or the Markdown catalog). Report its cover title, stated counts of result families and manuscripts, and the last subject heading in its contents list. Cite the PDF and page number. Use available PDF extraction tools; do not modify files or install anything.",
+    "keywords": ["OpenAI Research Catalog", "373", "721", "Partial differential equations", "overview.pdf"]
+  },
+  {
+    "id": "sympy-simplify",
+    "prompt": "Use a symbolic computation tool if available to simplify (x**3 + 11*x**2 - 139*x - 629)/(x**2 - 6*x - 37) for symbolic x wherever the original denominator is nonzero. Give the simplified expression in plain ASCII and explain the cancellation briefly. Do not modify files or install anything.",
+    "keywords": [],
+    "anyKeywords": ["x + 17", "x+17", "17 + x", "17+x"]
+  },
+  {
+    "id": "sympy-solve",
+    "prompt": "Use a symbolic computation tool if available to solve x**3 - 35*x**2 + 83*x + 2639 = 0 exactly. List all distinct roots as decimal integers and give a factorization or substitution check. Do not modify files or install anything.",
+    "keywords": ["-7", "13", "29"]
+  },
+  {
+    "id": "sympy-determinant",
+    "prompt": "Use a symbolic computation tool if available to compute the exact determinant of [[17,-4,9],[6,23,-5],[-8,7,31]]. State the integer result without thousands separators and briefly explain how it was obtained. Do not modify files or install anything.",
+    "keywords": ["15334"]
+  },
+  {
+    "id": "theorem-explanation",
+    "prompt": "In the local openai/math corpus, locate A quadratic bound for Jacobsthal's function and its Lean scope documentation. Explain the strengthened bound there, not just the older quadratic estimate: what interval length suffices, which moduli it covers, and whether interval starting points may be negative. Give the bound in plain ASCII using log(log(3*k)) for the iterated logarithm, include the three-digit family number, and cite the scope document. Treat the corpus statement as a reported claim, not an independently verified theorem. Do not run Lean, modify files, or install anything.",
+    "keywords": ["021", "021.md", "log(log(3*k))"],
+    "anyKeywords": ["signed", "negative", "any integer", "arbitrary integer"]
+  },
+  {
+    "id": "no-corpus-answer",
+    "prompt": "Search the local openai/math corpus for a manuscript with the exact title A cobalt-otter theorem for seven-dimensional clockwork primes. Give its family number and citation only if an exact matching manuscript exists. Otherwise clearly report that no matching manuscript was found; do not invent a title, family, theorem, or citation and do not treat vaguely related hits as a match. Use available retrieval tools; do not modify files or install anything.",
+    "keywords": [],
+    "anyKeywords": ["no matching manuscript", "no match", "not found", "could not find", "couldn't find", "cannot find", "does not contain", "does not appear", "no exact match", "no manuscript"]
   }
 ]

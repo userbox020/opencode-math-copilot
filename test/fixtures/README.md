@@ -1,0 +1,1 @@
+These portable fixtures let CI test PDF extraction and Lean declaration search without cloning the math corpus. The Lean fixture is synthetic and text-only: it is searched, not compiled, and requires no Lean toolchain. No fixture is copied from the corpus except `overview.pdf`, copied unchanged from `openai/math`'s `math/overview.pdf` for extraction with `unpdf`.

@@ -9,10 +9,10 @@ A project-local OpenCode math copilot using the bundled `math/` clone of `openai
 - `@opencode/plugin@2.0.29` available from the repo's `npm install` (OpenCode also provides it at runtime).
 - A clone of `openai/math` at `math/` for manuscript reads, grep, PDF extraction, Lean search, and the Lean tools. The prebuilt index makes `math_search` usable without it.
 - `npm install` installs `unpdf` for PDF extraction.
-- Recommended: `ripgrep` (`rg`) for fast Lean declaration search. Without it, a bounded Node fallback is used.
-- Optional: elan with the pinned Lean/Lake toolchain; Comparator, landrun, and lean4export on Linux/WSL for challenge checks; LaTeX for document builds; Python 3 + SymPy for computations.
+- Recommended: `ripgrep` (`rg`) for fast Lean declaration search. Without it, the prebuilt `data/lean-index.json.gz` is used, then a bounded Node fallback.
+- Optional: elan with the pinned Lean/Lake toolchain; Docker for reproducible Linux Lean verification; Comparator, landrun, and lean4export in Linux/Docker for challenge checks; LaTeX for document builds; Python 3 + SymPy for computations.
 
-Lean, Lake, Comparator, and LaTeX are optional. Missing prerequisites must be reported, not treated as successful verification. Run `math_status` for current availability. Native Windows Lean builds can be blocked by an NTFS-invalid path in the pinned dependency set; see the root `README.md` and `docs/comparator-wsl.md`.
+Lean, Lake, Comparator, and LaTeX are optional. Missing prerequisites must be reported, not treated as successful verification. Run `math_status` for current availability. Native Windows Lean builds can be blocked by an NTFS-invalid path in the pinned dependency set; Docker is the recommended path (`docker/README.md`).
 
 ## Install / verify
 
@@ -49,8 +49,11 @@ Use `/math <problem>` to invoke the project command, which loads the `math-workf
 After changing or updating `math/`, invoke `math_reindex`, or run from the workspace root:
 
 ```powershell
-node .opencode/plugins/math-toolkit/scripts/build-index.mjs
+npm run index
+npm run index:lean
 ```
+
+`index:lean` regenerates the gzip declaration index used when `rg` is unavailable.
 
 Restart OpenCode or reload the project session after rebuilding so the active plugin uses the refreshed index. Check counts with `math_status`.
 

@@ -7,7 +7,7 @@ import { resolveRoots } from "../lib/paths.js";
 
 const roots = resolveRoots({ directory: fileURLToPath(new URL("../../../../", import.meta.url)) });
 if (!fs.existsSync(path.join(roots.math, "lean"))) {
-  console.log("SKIP: math/lean is absent; clone the math corpus to run Lean search tests.");
+  console.log("SKIP: math/lean is absent; skipping real-corpus Lean search tests. test-tools.mjs covers fixture search.");
   process.exit(0);
 }
 

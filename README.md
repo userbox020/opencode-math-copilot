@@ -10,8 +10,8 @@ It provides BM25 search over **721 manuscripts / 373 result families**, reads ma
 - **Node.js 24** for the index builder and tests.
 - A clone of `openai/math` at `./math` for `math_manuscript`, `math_grep`, `math_pdf_text`, and the Lean tools.
 - `npm install` installs `unpdf` for PDF text extraction.
-- Recommended: `ripgrep` (`rg`) for fast Lean declaration search. Without it, a bounded Node fallback is used.
-- Optional: elan/Lean for `math_lean_check` / `math_lean_build`; Python 3 + SymPy for `math_compute`; Comparator + landrun + lean4export on Linux/WSL for `math_comparator`; LaTeX for document builds.
+- Recommended: `ripgrep` (`rg`) for fast Lean declaration search. Without it, a prebuilt declaration index is used, then a bounded Node fallback.
+- Optional: elan/Lean for `math_lean_check` / `math_lean_build`; Docker for reproducible Linux Lean verification; Python 3 + SymPy for `math_compute`; Comparator + landrun + lean4export in Linux/Docker for `math_comparator`; LaTeX for document builds.
 
 The repository includes a prebuilt `math-index.json`, so `math_search` works immediately. Manuscript reads and Lean checks need the `math/` clone.
 
@@ -97,6 +97,7 @@ After updating `math/`:
 
 ```powershell
 npm run index
+npm run index:lean
 opencode.cmd reload
 ```
 
@@ -106,6 +107,8 @@ or from an OpenCode session:
 await tools.math_reindex({})
 ```
 
+`index:lean` writes the gzip declaration index used when `rg` is unavailable.
+
 ## Test and check
 
 ```powershell
@@ -113,22 +116,30 @@ npm test
 npm run check
 ```
 
-The test suite passes with or without `math/`. Corpus-dependent manuscript/section/grep/PDF/Lean-search tests are skipped when the corpus is absent; search, status, schema, path-safety, PDF/Lean search, SymPy, and missing-toolchain tests run when their prerequisites are present.
+The test suite passes with or without `math/`. Corpus-dependent manuscript/section/grep tests are skipped when the corpus is absent; the fixture PDF, fixture Lean declaration, SymPy, status, schema, path-safety, and missing-toolchain tests run everywhere. CI installs SymPy and uses the fixtures on Windows and Ubuntu.
 
 ## Lean setup
 
-Install [elan](https://github.com/leanprover/elan), then use the setup helper:
+**Recommended: Docker.** It gives a Linux filesystem and avoids the NTFS-invalid AINTLIB path:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/setup-lean.ps1
+docker build -f docker/lean.Dockerfile -t opencode-math-lean .
+docker volume create opencode-math-lean
+docker run --rm -it -v opencode-math-lean:/work opencode-math-lean verify-lean.sh
 ```
 
-The helper normalizes the corpus patch files to LF (the pinned `math/lean` patches fail to apply under Windows `core.autocrlf=true`), sets LF-safe Git config for Lake dependency clones, and runs `lake exe cache get`. Add `-Build -Target OAI.Analysis` to attempt a focused build.
+For a quick Mathlib check without the large `OAI.Analysis` build:
 
-Native Windows has two hard limitations:
+```powershell
+docker run --rm -it -v opencode-math-lean:/work -e SKIP_BUILD=1 opencode-math-lean verify-lean.sh
+```
 
-- The pinned dependency set contains at least one path that is invalid on NTFS (a timestamp containing `:`), so a full `lake exe cache get` may fail while cloning dependencies.
-- Comparator/landrun require Linux/Landlock. See `docs/comparator-wsl.md`; the standalone Comparator is also version-sensitive to the project’s Lean 4.34.1 pin.
+See `docker/README.md` and `scripts/lean-docker.ps1`. The Comparator layer is in `docker/comparator.Dockerfile`; landrun/Comparator are Linux-only.
+
+**Native Windows** is still supported by `scripts/setup-lean.ps1`, which normalizes the corpus patch files to LF and runs `lake exe cache get`. It is not enough for a full build:
+
+- The pinned dependency set contains at least one path that is invalid on NTFS (a timestamp containing `:`), so dependency checkout fails.
+- Comparator/landrun require Linux/Landlock.
 
 `math_status` reports what is actually available; `math_lean_check` and `math_lean_build` report failures honestly.
 
@@ -144,7 +155,7 @@ The benchmark compares the same prompts with and without the plugin on a cheap m
 
 - `opencode plugin add` accepts npm or Git package specs, not local directories/tarballs. For local use, keep the plugin under `.opencode/plugins/`.
 - `npm pack --dry-run` verifies the package contents.
-- `RELEASING.md` documents the npm publish flow. The registry currently requires an OTP or a granular token with bypass 2FA; the built tarball is ready.
+- `RELEASING.md` documents the tag/release publish flow: publish a GitHub release for `vX.Y.Z` (or manually run the publish workflow) with the `NPM_TOKEN` secret configured for publish permission and bypass 2FA. Normal pushes do not publish.
 
 ## Limitations
 
@@ -171,10 +182,14 @@ The benchmark compares the same prompts with and without the plugin on a cheap m
   README.md
 .opencode/skills/math-workflow/SKILL.md
 .opencode/commands/math.md                 # /math
-scripts/setup-lean.ps1                     # patch normalization + Mathlib cache
+scripts/setup-lean.ps1                     # native Windows patch normalization + cache
+scripts/lean-docker.ps1                    # Docker Lean wrapper
+docker/                                     # Linux Lean + Comparator images
 docs/comparator-wsl.md                     # Comparator/Linux constraints
+test/fixtures/                              # portable PDF/Lean fixtures
 bench/                                      # with/without plugin harness + results
 .github/workflows/test.yml                 # Linux/Windows CI
+.github/workflows/publish.yml              # release-triggered npm publish
 ```
 
 ## Attribution

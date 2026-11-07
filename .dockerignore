@@ -1,0 +1,8 @@
+math
+node_modules
+.git
+.gitignore
+.opencode
+bench/results
+*.tgz
+*.log

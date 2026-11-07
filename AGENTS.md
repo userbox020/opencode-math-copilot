@@ -11,14 +11,19 @@ A portable, project-local OpenCode math plugin. It indexes the `openai/math` cor
 .opencode/plugins/math-toolkit/
   main.js                                  # V2 Plugin.define + ctx.tool.transform
   lib/                                     # search, corpus, Lean, PDF, SymPy, paths
-  scripts/build-index.mjs                  # index builder
+  scripts/build-index.mjs                  # corpus index builder
+  scripts/build-lean-index.mjs             # Lean declaration index builder
   scripts/math_compute.py                  # allowlisted SymPy worker
   scripts/test-*.mjs                       # portable tests
   data/math-index.json                     # generated; do not hand-edit
+  data/lean-index.json.gz                  # generated Lean index; do not hand-edit
 .opencode/skills/math-workflow/SKILL.md
 .opencode/commands/math.md
-scripts/setup-lean.ps1                     # patch normalization + Mathlib cache
+scripts/setup-lean.ps1                     # native Windows patch normalization + cache
+scripts/lean-docker.ps1                    # Docker Lean wrapper
+docker/                                     # Linux Lean + Comparator images
 docs/comparator-wsl.md                     # Linux/WSL Comparator constraints
+test/fixtures/                              # portable PDF/Lean fixtures
 bench/                                      # with/without plugin harness
 ```
 
@@ -37,14 +42,27 @@ npm install
 npm test
 npm run check
 npm run bench          # model inference; optional
-npm run index          # requires a math/ clone
+npm run index          # corpus index; requires a math/ clone
+npm run index:lean     # Lean declaration index; requires math/lean
 opencode.cmd reload    # after changing the plugin or index
 opencode.cmd plugin list
 ```
 
 `math/` is ignored and is not committed. The prebuilt `data/math-index.json` keeps `math_search` usable without the 3.3 GB clone; manuscript reads, `math_grep`, PDF extraction, Lean search, and Lean tools require `math/CONTENTS.md`.
 
-New tools: `math_lean_search`, `math_pdf_text`, `math_compute`. `math_lean_search` uses `rg` when available; the fallback is intentionally bounded and may truncate on the 162k-file Lean tree. `math_pdf_text` uses `unpdf`; `math_compute` uses the fixed `math_compute.py` allowlist, never raw `sympify`.
+New tools: `math_lean_search`, `math_pdf_text`, `math_compute`. `math_lean_search` uses `rg` when available, then the 21.9 MB gzip `lean-index.json.gz`, then a bounded Node walk. `math_pdf_text` uses `unpdf`; `math_compute` uses the fixed `math_compute.py` allowlist, never raw `sympify`.
+
+## Docker Lean
+
+Docker is the recommended Lean path on Windows; it avoids the NTFS-invalid AINTLIB path:
+
+```powershell
+docker build -f docker/lean.Dockerfile -t opencode-math-lean .
+docker volume create opencode-math-lean
+docker run --rm -it -v opencode-math-lean:/work opencode-math-lean verify-lean.sh
+```
+
+`docker/comparator.Dockerfile` adds Go, landrun, Comparator, and lean4export. Native Windows `scripts/setup-lean.ps1` is a fallback, not a full-build guarantee.
 
 ## Verification expectations
 

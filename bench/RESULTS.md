@@ -24,3 +24,8 @@ Model: `opencode-go/deepseek-v4.1-flash`
 - The `landau-siegel` run without the plugin hit the 180s timeout.
 - The quasi-Riemann prompt passed in both conditions; the plugin’s advantage is not universal.
 - Full stdout/stderr is in `bench/results/latest.json` locally; that directory is gitignored.
+
+## Pending
+
+The expanded 10-problem, multi-model matrix has not run yet. The results above
+remain the original 3-problem run; expanded results will replace them after integration.
