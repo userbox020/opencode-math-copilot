@@ -1,72 +1,83 @@
 # Distribution and releases
 
-## Project-local installation
+## Option 1: project-local (recommended for development)
 
-Clone this repository or copy both `.opencode/plugins/math-toolkit.js` and the
-complete `.opencode/plugins/math-toolkit/` directory into your project's matching
-paths. Install the dependencies from `package.json`. The project-local OpenCode
-entry remains `.opencode/plugins/math-toolkit.js`.
+1. Clone this repository, or copy:
+   - `.opencode/plugins/math-toolkit.js`
+   - the complete `.opencode/plugins/math-toolkit/` directory
+   - `.opencode/skills/math-workflow/`
+   - `.opencode/commands/math.md`
+2. Run `npm install` at the project root. This installs `unpdf`; OpenCode provides `@opencode/plugin` at runtime or through `node_modules`.
+3. Clone `https://github.com/openai/math` into `math/` for manuscript reads, PDF extraction, Lean search, and Lean tools.
+4. Run:
+   ```powershell
+   opencode.cmd plugin list
+   opencode.cmd reload
+   ```
 
-Copy `.opencode/skills/math-workflow/` and `.opencode/commands/math.md` as well to
-include the skill and `/math` command.
+The plugin is auto-discovered from `.opencode/plugins/`.
 
-`opencode plugin add` accepts npm registry or Git package specifiers, not local
-directories or tarballs. Use the `plugins` configuration for explicit local paths
-instead; the project-local layout above uses automatic discovery.
+## Option 2: global Git package (no npm registry auth)
 
-## npm release
+This is verified and does not require an npm token:
 
-The npm package entry is `index.js`, which re-exports the default project-local
-plugin. Before releasing, confirm the intended version in `package.json` and run:
-
-```sh
-npm run check
-npm test
-npm pack --dry-run
+```powershell
+opencode plugin add github:userbox020/opencode-math-copilot
+opencode plugin list
+opencode plugin check
+opencode plugin update
 ```
 
-Confirm the package includes `index.js`, `.opencode/plugins/math-toolkit.js`, the
-complete `.opencode/plugins/math-toolkit/` implementation and prebuilt index,
-`.opencode/skills/`, `.opencode/commands/`, `docker/`, `docs/`,
-`scripts/lean-docker.ps1`, `scripts/setup-lean.ps1`, `README.md`, `LICENSE`, and
-`NOTICE`.
-CI performs these checks on Node 24, on Linux and Windows, without installing
-Lean, SymPy, or the math corpus.
+The Git spec installs the package from GitHub. It uses the root `index.js` package entry and the bundled `.opencode/plugins/` assets. The `math/` corpus still needs to exist in the project for manuscript/PDF/Lean tools; `math_search` works from the bundled index.
 
-### GitHub Actions publishing
+## Option 3: npm registry
 
-Configure the repository's GitHub Actions secret `NPM_TOKEN` with an npm
-**granular access token with publish permission and bypass 2FA** (or an automation
-token). The workflow fails explicitly if the secret is missing.
+The package is public and `npm pack --dry-run` is part of CI. The release workflow is `.github/workflows/publish.yml`; it runs only on a published GitHub release or manual dispatch, never on ordinary pushes.
 
-1. Bump the version in `package.json` and `package-lock.json`, then commit the change.
-2. Tag that commit as `vX.Y.Z`, matching the package version.
-3. Push the commit and tag to GitHub.
-4. Create and publish a GitHub release for that tag.
+The package can be published with either:
 
-`.github/workflows/publish.yml` runs on a published GitHub release or manual
-`workflow_dispatch`, never on normal pushes or pull requests. Pushing a tag alone
-does not publish. The workflow installs dependencies with `npm ci`, runs the
-checks above on Node 24 / Ubuntu, then runs
-`npm publish --access public --provenance` using `NPM_TOKEN` as `NODE_AUTH_TOKEN`.
-Provenance requires the workflow's `id-token: write` permission.
+### Interactive 2FA
 
-For a manual run, select the intended release tag/ref in GitHub Actions. The
-workflow publishes the version in that ref's `package.json`; it does not bump
-versions or enforce that the tag matches. An already-published version cannot
-be published again.
-
-### Local publishing
-
-Without a suitable token configured for npm authentication, local publishing
-still requires a two-factor authentication code:
-
-```sh
-npm publish --access public --otp=<current-6-digit-code>
+```powershell
+cd C:\_Work\opencode-math-copilot
+npm login --auth-type=web
+npm publish --access public
 ```
 
-After npm publication, users can install the released version with:
+### Granular token with Bypass 2FA
 
-```sh
-opencode plugin add opencode-math-copilot@<version>
+Create a token with **Read and write (publish and stage)**, **All Packages**, and **Bypass two-factor authentication** checked. Then set the repository secret:
+
+```powershell
+gh secret set NPM_TOKEN --repo userbox020/opencode-math-copilot
 ```
+
+`NPM_TOKEN` is currently **not set**; the publish workflow therefore skips cleanly. Do not commit or paste long-lived tokens into the repository or issue tracker.
+
+### Trusted publishing (recommended long-term)
+
+After the package exists, configure **Trusted Publisher** in npm package settings:
+
+- Provider: GitHub Actions
+- User: `userbox020`
+- Repository: `opencode-math-copilot`
+- Workflow: `publish.yml`
+- Allow direct `npm publish`
+
+Then remove `NPM_TOKEN`; the workflow already has `id-token: write` and uses npm OIDC/provenance.
+
+## Update
+
+```powershell
+git pull
+npm install
+opencode.cmd reload
+```
+
+For a global Git install, use `opencode plugin update` or reinstall the Git spec.
+
+## Notes
+
+- `package.json` is public (`private: false`), versioned, and exports `index.js`.
+- `opencode plugin add` accepts npm registry or Git package specs, not local tarballs.
+- Use project-local discovery for development; use the Git spec for a no-auth global install.

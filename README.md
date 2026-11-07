@@ -36,6 +36,15 @@ You should see `math-toolkit`. If you change the plugin or rebuild the index, ru
 opencode.cmd reload
 ```
 
+### Global Git install (no npm registry auth)
+
+```powershell
+opencode plugin add github:userbox020/opencode-math-copilot
+opencode plugin list
+```
+
+This installs the package from GitHub and does not require an npm token. The `math/` clone is still required for manuscript, PDF, and Lean tools; `math_search` works from the bundled index.
+
 ## Use
 
 ```text
@@ -161,11 +170,11 @@ npm run bench -- --json bench/results/latest.json --md bench/results/latest.md
 
 The benchmark compares the same prompts with and without the plugin on a cheap model. Results are indicative, not a scientific benchmark; see `bench/README.md`.
 
-## Portability and release
+## Portability
 
-- `opencode plugin add` accepts npm or Git package specs, not local directories/tarballs. For local use, keep the plugin under `.opencode/plugins/`.
-- `npm pack --dry-run` verifies the package contents.
-- `RELEASING.md` documents the tag/release publish flow: publish a GitHub release for `vX.Y.Z` (or manually run the publish workflow) with the `NPM_TOKEN` secret configured for publish permission and bypass 2FA. Normal pushes do not publish.
+This plugin is **project-local**. Clone the repository or copy `.opencode/plugins/math-toolkit.js` plus `.opencode/plugins/math-toolkit/` into a project; OpenCode discovers it automatically. No npm package or registry authentication is required.
+
+`npm install` is only needed for `unpdf` and test dependencies. `package.json` is `"private": true` to prevent accidental publishing. See `RELEASING.md` for the local install/update steps.
 
 ## Limitations
 
@@ -199,7 +208,6 @@ docs/comparator-wsl.md                     # Comparator/Linux constraints
 test/fixtures/                              # portable PDF/Lean fixtures
 bench/                                      # with/without plugin harness + results
 .github/workflows/test.yml                 # Linux/Windows CI
-.github/workflows/publish.yml              # release-triggered npm publish
 ```
 
 ## Attribution
