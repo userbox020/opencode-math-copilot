@@ -1,4 +1,6 @@
-# Comparator on Windows: use WSL/Linux
+# Comparator on Windows: use Docker or WSL/Linux
+
+**Docker is now the recommended path** because it also avoids the corpus’s NTFS-invalid AINTLIB path. See `docker/README.md` and `docker/comparator.Dockerfile`. The WSL instructions below remain an alternative.
 
 Native Windows is not a supported Comparator environment. `landrun` depends on Linux Landlock, and the pinned `math/lean` dependency set can contain paths that NTFS cannot represent. Do not treat a missing/failed `math_comparator` call as successful verification.
 
