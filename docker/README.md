@@ -55,6 +55,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/lean-docker.ps1
 
 Add `-SkipBuild` for the quick check, or `-Target OAI.Algebra`.
 
+## Verification result
+
+See [`docs/verification.md`](../docs/verification.md). The focused module `OAI.Analysis.AffineBernstein.ABPCriticalDensity` builds successfully under Lean 4.34.1. The full `OAI.Analysis` target is enormous and was stopped after ~12,815 / ~18,496 modules.
+
 ## Comparator
 
 Comparator/landrun are Linux-only. Build the comparator layer after the Lean image:

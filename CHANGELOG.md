@@ -23,5 +23,9 @@
 
 - CI passes on Windows and Ubuntu with Node 24, PDF/Lean fixtures, and SymPy.
 - Lean declaration index tested for known declarations, kind filters, regex, and no-`rg` search.
-- Docker image built; Linux Lean verification is tracked in the release notes.
-- Benchmark results are in `bench/RESULTS.md`.
+- Docker Mathlib smoke passed: `Nat : Type`, `LEAN_DOCKER_OK`.
+- Focused corpus build passed: `lake build OAI.Analysis.AffineBernstein.ABPCriticalDensity` (9,201 jobs, exit 0).
+- Full `OAI.Analysis` build was attempted and stopped at ~12,815 / ~18,496 modules after ~5 hours; this is a scale limitation, not a compile failure.
+- Comparator/lean4export and the challenge built, but the export failed with `incompatible header` because standalone Comparator uses Lean 4.35.0 and the corpus pins 4.34.1. Documented as a blocker.
+- Benchmark results are in `bench/RESULTS.md` (DeepSeek 8/10 vs 4/10; GLM 9/10 vs 8/10).
+- Detailed evidence: `docs/verification.md`.

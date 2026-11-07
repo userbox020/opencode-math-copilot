@@ -62,7 +62,9 @@ docker volume create opencode-math-lean
 docker run --rm -it -v opencode-math-lean:/work opencode-math-lean verify-lean.sh
 ```
 
-`docker/comparator.Dockerfile` adds Go, landrun, Comparator, and lean4export. Native Windows `scripts/setup-lean.ps1` is a fallback, not a full-build guarantee.
+`docker/comparator.Dockerfile` adds Go, landrun, Comparator, and lean4export. The Comparator/lean4export build and challenge compile succeeded, but the export step failed with an incompatible `.olean` header because standalone Comparator pulled Lean 4.35.0 while the corpus pins 4.34.1. Do not claim Comparator verification.
+
+Verified Docker evidence: Mathlib smoke (`LEAN_DOCKER_OK`) and focused build `OAI.Analysis.AffineBernstein.ABPCriticalDensity` (9,201 jobs, exit 0). The full `OAI.Analysis` target is ~18k modules and was stopped at ~12,815 after ~5 hours. Native Windows `scripts/setup-lean.ps1` is a fallback, not a full-build guarantee. See `docs/verification.md`.
 
 ## Verification expectations
 

@@ -134,7 +134,17 @@ For a quick Mathlib check without the large `OAI.Analysis` build:
 docker run --rm -it -v opencode-math-lean:/work -e SKIP_BUILD=1 opencode-math-lean verify-lean.sh
 ```
 
-See `docker/README.md` and `scripts/lean-docker.ps1`. The Comparator layer is in `docker/comparator.Dockerfile`; landrun/Comparator are Linux-only.
+For a focused, practical corpus build:
+
+```powershell
+docker run --rm -it -v opencode-math-lean:/work `
+  -e TARGET=OAI.Analysis.AffineBernstein.ABPCriticalDensity `
+  opencode-math-lean verify-lean.sh
+```
+
+The focused module builds successfully (9,201 jobs under Lean 4.34.1). The full `OAI.Analysis` target is far larger (~18k modules) and may take many hours. See `docs/verification.md`.
+
+The Comparator layer is in `docker/comparator.Dockerfile`. Comparator/lean4export build, but the standalone Comparator pulled Lean 4.35.0 and cannot read the corpus’s 4.34.1 `.olean` (`incompatible header`); this is an unresolved version-pin blocker, not a verification pass.
 
 **Native Windows** is still supported by `scripts/setup-lean.ps1`, which normalizes the corpus patch files to LF and runs `lake exe cache get`. It is not enough for a full build:
 
