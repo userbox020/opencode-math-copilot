@@ -5,7 +5,7 @@
 There are two supported installs:
 
 - **Project-local**: copy `index.js`, `.opencode/plugins/math-toolkit.js`, and `.opencode/plugins/math-toolkit/` into a project. OpenCode discovers it.
-- **Global Git spec**: `opencode.cmd plugin add github:userbox020/opencode-math-copilot#v0.3.1` (replace the tag with the current release).
+- **Global Git spec**: `opencode.cmd plugin add github:userbox020/opencode-math-copilot#v0.4.0` (replace the tag with the current release).
 
 After changing the install, restart OpenCode or reload the session and check:
 
@@ -40,7 +40,7 @@ Recovery:
    (`~/.cache/opencode/npm/...` on Linux/macOS).
 3. Re-add the tag from a clean cache:
    ```powershell
-   opencode.cmd plugin add github:userbox020/opencode-math-copilot#v0.3.1
+   opencode.cmd plugin add github:userbox020/opencode-math-copilot#v0.4.0
    opencode.cmd plugin list
    ```
 4. Do not pin the global config to a tag while the cache is stale; OpenCode may list the plugin as failed and remove the live tools.
@@ -48,7 +48,7 @@ Recovery:
 If the updater still fails, install the package directly with npm and verify it first:
 
 ```powershell
-npm install github:userbox020/opencode-math-copilot#v0.3.1
+npm install github:userbox020/opencode-math-copilot#v0.4.0
 ```
 
 ## Corpus and indexes
