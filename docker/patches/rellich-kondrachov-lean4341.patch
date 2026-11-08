@@ -224,6 +224,46 @@ index 51414a8..fb91297 100644
          simpa [g] using hF
        filter_upwards [hF_ae_full] with x hx
        intro hxnot
+diff --git a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/Rellich.lean b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/Rellich.lean
+index 4cd9bb3..c4c12e1 100644
+--- a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/Rellich.lean
++++ b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/Rellich.lean
+@@ -105,10 +105,9 @@ theorem isCompactOperator_h1OnToL2 {K : Set E} (_hK : IsCompact K) (hKm : Measur
+       L2Compactness.extendByZeroL2 (E := E) (K := K) hKm u ∈
+         T '' Metric.closedBall (0 : ↥(h1On (E := E) K hKm)) 1}
+   let C : ℝ :=
+-    (h1ToL2 (μ := (volume : Measure E)) (E := E)).opNorm
++    ‖h1ToL2 (μ := (volume : Measure E)) (E := E)‖
+   have hCnonneg : 0 ≤ C := by
+-    dsimp [C]
+-    exact (h1ToL2 (μ := (volume : Measure E)) (E := E)).opNorm_nonneg
++    exact norm_nonneg (h1ToL2 (μ := (volume : Measure E)) (E := E))
+   have hA_ball :
+       A ⊆
+         Metric.closedBall
+@@ -117,9 +116,8 @@ theorem isCompactOperator_h1OnToL2 {K : Set E} (_hK : IsCompact K) (hKm : Measur
+     intro u hu
+     rcases hu with ⟨x, hx, hxEq⟩
+     have hx' : ‖(x : H1vol)‖ ≤ (1 : ℝ) := by
+-      -- `h1On` inherits the ambient norm, so this is definitional.
+-      change ‖x‖ ≤ (1 : ℝ)
+-      exact (mem_closedBall_zero_iff.mp hx)
++      change dist (x : H1vol) 0 ≤ (1 : ℝ) at hx
++      simpa only [dist_zero_right] using hx
+     have hTx' : ‖T x‖ ≤ C := by
+       have hTx : ‖T x‖ ≤ C * ‖(x : H1vol)‖ := by
+         have h :=
+@@ -156,8 +154,8 @@ theorem isCompactOperator_h1OnToL2 {K : Set E} (_hK : IsCompact K) (hKm : Measur
+     intro u huA
+     rcases huA with ⟨x, hx, hxEq⟩
+     have hxH1 : ‖(x : H1vol)‖ ≤ (1 : ℝ) := by
+-      change ‖x‖ ≤ (1 : ℝ)
+-      exact (mem_closedBall_zero_iff.mp hx)
++      change dist (x : H1vol) 0 ≤ (1 : ℝ) at hx
++      simpa only [dist_zero_right] using hx
+     have hmod :
+         ∀ t : E, t ∈ Metric.ball (0 : E) (ε / 2) →
+           ‖(translateL2 (μ := (volume : Measure E)) (-t)) (T x) - T x‖ ≤ ε / 2 := by
 diff --git a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/Translation.lean b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/Translation.lean
 index c009eb8..a70c1fe 100644
 --- a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/Translation.lean

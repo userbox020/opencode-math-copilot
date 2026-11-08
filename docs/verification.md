@@ -71,12 +71,12 @@ The rebuilt image's `verify-comparator.sh` also completed the same smoke challen
 
 The challenge module compiled (`Build completed successfully (8924 jobs)`), and its `.olean` is present. The initial solution build aborted at **4,389/7,075 modules** because the corpus-pinned `rellich-kondrachov` package (2026-05-14) predates the pinned Mathlib API (2026-09-24, Lean 4.34.1). This was an upstream source break, not Comparator/lean4export drift or a local edit.
 
-A checked-in compatibility patch now adapts eight dependency modules:
+A checked-in compatibility patch now adapts eleven dependency modules:
 
-- `Kernels`, `Restrict`, `H1`, `Translation`, `Compactness`
-- `TranslationEstimateL2`, `Approximation`, `ArzelaAscoli`
+- `Kernels`, `Restrict`, `H1`, `Translation`, `Compactness`, `Transfer`
+- `TranslationEstimateH1`, `TranslationEstimateL2`, `Approximation`, `ArzelaAscoli`, `Rellich`
 
-All eight compile under Lean 4.34.1/Mathlib `d13f23b7`. `verify-comparator.sh` applies `docker/patches/rellich-kondrachov-lean4341.patch` once per volume, idempotently, before running a challenge. The corpus manifest is unchanged.
+All eleven compile under Lean 4.34.1/Mathlib `d13f23b7`. `verify-comparator.sh` applies `docker/patches/rellich-kondrachov-lean4341.patch` once per volume, idempotently, before running a challenge. The corpus manifest is unchanged.
 
 The full challenge is rerunning with the patch. Do not record it as a pass until the run exits with `Your solution is okay!`. Rerun:
 
