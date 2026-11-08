@@ -82,12 +82,22 @@ The challenge file contains a `sorry` warning; that is the challenge statement, 
 
 ## Benchmark
 
-See `bench/RESULTS.md`. Two models, 10 problems, 1 repeat:
+See `bench/RESULTS.md` for the full tables and caveats.
+
+Original run: two models, 10 problems, 1 repeat.
 
 | Model | With plugin | Without plugin |
 | --- | ---: | ---: |
 | DeepSeek V4.1 Flash | 8/10, 93.97s | 4/10, 142.42s |
 | GLM-5.3-Flash | 9/10, 36.77s | 8/10, 76.98s |
+
+Core run: three models, 4 problems, 3 repeats.
+
+| Model | With plugin | Without plugin |
+| --- | ---: | ---: |
+| DeepSeek V4.1 Flash | 12/12, 27.48s | 8/12, 105.05s |
+| GLM-5.3-Flash | 12/12, 39.08s | 8/12, 105.01s |
+| GPT-6-Luna | 12/12, 20.89s | 7/12, 38.98s |
 
 ## Native Windows
 

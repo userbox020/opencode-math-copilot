@@ -54,5 +54,39 @@
 - Full stdout/stderr and JSON are in `bench/results/` locally; that directory is gitignored.
 - The full 10-problem matrix ran in separate detached processes to survive OpenCode server restarts.
 
-## Core repeat run (pending)
-The 4-problem × 3-repeat × 3-model matrix is configured in bench/problems-core.json and bench/run-core.ps1; results will be added after execution.
+## Core repeat run (3 repeats)
+
+Configured in `bench/problems-core.json` and `bench/run-core.ps1`. Four high-signal problems (retrieval, Lean status, PDF extraction, symbolic computation) × 3 repeats × 3 models, each run with `--standalone`.
+
+| Model | Condition | Passed | Errors | Mean time | Mean tool calls |
+| --- | --- | ---: | ---: | ---: | ---: |
+| `opencode-go/deepseek-v4.1-flash` | with plugin | **12/12** | 0 | 27.48s | 3.33 |
+| `opencode-go/deepseek-v4.1-flash` | without plugin | **8/12** | 4 | 105.05s | 4.25 |
+| `opencode-go/glm-5.3-flash` | with plugin | **12/12** | 0 | 39.08s | 3.58 |
+| `opencode-go/glm-5.3-flash` | without plugin | **8/12** | 4 | 105.01s | 3.58 |
+| `opencode-go/gpt-6-luna` | with plugin | **12/12** | 0 | 20.89s | 4.58 |
+| `opencode-go/gpt-6-luna` | without plugin | **7/12** | 0 | 38.98s | 7.08 |
+
+Per-problem passes (out of 3 repeats):
+
+| Problem | DeepSeek with | DeepSeek without | GLM with | GLM without | GPT with | GPT without |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| quasi-riemann | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 | 2/3 |
+| landau-siegel | 3/3 | 1/3 | 3/3 | 2/3 | 3/3 | 2/3 |
+| pdf-overview | 3/3 | 1/3 | 3/3 | 0/3 | 3/3 | 0/3 |
+| sympy-determinant | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
+
+### What this shows
+
+- The plugin passed all 36 core runs; without it, the same models passed 23/36.
+- Retrieval and PDF extraction account for the clearest gains: `landau-siegel` and `pdf-overview` fall sharply without the plugin, and GLM/GPT fail every `pdf-overview` repeat.
+- `sympy-determinant` passes both ways; the plugin is not required for that computation.
+- Mean time is lower with the plugin for every model, but the without-plugin mean includes timeouts; this is not a controlled latency benchmark.
+
+### Caveats
+
+- Three repeats and four problems: indicative, not scientific.
+- Keyword scoring is heuristic; tool-call counts are regex counts of tool activity, including non-math tools in the without-plugin condition.
+- The without-plugin condition still has global OpenCode plugins; only `math-toolkit` is excluded by the temporary project config.
+- The first part of this run overlapped the Comparator dependency build; DeepSeek runs may have been slowed. The build was paused before the GLM and GPT runs.
+- Full stdout/stderr and JSON are in `bench/results/` locally; that directory is gitignored.
