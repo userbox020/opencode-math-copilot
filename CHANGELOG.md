@@ -5,6 +5,7 @@
 - Docker execution mode for `math_lean_check`, `math_lean_build`, and `math_comparator` (`docker: true`), with configurable images/volumes and actionable missing-image errors.
 - `math_pdf_search` for bounded full-text phrase/regex search in one manuscript PDF.
 - Comparator Docker verification pinned to `v4.34.0` built against the corpus's Lean v4.34.1 toolchain, with an idempotent build cache.
+- The Comparator toolchain pin is smoke-verified. The full QuasiRiemann challenge remains blocked upstream by `rellich-kondrachov` compile errors at the corpus-pinned revisions (`70f85d4` vs Mathlib `d13f23b7`); no pass is claimed.
 - Index refresh automation: `scripts/refresh-indexes.ps1`, weekly/manual `refresh-index.yml`, and `docs/index-refresh.md`.
 - Core benchmark set (`bench/problems-core.json`, `bench/run-core.ps1`) for 4 problems × 3 repeats × 3 models.
 - Distribution is project-local discovery plus the global Git-spec install:

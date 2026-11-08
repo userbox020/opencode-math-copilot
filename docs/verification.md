@@ -69,9 +69,25 @@ The rebuilt image's `verify-comparator.sh` also completed the same smoke challen
 
 ### QuasiRiemannHypothesis challenge
 
-The challenge module compiled earlier (`Build completed successfully (8924 jobs)`), and its `.olean` is present. Running the challenge additionally builds the solution module `OAI.NumberTheory.DirichletL.Nonvanishing`, whose first-time dependency closure is 7,075 modules. That build is a multi-hour dependency chain; it reached roughly 4.4k/7,075 modules before being paused to avoid CPU contention with the benchmark. Build artifacts persist in `opencode-math-lean`. Do not record the challenge as a pass until the resumed run exits with `Your solution is okay!`.
+The challenge module compiled (`Build completed successfully (8924 jobs)`), and its `.olean` is present. The resumed run built the solution module's dependency closure to **4,389/7,075 modules**, then aborted because the corpus-pinned `rellich-kondrachov` dependency does not compile against the corpus-pinned Mathlib:
 
-Resume command:
+- `RellichKondrachov.Analysis.FunctionalSpaces.Sobolev.Euclidean.L2Compactness.Kernels` (lines 80, 82)
+- `RellichKondrachov.MeasureTheory.Function.LpSpace.Restrict` (lines 66, 120)
+- `RellichKondrachov.Analysis.FunctionalSpaces.Sobolev.Euclidean.H1` (lines 81, 91, 98, 105)
+
+Representative error:
+
+```text
+error: RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/H1.lean:81:4:
+Type mismatch: After simplification, term
+  HasCompactSupport.smul_left hf.right
+has type ... ((fun x => c) * f)
+but is expected to have type ... (c • f)
+```
+
+The corpus manifest pins `rellich-kondrachov` at `70f85d4` (2026-05-14) and Mathlib at `d13f23b7` (2026-09-24, Lean 4.34.1). The package predates Mathlib API changes in `HasCompactSupport`/`grad`. Both the repository manifest and the Docker volume manifest match upstream HEAD, so this is an upstream corpus dependency break, not Comparator/lean4export drift or a local edit.
+
+Do not record the challenge as a pass. Fixing it requires a corpus-maintainer update or patch to `rellich-kondrachov`; the plugin does not silently change corpus pins. After that dependency is fixed, rerun:
 
 ```powershell
 docker run --rm -v opencode-math-lean:/work -v opencode-comparator-tools:/opt -w /work/math/lean `
