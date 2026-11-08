@@ -70,6 +70,8 @@ docker run --rm -it -v opencode-math-lean:/work -v opencode-comparator-tools:/op
 
 The script pins Comparator to **`v4.34.0`** and builds it against the corpus’s **Lean v4.34.1** toolchain (override with `COMPARATOR_TOOLCHAIN` only after checking compatibility). The build is cached in `/opt` using a tag/toolchain stamp, so reruns reuse the Comparator and lean4export binaries. The first run of a challenge also builds its solution-module dependency closure inside `/work/math/lean/.lake`; large challenges such as `QuasiRiemannHypothesis` can take hours on the first run, then reuse the volume. It reports build/export failures explicitly; do not treat a failed comparator run as a verification pass.
 
+The `QuasiRiemannHypothesis` challenge currently stops in the corpus-pinned `rellich-kondrachov` dependency, which predates the pinned Mathlib API. This is an upstream corpus issue, not a Comparator failure; see [`docs/verification.md`](../docs/verification.md) for the exact revisions and errors.
+
 Run a specific challenge:
 
 ```powershell
