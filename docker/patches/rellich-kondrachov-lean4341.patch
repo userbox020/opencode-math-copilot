@@ -187,6 +187,43 @@ index 833b243..0459a5e 100644
      exact hsub.trans hf_tsupp
    exact ⟨ψ, hψc, hψcs, hψ0, hψint, hψ_tsupp⟩
  
+diff --git a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Transfer.lean b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Transfer.lean
+index 51414a8..fb91297 100644
+--- a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Transfer.lean
++++ b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Transfer.lean
+@@ -121,7 +121,7 @@ theorem smoothL2_image_closedBall_isCompact (hK : IsCompact K) (hKm : Measurable
+           (F : E → ℝ) =ᵐ[(volume : Measure E)]
+             fun x : E =>
+               smoothFun (E := E) (K := K) ψ u x - smoothFun (E := E) (K := K) ψ v x := by
+-        simpa [Pi.sub_apply] using hsub.trans (hu.sub hv)
++        exact hsub.trans (hu.sub hv)
+       exact MeasureTheory.ae_restrict_of_ae (μ := (volume : Measure E)) (s := s) hF
+     have hFs_ae : ((Fs : E → ℝ) =ᵐ[μs] g) := by
+       simpa [Fs, g] using
+@@ -157,10 +157,12 @@ theorem smoothL2_image_closedBall_isCompact (hK : IsCompact K) (hKm : Measurable
+             smoothFun (E := E) (K := K) ψ v x = 0 := by
+       intro x hx
+       have hu_supp : Function.support (smoothFun (E := E) (K := K) ψ u) ⊆ s := by
+-        simpa [s] using
++        change Function.support (smoothFun (E := E) (K := K) ψ u) ⊆ K + tsupport ψ
++        exact
+           (support_smoothFun_subset_add_tsupport (E := E) (K := K) (ψ := ψ) u)
+       have hv_supp : Function.support (smoothFun (E := E) (K := K) ψ v) ⊆ s := by
+-        simpa [s] using
++        change Function.support (smoothFun (E := E) (K := K) ψ v) ⊆ K + tsupport ψ
++        exact
+           (support_smoothFun_subset_add_tsupport (E := E) (K := K) (ψ := ψ) v)
+       have hu0 : smoothFun (E := E) (K := K) ψ u x = 0 := by
+         have : x ∉ Function.support (smoothFun (E := E) (K := K) ψ u) := fun hx' => hx (hu_supp hx')
+@@ -190,7 +192,7 @@ theorem smoothL2_image_closedBall_isCompact (hK : IsCompact K) (hKm : Measurable
+             (F : E → ℝ) =ᵐ[(volume : Measure E)]
+               fun x : E =>
+                 smoothFun (E := E) (K := K) ψ u x - smoothFun (E := E) (K := K) ψ v x := by
+-          simpa [Pi.sub_apply] using hsub.trans (hu.sub hv)
++          exact hsub.trans (hu.sub hv)
+         simpa [g] using hF
+       filter_upwards [hF_ae_full] with x hx
+       intro hxnot
 diff --git a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/Translation.lean b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/Translation.lean
 index c009eb8..a70c1fe 100644
 --- a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/Translation.lean
@@ -257,6 +294,28 @@ index c009eb8..a70c1fe 100644
          (Measure.QuasiMeasurePreserving.ae_eq_comp
            (MeasureTheory.measurePreserving_add_right μ a).quasiMeasurePreserving hf)
      exact
+diff --git a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/TranslationEstimateH1.lean b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/TranslationEstimateH1.lean
+index 6bac2f7..dd24f11 100644
+--- a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/TranslationEstimateH1.lean
++++ b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/TranslationEstimateH1.lean
+@@ -73,14 +73,14 @@ theorem norm_translateL2_sub_h1ToL2_le (a : E) (u : ↥(h1 (μ := μ) (E := E)))
+       have hsub :
+           Continuous fun v : V =>
+             translateL2 (μ := μ) (F := ℝ) a v.1 - v.1 := by
+-        simpa [sub_eq_add_neg] using htr.sub hfst
+-      simpa using (continuous_norm.comp hsub)
++        exact htr.sub hfst
++      exact continuous_norm.comp hsub
+     have hg :
+         Continuous fun v : V =>
+           ‖a‖ * ‖v.2‖ := by
+       have hsnd : Continuous fun v : V => v.2 := continuous_snd
+       have hnorm : Continuous fun v : V => ‖v.2‖ := continuous_norm.comp hsnd
+-      simpa [mul_assoc] using (continuous_const.mul hnorm)
++      exact continuous_const.mul hnorm
+     exact isClosed_le hf hg
+   have hRange : (LinearMap.range (graph (μ := μ) (E := E)) : Set V) ⊆ S := by
+     rintro v ⟨f, rfl⟩
 diff --git a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/TranslationEstimateL2.lean b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/TranslationEstimateL2.lean
 index 9a903af..a4833a1 100644
 --- a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/TranslationEstimateL2.lean
