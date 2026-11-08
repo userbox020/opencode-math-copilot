@@ -63,6 +63,8 @@ The JSON string receipt is versioned `math-lean-verify/v1`. Verification require
 
 ## PDF cache and excerpt index
 
+PDF searches default to recommended case-insensitive literal matching (`literal:true`), without a child process. With `literal:false`, regex matching runs in a child process terminated after 1000 ms by default; `MATH_TOOLKIT_REGEX_TIMEOUT_MS` overrides this deadline (clamped to 100–10000 ms). Timeouts/errors return no partial matches; use literal mode or simplify the pattern.
+
 Complete PDF extractions are cached under `~/.cache/opencode-math-copilot/pdf`. Set `MATH_TOOLKIT_PDF_CACHE` to override the directory, or `MATH_TOOLKIT_DISABLE_PDF_CACHE=1` to bypass reads and writes. Keys include absolute PDF path, size, modification time, requested pages, character limit and extraction-format version. Invalid/unavailable cache files fall back to extraction; errors and truncated/capped output are never cached. Before writing, oldest entries are pruned to keep at most 500 JSON files / 200 MB.
 
 Build the optional gzip excerpt index from the repo root (requires the corpus and the existing `unpdf` dependency):

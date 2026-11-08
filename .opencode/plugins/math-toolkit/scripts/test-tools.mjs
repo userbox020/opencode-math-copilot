@@ -82,7 +82,8 @@ assert.equal(corpusSchema.properties.limit.default, 10);
 assert.equal(corpusSchema.properties.literal.default, true);
 const verifySchema = tools.get("math_lean_verify").input;
 assert.deepEqual(verifySchema.required, ["theorem", "expectedType"]);
-assert.deepEqual(verifySchema.oneOf, [{ required: ["code"] }, { required: ["file"] }]);
+assert.equal(verifySchema.oneOf, undefined);
+assert.match(verifySchema.description, /exactly one of code or file/i);
 assert.deepEqual(verifySchema.properties.imports.default, ["Mathlib"]);
 assert.deepEqual(verifySchema.properties.allowedAxioms.default, DEFAULT_AXIOMS);
 assert.equal(verifySchema.additionalProperties, false);
@@ -611,3 +612,76 @@ if (corpusAvailable) {
 }
 assert((await call("math_search", { query: "Riemann hypothesis" })).includes("003"));
 console.log("PASS: index counts, BM25/filters, schema, PDF/Lean fixtures, path safety, status and missing-tool behavior. Lean/LaTeX/Comparator/network are not required.");
+
+// PERF-01: real child-process regex isolation, with a short deadline for CI.
+const { runRegexLines } = await import("../lib/regex-search.js");
+const pathologicalPattern = "^(a+)+$";
+const pathologicalLine = "a".repeat(30000) + "!";
+assert.deepEqual(runRegexLines(["ALPHA beta", "other"], "^alpha", { timeoutMs: 1000 }), {
+  status: "ok", matches: [true, false],
+});
+const timeoutStart = performance.now();
+const regexTimeout = runRegexLines(["aaaa", pathologicalLine], pathologicalPattern, { timeoutMs: 100 });
+const timeoutDuration = performance.now() - timeoutStart;
+assert.equal(regexTimeout.status, "timeout");
+assert.equal(regexTimeout.matches, undefined, "Timeout must discard even earlier successful matches");
+assert.match(regexTimeout.message, /^Regex search timed out after 100 ms; use literal:true or simplify the pattern\.$/);
+assert(timeoutDuration < 3000, `Regex worker took ${timeoutDuration.toFixed(1)} ms to terminate`);
+const regexError = runRegexLines(["a"], "[", { timeoutMs: 1000 });
+assert.equal(regexError.status, "error");
+assert.equal(regexError.matches, undefined);
+assert.match(regexError.message, /use literal:true or simplify the pattern/);
+console.log(`PASS: PERF-01 catastrophic regex child terminated in ${timeoutDuration.toFixed(1)} ms (100 ms deadline), without partial matches.`);
+
+const regexFixture = fs.mkdtempSync(path.join(os.tmpdir(), "math-toolkit-regex-"));
+const regexEnv = Object.fromEntries(["MATH_TOOLKIT_REGEX_TIMEOUT_MS", "MATH_TOOLKIT_PDF_CACHE", "MATH_TOOLKIT_DISABLE_PDF_CACHE"].map(name => [name, process.env[name]]));
+try {
+  process.env.MATH_TOOLKIT_REGEX_TIMEOUT_MS = "1000";
+  process.env.MATH_TOOLKIT_PDF_CACHE = path.join(regexFixture, "cache");
+  delete process.env.MATH_TOOLKIT_DISABLE_PDF_CACHE;
+  fs.copyFileSync(path.join(workspace, "test/fixtures/overview.pdf"), path.join(regexFixture, "sample.pdf"));
+  const roots = { math: regexFixture, workspace: regexFixture };
+  const candidates = () => [{ manuscript: { pdf: "sample.pdf" } }, { manuscript: { pdf: "sample.pdf" } }];
+  // Seed valid cache keys, then supply controlled extracted lines through the cache.
+  for (const maxChars of [5000, 50000]) {
+    assert.match(await pdfText(roots, { path: "sample.pdf", pages: "1", maxChars }), /## Page 1/);
+  }
+  const cacheFiles = fs.readdirSync(process.env.MATH_TOOLKIT_PDF_CACHE);
+  assert.equal(cacheFiles.length, 2);
+  for (const file of cacheFiles) {
+    const filename = path.join(process.env.MATH_TOOLKIT_PDF_CACHE, file);
+    const cached = JSON.parse(fs.readFileSync(filename, "utf8"));
+    // Corpus extraction is capped at 5000 chars; 2000 a's already trigger ReDoS.
+    const longLine = JSON.parse(cached.key).maxChars === 5000 ? "a".repeat(2000) + "!" : pathologicalLine;
+    cached.text = `# PDF text: sample.pdf\n\n## Page 7\naaaa\n${longLine}\nALPHA beta\n${pathologicalPattern}\n`;
+    fs.writeFileSync(filename, JSON.stringify(cached));
+  }
+  const fixtureIndex = () => ({ version: 1, generatedAt: "fixture", counts: { documents: 1, pages: 1, chars: 30050 }, documents: [
+    { path: "sample.pdf", pages: [{ page: 7, text: `aaaa\n${pathologicalLine}\nALPHA beta\n${pathologicalPattern}` }] },
+  ] });
+  const searches = [
+    args => pdfSearch(roots, { path: "sample.pdf", pages: "1", ...args }),
+    args => pdfCorpusSearch(roots, candidates, { pages: "1", ...args }),
+    args => pdfIndexSearch(args, fixtureIndex),
+  ];
+  for (const search of searches) {
+    assert.match(await search({ query: "^alpha (beta|gamma)$", literal: false }), /page 7, line 3: ALPHA beta/);
+    assert.match(await search({ query: "[", literal: false }), /^Invalid regex:/);
+    assert.match(await search({ query: pathologicalPattern }), /page 7, line 4: \^\(a\+\)\+\$/);
+    assert.match(await search({ query: "aaaa" }), /page 7, line 2: a+/);
+    process.env.MATH_TOOLKIT_REGEX_TIMEOUT_MS = "100";
+    const start = performance.now();
+    const timed = await search({ query: pathologicalPattern, literal: false, limit: 1 });
+    const duration = performance.now() - start;
+    assert.equal(timed, "Regex search timed out after 100 ms; use literal:true or simplify the pattern.");
+    assert.doesNotMatch(timed, /- page |Showing the first|# PDF/);
+    assert(duration < 3000, `PDF regex search took ${duration.toFixed(1)} ms`);
+    process.env.MATH_TOOLKIT_REGEX_TIMEOUT_MS = "1000";
+    console.log(`PASS: PERF-01 PDF search timeout in ${duration.toFixed(1)} ms; normal regex, literal long text, invalid regex and no partial matches.`);
+  }
+} finally {
+  for (const [name, value] of Object.entries(regexEnv)) {
+    if (value === undefined) delete process.env[name]; else process.env[name] = value;
+  }
+  fs.rmSync(regexFixture, { recursive: true, force: true });
+}

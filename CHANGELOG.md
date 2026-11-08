@@ -8,6 +8,8 @@
 - Added `bench/v2` deterministic evaluation harness (simulated only): A/B/F profiles, typed graders, append-only provenance/resume, family-paired bootstrap, and a restricted execution profile. No model inference is enabled.
 - Added `research/` protocol, claims/evidence map, related-work notes and `paper/` skeleton. New results are pending/simulated; no release or publication.
 - Addressed the independent review: strict verification audits a generated checked declaration (including synthesized instances/`sorry`), rejects malformed extra reports, handles null/`notRun`, and aligns the v2 study receipt schema 2.1.0 with `math-lean-verify/v1`.
+- PERF-01: PDF regex searches now run in a timeout-bounded child process (default 1000 ms; `MATH_TOOLKIT_REGEX_TIMEOUT_MS`); literal mode remains process-free and timeouts return no partial matches.
+- Added `research/pilot-readiness.md` documenting the real-pilot gates; no real model pilot was run.
 
 ## 0.4.0 - 2026-11-08
 

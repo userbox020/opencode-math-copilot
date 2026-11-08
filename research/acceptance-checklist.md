@@ -22,7 +22,9 @@ This checklist records delivery scope, not scientific evidence.
 | Paper avoids universal expertise, hallucination-elimination, or superiority without evidence | **implemented (docs)** | `paper/main.tex`, `research/protocol.md`, `research/claims-and-evidence.md` mark results pending and preserve historical negative cases. |
 | Every publishable table can be regenerated from an identified artifact | **implemented (simulated)** | `bench/v2/simulated/simulated-pilot-receipt-v2.1/{manifest,starts,episodes,report}`; confirmatory real-data tables pending. |
 | Historical benchmark is not presented as mathematical accuracy | **implemented** | `bench/RESULTS.md` caveats, Wilson-interval note, and `research/claims-and-evidence.md`; keyword heuristic only. |
-| No release, publication, or costly model matrix was performed | **implemented** | No tag/release/push and no model inference in this work. |
+| PERF-01: configurable regex searches have an effective time limit | **implemented** | Child-process worker with 1000 ms default; catastrophic regex terminates in ~125 ms; literal mode is process-free; no partial matches. |
+| Real pilot readiness | **pending** | `research/pilot-readiness.md`: no 30 reviewed tasks, real A/B/F adapter, trusted verifier side-channel, or model/budget plan yet. No real episode was run. |
+| No release, publication, or costly model matrix was performed | **implemented** | No tag/release; code changes only; no model inference in this work. |
 
 ## Simulated pilot (not evidence)
 

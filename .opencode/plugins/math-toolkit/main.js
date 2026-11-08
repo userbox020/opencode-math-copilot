@@ -92,7 +92,9 @@ const inputs = {
       timeoutMs: { type: "integer", minimum: 1000, maximum: 120000, default: 60000 },
     },
     required: ["theorem", "expectedType"],
-    oneOf: [{ required: ["code"] }, { required: ["file"] }],
+    // Runtime requires exactly one of code/file. Avoid JSON-Schema oneOf here:
+    // the Code Mode schema renderer cannot represent it and shows `unknown`.
+    description: "Provide exactly one of code or file; runtime enforces this.",
     additionalProperties: false,
   },
   math_lean_build: {

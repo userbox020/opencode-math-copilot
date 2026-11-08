@@ -1,5 +1,6 @@
 import { clip, fence } from "./format.js";
 import { pdfText } from "./pdf.js";
+import { runRegexLines } from "./regex-search.js";
 
 /**
  * Search the extracted text of one PDF/preprint. This is intentionally bounded:
@@ -12,15 +13,21 @@ export async function pdfSearch(roots, args = {}) {
   if (!Number.isInteger(limit) || limit < 1 || limit > 20) return "Usage error: limit must be an integer from 1 to 20.";
   if (typeof literal !== "boolean") return "Usage error: literal must be boolean.";
 
-  let regex;
   if (!literal) {
-    try { regex = new RegExp(query, "i"); } catch (error) { return `Invalid regex: ${error.message}`; }
+    try { new RegExp(query, "i"); } catch (error) { return `Invalid regex: ${error.message}`; }
   }
 
   const extracted = await pdfText(roots, { path: requested, pages, maxChars: 50000 });
   if (extracted.startsWith("PDF extraction error:")) return extracted;
 
-  const hits = matchingLines(extracted, query, regex, limit);
+  const lines = candidateLines(extracted);
+  let matches;
+  if (!literal) {
+    const result = runRegexLines(lines.map(line => line.text), query);
+    if (result.status !== "ok") return result.message;
+    matches = result.matches;
+  }
+  const hits = matchingLines(lines, query, matches, limit);
   if (!hits.length) {
     return `No matches for ${JSON.stringify(query)} in the extracted PDF text.${pages ? ` Pages: ${pages}.` : " Default extraction is the first 10 pages; pass pages to search more."}`;
   }
@@ -29,7 +36,7 @@ export async function pdfSearch(roots, args = {}) {
   return `# PDF search: ${JSON.stringify(query)}\n${hits.length === limit ? "Showing the first " + limit + " matches.\n" : ""}\n${fence(output)}`;
 }
 
-function matchingLines(extracted, query, regex, limit) {
+function candidateLines(extracted) {
   const blocks = [];
   const parts = extracted.split(/^## Page /m).slice(1);
   for (const part of parts) {
@@ -40,19 +47,26 @@ function matchingLines(extracted, query, regex, limit) {
     blocks.push({ page, text: part.slice(newline + 1) });
   }
 
-  const hits = [];
+  const candidates = [];
   for (const block of blocks) {
     const lines = block.text.split(/\r?\n/);
     for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      if (regex ? regex.test(line) : line.toLowerCase().includes(query.toLowerCase())) {
-        hits.push({ page: block.page, line: i + 1, text: clip(line.trim(), 700) });
-        if (hits.length >= limit) break;
-      }
+      candidates.push({ page: block.page, line: i + 1, text: lines[i] });
     }
-    if (hits.length >= limit) break;
   }
+  return candidates;
+}
 
+function matchingLines(lines, query, matches, limit) {
+  const hits = [];
+  const needle = query.toLowerCase();
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (matches ? matches[i] : line.text.toLowerCase().includes(needle)) {
+      hits.push({ ...line, text: clip(line.text.trim(), 700) });
+      if (hits.length >= limit) break;
+    }
+  }
   return hits;
 }
 
@@ -76,15 +90,21 @@ export async function pdfCorpusSearch(roots, search, args = {}) {
     if (selectedPages.size > 5) return pageError;
   }
 
-  let regex;
   if (!literal) {
-    try { regex = new RegExp(query, "i"); } catch (error) { return `Invalid regex: ${error.message}`; }
+    try { new RegExp(query, "i"); } catch (error) { return `Invalid regex: ${error.message}`; }
   }
   const results = search({ query, limit: candidates }).slice(0, candidates);
   if (!results.length) return `No candidate manuscripts found in the index for ${JSON.stringify(query)}. Try broader terms.`;
 
   const groups = [];
   const skipped = [];
+  const regexCandidates = [];
+  const addHits = (requested, hits) => {
+    if (hits.length) {
+      groups.push(`## ${requested}\n${fence(hits.map(hit => `- page ${hit.page}, line ${hit.line}: ${hit.text}`).join("\n"))}`);
+      hitCount += hits.length;
+    }
+  };
   let hitCount = 0;
   let inspected = 0;
   for (const { manuscript } of results) {
@@ -97,15 +117,24 @@ export async function pdfCorpusSearch(roots, search, args = {}) {
         skipped.push(`- ${requested}: ${clip(extracted.replace(/\s+/g, " "), 250)}`);
         continue;
       }
-      const hits = matchingLines(extracted, query, regex, limit - hitCount);
-      if (hits.length) {
-        groups.push(`## ${requested}\n${fence(hits.map(hit => `- page ${hit.page}, line ${hit.line}: ${hit.text}`).join("\n"))}`);
-        hitCount += hits.length;
-      }
+      const lines = candidateLines(extracted);
+      if (literal) addHits(requested, matchingLines(lines, query, undefined, limit - hitCount));
+      else regexCandidates.push({ requested, lines });
     } catch (error) {
       skipped.push(`- ${requested}: ${clip(String(error?.message || error).replace(/\s+/g, " "), 250)}`);
     }
     if (hitCount >= limit) break;
+  }
+
+  if (!literal) {
+    const result = runRegexLines(regexCandidates.flatMap(candidate => candidate.lines.map(line => line.text)), query);
+    if (result.status !== "ok") return result.message;
+    let offset = 0;
+    for (const { requested, lines } of regexCandidates) {
+      addHits(requested, matchingLines(lines, query, result.matches.slice(offset, offset + lines.length), limit - hitCount));
+      offset += lines.length;
+      if (hitCount >= limit) break;
+    }
   }
 
   return `# PDF corpus search: ${JSON.stringify(query)}\nInspected ${inspected} of ${results.length} indexed candidates. Pages: ${pages}; at most 5 pages and 5000 extraction characters per candidate (50000 total). Not a full-text index; no OCR.\n\n${groups.length ? groups.join("\n\n") : "No matches in the extracted candidate PDF text."}${hitCount === limit ? `\n\nShowing the first ${limit} matches.` : ""}${skipped.length ? `\n\n## Skipped candidates\n${skipped.join("\n")}` : ""}`;

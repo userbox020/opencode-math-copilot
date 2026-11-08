@@ -99,6 +99,8 @@ tools.math_reindex({})
 
 PDF discovery example (16 tools total): the committed excerpt index covers **789 PDFs / 1,548 pages / 1.46 MB gzip**; rebuild it with `npm run index:pdf`, then call `math_pdf_index_search` above. Complete extractions share a persistent cache (500 entries / 200 MB; `MATH_TOOLKIT_PDF_CACHE` overrides the directory, `MATH_TOOLKIT_DISABLE_PDF_CACHE=1` disables it). See the [plugin guide](.opencode/plugins/math-toolkit/README.md#pdf-cache-and-excerpt-index) for index/cache limits.
 
+PDF searches recommend and default to `literal:true`. Regex mode (`literal:false`) runs in a child process with a 1000 ms timeout (`MATH_TOOLKIT_REGEX_TIMEOUT_MS`, clamped to 100–10000 ms); timeouts/errors return no partial matches. Use literal mode or simplify the pattern if it times out.
+
 **Compilation is not proof verification.** `math_lean_check` retains its compilation-only behavior; Lean can compile declarations containing `sorry`. Use `math_lean_verify` with exactly one of `code`/`file`, a fully qualified `theorem`, and an independently trusted `expectedType`. Only a receipt with `proof.status: "verified"` meets its type/axiom contract; informal correspondence is not assessed. Comparator challenge `sorry` placeholders are statements, not solutions: use `math_comparator` for those challenges. See the [verification contract](docs/verification-contract.md).
 
 ## How it works
