@@ -119,6 +119,14 @@ Core run: three models, 4 problems, 3 repeats.
 | GLM-5.3-Flash | 12/12, 39.08s | 8/12, 105.01s |
 | GPT-6-Luna | 12/12, 20.89s | 7/12, 38.98s |
 
+Full run: three models, 10 problems, 3 repeats. With plugin **83/90**; without **62/90**.
+
+| Model | With plugin | Without plugin |
+| --- | ---: | ---: |
+| DeepSeek V4.1 Flash | 30/30, 31.37s | 19/30, 92.42s |
+| GLM-5.3-Flash | 26/30, 27.17s | 20/30, 65.41s |
+| GPT-6-Luna | 27/30, 20.57s | 23/30, 47.49s |
+
 ## Index refresh
 
 The `Refresh indexes` workflow was dispatch-tested (run `42452644635`) and completed successfully. It produced both artifacts; their counts match the committed indexes:

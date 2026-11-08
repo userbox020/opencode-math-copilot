@@ -90,3 +90,45 @@ Per-problem passes (out of 3 repeats):
 - The without-plugin condition still has global OpenCode plugins; only `math-toolkit` is excluded by the temporary project config.
 - The first part of this run overlapped the Comparator dependency build; DeepSeek runs may have been slowed. The build was paused before the GLM and GPT runs.
 - Full stdout/stderr and JSON are in `bench/results/` locally; that directory is gitignored.
+
+## Full run (3 repeats)
+
+10 problems × 3 repeats × 3 models, each run with `--standalone`. Started 2026-11-08 02:49:44, finished 05:12:00 (about 2h22m).
+
+| Model | Condition | Passed | Errors | Mean time | Mean tool calls |
+| --- | --- | ---: | ---: | ---: | ---: |
+| `opencode-go/deepseek-v4.1-flash` | with plugin | **30/30** | 0 | 31.37s | 4.23 |
+| `opencode-go/deepseek-v4.1-flash` | without plugin | **19/30** | 11 | 92.42s | 3.83 |
+| `opencode-go/glm-5.3-flash` | with plugin | **26/30** | 0 | 27.17s | 2.40 |
+| `opencode-go/glm-5.3-flash` | without plugin | **20/30** | 6 | 65.41s | 3.07 |
+| `opencode-go/gpt-6-luna` | with plugin | **27/30** | 0 | 20.57s | 4.03 |
+| `opencode-go/gpt-6-luna` | without plugin | **23/30** | 0 | 47.49s | 6.33 |
+
+Per-problem passes (out of 3 repeats):
+
+| Problem | DeepSeek with | DeepSeek without | GLM with | GLM without | GPT with | GPT without |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| quasi-riemann | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
+| landau-siegel | 3/3 | 0/3 | 2/3 | 1/3 | 2/3 | 3/3 |
+| family-lookup | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
+| lean-declaration | 3/3 | 0/3 | 2/3 | 0/3 | 3/3 | 1/3 |
+| pdf-overview | 3/3 | 0/3 | 3/3 | 1/3 | 3/3 | 1/3 |
+| sympy-simplify | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
+| sympy-solve | 3/3 | 3/3 | 2/3 | 2/3 | 1/3 | 0/3 |
+| sympy-determinant | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
+| theorem-explanation | 3/3 | 1/3 | 2/3 | 1/3 | 3/3 | 3/3 |
+| no-corpus-answer | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
+
+### What this shows
+
+- With the plugin, 83/90 runs passed with zero errors; without it, 62/90 passed.
+- Retrieval/Lean/PDF problems account for most of the gain: `landau-siegel`, `lean-declaration`, and `pdf-overview` fall sharply without the plugin.
+- The plugin is not a universal win: GPT `landau-siegel` passed 3/3 without it versus 2/3 with it, and pure `sympy-solve`/`sympy-determinant` behavior is mostly tool-independent.
+- Mean time is lower with the plugin for every model, but the without-plugin means include timeouts and 17 errors; this is not a controlled latency benchmark.
+
+### Caveats
+
+- Keyword scoring is heuristic; tool-call counts are regex counts of tool activity, including non-math tools in the without-plugin condition.
+- The without-plugin condition still has global OpenCode plugins; only `math-toolkit` is excluded by the temporary project config.
+- The run started after the QuasiRiemann challenge finished, so there was no Lean build contention. Failed plugin-update attempts during the run may have briefly touched the OpenCode server.
+- Full JSON (6.25 MB) and per-run stdout/stderr are in `bench/results/` locally; that directory is gitignored.
