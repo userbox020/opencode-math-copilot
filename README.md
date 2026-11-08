@@ -170,11 +170,18 @@ npm run bench -- --json bench/results/latest.json --md bench/results/latest.md
 
 The benchmark compares the same prompts with and without the plugin on a cheap model. Results are indicative, not a scientific benchmark; see `bench/README.md`.
 
-## Portability
+## Distribution
 
-This plugin is **project-local**. Clone the repository or copy `.opencode/plugins/math-toolkit.js` plus `.opencode/plugins/math-toolkit/` into a project; OpenCode discovers it automatically. No npm package or registry authentication is required.
+There are two supported installs:
 
-`npm install` is only needed for `unpdf` and test dependencies. `package.json` is `"private": true` to prevent accidental publishing. See `RELEASING.md` for the local install/update steps.
+1. **Project-local** — clone the repository or copy `.opencode/plugins/math-toolkit.js` plus `.opencode/plugins/math-toolkit/` into a project. OpenCode discovers it automatically.
+2. **Global Git install** — no npm registry auth or 2FA:
+
+   ```powershell
+   opencode plugin add github:userbox020/opencode-math-copilot
+   ```
+
+`npm install` is only needed for `unpdf` and test dependencies. `package.json` is `"private": true` to prevent accidental registry publishing; `npm pack --dry-run` still validates the package. See `RELEASING.md` for details.
 
 ## Limitations
 

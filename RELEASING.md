@@ -17,9 +17,9 @@
 
 The plugin is auto-discovered from `.opencode/plugins/`.
 
-## Option 2: global Git package (no npm registry auth)
+## Option 2: global Git install (no npm registry auth)
 
-This is verified and does not require an npm token:
+This is verified and does not require an npm token or 2FA:
 
 ```powershell
 opencode plugin add github:userbox020/opencode-math-copilot
@@ -30,41 +30,16 @@ opencode plugin update
 
 The Git spec installs the package from GitHub. It uses the root `index.js` package entry and the bundled `.opencode/plugins/` assets. The `math/` corpus still needs to exist in the project for manuscript/PDF/Lean tools; `math_search` works from the bundled index.
 
-## Option 3: npm registry
+## npm registry status
 
-The package is public and `npm pack --dry-run` is part of CI. The release workflow is `.github/workflows/publish.yml`; it runs only on a published GitHub release or manual dispatch, never on ordinary pushes.
+npm registry publishing is intentionally disabled:
 
-The package can be published with either:
+- `package.json` is `"private": true` to prevent accidental `npm publish`.
+- `.github/workflows/publish.yml` is not part of the distribution.
+- No `NPM_TOKEN` is required or stored.
+- `npm install` is still used for `unpdf` and test dependencies, and `npm pack --dry-run` still validates package contents.
 
-### Interactive 2FA
-
-```powershell
-cd C:\_Work\opencode-math-copilot
-npm login --auth-type=web
-npm publish --access public
-```
-
-### Granular token with Bypass 2FA
-
-Create a token with **Read and write (publish and stage)**, **All Packages**, and **Bypass two-factor authentication** checked. Then set the repository secret:
-
-```powershell
-gh secret set NPM_TOKEN --repo userbox020/opencode-math-copilot
-```
-
-`NPM_TOKEN` is currently **not set**; the publish workflow therefore skips cleanly. Do not commit or paste long-lived tokens into the repository or issue tracker.
-
-### Trusted publishing (recommended long-term)
-
-After the package exists, configure **Trusted Publisher** in npm package settings:
-
-- Provider: GitHub Actions
-- User: `userbox020`
-- Repository: `opencode-math-copilot`
-- Workflow: `publish.yml`
-- Allow direct `npm publish`
-
-Then remove `NPM_TOKEN`; the workflow already has `id-token: write` and uses npm OIDC/provenance.
+If npm publishing is needed later, make `private` false, restore a publish workflow, and use either interactive 2FA or npm trusted publishing (OIDC). Do not commit or paste long-lived tokens.
 
 ## Update
 
@@ -78,6 +53,6 @@ For a global Git install, use `opencode plugin update` or reinstall the Git spec
 
 ## Notes
 
-- `package.json` is public (`private: false`), versioned, and exports `index.js`.
+- The supported installs are project-local discovery and the global Git spec.
 - `opencode plugin add` accepts npm registry or Git package specs, not local tarballs.
-- Use project-local discovery for development; use the Git spec for a no-auth global install.
+- Keep `opencode plugin add github:userbox020/opencode-math-copilot` as the no-auth global path.

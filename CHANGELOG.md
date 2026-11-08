@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Distribution is project-local discovery plus the global Git-spec install:
+  `opencode plugin add github:userbox020/opencode-math-copilot`.
+- Removed npm registry publishing; `package.json` is `private: true` and the publish workflow is gone.
+- No npm registry auth or 2FA is required. `math_search` works from the bundled index; `math/` is still needed for manuscript/PDF/Lean tools.
+
 ## 0.2.0
 
 ### Added
