@@ -91,6 +91,8 @@ COMPARATOR_DOCKER_OK
 
 The challenge module (`8924 jobs`) and the solution closure (`7075 jobs`) build under the pinned Lean 4.34.1 toolchain. Comparator exports the target theorem and accepts the solution. This is Comparator verification of the Lean formalization, not a peer review of the paper.
 
+The installed plugin's `math_comparator` tool with `{ docker: true, challenge: "ComparatorChallenges/QuasiRiemannHypothesis.json" }` also completed the same challenge and returned `Your solution is okay!` / `COMPARATOR_DOCKER_OK`, confirming the tool routing as well as the CLI wrapper.
+
 Rerun:
 
 ```powershell
