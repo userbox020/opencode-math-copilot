@@ -46,6 +46,19 @@ index fcec4d8..7f49f21 100644
    exact hcomp.trans (tsupport_fderiv_subset (𝕜 := ℝ) (f := f))
  
  omit [CompleteSpace E] in
+diff --git a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Compactness.lean b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Compactness.lean
+index 00cba3a..90ad503 100644
+--- a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Compactness.lean
++++ b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Compactness.lean
+@@ -72,7 +72,7 @@ private def smoothOn (hKm : MeasurableSet K) (hψc : Continuous ψ) (hψcs : Has
+   continuous_toFun := by
+     have : Continuous (smoothFun (E := E) (K := K) ψ u) :=
+       continuous_smoothFun (E := E) (K := K) (ψ := ψ) (hKm := hKm) hψc hψcs u
+-    simpa using this.comp continuous_subtype_val
++    simpa only [Function.comp_def] using this.comp continuous_subtype_val
+ 
+ /-- `smoothFun` packaged as a `BoundedContinuousFunction` on the compact set `K + tsupport ψ`. -/
+ def smoothBCF (hK : IsCompact K) (hKm : MeasurableSet K) (hψc : Continuous ψ)
 diff --git a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Kernels.lean b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Kernels.lean
 index 833b243..0459a5e 100644
 --- a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Kernels.lean
@@ -75,6 +88,76 @@ index 833b243..0459a5e 100644
      exact hsub.trans hf_tsupp
    exact ⟨ψ, hψc, hψcs, hψ0, hψint, hψ_tsupp⟩
  
+diff --git a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/Translation.lean b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/Translation.lean
+index c009eb8..a70c1fe 100644
+--- a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/Translation.lean
++++ b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/Translation.lean
+@@ -47,20 +47,23 @@ omit [CompleteSpace E] in
+ lemma contDiff_translate {f : E → ℝ} (hf : ContDiff ℝ 1 f) (a : E) :
+     ContDiff ℝ 1 (translate (E := E) a f) := by
+   -- `x ↦ x + a` is `C^∞`; compose.
+-  simpa [translate] using hf.comp (contDiff_id.add contDiff_const)
++  change ContDiff ℝ 1 (fun x => f (x + a))
++  simpa [Function.comp_def] using hf.comp (contDiff_id.add contDiff_const)
+ 
+ omit [InnerProductSpace ℝ E] [CompleteSpace E] in
+ lemma hasCompactSupport_translate {F : Type*} [Zero F] {f : E → F}
+     (hf : HasCompactSupport f) (a : E) : HasCompactSupport (translate (E := E) a f) := by
+-  simpa [translate] using hf.comp_homeomorph (Homeomorph.addRight a)
++  change HasCompactSupport (fun x => f (x + a))
++  simpa [Function.comp_def] using hf.comp_homeomorph (Homeomorph.addRight a)
+ 
+ lemma grad_translate (a : E) (f : E → ℝ) (x : E) :
+     grad (E := E) (translate (E := E) a f) x = grad (E := E) f (x + a) := by
+   classical
+   -- `fderiv` commutes with translation, hence so does `grad`.
++  change grad (E := E) (fun x => f (x + a)) x = grad (E := E) f (x + a)
+   simp [grad]
+   -- Reduce to the standard `fderiv` translation lemma.
+-  simpa [translate] using (fderiv_comp_add_right (𝕜 := ℝ) (f := f) (x := x) a)
++  simpa using (fderiv_comp_add_right (𝕜 := ℝ) (f := f) (x := x) a)
+ 
+ omit [CompleteSpace E] in
+ lemma mem_C1c_translate {f : E → ℝ} (hf : f ∈ C1c (E := E)) (a : E) :
+@@ -106,7 +109,7 @@ lemma translateL2_ae_eq {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F] (
+     (translateL2 (μ := μ) (F := F) a g : E → F) =ᵐ[μ] fun x => (g : E → F) (x + a) := by
+   classical
+   -- Reduce to `Lp.coeFn_compMeasurePreserving`.
+-  simpa [translateL2] using
++  simpa [translateL2, Function.comp_def] using
+     (MeasureTheory.Lp.coeFn_compMeasurePreserving (g := (g : MeasureTheory.Lp F (2 : ENNReal) μ))
+       (hf := MeasureTheory.measurePreserving_add_right μ a))
+ 
+@@ -125,7 +128,7 @@ lemma translateL2_toL2 (a : E) (f : ↥(C1c (E := E))) :
+     have hf' :
+         (fun x => (toL2 (μ := μ) (E := E) f : E → ℝ) (x + a)) =ᵐ[μ] fun x => f.1 (x + a) := by
+       -- Move the a.e. equality through a measure-preserving map.
+-      simpa [Function.comp, Pi.add_apply] using
++      simpa [Function.comp_def, Pi.add_apply] using
+         (Measure.QuasiMeasurePreserving.ae_eq_comp
+           (MeasureTheory.measurePreserving_add_right μ a).quasiMeasurePreserving hf)
+     exact (translateL2_ae_eq (μ := μ) (F := ℝ) a (toL2 (μ := μ) (E := E) f)).trans hf'
+@@ -133,8 +136,9 @@ lemma translateL2_toL2 (a : E) (f : ↥(C1c (E := E))) :
+       (toL2 (μ := μ) (E := E) (translateC1c (E := E) a f) : E → ℝ) =ᵐ[μ]
+         fun x => f.1 (x + a) := by
+     -- `toL2` agrees a.e. with the underlying translated function.
+-    simpa [translateC1c, translate] using
+-      (memLp_of_mem_C1c (μ := μ) (E := E) (translateC1c (E := E) a f).2).coeFn_toLp
++    change (toL2 (μ := μ) (E := E) (translateC1c (E := E) a f) : E → ℝ) =ᵐ[μ]
++      translate (E := E) a f.1
++    exact (memLp_of_mem_C1c (μ := μ) (E := E) (translateC1c (E := E) a f).2).coeFn_toLp
+   exact h₁.trans h₂.symm
+ 
+ lemma translateL2_toL2Grad (a : E) (f : ↥(C1c (E := E))) :
+@@ -150,7 +154,7 @@ lemma translateL2_toL2Grad (a : E) (f : ↥(C1c (E := E))) :
+     have hf' :
+         (fun x => (toL2Grad (μ := μ) (E := E) f : E → E) (x + a)) =ᵐ[μ]
+           fun x => grad (E := E) f.1 (x + a) := by
+-      simpa [Function.comp, Pi.add_apply] using
++      simpa [Function.comp_def, Pi.add_apply] using
+         (Measure.QuasiMeasurePreserving.ae_eq_comp
+           (MeasureTheory.measurePreserving_add_right μ a).quasiMeasurePreserving hf)
+     exact
 diff --git a/RellichKondrachov/MeasureTheory/Function/LpSpace/Restrict.lean b/RellichKondrachov/MeasureTheory/Function/LpSpace/Restrict.lean
 index bb9c6e5..bb7f92e 100644
 --- a/RellichKondrachov/MeasureTheory/Function/LpSpace/Restrict.lean
