@@ -1,0 +1,7 @@
+{
+  "type": "absence",
+  "status": "not_found_in_consulted_excerpts",
+  "consulted": [
+    "toy-geometry#section-1"
+  ]
+}

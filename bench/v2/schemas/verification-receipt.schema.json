@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "format", "simulated", "issuer", "target_sha256", "solution_sha256", "policy_sha256", "verifier", "provenance", "correspondence", "toolchain", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "2.1.0"},
+    "format": {"const": "math-study-verification/v1"},
+    "simulated": {"type": "boolean"},
+    "issuer": {"enum": ["simulated-verifier", "restricted-verifier"]},
+    "target_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "solution_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "policy_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "verifier": {
+      "type": "object", "additionalProperties": false,
+      "required": ["version", "execution", "compilation", "target", "proof", "checker", "note"],
+      "properties": {
+        "version": {"const": "math-lean-verify/v1"},
+        "execution": {
+          "type": "object", "additionalProperties": false,
+          "required": ["status", "mode", "exitCode", "durationMs"],
+          "properties": {
+            "status": {"enum": ["completed", "timeout", "missing-tool", "error"]},
+            "mode": {"enum": ["native", "docker"]},
+            "exitCode": {"type": ["integer", "null"]},
+            "durationMs": {"type": "number", "minimum": 0},
+            "error": {"type": "string"}
+          }
+        },
+        "compilation": {
+          "type": "object", "additionalProperties": false, "required": ["status"],
+          "properties": {"status": {"enum": ["not-run", "compiled", "failed"]}, "diagnostics": {"type": "string"}}
+        },
+        "target": {
+          "type": "object", "additionalProperties": false, "required": ["theorem", "expectedType", "status"],
+          "properties": {
+            "theorem": {"type": ["string", "null"]},
+            "expectedType": {"type": ["string", "null"]},
+            "status": {"enum": ["not-requested", "identified", "missing", "mismatch"]}
+          }
+        },
+        "proof": {
+          "type": "object", "additionalProperties": false,
+          "required": ["status", "axioms", "allowedAxioms", "unauthorizedAxioms", "sorryAx"],
+          "properties": {
+            "status": {"enum": ["not-requested", "unverified", "incomplete", "rejected", "verified"]},
+            "axioms": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+            "allowedAxioms": {"type": "array", "items": {"type": "string"}},
+            "unauthorizedAxioms": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+            "sorryAx": {"type": "boolean"},
+            "reason": {"type": "string"}
+          }
+        },
+        "checker": {"type": "object", "additionalProperties": false, "required": ["tool"], "properties": {"tool": {"const": "lake env lean"}}},
+        "note": {"type": "string"}
+      }
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["issuance", "evidence", "source_receipt_sha256", "independent_kernel_check"],
+      "properties": {
+        "issuance": {"const": "evaluator-controlled"},
+        "evidence": {"enum": ["simulated-fixture", "verifier-output"]},
+        "source_receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "independent_kernel_check": {"const": false}
+      }
+    },
+    "correspondence": {
+      "type": "object", "additionalProperties": false, "required": ["status", "scope"],
+      "properties": {"status": {"const": "not-assessed"}, "scope": {"const": "fixed-lean-target-only"}}
+    },
+    "toolchain": {"type": "string", "minLength": 1},
+    "receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

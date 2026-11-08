@@ -1,0 +1,16 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "math_compute",
+    "arguments": {
+      "task_id": "numeric-speed"
+    },
+    "result": {
+      "fixture": true,
+      "text": "3; x/x = 1 when x != 0. These are tool logs, not a submitted answer."
+    },
+    "duration_ms": 5,
+    "simulated": true
+  }
+]

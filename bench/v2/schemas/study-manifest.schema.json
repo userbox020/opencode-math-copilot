@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "study_id", "simulated", "clock", "versions", "commits", "hashes", "protocol_hash", "profiles", "prompts", "budgets", "cache_state", "environment", "models", "tasks", "repeats", "attempts", "analysis", "expected_episode_count"],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "study_id": {"type": "string", "minLength": 1},
+    "simulated": {"type": "boolean"},
+    "clock": {"type": "object", "required": ["kind", "epoch"], "properties": {"kind": {"enum": ["simulated", "wall-clock"]}, "epoch": {"type": "string"}}},
+    "versions": {"type": "object", "required": ["harness", "adapter", "grader", "node"], "properties": {"harness": {"type": "string"}, "adapter": {"type": "string"}, "grader": {"type": "string"}, "node": {"type": "string"}}},
+    "commits": {"type": "object", "required": ["repository", "corpus"], "properties": {"repository": {"type": ["string", "null"]}, "corpus": {"type": ["string", "null"]}}},
+    "hashes": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
+    "protocol_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "profiles": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "object", "required": ["id", "effective_tools", "corpus_access", "configuration"], "properties": {"id": {"enum": ["A", "B", "F"]}, "effective_tools": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}, "corpus_access": {"type": "boolean"}, "configuration": {"const": "isolated-no-global-config"}}}},
+    "prompts": {"type": "object", "required": ["common", "tasks"], "properties": {"common": {"type": "string"}, "tasks": {"type": "object"}}},
+    "budgets": {"type": "object", "additionalProperties": false, "required": ["tokens", "tool_calls", "duration_ms", "usd"], "properties": {"tokens": {"type": "integer", "minimum": 1}, "tool_calls": {"type": "integer", "minimum": 0}, "duration_ms": {"type": "number", "minimum": 1}, "usd": {"type": "number", "minimum": 0}}},
+    "cache_state": {"type": "object", "required": ["episode", "shared"], "properties": {"episode": {"const": "cold"}, "shared": {"const": "disabled"}}},
+    "environment": {"type": "object", "required": ["platform", "arch", "config", "network", "execution"], "properties": {"platform": {"type": "string"}, "arch": {"type": "string"}, "config": {"const": "not-loaded"}, "network": {"type": "string"}, "execution": {"enum": ["simulator-only", "isolated-adapter"]}}},
+    "models": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "tasks": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["id", "family", "domain", "type", "negative"], "properties": {"id": {"type": "string"}, "family": {"type": "string"}, "domain": {"type": "string"}, "type": {"enum": ["numeric", "symbolic", "citation", "formal", "explanation", "absence"]}, "negative": {"type": "boolean"}}}},
+    "repeats": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "integer", "minimum": 1}},
+    "attempts": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "integer", "minimum": 1}},
+    "analysis": {"type": "object", "required": ["primary", "contrast", "seed", "resamples", "cluster"], "properties": {"primary": {"const": "correct-under-budget/all-started"}, "contrast": {"const": "F-B"}, "seed": {"type": "integer", "minimum": 0}, "resamples": {"type": "integer", "minimum": 1}, "cluster": {"const": "task-family"}}},
+    "expected_episode_count": {"type": "integer", "minimum": 1}
+  }
+}

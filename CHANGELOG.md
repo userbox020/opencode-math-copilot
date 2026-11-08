@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Fixed Comparator's effective timeouts: 30 minutes in Docker, 10 minutes native, or the explicit override; added stubbed timeout and invocation-scoped cleanup tests.
+- Added `math_lean_verify` (16 tools total) with a versioned JSON receipt, trusted target-type check and fail-closed axiom policy; compilation-only `math_lean_check` is unchanged. See `docs/verification-contract.md`.
+- Corrected Comparator/benchmark documentation, benchmark CLI flags, duplicate `bench:analyze` script and stale root lockfile version metadata (0.4.0; no dependency upgrades).
+- Added `bench/v2` deterministic evaluation harness (simulated only): A/B/F profiles, typed graders, append-only provenance/resume, family-paired bootstrap, and a restricted execution profile. No model inference is enabled.
+- Added `research/` protocol, claims/evidence map, related-work notes and `paper/` skeleton. New results are pending/simulated; no release or publication.
+- Addressed the independent review: strict verification audits a generated checked declaration (including synthesized instances/`sorry`), rejects malformed extra reports, handles null/`notRun`, and aligns the v2 study receipt schema 2.1.0 with `math-lean-verify/v1`.
+
 ## 0.4.0 - 2026-11-08
 
 - Added `math_doctor` for bounded corpus/index/cache/Docker/toolchain/disk diagnostics.

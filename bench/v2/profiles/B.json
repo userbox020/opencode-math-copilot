@@ -1,0 +1,7 @@
+{
+  "id": "B",
+  "description": "Generic corpus search/read, computation and Lean-like verification; no math_* interface.",
+  "effective_tools": ["corpus_search", "read_excerpt", "compute", "lean_check"],
+  "corpus_access": true,
+  "configuration": "isolated-no-global-config"
+}

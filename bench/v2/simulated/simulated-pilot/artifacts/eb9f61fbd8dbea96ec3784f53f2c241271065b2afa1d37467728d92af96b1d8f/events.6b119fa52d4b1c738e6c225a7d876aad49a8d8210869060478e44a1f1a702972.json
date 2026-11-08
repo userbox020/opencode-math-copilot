@@ -1,0 +1,27 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "corpus_search",
+    "arguments": {
+      "task_id": "citation-toy"
+    },
+    "result": {
+      "excerpts": [
+        {
+          "document": "toy-geometry",
+          "locator": "section-1",
+          "text": "A triangle has three sides."
+        },
+        {
+          "document": "toy-other",
+          "locator": "section-1",
+          "text": "A square has four sides."
+        }
+      ],
+      "complete_corpus": false
+    },
+    "duration_ms": 5,
+    "simulated": true
+  }
+]

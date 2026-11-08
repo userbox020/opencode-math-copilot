@@ -3,8 +3,10 @@
 This **indicative, not scientific** benchmark runs every model × problem × repeat
 × condition (with/without the project-local math toolkit). It measures keyword
 hits, elapsed wall time, and a visible tool-call heuristic, not proof correctness.
-`RESULTS.md` records the executed 10-problem, one-repeat, two-model run. The core
-three-repeat, three-model matrix below is configured but has not run yet.
+`RESULTS.md` records the historical 10-problem, one-repeat, two-model run, the
+executed core matrix (4 problems × 3 repeats × 3 models; 36/36 with plugin vs
+23/36 without), and the executed full matrix (10 × 3 × 3; 83/90 vs 62/90).
+These are keyword scores, not proof verification; the caveats below still apply.
 
 ## Running the matrix
 
@@ -93,8 +95,8 @@ default timeout. Real runs overwrite `bench/results/latest.json` and
 Use the core set to compare repeat variability and the third model without the
 full matrix's cost. Use `bench/problems.json` for broader coverage, including
 declaration lookup, theorem explanation, missing-corpus answers, simplification,
-and equation solving. The full 10-problem × 3-repeat × 3-model matrix would run
-180 commands across both conditions.
+and equation solving. The full 10-problem × 3-repeat × 3-model matrix runs
+180 commands across both conditions; the recorded run is in `RESULTS.md`.
 
 Expected runtime is long: the core's sequential invocations can consume roughly
 3.6 hours at the default 180-second timeout each, plus overhead. Detached

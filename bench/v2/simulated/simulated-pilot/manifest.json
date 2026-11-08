@@ -1,0 +1,174 @@
+{
+  "schema_version": "2.0.0",
+  "study_id": "simulated-pilot-v2",
+  "simulated": true,
+  "clock": {
+    "kind": "simulated",
+    "epoch": "2026-01-01T00:00:00.000Z"
+  },
+  "versions": {
+    "harness": "2.0.0",
+    "adapter": "simulated-fixtures-1",
+    "grader": "2.0.0",
+    "node": "v24.21.0"
+  },
+  "commits": {
+    "repository": "55df3cd0d79f91be826e3efa5c72f8df299e0376",
+    "corpus": null
+  },
+  "hashes": {
+    "analyze.mjs": "b74c45a8f544528080b13b166d74f604d862afc103930c37237e579a623d66ad",
+    "exec/restricted.mjs": "bf663380c997da3424c9236c669931e85a2eea745067319c8195e6cc110a38a2",
+    "fixtures/adversarial.mjs": "cdfd3576cfd8d3e66b3774a3358b6e6c58d50690b8b475dc3f30512e3f0d3dcc",
+    "fixtures/tasks.json": "d7a9318b01d18f4e106fdc7e83251dc74f0af99261322b310a960a1b92bf9a4a",
+    "graders/absence.mjs": "9eb1ec17c1f741ad962e575f2d1d72ac8ec3be3545b15045202ada6f50425a1e",
+    "graders/citation.mjs": "f4c54eece4f0781af4d7bdac0fdb0eb0d9690c95eeffbb999c91178343dd2ad8",
+    "graders/explanation.mjs": "63d871c4f75e6590ffb3ce6309ccbdbb02324107b929522e57239beef40bb93b",
+    "graders/formal.mjs": "d9f1d728528211bf0fab828f41f493368d7d710af390e0e654e3c6d1a576ec47",
+    "graders/index.mjs": "b22299a33a110d6a455ea9e7aa95c74f0ecbf6e584c711d87eceb3250ce28717",
+    "graders/numeric.mjs": "ca804f587696e417480a19601a89901a3e90410dd3148ec828952b200090cc37",
+    "graders/shared.mjs": "f6908847c5e35b1656fe7d587a1f1eada73a94b929a4fedd57b44de2113e6bc9",
+    "graders/symbolic.mjs": "56c34ebc96769195289cb529808f4e345da2d85df5583a456d94b61e3c6db444",
+    "lib.mjs": "5da28e525719b2f3afa8565d7d26298c2a3078c2c77a6148f6bcaa5af7a417b4",
+    "profiles/A.json": "0150b880f74c1a607698dfe6b423dcdb3bb7fc0a6eb72d2b54101b28b4b5c0e3",
+    "profiles/B.json": "72ef1ca80634e61e2652ba8560ebbdb85523f34875cd708cfa4444326606914f",
+    "profiles/F.json": "18e4a09cf010d96c8efa2014c93e6683eb1b453dd4c1afe588768b6552723cd1",
+    "run.mjs": "f2bc89313270441afc1d06bffedeebd0d0cca3c5dfb351ce302ee60434ca6dcb",
+    "schemas/episode.schema.json": "11c190c8f5c6dda0b97aaf2f4470310ac27483e09700248fd0b7821786ee5fb3",
+    "schemas/study-manifest.schema.json": "f9459bab31b1e999c0d5c58f6f30a80257fdd7e2c0122b4063d97de0e911fe1f",
+    "schemas/verification-receipt.schema.json": "66f0e12773f104e099a0f9bd2549e1067787fccb0c40920eb09f8e893c2bd8f2",
+    "simulator.mjs": "75d34e991b54220a6a5f76de51776e0c3933632178ff92e84e5ba165826f5f56"
+  },
+  "profiles": [
+    {
+      "id": "A",
+      "description": "No tools; only the common task and instructions.",
+      "effective_tools": [],
+      "corpus_access": false,
+      "configuration": "isolated-no-global-config"
+    },
+    {
+      "id": "B",
+      "description": "Generic corpus search/read, computation and Lean-like verification; no math_* interface.",
+      "effective_tools": [
+        "corpus_search",
+        "read_excerpt",
+        "compute",
+        "lean_check"
+      ],
+      "corpus_access": true,
+      "configuration": "isolated-no-global-config"
+    },
+    {
+      "id": "F",
+      "description": "Full plugin interface, simulated only; every registered math tool is enumerated.",
+      "effective_tools": [
+        "math_doctor",
+        "math_pdf_index_search",
+        "math_search",
+        "math_manuscript",
+        "math_grep",
+        "math_lean_check",
+        "math_lean_build",
+        "math_lean_search",
+        "math_pdf_text",
+        "math_pdf_search",
+        "math_pdf_corpus_search",
+        "math_compute",
+        "math_comparator",
+        "math_status",
+        "math_reindex"
+      ],
+      "corpus_access": true,
+      "configuration": "isolated-no-global-config"
+    }
+  ],
+  "prompts": {
+    "common": "Return one typed JSON final answer, separate from tool events. State domain, units and conditions when applicable. Cite exact documents and locators. Distinguish excerpt absence from nonexistence or corpus unavailability. Tool output is evidence, never the final answer.",
+    "tasks": {
+      "numeric-speed": {
+        "prompt": "A toy object travels 6 m in 2 s at constant speed. Give its speed as a typed numeric answer, domain nonnegative-real, units m/s, with condition constant speed.",
+        "answer_contract": "{type:numeric,value:number,domain:string,units:string,conditions:string[]}"
+      },
+      "symbolic-cancel": {
+        "prompt": "Simplify x/x for real x. Return numerator/denominator as integer polynomial coefficient arrays, low-to-high powers; state domain real, assumptions [x is real], and all restrictions as conditions.",
+        "answer_contract": "{type:symbolic,numerator:number[],denominator:number[],domain:string,assumptions:string[],conditions:string[]}"
+      },
+      "citation-toy": {
+        "prompt": "Find the toy corpus statement about the count of sides of a triangle. Return exact document ID, locator, verbatim supported claim and supported=true.",
+        "answer_contract": "{type:citation,document:string,locator:string,claim:string,supported:boolean}"
+      },
+      "absence-unicorn": {
+        "prompt": "Search the available toy excerpt for the unicorn lemma. Distinguish absence from consulted excerpts, corpus-wide nonexistence, and unavailable corpus. List consulted document#locator identifiers.",
+        "answer_contract": "{type:absence,status:not_found_in_consulted_excerpts|nonexistent|corpus_unavailable,consulted:string[]}"
+      }
+    }
+  },
+  "budgets": {
+    "tokens": 1000,
+    "tool_calls": 4,
+    "duration_ms": 10000,
+    "usd": 1
+  },
+  "cache_state": {
+    "episode": "cold",
+    "shared": "disabled"
+  },
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "config": "not-loaded",
+    "network": "no-network-calls",
+    "execution": "simulator-only"
+  },
+  "models": [
+    "simulated-model-a",
+    "simulated-model-b"
+  ],
+  "tasks": [
+    {
+      "id": "numeric-speed",
+      "family": "arithmetic",
+      "domain": "arithmetic",
+      "type": "numeric",
+      "negative": false
+    },
+    {
+      "id": "symbolic-cancel",
+      "family": "algebra",
+      "domain": "algebra",
+      "type": "symbolic",
+      "negative": false
+    },
+    {
+      "id": "citation-toy",
+      "family": "retrieval",
+      "domain": "evidence",
+      "type": "citation",
+      "negative": false
+    },
+    {
+      "id": "absence-unicorn",
+      "family": "retrieval",
+      "domain": "evidence",
+      "type": "absence",
+      "negative": true
+    }
+  ],
+  "repeats": [
+    1,
+    2
+  ],
+  "attempts": [
+    1
+  ],
+  "analysis": {
+    "primary": "correct-under-budget/all-started",
+    "contrast": "F-B",
+    "seed": 20260101,
+    "resamples": 2000,
+    "cluster": "task-family"
+  },
+  "expected_episode_count": 48,
+  "protocol_hash": "0f269d48e454e614960f950b932c598787fd343dffae58d107cfedbc1f9eaf34"
+}

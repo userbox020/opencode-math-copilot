@@ -1,0 +1,9 @@
+{
+  "type": "numeric",
+  "value": -3,
+  "domain": "nonnegative-real",
+  "units": "m/s",
+  "conditions": [
+    "constant speed"
+  ]
+}

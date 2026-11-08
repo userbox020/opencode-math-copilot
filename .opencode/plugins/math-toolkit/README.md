@@ -34,6 +34,7 @@ Confirm the project-local plugin appears in the list, then use `math_status` in 
 | `math_manuscript` | Read metadata, abstract, file outline, section headings, or a specific LaTeX section. |
 | `math_grep` | Search TeX, Markdown, and Lean text under `math/`. |
 | `math_lean_check` | Type-check a Lean 4 snippet or file with `lake env lean`. |
+| `math_lean_verify` | Check a named user solution against a trusted target type and axiom allowlist; return a JSON receipt. |
 | `math_lean_build` | Build a focused Lake target such as `OAI.Analysis`. |
 | `math_lean_search` | Search declaration lines in `math/lean` and Mathlib by name or regex. |
 | `math_pdf_text` | Extract bounded text from a manuscript PDF (no OCR). |
@@ -48,7 +49,17 @@ Confirm the project-local plugin appears in the list, then use `math_status` in 
 
 Use `/math <problem>` to invoke the project command, which loads the `math-workflow` skill. Lean tools are used when formal verification or a Lean statement is requested.
 
-There are 15 tools. The manuscript index is parsed lazily on first use, not during plugin startup.
+There are 16 tools. The manuscript index is parsed lazily on first use, not during plugin startup.
+
+### Strict proof verification
+
+`math_lean_check` is still compilation-only: a PASS can contain a `sorry` placeholder. `math_lean_verify` instead accepts exactly one of `code`/`file`, a fully qualified `theorem`, and a trusted `expectedType`. Optional `imports` defaults to `["Mathlib"]`; `allowedAxioms` defaults to `["propext", "Quot.sound", "Classical.choice"]`; `docker` defaults to false and `timeoutMs` to 60000 (1000–120000). An explicit empty imports/axioms list is respected.
+
+```json
+{ "code": "theorem answer : True := True.intro", "theorem": "answer", "expectedType": "True" }
+```
+
+The JSON string receipt is versioned `math-lean-verify/v1`. Verification requires successful compilation, a matching target type, a recognized axiom report and no unauthorized axiom or `sorryAx`. Execution/compilation/target/proof statuses are separate; missing tools and timeouts never verify. Informal correspondence is not assessed. `ComparatorChallenges/*.lean` can intentionally contain `sorry` statements: use `math_comparator` to validate their solutions, not this placeholder as a user proof. See [the contract](../../../docs/verification-contract.md) for receipt fields, trust assumptions and parsing limits.
 
 ## PDF cache and excerpt index
 
@@ -68,7 +79,7 @@ Use `math_pdf_index_search` with `{ "query": "Riemann hypothesis", "limit": 10 }
 
 ## Docker Lean execution
 
-`math_lean_check`, `math_lean_build`, and `math_comparator` accept `docker: true` to run inside Linux Docker rather than the host toolchain. The default is `false` (native behavior is unchanged). Start Docker Desktop with Linux containers on Windows, or Docker Engine on Linux. Build the images and initialize the persistent Lean volume using `docker/README.md`; the volume must contain `/work/math`, its pinned toolchain dependencies, and the Mathlib cache.
+`math_lean_check`, `math_lean_verify`, `math_lean_build`, and `math_comparator` accept `docker: true` to run inside Linux Docker rather than the host toolchain. The default is `false` (native behavior is unchanged). Start Docker Desktop with Linux containers on Windows, or Docker Engine on Linux. Build the images and initialize the persistent Lean volume using `docker/README.md`; the volume must contain `/work/math`, its pinned toolchain dependencies, and the Mathlib cache.
 
 Example tool arguments:
 
@@ -89,9 +100,9 @@ Configure the OpenCode process environment to override these defaults:
 
 Snippet checks add `imports` (default `Mathlib`) and mount a unique host temp directory read-only at `/check`; it is removed afterward. With `file`, the tool validates and reads the host file under `math/lean`, then copies its contents to `/check/Check.lean`. Project-relative imports may not resolve unless the file is self-contained; imports available in the volume's Lean package/cache remain usable. Docker Desktop receives native absolute Windows paths as individual mount arguments, without shell quoting.
 
-Builds use the clone in the volume, not host source edits. Comparator validates the challenge path against the host clone, then runs that relative challenge path in the volume's clone; keep the clones aligned. Its tools volume is created if needed and retained at `/opt`. The image pins Comparator v4.34.0 built with the corpus Lean 4.34.1 toolchain. The first run of a large challenge builds its solution-module dependency closure and can exceed the default timeout; pass `timeoutMs` up to `1800000`, and rerun after the volume cache is warm. A failed export is not verification.
+Builds use the clone in the volume, not host source edits. Comparator validates the challenge path against the host clone, then runs that relative challenge path in the volume's clone; keep the clones aligned. Its tools volume is created if needed and retained at `/opt`. The image pins Comparator v4.34.0 built with the corpus Lean 4.34.1 toolchain. Comparator defaults to `1800000` ms in Docker and `600000` ms natively; explicit `timeoutMs` is respected. The first run builds the solution-module dependency closure and can exceed even this timeout; later runs reuse the volume cache. On execution error/timeout only that invocation's uniquely named container is removed. A failed export is not verification.
 
-Results include `[docker]` PASS/FAIL and bounded output. Missing prerequisites return setup instructions. `npm test` exercises Docker snippet/file checks, the focused build, and missing-image/volume diagnostics when the Lean image and volume are available; otherwise it prints SKIP.
+Legacy results include `[docker]` PASS/FAIL and bounded output; `math_lean_verify` returns structured JSON instead. Missing prerequisites never verify. `npm test` exercises Docker snippet/file checks, strict-verifier smokes, the focused build, and missing-image/volume diagnostics when the Lean image and volume are available; otherwise it prints SKIP. Stubbed timeout/verification tests always run without external tools.
 
 ## Refresh the index
 

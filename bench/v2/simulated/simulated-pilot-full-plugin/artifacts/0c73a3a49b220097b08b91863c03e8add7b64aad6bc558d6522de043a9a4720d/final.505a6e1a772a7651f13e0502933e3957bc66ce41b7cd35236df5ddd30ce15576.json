@@ -1,0 +1,14 @@
+{
+  "type": "symbolic",
+  "numerator": [
+    1
+  ],
+  "denominator": [
+    1
+  ],
+  "domain": "real",
+  "assumptions": [
+    "x is real"
+  ],
+  "conditions": []
+}

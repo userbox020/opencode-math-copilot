@@ -1,0 +1,492 @@
+{
+  "simulated": true,
+  "study_id": "simulated-pilot-v2",
+  "protocol_hash": "0f269d48e454e614960f950b932c598787fd343dffae58d107cfedbc1f9eaf34",
+  "input_hashes": {
+    "manifest": "e4680c80ace92b3fe9484c795770957224cf3983610cbda5bc958661f618676d",
+    "episodes": "21bf2f035ecdc0a0c5f91be56af731a92fccc761f9595b0f87533f8f41904477",
+    "starts": "862a193fa4606173d32168a739cbdf7f2f33e2d3869c24eb6da08dbbd7feca5e"
+  },
+  "primary_metric": "correct episodes under every preregistered budget / all started episodes",
+  "started": 48,
+  "completed_records": 48,
+  "expected": 48,
+  "missing_expected_keys": [],
+  "pending_started_keys": [],
+  "conditions": {
+    "A": {
+      "started": 16,
+      "correct_under_budget": 2,
+      "rate": 0.125,
+      "operational_failures": 0,
+      "extraction_failures": 0,
+      "over_budget": 0,
+      "negative_cases": 4
+    },
+    "B": {
+      "started": 16,
+      "correct_under_budget": 12,
+      "rate": 0.75,
+      "operational_failures": 0,
+      "extraction_failures": 2,
+      "over_budget": 0,
+      "negative_cases": 4
+    },
+    "F": {
+      "started": 16,
+      "correct_under_budget": 14,
+      "rate": 0.875,
+      "operational_failures": 1,
+      "extraction_failures": 0,
+      "over_budget": 1,
+      "negative_cases": 4
+    }
+  },
+  "contrast": {
+    "contrast": "F-B",
+    "estimate": 0.125,
+    "exploratory_ci_95": [
+      -0.25,
+      0.5
+    ],
+    "seed": 20260101,
+    "resamples": 2000,
+    "families": 3,
+    "paired_episode_cells": 16,
+    "unique_tasks": 4,
+    "unpaired_cells_excluded_from_contrast_only": 0,
+    "cluster": "task-family; all tasks/models/conditions/repeats/attempts in each sampled family stay together",
+    "caveat": "Exploratory percentile CI. Very few families; repetitions are not independent tasks. No real-model or mathematical-validity inference."
+  },
+  "per_model": {
+    "simulated-model-a": {
+      "conditions": {
+        "A": {
+          "started": 8,
+          "correct_under_budget": 2,
+          "rate": 0.25,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 2
+        },
+        "B": {
+          "started": 8,
+          "correct_under_budget": 8,
+          "rate": 1,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 2
+        },
+        "F": {
+          "started": 8,
+          "correct_under_budget": 8,
+          "rate": 1,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 2
+        }
+      },
+      "contrast": {
+        "contrast": "F-B",
+        "estimate": 0,
+        "exploratory_ci_95": [
+          0,
+          0
+        ],
+        "seed": 20260101,
+        "resamples": 2000,
+        "families": 3,
+        "paired_episode_cells": 8,
+        "unique_tasks": 4,
+        "unpaired_cells_excluded_from_contrast_only": 0,
+        "cluster": "task-family; all tasks/models/conditions/repeats/attempts in each sampled family stay together",
+        "caveat": "Exploratory percentile CI. Very few families; repetitions are not independent tasks. No real-model or mathematical-validity inference."
+      }
+    },
+    "simulated-model-b": {
+      "conditions": {
+        "A": {
+          "started": 8,
+          "correct_under_budget": 0,
+          "rate": 0,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 2
+        },
+        "B": {
+          "started": 8,
+          "correct_under_budget": 4,
+          "rate": 0.5,
+          "operational_failures": 0,
+          "extraction_failures": 2,
+          "over_budget": 0,
+          "negative_cases": 2
+        },
+        "F": {
+          "started": 8,
+          "correct_under_budget": 6,
+          "rate": 0.75,
+          "operational_failures": 1,
+          "extraction_failures": 0,
+          "over_budget": 1,
+          "negative_cases": 2
+        }
+      },
+      "contrast": {
+        "contrast": "F-B",
+        "estimate": 0.25,
+        "exploratory_ci_95": [
+          -0.5,
+          1
+        ],
+        "seed": 20260101,
+        "resamples": 2000,
+        "families": 3,
+        "paired_episode_cells": 8,
+        "unique_tasks": 4,
+        "unpaired_cells_excluded_from_contrast_only": 0,
+        "cluster": "task-family; all tasks/models/conditions/repeats/attempts in each sampled family stay together",
+        "caveat": "Exploratory percentile CI. Very few families; repetitions are not independent tasks. No real-model or mathematical-validity inference."
+      }
+    }
+  },
+  "per_domain": {
+    "arithmetic": {
+      "conditions": {
+        "A": {
+          "started": 4,
+          "correct_under_budget": 2,
+          "rate": 0.5,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 0
+        },
+        "B": {
+          "started": 4,
+          "correct_under_budget": 4,
+          "rate": 1,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 0
+        },
+        "F": {
+          "started": 4,
+          "correct_under_budget": 3,
+          "rate": 0.75,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 1,
+          "negative_cases": 0
+        }
+      },
+      "contrast": {
+        "contrast": "F-B",
+        "estimate": -0.25,
+        "exploratory_ci_95": [
+          -0.25,
+          -0.25
+        ],
+        "seed": 20260101,
+        "resamples": 2000,
+        "families": 1,
+        "paired_episode_cells": 4,
+        "unique_tasks": 1,
+        "unpaired_cells_excluded_from_contrast_only": 0,
+        "cluster": "task-family; all tasks/models/conditions/repeats/attempts in each sampled family stay together",
+        "caveat": "Exploratory percentile CI. Very few families; repetitions are not independent tasks. No real-model or mathematical-validity inference."
+      }
+    },
+    "algebra": {
+      "conditions": {
+        "A": {
+          "started": 4,
+          "correct_under_budget": 0,
+          "rate": 0,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 0
+        },
+        "B": {
+          "started": 4,
+          "correct_under_budget": 2,
+          "rate": 0.5,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 0
+        },
+        "F": {
+          "started": 4,
+          "correct_under_budget": 4,
+          "rate": 1,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 0
+        }
+      },
+      "contrast": {
+        "contrast": "F-B",
+        "estimate": 0.5,
+        "exploratory_ci_95": [
+          0.5,
+          0.5
+        ],
+        "seed": 20260101,
+        "resamples": 2000,
+        "families": 1,
+        "paired_episode_cells": 4,
+        "unique_tasks": 1,
+        "unpaired_cells_excluded_from_contrast_only": 0,
+        "cluster": "task-family; all tasks/models/conditions/repeats/attempts in each sampled family stay together",
+        "caveat": "Exploratory percentile CI. Very few families; repetitions are not independent tasks. No real-model or mathematical-validity inference."
+      }
+    },
+    "evidence": {
+      "conditions": {
+        "A": {
+          "started": 8,
+          "correct_under_budget": 0,
+          "rate": 0,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 4
+        },
+        "B": {
+          "started": 8,
+          "correct_under_budget": 6,
+          "rate": 0.75,
+          "operational_failures": 0,
+          "extraction_failures": 2,
+          "over_budget": 0,
+          "negative_cases": 4
+        },
+        "F": {
+          "started": 8,
+          "correct_under_budget": 7,
+          "rate": 0.875,
+          "operational_failures": 1,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 4
+        }
+      },
+      "contrast": {
+        "contrast": "F-B",
+        "estimate": 0.125,
+        "exploratory_ci_95": [
+          0.125,
+          0.125
+        ],
+        "seed": 20260101,
+        "resamples": 2000,
+        "families": 1,
+        "paired_episode_cells": 8,
+        "unique_tasks": 2,
+        "unpaired_cells_excluded_from_contrast_only": 0,
+        "cluster": "task-family; all tasks/models/conditions/repeats/attempts in each sampled family stay together",
+        "caveat": "Exploratory percentile CI. Very few families; repetitions are not independent tasks. No real-model or mathematical-validity inference."
+      }
+    }
+  },
+  "per_model_domain": {
+    "simulated-model-a": {
+      "arithmetic": {
+        "A": {
+          "started": 2,
+          "correct_under_budget": 2,
+          "rate": 1,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 0
+        },
+        "B": {
+          "started": 2,
+          "correct_under_budget": 2,
+          "rate": 1,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 0
+        },
+        "F": {
+          "started": 2,
+          "correct_under_budget": 2,
+          "rate": 1,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 0
+        }
+      },
+      "algebra": {
+        "A": {
+          "started": 2,
+          "correct_under_budget": 0,
+          "rate": 0,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 0
+        },
+        "B": {
+          "started": 2,
+          "correct_under_budget": 2,
+          "rate": 1,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 0
+        },
+        "F": {
+          "started": 2,
+          "correct_under_budget": 2,
+          "rate": 1,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 0
+        }
+      },
+      "evidence": {
+        "A": {
+          "started": 4,
+          "correct_under_budget": 0,
+          "rate": 0,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 2
+        },
+        "B": {
+          "started": 4,
+          "correct_under_budget": 4,
+          "rate": 1,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 2
+        },
+        "F": {
+          "started": 4,
+          "correct_under_budget": 4,
+          "rate": 1,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 2
+        }
+      }
+    },
+    "simulated-model-b": {
+      "arithmetic": {
+        "A": {
+          "started": 2,
+          "correct_under_budget": 0,
+          "rate": 0,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 0
+        },
+        "B": {
+          "started": 2,
+          "correct_under_budget": 2,
+          "rate": 1,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 0
+        },
+        "F": {
+          "started": 2,
+          "correct_under_budget": 1,
+          "rate": 0.5,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 1,
+          "negative_cases": 0
+        }
+      },
+      "algebra": {
+        "A": {
+          "started": 2,
+          "correct_under_budget": 0,
+          "rate": 0,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 0
+        },
+        "B": {
+          "started": 2,
+          "correct_under_budget": 0,
+          "rate": 0,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 0
+        },
+        "F": {
+          "started": 2,
+          "correct_under_budget": 2,
+          "rate": 1,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 0
+        }
+      },
+      "evidence": {
+        "A": {
+          "started": 4,
+          "correct_under_budget": 0,
+          "rate": 0,
+          "operational_failures": 0,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 2
+        },
+        "B": {
+          "started": 4,
+          "correct_under_budget": 2,
+          "rate": 0.5,
+          "operational_failures": 0,
+          "extraction_failures": 2,
+          "over_budget": 0,
+          "negative_cases": 2
+        },
+        "F": {
+          "started": 4,
+          "correct_under_budget": 3,
+          "rate": 0.75,
+          "operational_failures": 1,
+          "extraction_failures": 0,
+          "over_budget": 0,
+          "negative_cases": 2
+        }
+      }
+    }
+  },
+  "exclusions": {
+    "all_started_metric": "None. Negative cases, extraction failures, operational failures and pending started episodes remain in the denominator; unknown monetary cost is not under budget.",
+    "not_started": 0,
+    "paired_contrast": "Only B/F cells with both starts are paired. Pending starts score zero; unpaired cells are enumerated as excluded from contrast only."
+  },
+  "limitations": [
+    "SIMULATED fixture outcomes only; no inference, real corpus, Lean compilation or Docker execution.",
+    "Three task families and four pilot tasks. Formal and explanation graders are exercised by tests, not this pilot.",
+    "Simulation durations, clock and estimated zero cost are fixture accounting, not measured performance or price estimates.",
+    "Blind explanation scoring recognizes only pre-scored fixture texts; symbolic checking is a bounded registered integer-polynomial/solution-set checker.",
+    "Bootstrap resamples whole task families, retaining repetitions and paired conditions; CIs are exploratory, especially with few families."
+  ]
+}

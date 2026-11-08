@@ -11,7 +11,7 @@ It provides BM25 search over **721 manuscripts / 373 result families**, reads ma
 - A clone of `openai/math` at `./math` for `math_manuscript`, `math_grep`, `math_pdf_text`, `math_pdf_search`, `math_pdf_corpus_search`, and the Lean tools.
 - `npm install` installs `unpdf` for PDF text extraction.
 - Recommended: `ripgrep` (`rg`) for fast Lean declaration search. Without it, a prebuilt declaration index is used, then a bounded Node fallback.
-- Optional: elan/Lean for `math_lean_check` / `math_lean_build`; Docker for reproducible Linux Lean verification; Python 3 + SymPy for `math_compute`; Comparator + landrun + lean4export in Linux/Docker for `math_comparator`; LaTeX for document builds.
+- Optional: elan/Lean for `math_lean_check` / `math_lean_verify` / `math_lean_build`; Docker for reproducible Linux Lean verification; Python 3 + SymPy for `math_compute`; Comparator + landrun + lean4export in Linux/Docker for `math_comparator`; LaTeX for document builds.
 
 The repository includes a prebuilt `math-index.json`, so `math_search` works immediately. Manuscript reads and Lean checks need the `math/` clone.
 
@@ -63,6 +63,7 @@ tools.math_search({ query: "family:003 has:lean", limit: 10 })
 tools.math_manuscript({ path: "preprints/The-Quasi-Riemann-Hypothesis-September-30-2026", section: "Introduction" })
 tools.math_grep({ query: "Quasi-Riemann", path: "preprints/The-Quasi-Riemann-Hypothesis-September-30-2026" })
 tools.math_lean_check({ code: "example : True := by trivial" })
+tools.math_lean_verify({ code: "theorem answer : True := True.intro", theorem: "answer", expectedType: "True" })
 tools.math_lean_build({ target: "OAI.Analysis" })
 tools.math_lean_search({ query: "linearizedMA_critical_density" })
 tools.math_pdf_text({ path: "overview.pdf", pages: "1-3" })
@@ -83,6 +84,7 @@ tools.math_reindex({})
 | `math_manuscript` | Metadata, abstract, file outline, section headings, or a specific LaTeX section. |
 | `math_grep` | Search TeX, Markdown, and Lean text under `math/`. |
 | `math_lean_check` | Type-check a Lean snippet or existing file with `lake env lean`. |
+| `math_lean_verify` | Check a named solution against a trusted target type and axiom policy; return a versioned JSON receipt. |
 | `math_lean_build` | Build a focused Lake target such as `OAI.Analysis`. |
 | `math_lean_search` | Search declaration lines in `math/lean` and Mathlib by name or regex. |
 | `math_pdf_text` | Extract bounded text from a manuscript PDF (no OCR). |
@@ -95,7 +97,9 @@ tools.math_reindex({})
 | `math_doctor` | Corpus/index/cache, Docker images/volumes, host tools and disk-space health; no Lean checks or builds. |
 | `math_reindex` | Rebuild the index after `math/` changes. |
 
-PDF discovery example (15 tools total): the committed excerpt index covers **789 PDFs / 1,548 pages / 1.46 MB gzip**; rebuild it with `npm run index:pdf`, then call `math_pdf_index_search` above. Complete extractions share a persistent cache (500 entries / 200 MB; `MATH_TOOLKIT_PDF_CACHE` overrides the directory, `MATH_TOOLKIT_DISABLE_PDF_CACHE=1` disables it). See the [plugin guide](.opencode/plugins/math-toolkit/README.md#pdf-cache-and-excerpt-index) for index/cache limits.
+PDF discovery example (16 tools total): the committed excerpt index covers **789 PDFs / 1,548 pages / 1.46 MB gzip**; rebuild it with `npm run index:pdf`, then call `math_pdf_index_search` above. Complete extractions share a persistent cache (500 entries / 200 MB; `MATH_TOOLKIT_PDF_CACHE` overrides the directory, `MATH_TOOLKIT_DISABLE_PDF_CACHE=1` disables it). See the [plugin guide](.opencode/plugins/math-toolkit/README.md#pdf-cache-and-excerpt-index) for index/cache limits.
+
+**Compilation is not proof verification.** `math_lean_check` retains its compilation-only behavior; Lean can compile declarations containing `sorry`. Use `math_lean_verify` with exactly one of `code`/`file`, a fully qualified `theorem`, and an independently trusted `expectedType`. Only a receipt with `proof.status: "verified"` meets its type/axiom contract; informal correspondence is not assessed. Comparator challenge `sorry` placeholders are statements, not solutions: use `math_comparator` for those challenges. See the [verification contract](docs/verification-contract.md).
 
 ## How it works
 
@@ -177,10 +181,10 @@ The Comparator layer is in `docker/comparator.Dockerfile`. Comparator v4.34.0 is
 ## Benchmark
 
 ```powershell
-npm run bench -- --json bench/results/latest.json --md bench/results/latest.md
+npm run bench -- --json --md
 ```
 
-The benchmark compares the same prompts with and without the plugin on a cheap model. Results are indicative, not a scientific benchmark; see `bench/README.md`.
+The boolean `--json`/`--md` flags write `bench/results/latest.json` and `bench/results/latest.md`. The benchmark compares the same prompts with and without the plugin on a cheap model. Results are indicative, not a scientific benchmark; see `bench/README.md`.
 
 ## Distribution
 

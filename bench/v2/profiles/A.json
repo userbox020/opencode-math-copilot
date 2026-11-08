@@ -1,0 +1,7 @@
+{
+  "id": "A",
+  "description": "No tools; only the common task and instructions.",
+  "effective_tools": [],
+  "corpus_access": false,
+  "configuration": "isolated-no-global-config"
+}

@@ -8,6 +8,7 @@ import { findExecutable, REBUILD, resolveRoots } from "./lib/paths.js";
 import { createSearch, formatSearch } from "./lib/search.js";
 import { grepCorpus, manuscript } from "./lib/corpus.js";
 import { comparator, leanBuild, leanCheck } from "./lib/lean.js";
+import { DEFAULT_AXIOMS, leanVerify } from "./lib/verify.js";
 import { searchLean } from "./lib/lean-search.js";
 import { pdfText } from "./lib/pdf.js";
 import { pdfCorpusSearch, pdfSearch } from "./lib/pdf-search.js";
@@ -76,6 +77,22 @@ const inputs = {
       docker: { type: "boolean", default: false, description: "Run inside the Linux Docker volume/image instead of the host Lean toolchain." },
       timeoutMs: { type: "integer", minimum: 1000, maximum: 120000 },
     },
+    additionalProperties: false,
+  },
+  math_lean_verify: {
+    type: "object",
+    properties: {
+      code: { type: "string" },
+      file: { type: "string" },
+      theorem: { type: "string", minLength: 1, description: "Fully qualified Lean declaration name." },
+      expectedType: { type: "string", minLength: 1, description: "Trusted target type supplied independently of the solution." },
+      imports: { type: "array", items: { type: "string" }, default: ["Mathlib"] },
+      allowedAxioms: { type: "array", items: { type: "string" }, default: DEFAULT_AXIOMS },
+      docker: { type: "boolean", default: false },
+      timeoutMs: { type: "integer", minimum: 1000, maximum: 120000, default: 60000 },
+    },
+    required: ["theorem", "expectedType"],
+    oneOf: [{ required: ["code"] }, { required: ["file"] }],
     additionalProperties: false,
   },
   math_lean_build: {
@@ -202,6 +219,8 @@ function makeExecutors(roots) {
     math_manuscript: run((args, { index }) => manuscript(index, roots, args)),
     math_grep: run((args) => grepCorpus(roots, args), false),
     math_lean_check: run((args) => leanCheck(roots, args), false),
+    // Receipts must remain valid JSON, never clipped into a Markdown error string.
+    math_lean_verify: async (args = {}) => leanVerify(roots, args),
     math_lean_build: run((args, { index }) => leanBuild(index, roots, args)),
     math_lean_search: run((args) => searchLean(roots, args), false),
     math_pdf_text: run((args) => pdfText(roots, args), false),
@@ -236,6 +255,7 @@ const descriptions = {
   math_manuscript: "Read an indexed manuscript's citation, metadata and section outline, or a named section's TeX source. Use a PDF/directory path or a unique title substring.",
   math_grep: "Search local math text sources for a phrase or regex. Prefer a small preprint/Lean subtree; excludes dependencies, binaries and oversized files.",
   math_lean_check: "Compile a Lean snippet with imports or check one existing .lean file using lake env lean. Requires a host toolchain/cache, or docker:true for the Linux Docker volume. Docker copies files to /check; project-relative imports may not resolve unless self-contained.",
+  math_lean_verify: "Check a named user solution against a supplied trusted Lean type and axiom allowlist. Returns a math-lean-verify/v1 JSON receipt; compilation alone is not a verified proof. Provide exactly one of code/file. Informal correspondence is not assessed. Use math_comparator for Comparator challenge statements.",
   math_lean_build: "Build a focused Lean library/module, default OAI.Analysis. Whole-library builds are expensive and may generate Lake build artifacts.",
   math_lean_search: "Search declaration lines in math/lean and Mathlib by name or regex. Use to locate theorems, lemmas, definitions, classes, and instances before editing Lean.",
   math_pdf_text: "Extract bounded text from a manuscript PDF (no OCR). Use when TeX source is missing or you need the released PDF's exact wording.",

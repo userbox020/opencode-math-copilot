@@ -36,7 +36,6 @@
     "index": "node .opencode/plugins/math-toolkit/scripts/build-index.mjs",
     "index:lean": "node .opencode/plugins/math-toolkit/scripts/build-lean-index.mjs",
     "index:pdf": "node .opencode/plugins/math-toolkit/scripts/build-pdf-index.mjs",
-    "bench:analyze": "node bench/analyze.mjs",
     "test": "node .opencode/plugins/math-toolkit/scripts/test-tools.mjs"
   },
   "devDependencies": {

@@ -1,0 +1,7 @@
+{
+  "id": "F",
+  "description": "Full plugin interface, simulated only; every registered math tool is enumerated.",
+  "effective_tools": ["math_doctor", "math_pdf_index_search", "math_search", "math_manuscript", "math_grep", "math_lean_check", "math_lean_verify", "math_lean_build", "math_lean_search", "math_pdf_text", "math_pdf_search", "math_pdf_corpus_search", "math_compute", "math_comparator", "math_status", "math_reindex"],
+  "corpus_access": true,
+  "configuration": "isolated-no-global-config"
+}

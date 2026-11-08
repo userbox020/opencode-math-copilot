@@ -1,0 +1,34 @@
+[
+  {
+    "id": "numeric-speed", "family": "arithmetic", "domain": "arithmetic", "type": "numeric", "negative": false,
+    "prompt": "A toy object travels 6 m in 2 s at constant speed. Give its speed as a typed numeric answer, domain nonnegative-real, units m/s, with condition constant speed.",
+    "answer_contract": "{type:numeric,value:number,domain:string,units:string,conditions:string[]}",
+    "excerpts": [],
+    "grading": {"value": 3, "tolerance": {"absolute": 0.000001, "relative": 0}, "domain": "nonnegative-real", "units": "m/s", "conditions": ["constant speed"]},
+    "correct_final": {"type": "numeric", "value": 3, "domain": "nonnegative-real", "units": "m/s", "conditions": ["constant speed"]}
+  },
+  {
+    "id": "symbolic-cancel", "family": "algebra", "domain": "algebra", "type": "symbolic", "negative": false,
+    "prompt": "Simplify x/x for real x. Return numerator/denominator as integer polynomial coefficient arrays, low-to-high powers; state domain real, assumptions [x is real], and all restrictions as conditions.",
+    "answer_contract": "{type:symbolic,numerator:number[],denominator:number[],domain:string,assumptions:string[],conditions:string[]}",
+    "excerpts": [],
+    "grading": {"kind": "rational-polynomial", "numerator": [1], "denominator": [1], "allowed_denominators": [[1], [0, 1]], "domain": "real", "assumptions": ["x is real"], "conditions": ["x != 0"]},
+    "correct_final": {"type": "symbolic", "numerator": [1], "denominator": [1], "domain": "real", "assumptions": ["x is real"], "conditions": ["x != 0"]}
+  },
+  {
+    "id": "citation-toy", "family": "retrieval", "domain": "evidence", "type": "citation", "negative": false,
+    "prompt": "Find the toy corpus statement about the count of sides of a triangle. Return exact document ID, locator, verbatim supported claim and supported=true.",
+    "answer_contract": "{type:citation,document:string,locator:string,claim:string,supported:boolean}",
+    "excerpts": [{"document": "toy-geometry", "locator": "section-1", "text": "A triangle has three sides."}, {"document": "toy-other", "locator": "section-1", "text": "A square has four sides."}],
+    "grading": {"document": "toy-geometry", "locator": "section-1", "supported_claim": "A triangle has three sides."},
+    "correct_final": {"type": "citation", "document": "toy-geometry", "locator": "section-1", "claim": "A triangle has three sides.", "supported": true}
+  },
+  {
+    "id": "absence-unicorn", "family": "retrieval", "domain": "evidence", "type": "absence", "negative": true,
+    "prompt": "Search the available toy excerpt for the unicorn lemma. Distinguish absence from consulted excerpts, corpus-wide nonexistence, and unavailable corpus. List consulted document#locator identifiers.",
+    "answer_contract": "{type:absence,status:not_found_in_consulted_excerpts|nonexistent|corpus_unavailable,consulted:string[]}",
+    "excerpts": [{"document": "toy-geometry", "locator": "section-1", "text": "A triangle has three sides. This is a partial excerpt, not the complete corpus."}],
+    "grading": {"status": "not_found_in_consulted_excerpts", "consulted": ["toy-geometry#section-1"], "exhaustive_inventory": false},
+    "correct_final": {"type": "absence", "status": "not_found_in_consulted_excerpts", "consulted": ["toy-geometry#section-1"]}
+  }
+]

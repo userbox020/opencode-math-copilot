@@ -1,0 +1,133 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+
+\title{OpenCode Math Copilot: A Model-Agnostic Tool Layer for Mathematical Retrieval, Computation, and Verification}
+\author{[Author names and affiliations pending owner decision]}
+\date{Draft protocol and manuscript skeleton}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This manuscript skeleton specifies an evaluation of a mathematical tool layer
+combining retrieval, symbolic computation, and formal verification in an agent
+workflow without changing model weights. The proposed study compares an
+unassisted condition, a generic agent with comparable corpus and tool access,
+and the full plugin. Its principal contrast concerns the full plugin versus
+the generic agent. New experimental results are \textbf{pending}; study sizes
+are proposed, not executed. Future dry-run outputs must be labeled simulated
+and cannot establish mathematical performance. No improvement, universal
+expertise, or security guarantee is claimed.
+\end{abstract}
+
+\section{Introduction and Scope of Claims}
+The unit of evaluation is the model, agent, tools, and corpus together.
+``Model-agnostic'' describes an interface not restricted to one provider,
+not guaranteed compatibility or mathematical expertise for all models.
+\textbf{Pending:} motivation and contributions tied to the frozen implementation
+and completed evidence. The companion claim/evidence map is
+\href{../research/claims-and-evidence.md}{\texttt{research/claims-and-evidence.md}};
+it distinguishes historical reports, proposed controls, and pending findings.
+
+\section{Related Work}
+ToRA is an antecedent for tool-integrated mathematical reasoning with
+training, rather than evidence of novelty for inference-time integration
+alone~\cite{tora2023}. Lean Copilot relates to model assistance inside Lean
+proof workflows~\cite{leanCopilot2024}. miniF2F is a public formal benchmark,
+not a contamination-free source of private test tasks~\cite{minif2f2021}.
+Lean's proof-validation reference informs the trust discussion~\cite{leanProofValidation}.
+\textbf{Pending:} primary-source metadata and passage verification, version
+pinning, and a fuller related-work review. No comparative performance is asserted.
+
+\section{Architecture and Tool Surface}
+\textbf{Pending:} description tied to the study's plugin commit, effective
+tool inventory, corpus and index hashes, and dependency versions. Describe
+retrieval coverage and excerpt limits, symbolic execution, formal checking,
+and workflow integration separately. Tool availability is not correctness.
+
+\section{Trust Model and Verification Contract}
+The proposed evidence contract separates execution, compilation, target
+identity, proof status under an axiom policy, and informal correspondence.
+Verification requires a controlled comparison to the trusted statement and
+inspection of transitive axioms, not merely process exit status or a printed
+success marker. File hashes provide provenance, not semantic equivalence.
+A placeholder in a challenge statement is distinct from an incomplete solution.
+\textbf{Pending:} implementation-linked checks and receipts. Restricted
+execution and protected graders are proposed controls, not a security proof.
+Any historical Comparator report is confined to its named challenge,
+commit, and environment; it does not verify all challenges or the mathematical paper.
+
+\section{Preregistered Experimental Protocol}
+\textbf{Status: proposed; completed preregistration and budget authorization pending.}
+The companion protocol is
+\href{../research/protocol.md}{\texttt{research/protocol.md}}.
+RQ1 concerns utility, RQ2 integration value, RQ3 reliability, and RQ4
+efficiency and limits. A has no tools during resolution; B is a generic agent
+with the same corpus and comparable tools but no \texttt{math\_*} interfaces;
+F uses the full plugin. The primary outcome is externally graded episode
+success within budget; the primary contrast is F minus B.
+
+Use family-separated development, validation, and test partitions, protected
+solutions and graders, fixed Lean statements, and explicit contamination
+audits. Distinguish attempts within a budgeted episode from independent
+repeats. Preserve all started episodes in operational accounting and pair
+conditions in a family bootstrap. Freeze prompts, budgets, rubrics, weights,
+and analysis before test outcomes are available.
+
+The proposed pilot is $30\times2\times3\times2=360$ episodes. An expanded
+example is $150\times4\times3\times3=5{,}400$ episodes before ablations.
+Neither has been run by this work; both require budget authorization.
+Any dry-run manifest must be labeled \textbf{simulated}, not measured.
+
+\section{Results Separated by Retrieval, Computation, and Proof}
+\textbf{Pending. No new evaluation results are available in this skeleton.}
+No simulated outputs or plausible result tables are supplied. Historical
+keyword-heuristic reports are documented separately in the claim/evidence map
+and must not be described as mathematical accuracy.
+
+\subsection{Bibliographic Retrieval and Evidence}
+\textbf{Pending:} source-supported grading, coverage, and failure accounting.
+\subsection{Exact and Symbolic Computation}
+\textbf{Pending:} correctness under registered assumptions and domains.
+\subsection{Fixed-Statement Lean Proof Construction}
+\textbf{Pending:} target-specific receipts; reproduction results kept separate.
+\subsection{Error and Hypothesis Detection}
+\textbf{Pending:} blinded rubric outcomes and adjudication records.
+\subsection{Out-of-Corpus Explanation}
+\textbf{Pending:} reviewed explanations and uncertainty by family/model.
+
+\section{Ablations, Costs, and Negative Cases}
+Only a leave-one-out design is proposed: remove retrieval, computation, or
+resolution-time verification from F while retaining external final grading.
+\textbf{Pending:} authorized ablations and cost analysis. Cost per correct
+episode includes failed attempts; undefined or missing costs are not zero.
+Report cold and warm caches, setup time, failures, and timeouts rather than
+only successful latencies. Preserve negative results, including the historical
+GPT landau-siegel keyword score of $2/3$ with versus $3/3$ without the plugin,
+as a preliminary project report rather than new mathematical evidence.
+
+\section{Limitations, Contamination, and Threats to Validity}
+Public benchmarks may overlap model training or accessible proofs. Repeated
+episodes are not independent tasks. Corpus access, interface differences,
+human grading, unknown model revisions, small family samples, and API drift
+limit interpretation. Formal validity does not establish faithful informal
+translation. No claim of universal expertise or broad causal superiority follows.
+\textbf{Pending:} study-specific deviations, missing data, and limitations.
+
+\section{Reproducibility, Licenses, and Artifact Availability}
+\textbf{Pending:} immutable study manifests, records, protected evaluation
+release policy, receipts, dependency/image/patch hashes, license review,
+redacted logs, and regeneration commands. No archive or public dataset release
+is claimed. Document actual tools and AI assistance under the chosen venue's
+policy; author names and affiliations remain placeholders.
+
+\section{Conclusion Limited to Observed Evidence}
+This skeleton specifies evaluation and evidence requirements. Empirical
+utility, reliability gains, efficiency, and generalization remain
+\textbf{pending}. A final conclusion must follow the completed evidence,
+including null and negative outcomes, rather than a predetermined claim.
+
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}

@@ -11,7 +11,8 @@ import { pdfText } from "../lib/pdf.js";
 import { pdfCorpusSearch, pdfSearch } from "../lib/pdf-search.js";
 import { createPdfIndexReader, pdfIndexSearch, PDF_INDEX_BUILD } from "../lib/pdf-index.js";
 import { searchLean } from "../lib/lean-search.js";
-import { leanCheck, comparator } from "../lib/lean.js";
+import { leanCheck, comparator, runDocker } from "../lib/lean.js";
+import { DEFAULT_AXIOMS, leanVerify } from "../lib/verify.js";
 import { findExecutable, resolveRoots, safePath } from "../lib/paths.js";
 
 const workspace = fileURLToPath(new URL("../../../../", import.meta.url));
@@ -61,7 +62,7 @@ await tools.get("math_search").execute({ query: "Riemann" });
 await tools.get("math_search").execute({ query: "Riemann" });
 assert.equal(manuscriptIndexReads, 1, "First use loads the index once");
 } finally { fs.readFileSync = originalReadFile; }
-assert.equal(tools.size, 15);
+assert.equal(tools.size, 16);
 console.log(`PASS: ${tools.size} registered tools.`);
 assert.deepEqual(tools.get("math_doctor").input, { type: "object", properties: {}, additionalProperties: false });
 const excerptSchema = tools.get("math_pdf_index_search").input;
@@ -79,11 +80,161 @@ assert.equal(corpusSchema.properties.pages.default, "1-2");
 assert.equal(corpusSchema.properties.limit.maximum, 20);
 assert.equal(corpusSchema.properties.limit.default, 10);
 assert.equal(corpusSchema.properties.literal.default, true);
+const verifySchema = tools.get("math_lean_verify").input;
+assert.deepEqual(verifySchema.required, ["theorem", "expectedType"]);
+assert.deepEqual(verifySchema.oneOf, [{ required: ["code"] }, { required: ["file"] }]);
+assert.deepEqual(verifySchema.properties.imports.default, ["Mathlib"]);
+assert.deepEqual(verifySchema.properties.allowedAxioms.default, DEFAULT_AXIOMS);
+assert.equal(verifySchema.additionalProperties, false);
 
 const call = async (name, args = {}) => {
   const result = await tools.get(name).execute(args, {});
   return typeof result === "string" ? result : result.content;
 };
+
+// Pure runner fixtures: no Docker, Lean, network, or long waits.
+const verificationFixture = fs.mkdtempSync(path.join(os.tmpdir(), "math-toolkit-verify-test-"));
+try {
+  const roots = { math: verificationFixture, workspace: verificationFixture };
+  fs.mkdirSync(path.join(verificationFixture, "lean", "ComparatorChallenges"), { recursive: true });
+  fs.writeFileSync(path.join(verificationFixture, "lean", "ComparatorChallenges", "Sample.json"), "{}");
+  fs.writeFileSync(path.join(verificationFixture, "lean", "Solution.lean"), "theorem Demo.answer : True := True.intro\n");
+  for (const docker of [false, true]) {
+    for (const explicit of [undefined, 42000]) {
+      let calls = 0;
+      const expected = explicit ?? (docker ? 1800000 : 600000);
+      const check = limit => { calls++; assert.equal(limit, expected); return "**FAIL** — timeout"; };
+      const runners = {
+        runDocker(args, limit, options) {
+          assert.equal(docker, true);
+          assert.deepEqual(args, ["verify-comparator.sh"]);
+          assert.equal(options.challenge, "ComparatorChallenges/Sample.json");
+          return check(limit);
+        },
+        runLake(actualRoots, args, limit) {
+          assert.equal(docker, false);
+          assert.equal(actualRoots, roots);
+          assert.equal(args[1], "comparator");
+          return check(limit);
+        },
+      };
+      const result = comparator(roots, { challenge: "Sample", docker, timeoutMs: explicit }, runners);
+      assert.equal(calls, 1);
+      assert.match(result, /FAIL.*timeout/);
+      assert.doesNotMatch(result, /PASS/);
+    }
+  }
+  const dockerCalls = [];
+  const dockerStub = {
+    findExecutable: () => "docker",
+    spawnSync(executable, args, options) {
+      assert.equal(executable, "docker");
+      assert.equal(options.shell, false);
+      dockerCalls.push(args);
+      if (args[0] !== "run") return { status: 0, stdout: "", stderr: "" };
+      assert.equal(options.timeout, 42000);
+      return { status: 0, error: Object.assign(new Error("spawnSync ETIMEDOUT"), { code: "ETIMEDOUT" }) };
+    },
+  };
+  const timedDocker = runDocker(["lake", "--version"], 42000, {}, dockerStub);
+  assert.match(timedDocker, /\*\*FAIL\*\*/);
+  assert.doesNotMatch(timedDocker, /\*\*PASS\*\*/);
+  runDocker(["lake", "--version"], 42000, {}, dockerStub);
+  const runs = dockerCalls.filter(args => args[0] === "run");
+  const removals = dockerCalls.filter(args => args[0] === "rm");
+  assert.equal(runs.length, 2);
+  assert.equal(removals.length, 2);
+  const containers = runs.map(args => args[args.indexOf("--name") + 1]);
+  assert.notEqual(containers[0], containers[1]);
+  removals.forEach((args, i) => assert.deepEqual(args, ["rm", "--force", containers[i]]));
+  console.log("PASS: CORE-01 native/Docker default and explicit timeouts; timeout is FAIL; cleanup removes only each invocation's unique container (all stubbed).");
+
+  const input = { code: "theorem Demo.answer : True := True.intro", theorem: "Demo.answer", expectedType: "True" };
+  const checkedNames = new Set();
+  const fixtureRunner = ({ report = "'$CHECKED' depends on axioms: [propext, Quot.sound, Classical.choice]", status = 0, error, diagnostic, stderr = false, markers = true, notRun = false } = {}) => (actualRoots, source, options) => {
+    assert.equal(actualRoots, roots);
+    assert.equal(options.timeoutMs, 60000);
+    assert.match(source, /^import Mathlib\n/);
+    const marker = source.match(/#eval IO.println "(math_verify_\w+)_begin"/)[1];
+    const checkedName = `${marker}_checked`;
+    assert(!checkedNames.has(checkedName), "Each invocation must generate a unique checked declaration");
+    checkedNames.add(checkedName);
+    assert(source.includes(`theorem _root_.${checkedName} : (True) := _root_.Demo.answer\n#print axioms _root_.${checkedName}`));
+    assert.doesNotMatch(source, /#print axioms _root_\.Demo\.answer/);
+    const line = source.split("\n").findIndex(line => line.startsWith(`theorem _root_.${checkedName}`)) + 1;
+    const text = [markers ? `${marker}_begin` : "", diagnostic?.(line), report.replaceAll("$CHECKED", checkedName), markers ? `${marker}_end` : ""].filter(Boolean).join("\n");
+    return { status, error, notRun, stdout: stderr ? "" : text, stderr: stderr ? text : "" };
+  };
+  const verify = (options, args = input) => JSON.parse(leanVerify(roots, args, fixtureRunner(options)));
+  const valid = verify();
+  assert.equal(valid.version, "math-lean-verify/v1");
+  assert.equal(valid.execution.status, "completed");
+  assert.equal(valid.execution.mode, "native");
+  assert.equal(valid.execution.exitCode, 0);
+  assert(valid.execution.durationMs >= 0);
+  assert.equal(valid.compilation.status, "compiled");
+  assert.equal(valid.target.status, "identified");
+  assert.equal(valid.proof.status, "verified");
+  assert.deepEqual(valid.proof.axioms, DEFAULT_AXIOMS);
+  assert.deepEqual(valid.proof.unauthorizedAxioms, []);
+  assert.equal(valid.checker.tool, "lake env lean");
+  assert.match(valid.note, /Informal correspondence is not assessed/);
+  assert.equal(verify({ stderr: true }).proof.status, "verified");
+  assert.equal(verify({ report: "'$CHECKED' does not depend on any axioms" }).proof.status, "verified");
+  assert.equal(verify({ report: "'$CHECKED' depends on axioms:\n[propext,\n Quot.sound, Classical.choice]" }).proof.status, "verified");
+  const missing = verify({ status: 1, report: "", diagnostic: line => `Check.lean:${line}:26: error: Unknown identifier \u0060Demo.answer\u0060` });
+  assert.equal(missing.target.status, "missing");
+  assert.equal(missing.compilation.status, "failed");
+  assert.equal(missing.proof.status, "unverified");
+  const mismatch = verify({ status: 1, diagnostic: line => `Check.lean:${line}:26: error: Type mismatch\n  Demo.answer\nhas type\n  False\nbut is expected to have type\n  True` });
+  assert.equal(mismatch.target.status, "mismatch");
+  assert.equal(mismatch.proof.status, "unverified");
+  const unauthorized = verify({ report: "'$CHECKED' depends on axioms: [Secret.assumption]" });
+  assert.equal(unauthorized.proof.status, "rejected");
+  assert.deepEqual(unauthorized.proof.unauthorizedAxioms, ["Secret.assumption"]);
+  assert.equal(verify({ report: "'$CHECKED' depends on axioms: [Secret.assumption]" }, { ...input, allowedAxioms: ["Secret.assumption"] }).proof.status, "verified");
+  const sorry = verify({ report: "'$CHECKED' depends on axioms: [sorryAx]" }, { ...input, allowedAxioms: ["sorryAx"] });
+  assert.equal(sorry.proof.status, "incomplete");
+  assert.equal(sorry.proof.sorryAx, true);
+  const timeout = verify({ error: Object.assign(new Error("timed out"), { code: "ETIMEDOUT" }) });
+  assert.equal(timeout.execution.status, "timeout");
+  assert.equal(timeout.compilation.status, "failed");
+  assert.notEqual(timeout.proof.status, "verified");
+  const absent = verify({ error: Object.assign(new Error("lake missing"), { code: "ENOENT" }) });
+  assert.equal(absent.execution.status, "missing-tool");
+  assert.equal(absent.compilation.status, "not-run");
+  assert.notEqual(absent.proof.status, "verified");
+  for (const options of [{ report: "" }, { markers: false }, { report: "'Other.theorem' depends on axioms: []" }, { report: "'Demo.answer' depends on axioms: []" }, { report: "'$CHECKED' depends on axioms: [not a name]" }, { report: "'$CHECKED' depends on axioms: []\n'$CHECKED' depends on axioms: []" }, { status: 1 }, { error: new Error("buffer exceeded") }]) {
+    assert.notEqual(verify(options).proof.status, "verified");
+  }
+  const validReport = "'$CHECKED' depends on axioms: []";
+  for (const extra of ["'$CHECKED' depends on axioms: [not a name]", "'$CHECKED' depends on axioms: [", "'$CHECKED' unfamiliar report format"]) {
+    for (const reports of [[validReport, extra], [extra, validReport]]) {
+      assert.equal(verify({ report: reports.join("\n") }).proof.status, "unverified", "Every extra candidate must fail closed, regardless of order or format");
+    }
+  }
+  const notRun = verify({ notRun: true });
+  assert.equal(notRun.execution.exitCode, 0);
+  assert.equal(notRun.compilation.status, "not-run");
+  assert.equal(notRun.proof.status, "unverified");
+  const fileReceipt = verify({}, { ...input, code: undefined, file: "lean/Solution.lean", docker: true });
+  assert.equal(fileReceipt.proof.status, "verified");
+  assert.equal(fileReceipt.execution.mode, "docker");
+  for (const args of [null, [], "invalid", {}, { ...input, file: "Solution.lean" }, { ...input, theorem: "Demo.answer\n#eval 1" }, { ...input, expectedType: "" }, { ...input, imports: ["Mathlib; exit"] }, { ...input, timeoutMs: 0 }, { ...input, code: undefined, file: "../escape.lean" }]) {
+    const invalid = JSON.parse(leanVerify(roots, args, () => assert.fail("Invalid input must not invoke Lean")));
+    assert.equal(invalid.execution.status, "error");
+    assert.equal(invalid.compilation.status, "not-run");
+    assert.equal(invalid.target.status, "not-requested");
+    assert.equal(invalid.proof.status, "not-requested");
+  }
+  const registeredInvalid = JSON.parse(await call("math_lean_verify", {}));
+  assert.equal(registeredInvalid.compilation.status, "not-run");
+  const registeredNull = JSON.parse(await call("math_lean_verify", null));
+  assert.equal(registeredNull.execution.status, "error");
+  assert.equal(registeredNull.proof.status, "not-requested");
+  console.log("PASS: VERIFY-01 JSON receipt/schema, valid/axiom-free/multiline/stderr/file targets, missing/mismatched targets, unauthorized axioms, sorryAx, timeouts/missing tools, malformed/absent output and invalid inputs (all stubbed).");
+  console.log("PASS: Generated-declaration audit only; valid+malformed/unrecognized reports in both orders fail closed; null/invalid requests and contradictory notRun runner cannot verify (all stubbed).");
+} finally { fs.rmSync(verificationFixture, { recursive: true, force: true }); }
 
 let manuscript = null;
 let grepArgs = null;
@@ -325,7 +476,7 @@ assert.match(await call("math_lean_check", {}), /exactly one/i);
 assert.match(await call("math_lean_check", { code: "", file: "test.lean" }), /exactly one/i);
 assert.match(await call("math_lean_build", { target: "--help" }), /invalid build target/i);
 
-for (const name of ["math_lean_check", "math_lean_build", "math_comparator"]) {
+for (const name of ["math_lean_check", "math_lean_verify", "math_lean_build", "math_comparator"]) {
   assert.equal(tools.get(name).input.properties.docker.type, "boolean");
   assert.equal(tools.get(name).input.properties.docker.default, false);
 }
@@ -348,6 +499,27 @@ if (!docker || /\.(cmd|bat)$/i.test(docker) || dockerProbe(["image", "inspect", 
   const check = await call("math_lean_check", { docker: true, code: "example : 1 = 1 := rfl", imports: ["Mathlib.Data.Nat.Basic"], timeoutMs: 120000 });
   assert.match(check, /\[docker\] \*\*PASS\*\*/, check);
   console.log("PASS: Docker Lean snippet with Mathlib cache and read-only host temp mount.");
+  const verified = JSON.parse(await call("math_lean_verify", { docker: true, code: "theorem verify_smoke : True := True.intro", theorem: "verify_smoke", expectedType: "True", imports: ["Mathlib.Data.Nat.Basic"], timeoutMs: 120000 }));
+  assert.equal(verified.proof.status, "verified", JSON.stringify(verified));
+  const incomplete = JSON.parse(await call("math_lean_verify", { docker: true, code: "theorem verify_smoke : False := by sorry", theorem: "verify_smoke", expectedType: "False", imports: ["Mathlib.Data.Nat.Basic"], timeoutMs: 120000 }));
+  assert.equal(incomplete.proof.status, "incomplete", JSON.stringify(incomplete));
+  console.log("PASS: Docker strict-verifier smoke and sorryAx rejection with the already-available Lean image/volume.");
+  const instanceSource = `class VerifyPremise : Prop where
+  out : False
+axiom unauthorizedInstance : VerifyPremise
+attribute [instance] unauthorizedInstance
+theorem Demo.answer [h : VerifyPremise] : False := h.out
+#print axioms Demo.answer`;
+  const instanceArgs = { docker: true, theorem: "Demo.answer", expectedType: "False", allowedAxioms: [], imports: ["Mathlib.Data.Nat.Basic"], timeoutMs: 120000 };
+  const unauthorizedInstance = JSON.parse(await call("math_lean_verify", { ...instanceArgs, code: instanceSource }));
+  assert.equal(unauthorizedInstance.compilation.status, "compiled", JSON.stringify(unauthorizedInstance));
+  assert.equal(unauthorizedInstance.proof.status, "rejected", JSON.stringify(unauthorizedInstance));
+  assert(unauthorizedInstance.proof.unauthorizedAxioms.includes("unauthorizedInstance"), JSON.stringify(unauthorizedInstance));
+  const sorryInstance = JSON.parse(await call("math_lean_verify", { ...instanceArgs, code: instanceSource.replace("axiom unauthorizedInstance : VerifyPremise", "theorem unauthorizedInstance : VerifyPremise := by sorry") }));
+  assert.equal(sorryInstance.compilation.status, "compiled", JSON.stringify(sorryInstance));
+  assert.equal(sorryInstance.proof.status, "incomplete", JSON.stringify(sorryInstance));
+  assert(sorryInstance.proof.axioms.includes("sorryAx"), JSON.stringify(sorryInstance));
+  console.log("PASS: Real Docker Lean elaboration-only dependencies: synthesized unauthorized instance is rejected; synthesized sorry instance is incomplete and reports sorryAx.");
   const build = await call("math_lean_build", { docker: true, target: "OAI.Analysis.AffineBernstein.ABPCriticalDensity" });
   assert.match(build, /\[docker\] \*\*PASS\*\*/, build);
   console.log("PASS: Docker focused build OAI.Analysis.AffineBernstein.ABPCriticalDensity.");
@@ -368,7 +540,7 @@ if (!docker || /\.(cmd|bat)$/i.test(docker) || dockerProbe(["image", "inspect", 
     process.env.MATH_TOOLKIT_COMPARATOR_IMAGE = "math-toolkit-missing-comparator-test:nonexistent";
     const missingComparator = comparator(fixtureRoots, { docker: true, challenge: "Sample" });
     assert.match(missingComparator, /docker build -f docker\/comparator\.Dockerfile/);
-    assert.match(missingComparator, /may not match the corpus Lean 4\.34\.1 pin/);
+    assert.match(missingComparator, /Comparator v4\.34\.0 is rebuilt with the corpus Lean 4\.34\.1 toolchain/);
     process.env.MATH_TOOLKIT_LEAN_IMAGE = leanImage;
     process.env.MATH_TOOLKIT_LEAN_VOLUME = "math-toolkit-missing-volume-test";
     const missingVolume = await call("math_lean_build", { docker: true, target: "OAI.Analysis" });
@@ -419,6 +591,12 @@ try {
   assert(health.length <= 16000);
   assert.match(await call("math_lean_check", { code: "example : True := by trivial" }), /install elan\/Lean/i);
   assert.match(await call("math_lean_check", { docker: true, code: "example : True := by trivial" }), /docker was not found on PATH.*Install Docker/i);
+  for (const docker of [false, true]) {
+    const missing = JSON.parse(await call("math_lean_verify", { docker, code: "theorem proof : True := True.intro", theorem: "proof", expectedType: "True" }));
+    assert.equal(missing.execution.status, "missing-tool");
+    assert.equal(missing.compilation.status, "not-run");
+    assert.equal(missing.proof.status, "unverified");
+  }
 } finally {
   if (originalPath === undefined) delete process.env.PATH;
   else process.env.PATH = originalPath;

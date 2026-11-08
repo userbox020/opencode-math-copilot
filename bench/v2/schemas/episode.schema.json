@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "study_id", "model_id", "task_id", "condition_id", "repeat_id", "attempt_id", "key", "simulated", "family", "domain", "negative", "status", "error", "final", "events", "grade", "usage", "under_budget", "duration_ms", "duration_source", "cost", "artifacts", "workspace", "started_at"],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "study_id": {"type": "string", "minLength": 1},
+    "model_id": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "condition_id": {"enum": ["A", "B", "F"]},
+    "repeat_id": {"type": "integer", "minimum": 1},
+    "attempt_id": {"type": "integer", "minimum": 1},
+    "key": {"type": "string", "minLength": 1},
+    "simulated": {"type": "boolean"},
+    "family": {"type": "string"},
+    "domain": {"type": "string"},
+    "negative": {"type": "boolean"},
+    "status": {"enum": ["completed", "extraction_failure", "operational_failure"]},
+    "error": {"type": ["object", "null"], "required": ["category", "message"], "properties": {"category": {"enum": ["extraction_failure", "adapter_failure", "interrupted", "tool_unavailable", "isolation_failure"]}, "message": {"type": "string"}}},
+    "final": {"type": ["object", "null"]},
+    "events": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["seq", "kind", "tool", "arguments", "result", "duration_ms", "simulated"], "properties": {"seq": {"type": "integer", "minimum": 1}, "kind": {"const": "tool_call"}, "tool": {"type": "string"}, "arguments": {"type": "object"}, "result": {"type": "object"}, "duration_ms": {"type": "number", "minimum": 0}, "simulated": {"type": "boolean"}}}},
+    "grade": {"type": "object", "additionalProperties": false, "required": ["correct", "reason"], "properties": {"correct": {"type": "boolean"}, "reason": {"type": "string"}}},
+    "usage": {"type": "object", "additionalProperties": false, "required": ["tokens", "tool_calls"], "properties": {"tokens": {"type": "integer", "minimum": 0}, "tool_calls": {"type": "integer", "minimum": 0}}},
+    "under_budget": {"type": "boolean"},
+    "duration_ms": {"type": "number", "minimum": 0},
+    "duration_source": {"enum": ["simulated-fixture", "monotonic-clock"]},
+    "cost": {"type": "object", "additionalProperties": false, "required": ["observed_usd", "estimated_usd", "source", "date"], "properties": {"observed_usd": {"type": ["number", "null"], "minimum": 0}, "estimated_usd": {"type": ["number", "null"], "minimum": 0}, "source": {"type": ["string", "null"]}, "date": {"type": ["string", "null"]}}},
+    "artifacts": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["kind", "path", "sha256"], "properties": {"kind": {"enum": ["final", "events"]}, "path": {"type": "string"}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}}},
+    "workspace": {"type": "object", "additionalProperties": false, "required": ["fresh", "config_loaded", "agent_payload_sha256", "removed"], "properties": {"fresh": {"const": true}, "config_loaded": {"const": false}, "agent_payload_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "removed": {"const": true}}},
+    "started_at": {"type": "string"}
+  }
+}
