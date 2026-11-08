@@ -46,6 +46,105 @@ index fcec4d8..7f49f21 100644
    exact hcomp.trans (tsupport_fderiv_subset (𝕜 := ℝ) (f := f))
  
  omit [CompleteSpace E] in
+diff --git a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Approximation.lean b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Approximation.lean
+index 1ae0860..d5eafc7 100644
+--- a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Approximation.lean
++++ b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Approximation.lean
+@@ -81,7 +81,7 @@ lemma kernelMeasure_univ (hψc : Continuous ψ) (hψcs : HasCompactSupport ψ) (
+   -- Conclude using `∫ ψ = 1`.
+   simpa [hψint] using (hwd.trans hlin)
+ 
+-local instance instIsProbabilityMeasure_kernelMeasure
++private lemma instIsProbabilityMeasure_kernelMeasure
+     (hψc : Continuous ψ) (hψcs : HasCompactSupport ψ)
+     (hψ0 : ∀ x, 0 ≤ ψ x)
+     (hψint : ∫ x, ψ x ∂(volume : Measure E) = 1) :
+@@ -189,7 +189,7 @@ lemma norm_sq_translateL2_sub_extendByZeroL2_eq_integral_sq (t : E)
+         MeasureTheory.MeasurePreserving (fun x : E => x - t)
+           (volume : Measure E) (volume : Measure E) :=
+       MeasureTheory.measurePreserving_sub_right (μ := (volume : Measure E)) t
+-    simpa [Function.comp] using (hmp.quasiMeasurePreserving.ae_eq_comp hF_ae)
++    simpa only [Function.comp_def] using (hmp.quasiMeasurePreserving.ae_eq_comp hF_ae)
+   -- TranslateL2 gives `F(x - t)` a.e.
+   have htrans :
+       ((translateL2 (μ := (volume : Measure E)) (-t)) F : E → ℝ) =ᵐ[(volume : Measure E)]
+@@ -221,7 +221,7 @@ lemma norm_sq_translateL2_sub_extendByZeroL2_eq_integral_sq (t : E)
+             ∂(volume : Measure E) =
+           ∫ x, (f (x - t) - f x) ^ 2 ∂(volume : Measure E) := by
+       refine MeasureTheory.integral_congr_ae ?_
+-      simpa using hdiff.pow_const 2
++      exact hdiff.pow_const 2
+     exact h1.trans h2
+   simpa [F, f] using hcalc
+ 
+@@ -288,7 +288,7 @@ lemma smoothFun_sub_extendByZeroFun_sq_le_integral_sq
+           (volume : Measure E) (volume : Measure E) :=
+       MeasureTheory.measurePreserving_add_right
+         (μ := (volume : Measure E)) x
+-    simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using hadd.comp hneg
++    simpa only [Function.comp_def, sub_eq_add_neg, add_comm] using hadd.comp hneg
+   have hf_shift_vol :
+       MeasureTheory.MemLp (fun t : E => f (x - t))
+         (2 : ℝ≥0∞) (volume : Measure E) :=
+@@ -361,7 +361,7 @@ lemma norm_sq_smoothL2_sub_extendByZeroL2_le_integral_norm_sq_translateL2_sub_ex
+         (∫ x, ((S - F) x) ^ 2 ∂(volume : Measure E)) =
+           ∫ x, (smoothFun (E := E) (K := K) ψ u x - f x) ^ 2 ∂(volume : Measure E) := by
+       refine MeasureTheory.integral_congr_ae ?_
+-      simpa using hSF_ae.pow_const 2
++      exact hSF_ae.pow_const 2
+     exact h1.trans h2
+   have hLHS_int :
+       MeasureTheory.Integrable (fun x : E => (smoothFun (E := E) (K := K) ψ u x - f x) ^ 2)
+@@ -414,7 +414,7 @@ lemma norm_sq_smoothL2_sub_extendByZeroL2_le_integral_norm_sq_translateL2_sub_ex
+       MeasureTheory.Integrable (fun z : E × E => (f (z.1 - z.2)) ^ 2)
+         ((volume : Measure E).prod μ) := by
+     have := (hsub.integrable_comp hf_fst_sq_prod.aestronglyMeasurable).2 hf_fst_sq_prod
+-    simpa [Function.comp] using this
++    simpa only [Function.comp_def] using this
+   have hdom :
+       MeasureTheory.Integrable (fun z : E × E => (2 : ℝ) * ((f (z.1 - z.2)) ^ 2 + (f z.1) ^ 2))
+         ((volume : Measure E).prod μ) := by
+@@ -426,7 +426,7 @@ lemma norm_sq_smoothL2_sub_extendByZeroL2_le_integral_norm_sq_translateL2_sub_ex
+         MeasureTheory.AEStronglyMeasurable f
+           (Measure.map Prod.fst
+             ((volume : Measure E).prod μ)) := by
+-      simpa [Measure.map_fst_prod] using hf_mem.1
++      simpa [Measure.map_fst_prod] using hf_mem.aestronglyMeasurable
+     exact MeasureTheory.AEStronglyMeasurable.comp_measurable
+       (μ := (volume : Measure E).prod μ) (f := Prod.fst)
+       (g := f) hf_map measurable_fst
+@@ -436,7 +436,7 @@ lemma norm_sq_smoothL2_sub_extendByZeroL2_le_integral_norm_sq_translateL2_sub_ex
+         ((volume : Measure E).prod μ) := by
+     have := MeasureTheory.AEStronglyMeasurable.comp_measurePreserving (g := fun z : E × E => f z.1)
+       hf_fst_aesm hsub
+-    simpa [Function.comp] using this
++    simpa only [Function.comp_def] using this
+   have h_aesm :
+       MeasureTheory.AEStronglyMeasurable h ((volume : Measure E).prod μ) := by
+     -- Build up AE-strong measurability from the two components.
+@@ -444,7 +444,7 @@ lemma norm_sq_smoothL2_sub_extendByZeroL2_le_integral_norm_sq_translateL2_sub_ex
+         MeasureTheory.AEStronglyMeasurable (fun z : E × E => f (z.1 - z.2) - f z.1)
+           ((volume : Measure E).prod μ) :=
+       hf_shift_aesm.sub hf_fst_aesm
+-    simpa [h] using (hsub'.pow 2)
++    exact hsub'.pow 2
+   have hint_h : MeasureTheory.Integrable h ((volume : Measure E).prod μ) := by
+     refine MeasureTheory.Integrable.mono (μ := (volume : Measure E).prod μ) hdom h_aesm ?_
+     refine Filter.Eventually.of_forall ?_
+diff --git a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/ArzelaAscoli.lean b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/ArzelaAscoli.lean
+index 37fe123..d5e1bfc 100644
+--- a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/ArzelaAscoli.lean
++++ b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/ArzelaAscoli.lean
+@@ -317,7 +317,8 @@ theorem smoothBCF_image_closedBall_isCompact (hK : IsCompact K) (hKm : Measurabl
+             (MeasureTheory.Lp.coeFn_sub (μ := (volume.restrict K)) (p := (2 : ℝ≥0∞)) kx ky)] with
+             t ht hx_t hy_t hsub
+           have hxy' : dist ((x : E) - t) ((y : E) - t) < δ := by
+-            simpa [sub_eq_add_neg, add_assoc] using hxy
++            change dist (x : E) (y : E) < δ at hxy
++            simpa only [dist_sub_right] using hxy
+           have hψxy : dist (ψ ((x : E) - t)) (ψ ((y : E) - t)) < ε' :=
+             hδ (a := (x : E) - t) (b := (y : E) - t) hxy'
+           have : ‖ψ ((x : E) - t) - ψ ((y : E) - t)‖ ≤ ε' := by
 diff --git a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Compactness.lean b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Compactness.lean
 index 00cba3a..90ad503 100644
 --- a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Compactness.lean
@@ -158,6 +257,45 @@ index c009eb8..a70c1fe 100644
          (Measure.QuasiMeasurePreserving.ae_eq_comp
            (MeasureTheory.measurePreserving_add_right μ a).quasiMeasurePreserving hf)
      exact
+diff --git a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/TranslationEstimateL2.lean b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/TranslationEstimateL2.lean
+index 9a903af..a4833a1 100644
+--- a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/TranslationEstimateL2.lean
++++ b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/TranslationEstimateL2.lean
+@@ -112,7 +112,7 @@ lemma enorm_translateL2_sub_toL2_le (a : E) (f : ↥(C1c (E := E))) :
+         (memLp_of_mem_C1c (μ := μ) (E := E) f.2).coeFn_toLp
+       have hf' :
+           (fun x => (toL2 (μ := μ) (E := E) f : E → ℝ) (x + a)) =ᵐ[μ] fun x => f.1 (x + a) := by
+-        simpa [Function.comp, Pi.add_apply] using
++        simpa only [Function.comp_def] using
+           (Measure.QuasiMeasurePreserving.ae_eq_comp
+             (MeasureTheory.measurePreserving_add_right μ a).quasiMeasurePreserving hf)
+       exact (translateL2_ae_eq (μ := μ) (F := ℝ) a (toL2 (μ := μ) (E := E) f)).trans hf'
+@@ -160,8 +160,14 @@ lemma enorm_translateL2_sub_toL2_le (a : E) (f : ↥(C1c (E := E))) :
+     -- Expand the definition of `eLpNorm` at exponent `2`.
+     have h2_ne0 : (2 : ℝ≥0∞) ≠ 0 := by simp
+     have h2_netop : (2 : ℝ≥0∞) ≠ ∞ := by simp
+-    simp_rw [MeasureTheory.eLpNorm_eq_lintegral_rpow_enorm_toReal
+-      h2_ne0 h2_netop, ENNReal.toReal_ofNat] at *
++    have hdiff_meas : AEStronglyMeasurable (fun x : E => f.1 (x + a) - f.1 x) μ :=
++      ((f.2.1.continuous.comp (continuous_id.add continuous_const)).sub
++        f.2.1.continuous).aestronglyMeasurable
++    have hgrad_meas : AEStronglyMeasurable (grad (E := E) f.1) μ :=
++      (memLp_grad_of_mem_C1c (μ := μ) (E := E) f.2).aestronglyMeasurable
++    rw [MeasureTheory.eLpNorm_eq_lintegral_rpow_enorm_toReal h2_ne0 h2_netop hdiff_meas,
++      MeasureTheory.eLpNorm_eq_lintegral_rpow_enorm_toReal h2_ne0 h2_netop hgrad_meas]
++    simp only [ENNReal.toReal_ofNat]
+     -- It suffices to compare the squared integrals.
+     have hsq :
+         (∫⁻ x, ‖f.1 (x + a) - f.1 x‖ₑ ^ (2 : ℝ) ∂μ) ≤
+@@ -222,7 +228,7 @@ lemma enorm_translateL2_sub_toL2_le (a : E) (f : ↥(C1c (E := E))) :
+           exact (hgrad.comp hcont).measurable.enorm
+         have hpow : Measurable fun r : ℝ≥0∞ => r ^ (2 : ℝ) :=
+           (ENNReal.continuous_rpow_const (y := (2 : ℝ))).measurable
+-        simpa [F] using (hpow.comp hbase).aemeasurable
++        simpa only [F, Function.comp_def] using (hpow.comp hbase).aemeasurable
+       have hTonelli :
+           (∫⁻ x, ∫⁻ t, ‖grad (E := E) f.1 (x + t • a)‖ₑ ^ (2 : ℝ) ∂(μI : Measure ℝ) ∂μ) =
+             ∫⁻ t, ∫⁻ x, ‖grad (E := E) f.1 (x + t • a)‖ₑ ^ (2 : ℝ) ∂μ ∂(μI : Measure ℝ) := by
 diff --git a/RellichKondrachov/MeasureTheory/Function/LpSpace/Restrict.lean b/RellichKondrachov/MeasureTheory/Function/LpSpace/Restrict.lean
 index bb9c6e5..bb7f92e 100644
 --- a/RellichKondrachov/MeasureTheory/Function/LpSpace/Restrict.lean
