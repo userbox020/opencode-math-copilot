@@ -65,11 +65,11 @@ Lean default kernel accepts the solution
 Your solution is okay!
 ```
 
-This proves the toolchain-pin blocker is fixed. It is a toolchain smoke test, not verification of a corpus theorem.
+The rebuilt image's `verify-comparator.sh` also completed the same smoke challenge through its cached build path and printed `COMPARATOR_DOCKER_OK`. This proves the toolchain-pin blocker and the Docker wrapper are fixed. It is a toolchain smoke test, not verification of a corpus theorem.
 
 ### QuasiRiemannHypothesis challenge
 
-The challenge module compiled earlier (`Build completed successfully (8924 jobs)`), and its `.olean` is present. Running the challenge additionally builds the solution module `OAI.NumberTheory.DirichletL.Nonvanishing`, whose first-time dependency closure is 7,075 modules. That build is a multi-hour linear chain and was still running when this file was updated; do not record the challenge as a pass until it exits with `Your solution is okay!`.
+The challenge module compiled earlier (`Build completed successfully (8924 jobs)`), and its `.olean` is present. Running the challenge additionally builds the solution module `OAI.NumberTheory.DirichletL.Nonvanishing`, whose first-time dependency closure is 7,075 modules. That build is a multi-hour dependency chain; it reached roughly 4.4k/7,075 modules before being paused to avoid CPU contention with the benchmark. Build artifacts persist in `opencode-math-lean`. Do not record the challenge as a pass until the resumed run exits with `Your solution is okay!`.
 
 Resume command:
 
