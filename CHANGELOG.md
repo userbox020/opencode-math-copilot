@@ -2,13 +2,18 @@
 
 ## Unreleased
 
+## 0.3.1 - 2026-11-08
+
+- Extended the `rellich-kondrachov` Lean 4.34 compatibility patch to `Rellich`, `TranslationEstimateH1`, and `Transfer`.
+- The full `QuasiRiemannHypothesis` Comparator challenge passes: 7,075 solution modules build, `OAI.riemannZeta_ne_zero_of_seven_eighths_lt_re` is exported, and the Lean kernel accepts the solution (`Your solution is okay!`, `COMPARATOR_DOCKER_OK`).
+
 ## 0.3.0 - 2026-11-08
 
 - Docker execution mode for `math_lean_check`, `math_lean_build`, and `math_comparator` (`docker: true`), with configurable images/volumes and actionable missing-image errors.
 - `math_pdf_search` for bounded full-text phrase/regex search in one manuscript PDF.
 - `math_pdf_corpus_search` for bounded PDF line search across the top BM25-indexed manuscript candidates (maximum 10 candidates, 5 pages each; not a full-text index).
 - Comparator Docker verification pinned to `v4.34.0` built against the corpus's Lean v4.34.1 toolchain, with an idempotent build cache.
-- The Comparator toolchain pin is smoke-verified. A checked-in compatibility patch adapts the corpus-pinned `rellich-kondrachov` source (`70f85d4`) to Lean 4.34.1/Mathlib `d13f23b7`; the full QuasiRiemann challenge is rerun with it. No pass is claimed until that run succeeds.
+- The Comparator toolchain pin is smoke-verified. A checked-in compatibility patch adapts the corpus-pinned `rellich-kondrachov` source (`70f85d4`) to Lean 4.34.1/Mathlib `d13f23b7`; the full QuasiRiemann challenge pass is recorded under 0.3.1.
 - Index refresh automation: `scripts/refresh-indexes.ps1`, weekly/manual `refresh-index.yml`, and `docs/index-refresh.md`.
 - Core benchmark set (`bench/problems-core.json`, `bench/run-core.ps1`) for 4 problems × 3 repeats × 3 models.
 - Distribution is project-local discovery plus the global Git-spec install:

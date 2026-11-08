@@ -78,7 +78,20 @@ A checked-in compatibility patch now adapts eleven dependency modules:
 
 All eleven compile under Lean 4.34.1/Mathlib `d13f23b7`. `verify-comparator.sh` applies `docker/patches/rellich-kondrachov-lean4341.patch` once per volume, idempotently, before running a challenge. The corpus manifest is unchanged.
 
-The full challenge is rerunning with the patch. Do not record it as a pass until the run exits with `Your solution is okay!`. Rerun:
+The full challenge now passes:
+
+```text
+Build completed successfully (7075 jobs).
+Exporting #[..., OAI.riemannZeta_ne_zero_of_seven_eighths_lt_re, ...]
+Running Lean default kernel on solution.
+Lean default kernel accepts the solution
+Your solution is okay!
+COMPARATOR_DOCKER_OK
+```
+
+The challenge module (`8924 jobs`) and the solution closure (`7075 jobs`) build under the pinned Lean 4.34.1 toolchain. Comparator exports the target theorem and accepts the solution. This is Comparator verification of the Lean formalization, not a peer review of the paper.
+
+Rerun:
 
 ```powershell
 docker run --rm -v opencode-math-lean:/work -v opencode-comparator-tools:/opt -w /work/math/lean `
