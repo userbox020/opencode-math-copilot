@@ -1,0 +1,99 @@
+diff --git a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/H1.lean b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/H1.lean
+index fcec4d8..7f49f21 100644
+--- a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/H1.lean
++++ b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/H1.lean
+@@ -78,7 +78,8 @@ def C1c : Submodule ℝ (E → ℝ) where
+     intro c f hf
+     refine ⟨hf.1.const_smul c, ?_⟩
+     -- `HasCompactSupport` is stable under pointwise scalar multiplication.
+-    simpa using (HasCompactSupport.smul_left (f := fun _ : E => c) hf.2)
++    change HasCompactSupport (fun x => c * f x)
++    convert (HasCompactSupport.smul_left (f := fun _ : E => c) hf.2) using 1
+ 
+ /-- The pointwise gradient (as an `E`-valued function), via Riesz representation. -/
+ noncomputable def grad (f : E → ℝ) : E → E :=
+@@ -88,24 +89,25 @@ lemma continuous_grad {f : E → ℝ} (hf : ContDiff ℝ 1 f) : Continuous (grad
+   have hcont : Continuous (fderiv ℝ f) := hf.continuous_fderiv one_ne_zero
+   have : Continuous fun x => (InnerProductSpace.toDual ℝ E).symm (fderiv ℝ f x) :=
+     (InnerProductSpace.toDual ℝ E).symm.continuous.comp hcont
+-  simpa [grad] using this
++  unfold grad
++  exact this
+ 
+ lemma hasCompactSupport_grad {f : E → ℝ} (hf : HasCompactSupport f) :
+     HasCompactSupport (grad (E := E) f) := by
+   -- Outside the support of `f`, `fderiv` is identically `0`, hence so is `grad`.
+   have hf' : HasCompactSupport (fderiv ℝ f) := hf.fderiv ℝ
+   -- `grad` is composition with a linear map sending `0` to `0`.
+-  simpa [grad] using
+-    (HasCompactSupport.comp_left (f := fderiv ℝ f) (g := (InnerProductSpace.toDual ℝ E).symm)
+-      hf' (by simp))
++  unfold grad
++  exact HasCompactSupport.comp_left (f := fderiv ℝ f) (g := (InnerProductSpace.toDual ℝ E).symm)
++    hf' (by simp)
+ 
+ lemma tsupport_grad_subset (f : E → ℝ) : tsupport (grad (E := E) f) ⊆ tsupport f := by
+   have hcomp :
+       tsupport (grad (E := E) f) ⊆ tsupport (fderiv ℝ f) := by
+-    simpa [grad, Function.comp] using
+-      (tsupport_comp_subset
+-        (g := (InnerProductSpace.toDual ℝ E).symm) (hg := by simp)
+-        (f := fderiv ℝ f))
++    unfold grad
++    exact tsupport_comp_subset
++      (g := (InnerProductSpace.toDual ℝ E).symm) (hg := by simp)
++      (f := fderiv ℝ f)
+   exact hcomp.trans (tsupport_fderiv_subset (𝕜 := ℝ) (f := f))
+ 
+ omit [CompleteSpace E] in
+diff --git a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Kernels.lean b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Kernels.lean
+index 833b243..0459a5e 100644
+--- a/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Kernels.lean
++++ b/RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/L2Compactness/Kernels.lean
+@@ -77,10 +77,11 @@ theorem exists_kernel_tsupport_subset_ball_integral_eq_one {δ : ℝ} (hδ : 0 <
+   -- Normalize: `ψ = I⁻¹ • f`.
+   let ψ : E → ℝ := fun x => I⁻¹ * f x
+   have hψc : Continuous ψ := by
+-    simpa [ψ] using (continuous_const.mul hf_cont)
++    change Continuous (fun x => I⁻¹ * f x)
++    exact continuous_const.mul hf_cont
+   have hψcs : HasCompactSupport ψ := by
+-    simpa [ψ, smul_eq_mul] using
+-      (HasCompactSupport.smul_left (f := fun _x : E => I⁻¹) (f' := f) hf_cs)
++    change HasCompactSupport (fun x => I⁻¹ * f x)
++    convert (HasCompactSupport.smul_left (f := fun _x : E => I⁻¹) (f' := f) hf_cs) using 1
+   have hψ0 : ∀ x, 0 ≤ ψ x := by
+     intro x
+     have hInv : 0 ≤ I⁻¹ := by
+@@ -96,7 +97,8 @@ theorem exists_kernel_tsupport_subset_ball_integral_eq_one {δ : ℝ} (hδ : 0 <
+   have hψ_tsupp : tsupport ψ ⊆ Metric.ball (0 : E) δ := by
+     -- Scaling does not enlarge topological support; use the bump support inclusion.
+     have hsub : tsupport ψ ⊆ tsupport f := by
+-      simpa [ψ, smul_eq_mul] using (tsupport_smul_subset_right (f := fun _x : E => I⁻¹) (g := f))
++      change tsupport (fun x => I⁻¹ * f x) ⊆ tsupport f
++      convert (tsupport_smul_subset_right (f := fun _x : E => I⁻¹) (g := f)) using 1
+     exact hsub.trans hf_tsupp
+   exact ⟨ψ, hψc, hψcs, hψ0, hψint, hψ_tsupp⟩
+ 
+diff --git a/RellichKondrachov/MeasureTheory/Function/LpSpace/Restrict.lean b/RellichKondrachov/MeasureTheory/Function/LpSpace/Restrict.lean
+index bb9c6e5..bb7f92e 100644
+--- a/RellichKondrachov/MeasureTheory/Function/LpSpace/Restrict.lean
++++ b/RellichKondrachov/MeasureTheory/Function/LpSpace/Restrict.lean
+@@ -63,7 +63,7 @@ noncomputable def extendByZeroₗ : Lp E p (μ.restrict s) →ₗ[ℝ] Lp E p μ
+     refine Lp.ext ?_
+     have h_add_restrict :
+         (fun x : α => (f + g) x) =ᵐ[μ.restrict s] fun x : α => f x + g x := by
+-      simpa using (Lp.coeFn_add (μ := μ.restrict s) f g)
++      exact Lp.coeFn_add (μ := μ.restrict s) f g
+     have h_add_on :
+         ∀ᵐ x : α ∂μ, x ∈ s → (f + g) x = f x + g x :=
+       (ae_restrict_iff' (μ := μ) (s := s) hs).1 h_add_restrict
+@@ -117,7 +117,7 @@ noncomputable def extendByZeroₗ : Lp E p (μ.restrict s) →ₗ[ℝ] Lp E p μ
+     refine Lp.ext ?_
+     have h_smul_restrict :
+         (fun x : α => (c • f) x) =ᵐ[μ.restrict s] fun x : α => c • f x := by
+-      simpa using (Lp.coeFn_smul (μ := μ.restrict s) c f)
++      exact Lp.coeFn_smul (μ := μ.restrict s) c f
+     have h_smul_on :
+         ∀ᵐ x : α ∂μ, x ∈ s → (c • f) x = c • f x :=
+       (ae_restrict_iff' (μ := μ) (s := s) hs).1 h_smul_restrict

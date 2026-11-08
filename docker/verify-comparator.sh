@@ -18,6 +18,23 @@ if [ ! -d "$MATH_DIR/math" ] && [ ! -d "$MATH_DIR/.git" ]; then
   exit 1
 fi
 
+# The corpus pins rellich-kondrachov at a Lean 4.29-era revision while building
+# it with Lean 4.34.1/Mathlib. Apply the checked-in compatibility patch once.
+RELLICH_DIR="$MATH_DIR/lean/.lake/packages/rellich-kondrachov"
+RELLICH_PATCH="/usr/local/share/math-toolkit/rellich-kondrachov-lean4341.patch"
+if [ -d "$RELLICH_DIR/.git" ] && [ -f "$RELLICH_PATCH" ]; then
+  if git -C "$RELLICH_DIR" apply --reverse --check "$RELLICH_PATCH" 2>/dev/null; then
+    echo "== rellich-kondrachov compatibility patch already applied =="
+  elif git -C "$RELLICH_DIR" apply --check "$RELLICH_PATCH" 2>/dev/null; then
+    echo "== Applying rellich-kondrachov Lean 4.34 compatibility patch =="
+    git -C "$RELLICH_DIR" apply "$RELLICH_PATCH"
+  else
+    echo "Could not apply $RELLICH_PATCH: the package source differs from the pinned revision." >&2
+    echo "Restore the pinned checkout or update the patch deliberately." >&2
+    exit 1
+  fi
+fi
+
 if [ ! -d "$COMPARATOR_DIR/.git" ]; then
   git clone --branch "$COMPARATOR_TAG" --depth 1 https://github.com/leanprover/comparator.git "$COMPARATOR_DIR"
 else

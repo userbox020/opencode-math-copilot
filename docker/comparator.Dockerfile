@@ -28,6 +28,7 @@ RUN git clone --depth 1 https://github.com/ZouUup/landrun.git /opt/landrun \
     && go build -o /usr/local/bin/landrun cmd/landrun/main.go \
     && landrun --version
 
+COPY docker/patches/rellich-kondrachov-lean4341.patch /usr/local/share/math-toolkit/rellich-kondrachov-lean4341.patch
 COPY docker/verify-comparator.sh /usr/local/bin/verify-comparator.sh
 RUN chmod +x /usr/local/bin/verify-comparator.sh
 
