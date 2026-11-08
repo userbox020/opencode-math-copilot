@@ -69,25 +69,16 @@ The rebuilt image's `verify-comparator.sh` also completed the same smoke challen
 
 ### QuasiRiemannHypothesis challenge
 
-The challenge module compiled (`Build completed successfully (8924 jobs)`), and its `.olean` is present. The resumed run built the solution module's dependency closure to **4,389/7,075 modules**, then aborted because the corpus-pinned `rellich-kondrachov` dependency does not compile against the corpus-pinned Mathlib:
+The challenge module compiled (`Build completed successfully (8924 jobs)`), and its `.olean` is present. The initial solution build aborted at **4,389/7,075 modules** because the corpus-pinned `rellich-kondrachov` package (2026-05-14) predates the pinned Mathlib API (2026-09-24, Lean 4.34.1). This was an upstream source break, not Comparator/lean4export drift or a local edit.
 
-- `RellichKondrachov.Analysis.FunctionalSpaces.Sobolev.Euclidean.L2Compactness.Kernels` (lines 80, 82)
-- `RellichKondrachov.MeasureTheory.Function.LpSpace.Restrict` (lines 66, 120)
-- `RellichKondrachov.Analysis.FunctionalSpaces.Sobolev.Euclidean.H1` (lines 81, 91, 98, 105)
+A checked-in compatibility patch now adapts eight dependency modules:
 
-Representative error:
+- `Kernels`, `Restrict`, `H1`, `Translation`, `Compactness`
+- `TranslationEstimateL2`, `Approximation`, `ArzelaAscoli`
 
-```text
-error: RellichKondrachov/Analysis/FunctionalSpaces/Sobolev/Euclidean/H1.lean:81:4:
-Type mismatch: After simplification, term
-  HasCompactSupport.smul_left hf.right
-has type ... ((fun x => c) * f)
-but is expected to have type ... (c • f)
-```
+All eight compile under Lean 4.34.1/Mathlib `d13f23b7`. `verify-comparator.sh` applies `docker/patches/rellich-kondrachov-lean4341.patch` once per volume, idempotently, before running a challenge. The corpus manifest is unchanged.
 
-The corpus manifest pins `rellich-kondrachov` at `70f85d4` (2026-05-14) and Mathlib at `d13f23b7` (2026-09-24, Lean 4.34.1). The package predates Mathlib API changes in `HasCompactSupport`/`grad`. Both the repository manifest and the Docker volume manifest match upstream HEAD, so this is an upstream corpus dependency break, not Comparator/lean4export drift or a local edit.
-
-Do not record the challenge as a pass. Fixing it requires a corpus-maintainer update or patch to `rellich-kondrachov`; the plugin does not silently change corpus pins. After that dependency is fixed, rerun:
+The full challenge is rerunning with the patch. Do not record it as a pass until the run exits with `Your solution is okay!`. Rerun:
 
 ```powershell
 docker run --rm -v opencode-math-lean:/work -v opencode-comparator-tools:/opt -w /work/math/lean `
