@@ -23,4 +23,15 @@ jobs:
       - run: python -m pip install sympy
       - run: npm run check
       - run: npm test
-      - run: npm pack --dry-run
+      - name: Smoke-test package installation
+        shell: bash
+        run: |
+          runner_temp="$(cd "$RUNNER_TEMP" && pwd)"
+          tarball="$(npm pack --pack-destination "$RUNNER_TEMP" --silent)"
+          install_dir="$(mktemp -d "$runner_temp/package-smoke.XXXXXX")"
+          (
+            cd "$install_dir"
+            npm init -y
+            npm install "$runner_temp/$tarball"
+          )
+          node scripts/test-package.mjs "$install_dir/node_modules/opencode-math-copilot"

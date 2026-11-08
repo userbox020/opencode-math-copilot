@@ -1,6 +1,6 @@
 {
   "name": "opencode-math-copilot",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "OpenCode V2 plugin that turns the OpenAI math repository into searchable, readable, Lean-verifiable tools.",
   "type": "module",

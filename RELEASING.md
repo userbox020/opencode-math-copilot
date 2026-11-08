@@ -39,7 +39,11 @@ npm registry publishing is intentionally disabled:
 - No `NPM_TOKEN` is required or stored.
 - `npm install` is still used for `unpdf` and test dependencies, and `npm pack --dry-run` still validates package contents.
 
-If npm publishing is needed later, make `private` false, restore a publish workflow, and use either interactive 2FA or npm trusted publishing (OIDC). Do not commit or paste long-lived tokens.
+## GitHub releases
+
+Create release tags and GitHub releases from `main` only, after the version bump and dated changelog are committed and merged. Run `npm run check`, `npm test`, and `npm pack --dry-run` before tagging.
+
+Use an annotated `v<package.json version>` tag on the verified `main` commit, then create the GitHub release from that tag with the matching changelog entry. Do not run `npm publish`; distribution remains project-local discovery and the Git-spec install above.
 
 ## Update
 
