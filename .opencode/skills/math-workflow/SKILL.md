@@ -10,7 +10,7 @@ Solve the user's stated problem. Do not turn it into a broad research project.
 ## Workflow
 
 1. Restate the problem and identify its mathematical domain. Determine whether the user wants a proof, computation, corpus lookup, or formal verification; clarify only blocking ambiguities.
-2. Use `math_search` for related manuscripts and strategies. Start broad, then narrow by terminology or hypotheses. Use `math_manuscript` to read only the relevant abstract, outline, or LaTeX section. If the TeX source is missing or you need the released wording, use `math_pdf_text` on selected pages.
+2. Use `math_search` for related manuscripts and strategies. Start broad, then narrow by terminology or hypotheses. Use `math_manuscript` to read only the relevant abstract, outline, or LaTeX section. If the TeX source is missing or you need the released wording, use `math_pdf_text` on selected pages or `math_pdf_search` to locate a phrase first.
 3. For a proof, give a lemma plan before algebra. Separate results cited from the corpus from new derivation, and check that each cited result's hypotheses apply.
 4. For requested formal verification or a Lean statement, use `math_lean_search` to locate existing declarations, `math_lean_check` on small snippets first, then `math_lean_build` for the focused target. Use `math_comparator` only when a matching challenge config exists. Do not build the entire package by default.
 5. For numerical or symbolic work, use `math_compute` for allowlisted SymPy operations. Otherwise show the computation and state the execution limitation. Numerical evidence is not a proof of an exact claim.
@@ -30,7 +30,7 @@ Solve the user's stated problem. Do not turn it into a broad research project.
 ## Tool-use patterns
 
 - Query broad first, then narrow; do not perform repo-wide discovery for a localized question.
-- Read relevant sections rather than whole PDFs. Resolve released PDF paths from metadata rather than assuming a filename; use `math_pdf_text` only for selected pages.
+- Read relevant sections rather than whole PDFs. Resolve released PDF paths from metadata rather than assuming a filename; use `math_pdf_search` to find a phrase, then `math_pdf_text` for the selected pages.
 - Prefer `math_grep` for exact names or notation in TeX, Markdown, and Lean; use `math_lean_search` for declaration names. Scope searches to relevant files or directories when possible.
 - Use `math_compute` for symbolic checks, but state the operation and verify the returned expression independently.
 - Keep output bounded: summarize matches and quote only the needed statements or proof steps.

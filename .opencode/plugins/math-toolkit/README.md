@@ -37,12 +37,40 @@ Confirm the project-local plugin appears in the list, then use `math_status` in 
 | `math_lean_build` | Build a focused Lake target such as `OAI.Analysis`. |
 | `math_lean_search` | Search declaration lines in `math/lean` and Mathlib by name or regex. |
 | `math_pdf_text` | Extract bounded text from a manuscript PDF (no OCR). |
+| `math_pdf_search` | Search the extracted text of one manuscript PDF/preprint (bounded pages; no OCR). |
 | `math_compute` | Restricted SymPy operations over allowlisted expressions/matrices. |
 | `math_comparator` | Run an existing Comparator challenge JSON. |
 | `math_status` | Report index counts and toolchain availability. |
 | `math_reindex` | Rebuild the manuscript index after `math/` changes. |
 
 Use `/math <problem>` to invoke the project command, which loads the `math-workflow` skill. Lean tools are used when formal verification or a Lean statement is requested.
+
+## Docker Lean execution
+
+`math_lean_check`, `math_lean_build`, and `math_comparator` accept `docker: true` to run inside Linux Docker rather than the host toolchain. The default is `false` (native behavior is unchanged). Start Docker Desktop with Linux containers on Windows, or Docker Engine on Linux. Build the images and initialize the persistent Lean volume using `docker/README.md`; the volume must contain `/work/math`, its pinned toolchain dependencies, and the Mathlib cache.
+
+Example tool arguments:
+
+```json
+{ "docker": true, "code": "example : 1 = 1 := rfl" }
+{ "docker": true, "target": "OAI.Analysis.AffineBernstein.ABPCriticalDensity" }
+{ "docker": true, "challenge": "ComparatorChallenges/QuasiRiemannHypothesis.json" }
+```
+
+Configure the OpenCode process environment to override these defaults:
+
+| Environment variable | Default |
+| --- | --- |
+| `MATH_TOOLKIT_LEAN_IMAGE` | `opencode-math-lean` |
+| `MATH_TOOLKIT_LEAN_VOLUME` | `opencode-math-lean` |
+| `MATH_TOOLKIT_COMPARATOR_IMAGE` | `opencode-math-comparator` |
+| `MATH_TOOLKIT_COMPARATOR_VOLUME` | `opencode-comparator-tools` |
+
+Snippet checks add `imports` (default `Mathlib`) and mount a unique host temp directory read-only at `/check`; it is removed afterward. With `file`, the tool validates and reads the host file under `math/lean`, then copies its contents to `/check/Check.lean`. Project-relative imports may not resolve unless the file is self-contained; imports available in the volume's Lean package/cache remain usable. Docker Desktop receives native absolute Windows paths as individual mount arguments, without shell quoting.
+
+Builds use the clone in the volume, not host source edits. Comparator validates the challenge path against the host clone, then runs that relative challenge path in the volume's clone; keep the clones aligned. Its tools volume is created if needed and retained at `/opt`. The image pins Comparator v4.34.0 built with the corpus Lean 4.34.1 toolchain. The first run of a large challenge builds its solution-module dependency closure and can exceed the default timeout; pass `timeoutMs` up to `1800000`, and rerun after the volume cache is warm. A failed export is not verification.
+
+Results include `[docker]` PASS/FAIL and bounded output. Missing prerequisites return setup instructions. `npm test` exercises Docker snippet/file checks, the focused build, and missing-image/volume diagnostics when the Lean image and volume are available; otherwise it prints SKIP.
 
 ## Refresh the index
 

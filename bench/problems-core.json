@@ -1,0 +1,24 @@
+[
+  {
+    "id": "quasi-riemann",
+    "prompt": "In the local openai/math corpus, identify the three-digit family number for the quasi-Riemann hypothesis. Give the main paper's full title, the zero-free half-plane bound as a fraction, and a citation to a local source. Use available retrieval tools; do not modify files or install anything.",
+    "keywords": ["003", "7/8", "A Zero-Free Half-Plane"],
+    "anyKeywords": ["CONTENTS.md", "003.md", "paper.pdf", "main.tex", "paper.tex"]
+  },
+  {
+    "id": "landau-siegel",
+    "prompt": "Find the paper titled Uniform exclusion of Landau–Siegel zeros in the local openai/math corpus. Report its three-digit family number, whether its main result is cataloged as Lean-formalized, and the basename of the Comparator statement linked in its Lean scope documentation. Cite that documentation; do not run Lean, modify files, or install anything.",
+    "keywords": ["003", "SiegelZeros.lean"],
+    "anyKeywords": ["formalized", "formalised"]
+  },
+  {
+    "id": "pdf-overview",
+    "prompt": "Extract page 1 of the local openai/math overview.pdf itself (not a TeX source or the Markdown catalog). Report its cover title, stated counts of result families and manuscripts, and the last subject heading in its contents list. Cite the PDF and page number. Use available PDF extraction tools; do not modify files or install anything.",
+    "keywords": ["OpenAI Research Catalog", "373", "721", "Partial differential equations", "overview.pdf"]
+  },
+  {
+    "id": "sympy-determinant",
+    "prompt": "Use a symbolic computation tool if available to compute the exact determinant of [[17,-4,9],[6,23,-5],[-8,7,31]]. State the integer result without thousands separators and briefly explain how it was obtained. Do not modify files or install anything.",
+    "keywords": ["15334"]
+  }
+]

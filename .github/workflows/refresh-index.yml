@@ -1,0 +1,43 @@
+name: Refresh indexes
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 0'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: refresh-indexes
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Install ripgrep
+        run: sudo apt-get update && sudo apt-get install -y ripgrep
+      - name: Clone corpus
+        run: git clone --depth 1 https://github.com/openai/math math
+      - run: npm run index
+      - run: npm run index:lean
+      - name: Show changes for review
+        run: |
+          git diff --stat
+          git status --short
+      - uses: actions/upload-artifact@v4
+        with:
+          name: refreshed-indexes
+          if-no-files-found: error
+          include-hidden-files: true
+          path: |
+            .opencode/plugins/math-toolkit/data/math-index.json
+            .opencode/plugins/math-toolkit/data/lean-index.json.gz

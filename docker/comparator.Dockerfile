@@ -7,9 +7,9 @@
 #   docker run --rm -it -v opencode-math-lean:/work \
 #     opencode-math-comparator verify-comparator.sh
 #
-# Comparator and landrun are Linux-only. The standalone Comparator is archived
-# and version-sensitive to the project's Lean 4.34.1 pin; the script reports
-# build failures instead of claiming verification.
+# Comparator and landrun are Linux-only. verify-comparator.sh pins Comparator
+# v4.34.0 and builds it with the corpus Lean v4.34.1 toolchain. Build/export
+# failures are reported instead of claiming verification.
 
 FROM opencode-math-lean
 

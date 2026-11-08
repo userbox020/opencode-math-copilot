@@ -43,25 +43,42 @@ The full target was attempted but is enormous: after about five hours it had bui
 
 ## Comparator
 
-Image: `opencode-math-comparator` (Go 1.24.5, landrun 0.1.18, Comparator + lean4export).
+Image: `opencode-math-comparator` (Go 1.24.5, landrun 0.1.18, Comparator v4.34.0 + lean4export).
 
-What succeeded:
+### Toolchain pin
 
-- Comparator and lean4export built: `Build completed successfully (21 jobs)`.
-- `ComparatorChallenges.QuasiRiemannHypothesis` compiled: `Build completed successfully (8924 jobs)`
-- The challenge file contains a `sorry` warning; that is the challenge statement, not a proof.
+The standalone Comparator checkout pins Lean 4.34.0 and its lean4export dependency pins 4.36.0-rc1. The corpus pins Lean 4.34.1; the 4.35/4.36 exporter could not read 4.34.1 `.olean` headers and failed with `incompatible header`.
 
-What failed:
+The Docker verification now checks out Comparator **v4.34.0** and rebuilds it with `leanprover/lean4:v4.34.1`:
 
 ```text
-uncaught exception: failed to read file
-'/work/math/lean/.lake/build/lib/lean/ComparatorChallenges/QuasiRiemannHypothesis.olean',
-incompatible header
+Build completed successfully (21 jobs).
 ```
 
-Cause: the standalone Comparator checkout pulled Lean **4.35.0**, while the corpus pins Lean **4.34.1**. The challenge was built with 4.34.1; the 4.35.0 exporter cannot read its `.olean` header.
+### Minimal end-to-end check
 
-This is the known Comparator version-pin blocker. Do not treat the comparator run as a verification pass. A compatible Comparator/lean4export revision for 4.34.1, or a deliberate corpus toolchain upgrade, is required.
+A trivial Lean 4.34.1 challenge (`Smoke.smoke : (1 : Nat) = 1`) was exported and compared with the rebuilt binaries:
+
+```text
+Running Lean default kernel on solution.
+Lean default kernel accepts the solution
+Your solution is okay!
+```
+
+This proves the toolchain-pin blocker is fixed. It is a toolchain smoke test, not verification of a corpus theorem.
+
+### QuasiRiemannHypothesis challenge
+
+The challenge module compiled earlier (`Build completed successfully (8924 jobs)`), and its `.olean` is present. Running the challenge additionally builds the solution module `OAI.NumberTheory.DirichletL.Nonvanishing`, whose first-time dependency closure is 7,075 modules. That build is a multi-hour linear chain and was still running when this file was updated; do not record the challenge as a pass until it exits with `Your solution is okay!`.
+
+Resume command:
+
+```powershell
+docker run --rm -v opencode-math-lean:/work -v opencode-comparator-tools:/opt -w /work/math/lean `
+  -e CHALLENGE=ComparatorChallenges/QuasiRiemannHypothesis.json opencode-math-comparator verify-comparator.sh
+```
+
+The challenge file contains a `sorry` warning; that is the challenge statement, not a proof.
 
 ## Benchmark
 

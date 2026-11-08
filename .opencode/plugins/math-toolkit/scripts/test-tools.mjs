@@ -1,12 +1,15 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import plugin from "../../math-toolkit.js";
 import { createSearch } from "../lib/search.js";
 import { pdfText } from "../lib/pdf.js";
+import { pdfSearch } from "../lib/pdf-search.js";
 import { searchLean } from "../lib/lean-search.js";
+import { leanCheck, comparator } from "../lib/lean.js";
 import { findExecutable, resolveRoots, safePath } from "../lib/paths.js";
 
 const workspace = fileURLToPath(new URL("../../../../", import.meta.url));
@@ -44,7 +47,7 @@ await plugin.setup({
     },
   },
 });
-assert.equal(tools.size, 11);
+assert.equal(tools.size, 12);
 
 const call = async (name, args = {}) => {
   const result = await tools.get(name).execute(args, {});
@@ -119,6 +122,13 @@ assert.match(fixturePdf, /## Page 1\b/);
 const fixturePageText = fixturePdf.split("## Page 1")[1].trim();
 assert(fixturePageText.length > 0, "Expected non-empty fixture page text");
 assert.doesNotMatch(fixturePageText, /No extractable text found|PDF extraction error/);
+const fixtureSearch = await pdfSearch({ math: path.join(workspace, "test/fixtures"), workspace }, {
+  path: "overview.pdf", query: "Research Catalog", pages: "1", limit: 3,
+});
+assert.match(fixtureSearch, /page 1, line \d+/i, fixtureSearch);
+assert.match(await pdfSearch({ math: path.join(workspace, "test/fixtures"), workspace }, {
+  path: "overview.pdf", query: "[", pages: "1", literal: false,
+}), /Invalid regex/i);
 
 const python = findExecutable("python") || findExecutable("python3");
 const sympyAvailable = Boolean(python) && spawnSync(python, ["-c", "import sympy"], { encoding: "utf8" }).status === 0;
@@ -143,6 +153,65 @@ assert.match(await call("math_lean_check", {}), /exactly one/i);
 assert.match(await call("math_lean_check", { code: "", file: "test.lean" }), /exactly one/i);
 assert.match(await call("math_lean_build", { target: "--help" }), /invalid build target/i);
 
+for (const name of ["math_lean_check", "math_lean_build", "math_comparator"]) {
+  assert.equal(tools.get(name).input.properties.docker.type, "boolean");
+  assert.equal(tools.get(name).input.properties.docker.default, false);
+}
+assert.match(await call("math_lean_check", { docker: true }), /exactly one/i);
+assert.match(await call("math_lean_check", { docker: true, code: "", file: "test.lean" }), /exactly one/i);
+assert.match(await call("math_lean_check", { docker: true, code: "", imports: ["Mathlib; exit"] }), /imports must be Lean module names/i);
+assert.match(await call("math_lean_check", { docker: true, file: "../escape.lean" }), /traversal/i);
+assert.match(await call("math_lean_build", { docker: true, target: "OAI.Analysis; echo unsafe" }), /invalid build target/i);
+assert.match(await call("math_comparator", { docker: true, challenge: "../escape" }), /traversal/i);
+
+const docker = findExecutable("docker");
+const dockerProbe = args => spawnSync(docker, args, { shell: false, encoding: "utf8", timeout: 30000, maxBuffer: 8 * 1024 * 1024, windowsHide: true });
+const leanImage = process.env.MATH_TOOLKIT_LEAN_IMAGE || "opencode-math-lean";
+const leanVolume = process.env.MATH_TOOLKIT_LEAN_VOLUME || "opencode-math-lean";
+if (!docker || /\.(cmd|bat)$/i.test(docker) || dockerProbe(["image", "inspect", "--", leanImage]).status !== 0) {
+  console.log(`SKIP: Docker unavailable or image ${leanImage} absent; skipping Docker Lean integration tests.`);
+} else if (dockerProbe(["volume", "inspect", "--", leanVolume]).status !== 0) {
+  console.log(`SKIP: Docker Lean volume ${leanVolume} absent; skipping Docker Lean integration tests.`);
+} else {
+  const check = await call("math_lean_check", { docker: true, code: "example : 1 = 1 := rfl", imports: ["Mathlib.Data.Nat.Basic"], timeoutMs: 120000 });
+  assert.match(check, /\[docker\] \*\*PASS\*\*/, check);
+  console.log("PASS: Docker Lean snippet with Mathlib cache and read-only host temp mount.");
+  const build = await call("math_lean_build", { docker: true, target: "OAI.Analysis.AffineBernstein.ABPCriticalDensity" });
+  assert.match(build, /\[docker\] \*\*PASS\*\*/, build);
+  console.log("PASS: Docker focused build OAI.Analysis.AffineBernstein.ABPCriticalDensity.");
+
+  const fixture = fs.mkdtempSync(path.join(os.tmpdir(), "math-toolkit-docker-test-"));
+  const fixtureRoots = { math: fixture, workspace: fixture };
+  const savedEnv = Object.fromEntries(["MATH_TOOLKIT_LEAN_IMAGE", "MATH_TOOLKIT_COMPARATOR_IMAGE", "MATH_TOOLKIT_LEAN_VOLUME"].map(name => [name, process.env[name]]));
+  try {
+    fs.mkdirSync(path.join(fixture, "lean", "ComparatorChallenges"), { recursive: true });
+    fs.writeFileSync(path.join(fixture, "lean", "Sample.lean"), "example : 1 = 1 := rfl\n");
+    fs.writeFileSync(path.join(fixture, "lean", "ComparatorChallenges", "Sample.json"), "{}");
+    const fileCheck = leanCheck(fixtureRoots, { docker: true, file: "lean/Sample.lean", timeoutMs: 120000 });
+    assert.match(fileCheck, /\[docker\] \*\*PASS\*\*/, fileCheck);
+    process.env.MATH_TOOLKIT_LEAN_IMAGE = "math-toolkit-missing-image-test:nonexistent";
+    const missing = await call("math_lean_check", { docker: true, code: "example : True := by trivial" });
+    assert.match(missing, /Docker image math-toolkit-missing-image-test:nonexistent is not available/);
+    assert.match(missing, /docker build -f docker\/lean\.Dockerfile -t math-toolkit-missing-image-test:nonexistent \./);
+    process.env.MATH_TOOLKIT_COMPARATOR_IMAGE = "math-toolkit-missing-comparator-test:nonexistent";
+    const missingComparator = comparator(fixtureRoots, { docker: true, challenge: "Sample" });
+    assert.match(missingComparator, /docker build -f docker\/comparator\.Dockerfile/);
+    assert.match(missingComparator, /may not match the corpus Lean 4\.34\.1 pin/);
+    process.env.MATH_TOOLKIT_LEAN_IMAGE = leanImage;
+    process.env.MATH_TOOLKIT_LEAN_VOLUME = "math-toolkit-missing-volume-test";
+    const missingVolume = await call("math_lean_build", { docker: true, target: "OAI.Analysis" });
+    assert.match(missingVolume, /Docker volume math-toolkit-missing-volume-test is not available/);
+    assert.match(missingVolume, /verify-lean\.sh/);
+    console.log("PASS: Docker host-file check and actionable missing Lean/Comparator image and volume errors.");
+  } finally {
+    for (const [name, value] of Object.entries(savedEnv)) {
+      if (value === undefined) delete process.env[name];
+      else process.env[name] = value;
+    }
+    fs.rmSync(fixture, { recursive: true, force: true });
+  }
+}
+
 const status = await call("math_status");
 assert(status.includes("Manuscripts: 721"), status);
 assert(status.includes("Lean toolchain:"));
@@ -165,6 +234,7 @@ try {
   assert(absent.includes("Manuscripts: 721"));
   assert(absent.includes("lake: not found on PATH"));
   assert.match(await call("math_lean_check", { code: "example : True := by trivial" }), /install elan\/Lean/i);
+  assert.match(await call("math_lean_check", { docker: true, code: "example : True := by trivial" }), /docker was not found on PATH.*Install Docker/i);
 } finally {
   if (originalPath === undefined) delete process.env.PATH;
   else process.env.PATH = originalPath;

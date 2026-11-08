@@ -65,10 +65,10 @@ Comparator/landrun are Linux-only. Build the comparator layer after the Lean ima
 
 ```powershell
 docker build -f docker/comparator.Dockerfile -t opencode-math-comparator .
-docker run --rm -it -v opencode-math-lean:/work opencode-math-comparator verify-comparator.sh
+docker run --rm -it -v opencode-math-lean:/work -v opencode-comparator-tools:/opt opencode-math-comparator verify-comparator.sh
 ```
 
-The script installs/builds landrun, Comparator, and lean4export inside the container. It reports build failures explicitly; do not treat a failed comparator build as a verification pass. The standalone Comparator is version-sensitive to the project’s Lean 4.34.1 pin; do not silently upgrade the project toolchain.
+The script pins Comparator to **`v4.34.0`** and builds it against the corpus’s **Lean v4.34.1** toolchain (override with `COMPARATOR_TOOLCHAIN` only after checking compatibility). The build is cached in `/opt` using a tag/toolchain stamp, so reruns reuse the Comparator and lean4export binaries. The first run of a challenge also builds its solution-module dependency closure inside `/work/math/lean/.lake`; large challenges such as `QuasiRiemannHypothesis` can take hours on the first run, then reuse the volume. It reports build/export failures explicitly; do not treat a failed comparator run as a verification pass.
 
 Run a specific challenge:
 

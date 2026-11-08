@@ -10,6 +10,7 @@ import { grepCorpus, manuscript } from "./lib/corpus.js";
 import { comparator, leanBuild, leanCheck } from "./lib/lean.js";
 import { searchLean } from "./lib/lean-search.js";
 import { pdfText } from "./lib/pdf.js";
+import { pdfSearch } from "./lib/pdf-search.js";
 import { compute, sympyVersion } from "./lib/compute.js";
 
 const indexFile = fileURLToPath(new URL("./data/math-index.json", import.meta.url));
@@ -55,6 +56,7 @@ const inputs = {
       code: { type: "string" },
       file: { type: "string" },
       imports: { type: "array", items: { type: "string" } },
+      docker: { type: "boolean", default: false, description: "Run inside the Linux Docker volume/image instead of the host Lean toolchain." },
       timeoutMs: { type: "integer", minimum: 1000, maximum: 120000 },
     },
     additionalProperties: false,
@@ -63,6 +65,7 @@ const inputs = {
     type: "object",
     properties: {
       target: { type: "string" },
+      docker: { type: "boolean", default: false, description: "Run inside the Linux Docker volume/image instead of the host Lean toolchain." },
       timeoutMs: { type: "integer", minimum: 10000, maximum: 1800000 },
     },
     additionalProperties: false,
@@ -90,6 +93,18 @@ const inputs = {
     required: ["path"],
     additionalProperties: false,
   },
+  math_pdf_search: {
+    type: "object",
+    properties: {
+      path: { type: "string", minLength: 1 },
+      query: { type: "string", minLength: 1 },
+      pages: { type: "string" },
+      literal: { type: "boolean" },
+      limit: { type: "integer", minimum: 1, maximum: 20 },
+    },
+    required: ["path", "query"],
+    additionalProperties: false,
+  },
   math_compute: {
     type: "object",
     properties: {
@@ -111,6 +126,7 @@ const inputs = {
     type: "object",
     properties: {
       challenge: { type: "string", minLength: 1 },
+      docker: { type: "boolean", default: false, description: "Run inside the Linux Docker volume/image instead of the host Lean toolchain." },
       timeoutMs: { type: "integer", minimum: 10000, maximum: 1800000 },
     },
     required: ["challenge"],
@@ -156,6 +172,7 @@ function makeExecutors(roots) {
     math_lean_build: run((args) => leanBuild(index, roots, args)),
     math_lean_search: run((args) => searchLean(roots, args), false),
     math_pdf_text: run((args) => pdfText(roots, args), false),
+    math_pdf_search: run((args) => pdfSearch(roots, args), false),
     math_compute: run((args) => compute(roots, args), false),
     math_comparator: run((args) => comparator(roots, args)),
     math_status: run(() => {
@@ -181,12 +198,13 @@ const descriptions = {
   math_search: "Find math manuscripts by topic using the prebuilt BM25 index. Supports family:003, lean:true and has:lean filters; use before opening a paper.",
   math_manuscript: "Read an indexed manuscript's citation, metadata and section outline, or a named section's TeX source. Use a PDF/directory path or a unique title substring.",
   math_grep: "Search local math text sources for a phrase or regex. Prefer a small preprint/Lean subtree; excludes dependencies, binaries and oversized files.",
-  math_lean_check: "Compile a Lean snippet with imports or check one existing .lean file using lake env lean. Executes Lean code locally; requires an installed Lean toolchain and cached dependencies.",
+  math_lean_check: "Compile a Lean snippet with imports or check one existing .lean file using lake env lean. Requires a host toolchain/cache, or docker:true for the Linux Docker volume. Docker copies files to /check; project-relative imports may not resolve unless self-contained.",
   math_lean_build: "Build a focused Lean library/module, default OAI.Analysis. Whole-library builds are expensive and may generate Lake build artifacts.",
   math_lean_search: "Search declaration lines in math/lean and Mathlib by name or regex. Use to locate theorems, lemmas, definitions, classes, and instances before editing Lean.",
   math_pdf_text: "Extract bounded text from a manuscript PDF (no OCR). Use when TeX source is missing or you need the released PDF's exact wording.",
+  math_pdf_search: "Search the extracted text of one manuscript PDF/preprint (bounded pages; no OCR). Use when TeX source is missing or you need exact PDF wording.",
   math_compute: "Run a restricted SymPy operation (simplify, factor, expand, solve, diff, integrate, limit, series, evalf, det, eigenvalues). Expressions are allowlisted, not arbitrary Python.",
-  math_comparator: "Validate an existing ComparatorChallenges JSON challenge. Requires comparator, landrun and lean4export on PATH plus the Lean toolchain.",
+  math_comparator: "Validate an existing ComparatorChallenges JSON challenge. Requires comparator, landrun and lean4export on PATH plus the Lean toolchain, or docker:true for the Linux Docker image/volumes. The first Docker run builds the challenge dependency closure; pass a larger timeoutMs (up to 1800000).",
   math_status: "Inspect math index counts, root paths, Lean toolchain, and local executable availability without running Lean or a build.",
   math_reindex: "Regenerate the prebuilt math index after corpus updates. Reload/restart the plugin afterward to load the new index.",
 };

@@ -3,7 +3,8 @@
 This **indicative, not scientific** benchmark runs every model × problem × repeat
 × condition (with/without the project-local math toolkit). It measures keyword
 hits, elapsed wall time, and a visible tool-call heuristic, not proof correctness.
-The expanded matrix has not run yet; `RESULTS.md` retains the original smoke run.
+`RESULTS.md` records the executed 10-problem, one-repeat, two-model run. The core
+three-repeat, three-model matrix below is configured but has not run yet.
 
 ## Running the matrix
 
@@ -51,6 +52,54 @@ a `.cmd` file directly with `shell:false`. Unsupported custom shims are recorded
 as run errors. Other systems execute `opencode` directly. Prompts are passed as
 single arguments, never interpolated into a shell. Timeout termination applies
 to the directly spawned process, not a guaranteed cleanup of all descendants.
+
+## Core repeat matrix
+
+Use `bench/problems-core.json` for a repeatable, high-signal **4-problem ×
+3-repeat × 3-model** comparison. With both plugin conditions this is **72
+commands**. The models are `opencode-go/deepseek-v4.1-flash`,
+`opencode-go/glm-5.3-flash`, and `opencode-go/gpt-6-luna`.
+
+The subset preserves the full set's prompts and keywords unchanged:
+
+- `quasi-riemann`: corpus retrieval, including the previously observed retrieval timeout.
+- `landau-siegel`: corpus retrieval and cataloged Lean status/Comparator documentation.
+- `pdf-overview`: PDF-only extraction.
+- `sympy-determinant`: exact symbolic computation.
+
+From the repository root, run the PowerShell wrapper (no arguments required):
+
+```powershell
+.\bench\run-core.ps1
+```
+
+It resolves the repository root from its own location, prints the command, and
+runs the equivalent of:
+
+```powershell
+npm run bench -- `
+  --models opencode-go/deepseek-v4.1-flash,opencode-go/glm-5.3-flash,opencode-go/gpt-6-luna `
+  --problems bench/problems-core.json `
+  --repeats 3 `
+  --standalone `
+  --json --md
+```
+
+Extra arguments pass through, for example `.\bench\run-core.ps1 --dry-run` to
+preview without inference or report writes, or `--timeout 240` to override the
+default timeout. Real runs overwrite `bench/results/latest.json` and
+`bench/results/latest.md`; preserve previous reports first if needed.
+
+Use the core set to compare repeat variability and the third model without the
+full matrix's cost. Use `bench/problems.json` for broader coverage, including
+declaration lookup, theorem explanation, missing-corpus answers, simplification,
+and equation solving. The full 10-problem × 3-repeat × 3-model matrix would run
+180 commands across both conditions.
+
+Expected runtime is long: the core's sequential invocations can consume roughly
+3.6 hours at the default 180-second timeout each, plus overhead. Detached
+processes may be needed to survive session/server restarts; keep logs and avoid
+concurrent runs overwriting the same report files.
 
 ## Ten problems
 

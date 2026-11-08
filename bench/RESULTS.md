@@ -53,3 +53,6 @@
 - The “without plugin” condition still has global OpenCode plugins; only `math-toolkit` is absent.
 - Full stdout/stderr and JSON are in `bench/results/` locally; that directory is gitignored.
 - The full 10-problem matrix ran in separate detached processes to survive OpenCode server restarts.
+
+## Core repeat run (pending)
+The 4-problem × 3-repeat × 3-model matrix is configured in bench/problems-core.json and bench/run-core.ps1; results will be added after execution.

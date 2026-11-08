@@ -3,7 +3,8 @@ set -euo pipefail
 
 MATH_DIR="${MATH_DIR:-/work/math}"
 COMPARATOR_DIR="${COMPARATOR_DIR:-/opt/comparator}"
-EXPORT_DIR="${EXPORT_DIR:-/opt/lean4export}"
+COMPARATOR_TAG="${COMPARATOR_TAG:-v4.34.0}"
+COMPARATOR_TOOLCHAIN="${COMPARATOR_TOOLCHAIN:-leanprover/lean4:v4.34.1}"
 CHALLENGE="${CHALLENGE:-ComparatorChallenges/QuasiRiemannHypothesis.json}"
 
 echo "== Comparator Docker verification =="
@@ -18,19 +19,36 @@ if [ ! -d "$MATH_DIR/math" ] && [ ! -d "$MATH_DIR/.git" ]; then
 fi
 
 if [ ! -d "$COMPARATOR_DIR/.git" ]; then
-  git clone --depth 1 https://github.com/leanprover/comparator.git "$COMPARATOR_DIR"
-fi
-if [ ! -d "$EXPORT_DIR/.git" ]; then
-  git clone --depth 1 https://github.com/leanprover/lean4export.git "$EXPORT_DIR"
+  git clone --branch "$COMPARATOR_TAG" --depth 1 https://github.com/leanprover/comparator.git "$COMPARATOR_DIR"
+else
+  if ! git -C "$COMPARATOR_DIR" rev-parse --verify --quiet "refs/tags/$COMPARATOR_TAG" >/dev/null; then
+    git -C "$COMPARATOR_DIR" fetch --tags --quiet
+  fi
+  git -C "$COMPARATOR_DIR" checkout --quiet "$COMPARATOR_TAG"
 fi
 
 cd "$COMPARATOR_DIR"
 
-echo "== Building Comparator and lean4export =="
-if ! lake build lean4export comparator; then
-  echo "Comparator build failed. This is expected for some Lean-version/toolchain combinations." >&2
-  echo "Do not treat this as a verification pass." >&2
-  exit 1
+# Comparator v4.34.0 pins Lean 4.34.0; the corpus uses 4.34.1. Building the
+# standalone release with the corpus toolchain is the compatibility test.
+BUILD_STAMP="$COMPARATOR_DIR/.lake/math-toolkit-build"
+WANT="$COMPARATOR_TAG $COMPARATOR_TOOLCHAIN"
+if [ -x "$COMPARATOR_DIR/.lake/build/bin/comparator" ] \
+  && [ -x "$COMPARATOR_DIR/.lake/packages/lean4export/.lake/build/bin/lean4export" ] \
+  && [ -f "$BUILD_STAMP" ] \
+  && [ "$(cat "$BUILD_STAMP")" = "$WANT" ]; then
+  echo "== Reusing Comparator $COMPARATOR_TAG build for $COMPARATOR_TOOLCHAIN =="
+else
+  echo "$COMPARATOR_TOOLCHAIN" > lean-toolchain
+  echo "== Building Comparator $COMPARATOR_TAG with $COMPARATOR_TOOLCHAIN and lean4export =="
+  rm -rf .lake
+  if ! lake build lean4export comparator; then
+    echo "Comparator build failed. This is expected for some Lean-version/toolchain combinations." >&2
+    echo "Do not treat this as a verification pass." >&2
+    exit 1
+  fi
+  mkdir -p .lake
+  echo "$WANT" > "$BUILD_STAMP"
 fi
 
 export PATH="$COMPARATOR_DIR/.lake/build/bin:$COMPARATOR_DIR/.lake/packages/lean4export/.lake/build/bin:$PATH"

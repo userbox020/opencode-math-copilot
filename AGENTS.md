@@ -50,7 +50,7 @@ opencode.cmd plugin list
 
 `math/` is ignored and is not committed. The prebuilt `data/math-index.json` keeps `math_search` usable without the 3.3 GB clone; manuscript reads, `math_grep`, PDF extraction, Lean search, and Lean tools require `math/CONTENTS.md`.
 
-New tools: `math_lean_search`, `math_pdf_text`, `math_compute`. `math_lean_search` uses `rg` when available, then the 21.9 MB gzip `lean-index.json.gz`, then a bounded Node walk. `math_pdf_text` uses `unpdf`; `math_compute` uses the fixed `math_compute.py` allowlist, never raw `sympify`.
+New tools: `math_lean_search`, `math_pdf_text`, `math_pdf_search`, `math_compute`. `math_lean_search` uses `rg` when available, then the 21.9 MB gzip `lean-index.json.gz`, then a bounded Node walk. `math_pdf_text`/`math_pdf_search` use `unpdf`; `math_compute` uses the fixed `math_compute.py` allowlist, never raw `sympify`. Lean tools accept `docker: true` for the Linux Docker volume.
 
 ## Docker Lean
 
@@ -76,6 +76,8 @@ Verified Docker evidence: Mathlib smoke (`LEAN_DOCKER_OK`) and focused build `OA
 - Native Windows Lean builds are blocked by a pinned dependency path invalid on NTFS, and Comparator/landrun need Linux/WSL. Do not silently upgrade the Lean pin to work around this.
 
 ## Index facts
+
+- Refresh indexes: `scripts/refresh-indexes.ps1` updates the corpus and both indexes; the weekly/manual workflow uploads artifacts without committing. See [docs/index-refresh.md](docs/index-refresh.md) and review large index changes before committing.
 
 - 721 manuscripts, 373 families, 175 Lean-formalized papers, 22,723 indexed section headings.
 - `math/CONTENTS.md` is HTML-in-Markdown; titles can contain `<`, `>`, and nested parentheses. The parser intentionally strips only real HTML tags and handles balanced link parentheses.

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Docker execution mode for `math_lean_check`, `math_lean_build`, and `math_comparator` (`docker: true`), with configurable images/volumes and actionable missing-image errors.
+- `math_pdf_search` for bounded full-text phrase/regex search in one manuscript PDF.
+- Comparator Docker verification pinned to `v4.34.0` built against the corpus's Lean v4.34.1 toolchain, with an idempotent build cache.
+- Index refresh automation: `scripts/refresh-indexes.ps1`, weekly/manual `refresh-index.yml`, and `docs/index-refresh.md`.
+- Core benchmark set (`bench/problems-core.json`, `bench/run-core.ps1`) for 4 problems × 3 repeats × 3 models.
 - Distribution is project-local discovery plus the global Git-spec install:
   `opencode plugin add github:userbox020/opencode-math-copilot`.
 - Removed npm registry publishing; `package.json` is `private: true` and the publish workflow is gone.
