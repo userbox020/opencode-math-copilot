@@ -6,6 +6,7 @@
 
 - Extended the `rellich-kondrachov` Lean 4.34 compatibility patch to `Rellich`, `TranslationEstimateH1`, and `Transfer`.
 - The full `QuasiRiemannHypothesis` Comparator challenge passes: 7,075 solution modules build, `OAI.riemannZeta_ne_zero_of_seven_eighths_lt_re` is exported, and the Lean kernel accepts the solution (`Your solution is okay!`, `COMPARATOR_DOCKER_OK`).
+- Full benchmark: **83/90** with plugin vs **62/90** without (10 problems × 3 repeats × 3 models).
 
 ## 0.3.0 - 2026-11-08
 
@@ -15,7 +16,7 @@
 - Comparator Docker verification pinned to `v4.34.0` built against the corpus's Lean v4.34.1 toolchain, with an idempotent build cache.
 - The Comparator toolchain pin is smoke-verified. A checked-in compatibility patch adapts the corpus-pinned `rellich-kondrachov` source (`70f85d4`) to Lean 4.34.1/Mathlib `d13f23b7`; the full QuasiRiemann challenge pass is recorded under 0.3.1.
 - Index refresh automation: `scripts/refresh-indexes.ps1`, weekly/manual `refresh-index.yml`, and `docs/index-refresh.md`.
-- Core benchmark set (`bench/problems-core.json`, `bench/run-core.ps1`) for 4 problems × 3 repeats × 3 models.
+- Core benchmark set (`bench/problems-core.json`, `bench/run-core.ps1`) for 4 problems Ã— 3 repeats Ã— 3 models.
 - Distribution is project-local discovery plus the global Git-spec install:
   `opencode plugin add github:userbox020/opencode-math-copilot`.
 - Removed npm registry publishing; `package.json` is `private: true` and the publish workflow is gone.
