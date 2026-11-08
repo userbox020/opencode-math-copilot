@@ -40,7 +40,7 @@
     "test": "node .opencode/plugins/math-toolkit/scripts/test-tools.mjs"
   },
   "devDependencies": {
-    "@opencode/plugin": "2.0.29"
+    "@opencode/plugin": "2.2.5"
   },
   "peerDependencies": {
     "@opencode/plugin": "^2.0.29"
