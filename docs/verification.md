@@ -115,6 +115,15 @@ Core run: three models, 4 problems, 3 repeats.
 | GLM-5.3-Flash | 12/12, 39.08s | 8/12, 105.01s |
 | GPT-6-Luna | 12/12, 20.89s | 7/12, 38.98s |
 
+## Index refresh
+
+The `Refresh indexes` workflow was dispatch-tested (run `42452644635`) and completed successfully. It produced both artifacts; their counts match the committed indexes:
+
+- 721 manuscripts, 373 families, 22,723 sections, 245 Lean docs
+- 3,139,860 Lean declarations across 163,029 files
+
+The artifact timestamps differ, so no index replacement was needed.
+
 ## Native Windows
 
 Native Windows Lean remains blocked by the pinned AINTLIB path `2026-07-16T07:39:08Z`, which NTFS cannot represent. Docker is the recommended workaround and is tested above.

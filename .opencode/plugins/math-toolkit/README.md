@@ -38,6 +38,7 @@ Confirm the project-local plugin appears in the list, then use `math_status` in 
 | `math_lean_search` | Search declaration lines in `math/lean` and Mathlib by name or regex. |
 | `math_pdf_text` | Extract bounded text from a manuscript PDF (no OCR). |
 | `math_pdf_search` | Search the extracted text of one manuscript PDF/preprint (bounded pages; no OCR). |
+| `math_pdf_corpus_search` | Search PDF lines across top BM25 manuscript candidates (default 5, maximum 10), grouped by path/page/line. |
 | `math_compute` | Restricted SymPy operations over allowlisted expressions/matrices. |
 | `math_comparator` | Run an existing Comparator challenge JSON. |
 | `math_status` | Report index counts and toolchain availability. |
@@ -87,6 +88,8 @@ Restart OpenCode or reload the project session after rebuilding so the active pl
 
 ## Example session
 
+For bounded corpus-wide PDF lookup, use `math_pdf_corpus_search` with `{ "query": "Riemann hypothesis", "candidates": 5, "pages": "1-2", "limit": 10 }`. Only `query` is required; matching is case-insensitive and literal by default (`literal: false` enables regex).
+
 1. Ask: “Use `math_search` to find manuscripts about concentration inequalities.”
 2. Choose a returned manuscript identifier and ask: “Use `math_manuscript` to read its outline, then only the section containing the relevant theorem.”
 3. If the TeX source is missing, ask: “Use `math_pdf_text` on this preprint directory, pages 1–3.”
@@ -104,6 +107,7 @@ For symbolic work, use `math_compute` (for example `simplify sin(x)^2+cos(x)^2` 
 ## Limitations
 
 - The plugin provides retrieval and tool execution, not inference or an automatic proof guarantee.
+- `math_pdf_corpus_search` is not a full-text index: only the top indexed candidates are inspected, with at most 5 distinct pages and 5000 extraction characters each (50000 total). Pages default to `1-2`; missing/unreadable PDFs are reported and skipped, and no OCR is performed. Unselected manuscripts/pages or truncated text may contain additional matches.
 - `CONTENTS.md` maps 721 manuscripts in 373 families; 175 papers currently have Lean formalizations catalogued in `lean/formalization.yaml`. These are raw research data, and not all claims are verified.
 - Consult `history.md` for revisions and withdrawals when a result looks suspicious. Cite corpus paths relative to `math/`.
 - Lean/Comparator checks require external tools and dependencies. The single `OAI` Lake package is pinned to `leanprover/lean4:v4.34.1`; full builds are huge, so prefer focused targets.

@@ -31,6 +31,7 @@ Solve the user's stated problem. Do not turn it into a broad research project.
 
 - Query broad first, then narrow; do not perform repo-wide discovery for a localized question.
 - Read relevant sections rather than whole PDFs. Resolve released PDF paths from metadata rather than assuming a filename; use `math_pdf_search` to find a phrase, then `math_pdf_text` for the selected pages.
+- If the manuscript is unknown, use `math_pdf_corpus_search` for a bounded PDF search across top indexed candidates (default 5, pages 1-2). It is not a full-text index; no matches does not establish absence from the corpus.
 - Prefer `math_grep` for exact names or notation in TeX, Markdown, and Lean; use `math_lean_search` for declaration names. Scope searches to relevant files or directories when possible.
 - Use `math_compute` for symbolic checks, but state the operation and verify the returned expression independently.
 - Keep output bounded: summarize matches and quote only the needed statements or proof steps.

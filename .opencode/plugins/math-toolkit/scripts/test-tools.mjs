@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import plugin from "../../math-toolkit.js";
 import { createSearch } from "../lib/search.js";
 import { pdfText } from "../lib/pdf.js";
-import { pdfSearch } from "../lib/pdf-search.js";
+import { pdfCorpusSearch, pdfSearch } from "../lib/pdf-search.js";
 import { searchLean } from "../lib/lean-search.js";
 import { leanCheck, comparator } from "../lib/lean.js";
 import { findExecutable, resolveRoots, safePath } from "../lib/paths.js";
@@ -47,7 +47,16 @@ await plugin.setup({
     },
   },
 });
-assert.equal(tools.size, 12);
+assert.equal(tools.size, 13);
+console.log(`PASS: ${tools.size} registered tools.`);
+const corpusSchema = tools.get("math_pdf_corpus_search").input;
+assert.deepEqual(corpusSchema.required, ["query"]);
+assert.equal(corpusSchema.properties.candidates.maximum, 10);
+assert.equal(corpusSchema.properties.candidates.default, 5);
+assert.equal(corpusSchema.properties.pages.default, "1-2");
+assert.equal(corpusSchema.properties.limit.maximum, 20);
+assert.equal(corpusSchema.properties.limit.default, 10);
+assert.equal(corpusSchema.properties.literal.default, true);
 
 const call = async (name, args = {}) => {
   const result = await tools.get(name).execute(args, {});
@@ -129,6 +138,64 @@ assert.match(fixtureSearch, /page 1, line \d+/i, fixtureSearch);
 assert.match(await pdfSearch({ math: path.join(workspace, "test/fixtures"), workspace }, {
   path: "overview.pdf", query: "[", pages: "1", literal: false,
 }), /Invalid regex/i);
+
+const corpusFixture = fs.mkdtempSync(path.join(os.tmpdir(), "math-toolkit-pdf-corpus-"));
+try {
+  fs.mkdirSync(path.join(corpusFixture, "released"));
+  fs.mkdirSync(path.join(corpusFixture, "broken"));
+  fs.copyFileSync(path.join(workspace, "test/fixtures/overview.pdf"), path.join(corpusFixture, "released", "title-derived.pdf"));
+  fs.writeFileSync(path.join(corpusFixture, "broken", "paper.pdf"), "not a PDF");
+  const fixtureRoots = { math: corpusFixture, workspace: corpusFixture };
+  const documents = ["missing", "broken", "released"].map((dir, i) => ({
+    id: String(i), dir, title: "Research Catalog", sections: [],
+  }));
+  const fixtureIndexSearch = createSearch({ manuscripts: documents });
+  const corpusHits = await pdfCorpusSearch(fixtureRoots, fixtureIndexSearch, { query: "Research Catalog" });
+  assert.match(corpusHits, /## released\b/);
+  assert.match(corpusHits, /page 1, line \d+:.*Research Catalog/i);
+  assert.match(corpusHits, /Skipped candidates[\s\S]*missing:[\s\S]*broken:/);
+  assert.match(await pdfCorpusSearch(fixtureRoots, fixtureIndexSearch, { query: "zzznocandidatezzz" }), /No candidate manuscripts/);
+  const noHits = await pdfCorpusSearch(fixtureRoots, fixtureIndexSearch, { query: "Research Catalog zzznomatchzzz" });
+  assert.match(noHits, /No matches in the extracted candidate PDF text/);
+  assert.match(noHits, /Skipped candidates/);
+  const regexHits = await pdfCorpusSearch(fixtureRoots, fixtureIndexSearch, {
+    query: "Research.*Catalog", literal: false, pages: "1", limit: 1,
+  });
+  assert.equal((regexHits.match(/- page \d+, line \d+:/g) || []).length, 1);
+  assert.match(regexHits, /Showing the first 1 matches/);
+
+  const invalidSearch = () => assert.fail("Invalid inputs must not search the index");
+  for (const args of [
+    {}, { query: " " }, { query: 12 },
+    ...[0, 11, 1.5, "5", null].map(candidates => ({ query: "Research", candidates })),
+    ...[0, 21, 1.5, "10"].map(limit => ({ query: "Research", limit })),
+    { query: "Research", literal: "true" },
+    ...["", "0", "2-1", "1-6", "1-999999999", "1,3,5,7,9,11", "9007199254740992", "x", 1, "1,".repeat(51)].map(pages => ({ query: "Research", pages })),
+  ]) {
+    assert.match(await pdfCorpusSearch(fixtureRoots, invalidSearch, args), /Usage error/);
+  }
+  assert.match(await pdfCorpusSearch(fixtureRoots, invalidSearch, { query: "[", literal: false }), /Invalid regex/);
+  assert.match(await pdfCorpusSearch(fixtureRoots, fixtureIndexSearch, { query: "Research", pages: "1-5,1" }), /page 1, line/);
+
+  // Even an over-returning search implementation cannot exceed the candidate cap.
+  const cappedSearch = ({ query, limit }) => {
+    assert.equal(query, "Research Catalog");
+    assert.equal(limit, 10);
+    return Array.from({ length: 11 }, (_, i) => ({ manuscript: { dir: `absent-${i}` } }));
+  };
+  const capped = await pdfCorpusSearch(fixtureRoots, cappedSearch, { query: "Research Catalog", candidates: 10 });
+  assert.match(capped, /Inspected 10 of 10/);
+  assert.equal((capped.match(/- absent-\d+:/g) || []).length, 10);
+  assert.doesNotMatch(capped, /absent-10/);
+  let defaultCandidates;
+  await pdfCorpusSearch(fixtureRoots, args => { defaultCandidates = args.limit; return []; }, { query: "Research" });
+  assert.equal(defaultCandidates, 5);
+  assert.match(await call("math_pdf_corpus_search", { query: "zzznocandidatezzz" }), /No candidate manuscripts/);
+  assert.match(await call("math_pdf_corpus_search", { query: "Research", candidates: 11 }), /Usage error/);
+  console.log("PASS: bounded PDF corpus search fixtures, schema/defaults, invalid inputs, candidate/page caps, global hit limit and missing/unreadable PDF skips.");
+} finally {
+  fs.rmSync(corpusFixture, { recursive: true, force: true });
+}
 
 const python = findExecutable("python") || findExecutable("python3");
 const sympyAvailable = Boolean(python) && spawnSync(python, ["-c", "import sympy"], { encoding: "utf8" }).status === 0;

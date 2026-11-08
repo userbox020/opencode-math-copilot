@@ -10,7 +10,7 @@ import { grepCorpus, manuscript } from "./lib/corpus.js";
 import { comparator, leanBuild, leanCheck } from "./lib/lean.js";
 import { searchLean } from "./lib/lean-search.js";
 import { pdfText } from "./lib/pdf.js";
-import { pdfSearch } from "./lib/pdf-search.js";
+import { pdfCorpusSearch, pdfSearch } from "./lib/pdf-search.js";
 import { compute, sympyVersion } from "./lib/compute.js";
 
 const indexFile = fileURLToPath(new URL("./data/math-index.json", import.meta.url));
@@ -105,6 +105,18 @@ const inputs = {
     required: ["path", "query"],
     additionalProperties: false,
   },
+  math_pdf_corpus_search: {
+    type: "object",
+    properties: {
+      query: { type: "string", minLength: 1 },
+      candidates: { type: "integer", minimum: 1, maximum: 10, default: 5 },
+      pages: { type: "string", minLength: 1, maxLength: 100, default: "1-2", description: "At most 5 distinct positive pages per candidate, e.g. 1-2,5." },
+      limit: { type: "integer", minimum: 1, maximum: 20, default: 10 },
+      literal: { type: "boolean", default: true },
+    },
+    required: ["query"],
+    additionalProperties: false,
+  },
   math_compute: {
     type: "object",
     properties: {
@@ -173,6 +185,7 @@ function makeExecutors(roots) {
     math_lean_search: run((args) => searchLean(roots, args), false),
     math_pdf_text: run((args) => pdfText(roots, args), false),
     math_pdf_search: run((args) => pdfSearch(roots, args), false),
+    math_pdf_corpus_search: run((args) => pdfCorpusSearch(roots, search, args)),
     math_compute: run((args) => compute(roots, args), false),
     math_comparator: run((args) => comparator(roots, args)),
     math_status: run(() => {
@@ -203,6 +216,7 @@ const descriptions = {
   math_lean_search: "Search declaration lines in math/lean and Mathlib by name or regex. Use to locate theorems, lemmas, definitions, classes, and instances before editing Lean.",
   math_pdf_text: "Extract bounded text from a manuscript PDF (no OCR). Use when TeX source is missing or you need the released PDF's exact wording.",
   math_pdf_search: "Search the extracted text of one manuscript PDF/preprint (bounded pages; no OCR). Use when TeX source is missing or you need exact PDF wording.",
+  math_pdf_corpus_search: "Search PDF lines in the top BM25-indexed manuscripts (default 5, maximum 10). Defaults to pages 1-2; maximum 5 pages and 5000 extraction characters per candidate, 50000 total. Skips unreadable PDFs. Not a full-text corpus index; no OCR.",
   math_compute: "Run a restricted SymPy operation (simplify, factor, expand, solve, diff, integrate, limit, series, evalf, det, eigenvalues). Expressions are allowlisted, not arbitrary Python.",
   math_comparator: "Validate an existing ComparatorChallenges JSON challenge. Requires comparator, landrun and lean4export on PATH plus the Lean toolchain, or docker:true for the Linux Docker image/volumes. The first Docker run builds the challenge dependency closure; pass a larger timeoutMs (up to 1800000).",
   math_status: "Inspect math index counts, root paths, Lean toolchain, and local executable availability without running Lean or a build.",

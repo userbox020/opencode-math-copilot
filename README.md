@@ -8,7 +8,7 @@ It provides BM25 search over **721 manuscripts / 373 result families**, reads ma
 
 - **OpenCode 2.0.29+** with the V2 plugin API (`Plugin.define` / `ctx.tool.transform`). V1 plugin implementations do not run in OpenCode 2.x.
 - **Node.js 24** for the index builder and tests.
-- A clone of `openai/math` at `./math` for `math_manuscript`, `math_grep`, `math_pdf_text`, `math_pdf_search`, and the Lean tools.
+- A clone of `openai/math` at `./math` for `math_manuscript`, `math_grep`, `math_pdf_text`, `math_pdf_search`, `math_pdf_corpus_search`, and the Lean tools.
 - `npm install` installs `unpdf` for PDF text extraction.
 - Recommended: `ripgrep` (`rg`) for fast Lean declaration search. Without it, a prebuilt declaration index is used, then a bounded Node fallback.
 - Optional: elan/Lean for `math_lean_check` / `math_lean_build`; Docker for reproducible Linux Lean verification; Python 3 + SymPy for `math_compute`; Comparator + landrun + lean4export in Linux/Docker for `math_comparator`; LaTeX for document builds.
@@ -66,6 +66,7 @@ tools.math_lean_build({ target: "OAI.Analysis" })
 tools.math_lean_search({ query: "linearizedMA_critical_density" })
 tools.math_pdf_text({ path: "overview.pdf", pages: "1-3" })
 tools.math_pdf_search({ path: "overview.pdf", query: "Research Catalog", pages: "1" })
+tools.math_pdf_corpus_search({ query: "Riemann hypothesis", candidates: 5, pages: "1-2", limit: 10 })
 tools.math_compute({ operation: "simplify", expression: "sin(x)^2 + cos(x)^2" })
 tools.math_compute({ operation: "det", matrix: [[1, 2], [3, 4]] })
 tools.math_comparator({ challenge: "QuasiRiemannHypothesis" })
@@ -84,6 +85,7 @@ tools.math_reindex({})
 | `math_lean_search` | Search declaration lines in `math/lean` and Mathlib by name or regex. |
 | `math_pdf_text` | Extract bounded text from a manuscript PDF (no OCR). |
 | `math_pdf_search` | Search the extracted text of one manuscript PDF/preprint (bounded pages; no OCR). |
+| `math_pdf_corpus_search` | Search PDF lines across top BM25 manuscript candidates (default 5, maximum 10), grouped by path/page/line. |
 | `math_compute` | Restricted SymPy operations: simplify, factor, expand, solve, diff, integrate, limit, series, evalf, det, eigenvalues. |
 | `math_comparator` | Run an existing Comparator challenge JSON. |
 | `math_status` | Index counts and PATH availability for Lean/LaTeX/Python/rg/SymPy. |
@@ -194,6 +196,7 @@ There are two supported installs:
 - Lean/Comparator checks require an installed toolchain. Missing tools are reported as failures, never as successful verification.
 - `math_grep` and `math_lean_search` prefer `rg`; without it, bounded pure-Node fallbacks scan only text files under `math/`.
 - `math_pdf_text` performs text extraction only; it does not OCR scanned pages and caps extraction at 50 pages / 80 MB per PDF.
+- `math_pdf_corpus_search` is not a full-text index: it searches only the top indexed candidates, defaults to pages `1-2`, and accepts at most 5 distinct pages per PDF. Extraction output is capped at 5000 characters per candidate / 50000 total; matches are case-insensitive literal lines by default (`literal: false` enables regex). Missing/unreadable PDFs are reported and skipped. Unselected manuscripts/pages or truncated text may contain additional matches.
 - `math_compute` is allowlisted SymPy, not general Python execution. It enforces AST, size, and timeout limits, but it is not an OS-level memory sandbox.
 - Full Lake builds are huge. Prefer focused targets; the whole package may hit `vm.max_map_count` on Linux (see `math/lean/README.md`).
 - The plugin reads only under `math/` (plus its own index and scripts). It does not expose arbitrary filesystem reads.
