@@ -12,10 +12,27 @@ import { searchLean } from "./lib/lean-search.js";
 import { pdfText } from "./lib/pdf.js";
 import { pdfCorpusSearch, pdfSearch } from "./lib/pdf-search.js";
 import { compute, sympyVersion } from "./lib/compute.js";
+import { doctor } from "./lib/doctor.js";
+import { pdfIndexSearch } from "./lib/pdf-index.js";
 
 const indexFile = fileURLToPath(new URL("./data/math-index.json", import.meta.url));
 
 const inputs = {
+  math_doctor: {
+    type: "object",
+    properties: {},
+    additionalProperties: false,
+  },
+  math_pdf_index_search: {
+    type: "object",
+    properties: {
+      query: { type: "string", minLength: 1 },
+      limit: { type: "integer", minimum: 1, maximum: 20, default: 10 },
+      literal: { type: "boolean", default: true },
+    },
+    required: ["query"],
+    additionalProperties: false,
+  },
   math_search: {
     type: "object",
     properties: {
@@ -166,29 +183,33 @@ function loadIndex() {
 }
 
 function makeExecutors(roots) {
-  const { index, search, error } = loadIndex();
+  let loaded;
+  const getIndex = () => (loaded ??= loadIndex());
   const run = (fn, requiresIndex = true) => async (values = {}) => {
-    if (requiresIndex && error) return error;
     try {
-      return clip(await fn(values), 75000);
+      const state = requiresIndex ? getIndex() : null;
+      if (state?.error) return state.error;
+      return clip(await fn(values, state), 75000);
     } catch (caught) {
       return clip(`Error: ${caught.message}`, 4000);
     }
   };
 
   return {
-    math_search: run((args) => formatSearch(search(args))),
-    math_manuscript: run((args) => manuscript(index, roots, args)),
-    math_grep: run((args) => grepCorpus(roots, args)),
-    math_lean_check: run((args) => leanCheck(roots, args)),
-    math_lean_build: run((args) => leanBuild(index, roots, args)),
+    math_doctor: run(() => doctor(roots, getIndex), false),
+    math_pdf_index_search: run((args) => pdfIndexSearch(args), false),
+    math_search: run((args, { search }) => formatSearch(search(args))),
+    math_manuscript: run((args, { index }) => manuscript(index, roots, args)),
+    math_grep: run((args) => grepCorpus(roots, args), false),
+    math_lean_check: run((args) => leanCheck(roots, args), false),
+    math_lean_build: run((args, { index }) => leanBuild(index, roots, args)),
     math_lean_search: run((args) => searchLean(roots, args), false),
     math_pdf_text: run((args) => pdfText(roots, args), false),
     math_pdf_search: run((args) => pdfSearch(roots, args), false),
-    math_pdf_corpus_search: run((args) => pdfCorpusSearch(roots, search, args)),
+    math_pdf_corpus_search: run((args, { search }) => pdfCorpusSearch(roots, search, args)),
     math_compute: run((args) => compute(roots, args), false),
-    math_comparator: run((args) => comparator(roots, args)),
-    math_status: run(() => {
+    math_comparator: run((args) => comparator(roots, args), false),
+    math_status: run((args, { index }) => {
       const stat = fs.statSync(indexFile);
       const availability = ["lake", "lean", "comparator", "landrun", "lean4export", "latexmk", "pdflatex", "python", "rg"]
         .map((name) => `- ${name}: ${findExecutable(name) || "not found on PATH"}`)
@@ -202,12 +223,15 @@ function makeExecutors(roots) {
       if (/\.(cmd|bat)$/i.test(node)) return `Put the native Node.js executable on PATH (batch shims are not supported with shell:false). ${REBUILD}`;
       const script = fileURLToPath(new URL("./scripts/build-index.mjs", import.meta.url));
       const result = spawnSync(node, [script, "--math-root", roots.math, "--out", indexFile], { cwd: roots.workspace, shell: false, encoding: "utf8", timeout: 120000, maxBuffer: 2 * 1024 * 1024, windowsHide: true });
-      return `Reindex ${result.status === 0 && !result.error ? "PASS" : "FAIL"}; exit code: ${result.status ?? "none"}${result.error ? `\n${result.error.message}` : ""}\n${fence(clip([result.stdout, result.stderr].filter(Boolean).join("\n"), 12000))}\n\nReload/restart the plugin to pick up the new index.`;
+      if (result.status === 0 && !result.error) loaded = undefined;
+      return `Reindex ${result.status === 0 && !result.error ? "PASS" : "FAIL"}; exit code: ${result.status ?? "none"}${result.error ? `\n${result.error.message}` : ""}\n${fence(clip([result.stdout, result.stderr].filter(Boolean).join("\n"), 12000))}\n\nThe manuscript index will reload lazily on next use.`;
     }, false),
   };
 }
 
 const descriptions = {
+  math_doctor: "Report bounded corpus, index/cache, disk, Docker image/volume and host-tool health with actionable setup hints. Does not run Lean or build Docker images.",
+  math_pdf_index_search: "Search prebuilt PDF excerpt lines by literal text or regex, grouped by path/page/line. Default excerpts are the first 2 pages only, not a full-text corpus; no OCR. Use math_pdf_search for deeper page lookup.",
   math_search: "Find math manuscripts by topic using the prebuilt BM25 index. Supports family:003, lean:true and has:lean filters; use before opening a paper.",
   math_manuscript: "Read an indexed manuscript's citation, metadata and section outline, or a named section's TeX source. Use a PDF/directory path or a unique title substring.",
   math_grep: "Search local math text sources for a phrase or regex. Prefer a small preprint/Lean subtree; excludes dependencies, binaries and oversized files.",
@@ -220,7 +244,7 @@ const descriptions = {
   math_compute: "Run a restricted SymPy operation (simplify, factor, expand, solve, diff, integrate, limit, series, evalf, det, eigenvalues). Expressions are allowlisted, not arbitrary Python.",
   math_comparator: "Validate an existing ComparatorChallenges JSON challenge. Requires comparator, landrun and lean4export on PATH plus the Lean toolchain, or docker:true for the Linux Docker image/volumes. The first Docker run builds the challenge dependency closure; pass a larger timeoutMs (up to 1800000).",
   math_status: "Inspect math index counts, root paths, Lean toolchain, and local executable availability without running Lean or a build.",
-  math_reindex: "Regenerate the prebuilt math index after corpus updates. Reload/restart the plugin afterward to load the new index.",
+  math_reindex: "Regenerate the prebuilt math index after corpus updates. The new manuscript index loads lazily on next use.",
 };
 
 export default Plugin.define({

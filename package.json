@@ -1,6 +1,6 @@
 {
   "name": "opencode-math-copilot",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "private": true,
   "description": "OpenCode V2 plugin that turns the OpenAI math repository into searchable, readable, Lean-verifiable tools.",
   "type": "module",
@@ -18,7 +18,8 @@
     "scripts/setup-lean.ps1",
     "README.md",
     "LICENSE",
-    "NOTICE"
+    "NOTICE",
+    "SECURITY.md"
   ],
   "license": "Apache-2.0",
   "repository": {
@@ -30,9 +31,12 @@
   },
   "scripts": {
     "bench": "node bench/run.mjs",
+    "bench:analyze": "node bench/analyze.mjs",
     "check": "node scripts/check-syntax.mjs",
     "index": "node .opencode/plugins/math-toolkit/scripts/build-index.mjs",
     "index:lean": "node .opencode/plugins/math-toolkit/scripts/build-lean-index.mjs",
+    "index:pdf": "node .opencode/plugins/math-toolkit/scripts/build-pdf-index.mjs",
+    "bench:analyze": "node bench/analyze.mjs",
     "test": "node .opencode/plugins/math-toolkit/scripts/test-tools.mjs"
   },
   "devDependencies": {

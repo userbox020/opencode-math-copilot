@@ -10,6 +10,7 @@ const requiredFiles = [
   ".opencode/plugins/math-toolkit/main.js",
   ".opencode/plugins/math-toolkit/data/math-index.json",
   ".opencode/plugins/math-toolkit/data/lean-index.json.gz",
+  ".opencode/plugins/math-toolkit/data/pdf-index.json.gz",
   "docker/verify-comparator.sh",
   "docs/verification.md",
 ];

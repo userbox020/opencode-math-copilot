@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.4.0 - 2026-11-08
+
+- Added `math_doctor` for bounded corpus/index/cache/Docker/toolchain/disk diagnostics.
+- Added a persistent PDF extraction cache (500 entries / 200 MB default), metadata-based invalidation, lazy manuscript-index loading, and index invalidation after reindex.
+- Added a prebuilt PDF excerpt index and `math_pdf_index_search` (15 tools total): **789 PDFs / 1,548 pages / 1.46 MB gzip**. Excerpts are selected pages (default first 2, max 5 pages/20k chars per PDF); no OCR, not a full-text corpus.
+- Added Comparator batch verification (`scripts/verify-challenges.ps1`), JSON/Markdown reports, and a self-hosted Linux Docker verification workflow.
+- Added Dependabot, security audit and dependency-review workflows, a manual release workflow, and `SECURITY.md`.
+- Added `bench/analyze.mjs` with Wilson 95% intervals, p95/median durations, per-problem counts, and benchmark rigor documentation.
+- Added `docs/troubleshooting.md` and `docs/verification-automation.md`.
+
 ## 0.3.1 - 2026-11-08
 
 - Extended the `rellich-kondrachov` Lean 4.34 compatibility patch to `Rellich`, `TranslationEstimateH1`, and `Transfer`.

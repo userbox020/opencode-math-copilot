@@ -132,3 +132,20 @@ Per-problem passes (out of 3 repeats):
 - The without-plugin condition still has global OpenCode plugins; only `math-toolkit` is excluded by the temporary project config.
 - The run started after the QuasiRiemann challenge finished, so there was no Lean build contention. Failed plugin-update attempts during the run may have briefly touched the OpenCode server.
 - Full JSON (6.25 MB) and per-run stdout/stderr are in `bench/results/` locally; that directory is gitignored.
+
+### Statistical summary
+
+Wilson 95% intervals are descriptive independent-trial approximations; repeats and pooled models are not independent samples, and interval overlap is not a significance test. Run `npm run bench:analyze` to reproduce.
+
+| Condition | Passed | Rate | Wilson 95% CI | Errors |
+| --- | ---: | ---: | ---: | ---: |
+| With plugin | 83/90 | 92.2% | 84.8–96.2% | 0 |
+| Without plugin | 62/90 | 68.9% | 58.7–77.5% | 17 |
+
+Difference: **+23.3 percentage points** (descriptive only).
+
+| Model | With plugin | Without plugin |
+| --- | --- | --- |
+| DeepSeek V4.1 Flash | 30/30 (88.6–100.0%) | 19/30 (45.5–78.1%) |
+| GLM-5.3-Flash | 26/30 (70.3–94.7%) | 20/30 (48.8–80.8%) |
+| GPT-6-Luna | 27/30 (74.4–96.5%) | 23/30 (59.1–88.2%) |

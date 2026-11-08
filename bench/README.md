@@ -165,3 +165,57 @@ the absence check. The with condition has corpus files, repository instructions,
 and other local configuration unavailable in the without project, so this does
 not isolate the plugin alone. Small sample size, fixed model/condition order,
 caching, network latency, and model variability further limit comparisons.
+
+## Analyze an existing run
+
+From the repository root, analyze the saved full run without model inference or
+file writes:
+
+```sh
+node bench/analyze.mjs bench/results/latest.json --md
+npm run bench:analyze
+node bench/analyze.mjs bench/results/latest.json --json
+```
+
+The optional JSON path defaults to this repository's `bench/results/latest.json`;
+explicit paths are relative to the calling directory. Markdown is the default;
+choose either `--md` or `--json` for stdout output, not both. The analyzer validates
+the saved result rows and fails with an error if the file is missing or malformed.
+It recomputes summaries from those rows rather than trusting saved summaries.
+
+Reports include model × condition pass counts/rates, errors, mean/median/p95
+duration in seconds, mean visible tool calls, pooled with/without totals and their
+percentage-point difference, and problem × model × condition pass counts.
+Duration and tool-call statistics include failures and errors. The median averages
+the middle pair for even samples; p95 uses nearest rank (`ceil(0.95 × n)`).
+Errors mean a nonempty process error or an exit code other than zero.
+
+Wilson 95% confidence intervals describe binomial sampling uncertainty around
+each pass rate, including pooled totals. Under independent, comparable trials,
+the interval procedure covers the true rate in approximately 95% of repeated
+samples; this is not a 95% probability that this particular interval contains it.
+JSON rates and interval bounds are fractions from 0 to 1. Wide intervals indicate
+limited precision; even a perfect observed score does not establish a 100% true
+pass rate. Repeats of the same problems and pooled models are not independent
+random samples, so these intervals are descriptive approximations, not adjusted
+for clustering or evidence of general benchmark superiority. Interval overlap is
+not a significance test; the reported percentage-point difference is descriptive
+and has no confidence interval or causal interpretation.
+
+## Rigor limits
+
+- **Heuristic scoring:** keyword matches are not blind grading, citation checks,
+  mathematical correctness checks, or proof verification.
+- **Three repeats:** the full run has only 3 repeats per problem/model/condition;
+  small samples and correlated prompts limit precision and generalization.
+- **Global plugins:** the without condition still inherits global OpenCode
+  plugins/configuration. It is not a clean no-tools baseline, and corpus access
+  and project instructions also differ between conditions.
+- **Overlapping builds/plugin updates:** concurrent builds and plugin updates
+  during the run can affect resource contention and environment consistency.
+  Recorded durations are not a controlled latency benchmark.
+- **Stronger claims require** isolated profiles/environments, frozen plugin and
+  model configurations, balanced or randomized execution, more independent
+  problems/repeats, and blind grading against a predefined correctness rubric.
+
+The analyzer does not alter `RESULTS.md` or any saved reports.

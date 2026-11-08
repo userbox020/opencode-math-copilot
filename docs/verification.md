@@ -93,6 +93,8 @@ The challenge module (`8924 jobs`) and the solution closure (`7075 jobs`) build 
 
 The installed plugin's `math_comparator` tool with `{ docker: true, challenge: "ComparatorChallenges/QuasiRiemannHypothesis.json" }` also completed the same challenge and returned `Your solution is okay!` / `COMPARATOR_DOCKER_OK`, confirming the tool routing as well as the CLI wrapper.
 
+For batch and self-hosted verification, see [verification-automation.md](verification-automation.md). Success on this challenge does not claim that all 418 configurations pass.
+
 Rerun:
 
 ```powershell
@@ -121,7 +123,7 @@ Core run: three models, 4 problems, 3 repeats.
 | GLM-5.3-Flash | 12/12, 39.08s | 8/12, 105.01s |
 | GPT-6-Luna | 12/12, 20.89s | 7/12, 38.98s |
 
-Full run: three models, 10 problems, 3 repeats. With plugin **83/90**; without **62/90**.
+Full run: three models, 10 problems, 3 repeats. With plugin **83/90**; without **62/90**. Pooled Wilson 95% intervals: 92.2% (84.8–96.2%) vs 68.9% (58.7–77.5%); descriptive only, not a significance test.
 
 | Model | With plugin | Without plugin |
 | --- | ---: | ---: |

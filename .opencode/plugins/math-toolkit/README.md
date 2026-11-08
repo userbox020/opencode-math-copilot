@@ -39,12 +39,32 @@ Confirm the project-local plugin appears in the list, then use `math_status` in 
 | `math_pdf_text` | Extract bounded text from a manuscript PDF (no OCR). |
 | `math_pdf_search` | Search the extracted text of one manuscript PDF/preprint (bounded pages; no OCR). |
 | `math_pdf_corpus_search` | Search PDF lines across top BM25 manuscript candidates (default 5, maximum 10), grouped by path/page/line. |
+| `math_pdf_index_search` | Search prebuilt PDF excerpts by literal text or regex, grouped by path/page/line (not full text; no OCR). |
 | `math_compute` | Restricted SymPy operations over allowlisted expressions/matrices. |
 | `math_comparator` | Run an existing Comparator challenge JSON. |
 | `math_status` | Report index counts and toolchain availability. |
+| `math_doctor` | Bounded corpus/index/cache, Docker image/volume, host-tool and disk-space health with setup hints; no builds. |
 | `math_reindex` | Rebuild the manuscript index after `math/` changes. |
 
 Use `/math <problem>` to invoke the project command, which loads the `math-workflow` skill. Lean tools are used when formal verification or a Lean statement is requested.
+
+There are 15 tools. The manuscript index is parsed lazily on first use, not during plugin startup.
+
+## PDF cache and excerpt index
+
+Complete PDF extractions are cached under `~/.cache/opencode-math-copilot/pdf`. Set `MATH_TOOLKIT_PDF_CACHE` to override the directory, or `MATH_TOOLKIT_DISABLE_PDF_CACHE=1` to bypass reads and writes. Keys include absolute PDF path, size, modification time, requested pages, character limit and extraction-format version. Invalid/unavailable cache files fall back to extraction; errors and truncated/capped output are never cached. Before writing, oldest entries are pruned to keep at most 500 JSON files / 200 MB.
+
+Build the optional gzip excerpt index from the repo root (requires the corpus and the existing `unpdf` dependency):
+
+```powershell
+node .opencode/plugins/math-toolkit/scripts/build-pdf-index.mjs
+# Quick sample, separate output, machine-readable report:
+node .opencode/plugins/math-toolkit/scripts/build-pdf-index.mjs --pages 1-2 --limit 2 --out pdf-sample.json.gz --json
+```
+
+The default output is `data/pdf-index.json.gz` under the plugin directory. The builder prefers released preprint PDFs, then includes other PDFs outside `.lake/`, `node_modules/` and `.git/`, skipping duplicates and unreadable files. `--pages` defaults to `1-2` and accepts at most 5 distinct positive pages; extraction is bounded to 20000 characters per document. `--limit` caps attempted PDFs; `--math-root` can select a fixture/corpus directory. Progress and skipped-file counts are reported. Reload the plugin after rebuilding an already-loaded excerpt index.
+
+Use `math_pdf_index_search` with `{ "query": "Riemann hypothesis", "limit": 10 }` (`literal: false` enables regex). It searches only prebuilt first-N/selected-page excerpts, **not a full-text corpus**, and performs no OCR. Missing matches do not establish absence from the corpus; use `math_pdf_search` for deeper page lookup. Use `math_doctor` with `{}` to inspect index presence/count/age and cache health without running Lean or building Docker images.
 
 ## Docker Lean execution
 
@@ -84,7 +104,7 @@ npm run index:lean
 
 `index:lean` regenerates the gzip declaration index used when `rg` is unavailable.
 
-Restart OpenCode or reload the project session after rebuilding so the active plugin uses the refreshed index. Check counts with `math_status`.
+Restart OpenCode or reload the project session after external index rebuilds. `math_reindex` invalidates the in-memory manuscript index, which reloads on next use. Check counts with `math_status`.
 
 ## Example session
 
@@ -125,7 +145,9 @@ Paths below are relative to the workspace root:
     main.js                       # Plugin.define + ctx.tool.transform registration
     lib/                          # Tool and corpus helpers
     scripts/build-index.mjs        # Index builder
+    scripts/build-pdf-index.mjs    # Bounded PDF excerpt index builder
     data/math-index.json           # Generated manuscript index
+    data/pdf-index.json.gz         # Optional generated PDF excerpts (no OCR)
     README.md
 .opencode/skills/math-workflow/SKILL.md
 .opencode/commands/math.md

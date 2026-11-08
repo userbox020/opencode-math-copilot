@@ -77,3 +77,5 @@ Run a specific challenge:
 ```powershell
 docker run --rm -it -v opencode-math-lean:/work -e CHALLENGE=ComparatorChallenges/Other.json opencode-math-comparator verify-comparator.sh
 ```
+
+For timed local batches, JSON/Markdown reports, and weekly/manual verification on a self-hosted Linux runner, see [verification automation](../docs/verification-automation.md).

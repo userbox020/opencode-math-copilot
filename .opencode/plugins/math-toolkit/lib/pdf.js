@@ -1,10 +1,56 @@
 import fs from "node:fs";
 import path from "node:path";
+import os from "node:os";
+import { createHash, randomUUID } from "node:crypto";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { mathPath, relativeMath, safePath } from "./paths.js";
 
 const MAX_BYTES = 80 * 1024 * 1024;
 const MAX_PAGES = 50;
+
+export function pdfCacheDirectory() {
+  return process.env.MATH_TOOLKIT_PDF_CACHE || path.join(os.homedir(), ".cache", "opencode-math-copilot", "pdf");
+}
+
+function cacheLocation(filename, stat, pages, maxChars) {
+  if (process.env.MATH_TOOLKIT_DISABLE_PDF_CACHE === "1") return null;
+  const key = JSON.stringify({ path: path.resolve(filename), size: stat.size, mtimeMs: stat.mtimeMs, pages: pages ?? null, maxChars, format: "pdf-text-v1" });
+  return { key, file: path.join(pdfCacheDirectory(), createHash("sha256").update(key).digest("hex") + ".json") };
+}
+
+function readCache(cache) {
+  if (!cache) return null;
+  try {
+    const value = JSON.parse(fs.readFileSync(cache.file, "utf8"));
+    return value.key === cache.key && typeof value.text === "string" && value.text.startsWith("# PDF text:") ? value.text : null;
+  } catch { return null; }
+}
+
+function writeCache(cache, text) {
+  if (!cache) return;
+  let temporary;
+  try {
+    const directory = path.dirname(cache.file);
+    fs.mkdirSync(directory, { recursive: true });
+    const content = JSON.stringify({ key: cache.key, text });
+    const entries = fs.readdirSync(directory, { withFileTypes: true })
+      .filter(entry => entry.isFile() && /^[a-f0-9]{64}\.json$/.test(entry.name))
+      .map(entry => { const file = path.join(directory, entry.name); return { file, ...fs.statSync(file) }; })
+      .sort((a, b) => a.mtimeMs - b.mtimeMs);
+    let bytes = entries.reduce((sum, entry) => sum + entry.size, 0) + Buffer.byteLength(content);
+    let count = entries.length + 1;
+    for (const entry of entries) {
+      if (count <= 500 && bytes <= 200 * 1024 * 1024) break;
+      fs.unlinkSync(entry.file);
+      bytes -= entry.size;
+      count--;
+    }
+    temporary = cache.file + `.${randomUUID()}.tmp`;
+    fs.writeFileSync(temporary, content, { flag: "wx" });
+    fs.renameSync(temporary, cache.file);
+  } catch { /* Cache failures must never prevent extraction. */ }
+  finally { if (temporary) { try { fs.unlinkSync(temporary); } catch { /* Already renamed or unavailable. */ } } }
+}
 
 function clipOutput(text, limit) {
   if (text.length <= limit) return text;
@@ -12,7 +58,7 @@ function clipOutput(text, limit) {
   return text.slice(0, limit - note.length) + note;
 }
 
-function resolvePdf(roots, requested) {
+export function resolvePdf(roots, requested) {
   let filename = mathPath(roots, requested);
   if (!fs.existsSync(filename)) {
     const preprints = mathPath(roots, "preprints");
@@ -111,16 +157,18 @@ async function loadPdfEngine() {
 export async function pdfText(roots, args = {}) {
   const { path: requested, pages, maxChars = 12000 } = args;
   if (!Number.isInteger(maxChars) || maxChars < 1000 || maxChars > 50000) return "PDF extraction error: maxChars must be an integer between 1000 and 50000.";
-  const engine = await loadPdfEngine();
-  if (!engine) {
-    return "PDF extraction error: the `unpdf` package is not installed. Run `npm install` in the repo root (or `.opencode`), then reload the plugin.";
-  }
   let pdf;
   let destroyPdf;
   try {
     if (typeof requested !== "string" || !requested.trim()) throw new Error("Provide a PDF path relative to math/, a preprint directory, or a unique title substring.");
     const filename = resolvePdf(roots, requested);
-    if (fs.statSync(filename).size > MAX_BYTES) throw new Error("PDF exceeds the 80 MB extraction limit. Provide a smaller PDF.");
+    const stat = fs.statSync(filename);
+    if (stat.size > MAX_BYTES) throw new Error("PDF exceeds the 80 MB extraction limit. Provide a smaller PDF.");
+    const cache = cacheLocation(filename, stat, pages, maxChars);
+    const cached = readCache(cache);
+    if (cached !== null) return cached;
+    const engine = await loadPdfEngine();
+    if (!engine) throw new Error("the `unpdf` package is not installed. Run `npm install` in the repo root (or `.opencode`), then reload the plugin.");
     const data = new Uint8Array(fs.readFileSync(filename));
     if (engine.getDocumentProxy) {
       pdf = await engine.getDocumentProxy(data);
@@ -148,6 +196,11 @@ export async function pdfText(roots, args = {}) {
       output += `\n## Page ${number}\n\n${text || "No extractable text found on this page; it may be scanned or image-only. No OCR was performed."}\n`;
       if (output.length > maxChars) break;
     }
+    // Do not persist truncated, capped, failed, or concurrently changed documents.
+    await destroyPdf();
+    destroyPdf = null;
+    const after = fs.statSync(filename);
+    if (!selection.capped && output.length <= maxChars && after.size === stat.size && after.mtimeMs === stat.mtimeMs) writeCache(cache, output);
     return clipOutput(output, maxChars);
   } catch (error) {
     let message = error?.message || String(error);
@@ -158,6 +211,6 @@ export async function pdfText(roots, args = {}) {
     }
     return clipOutput(`PDF extraction error: ${message}`, maxChars);
   } finally {
-    if (destroyPdf) await destroyPdf();
+    if (destroyPdf) { try { await destroyPdf(); } catch { /* Preserve the extraction error. */ } }
   }
 }

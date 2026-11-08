@@ -4,10 +4,12 @@ import os from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { gzipSync } from "node:zlib";
 import plugin from "../../math-toolkit.js";
 import { createSearch } from "../lib/search.js";
 import { pdfText } from "../lib/pdf.js";
 import { pdfCorpusSearch, pdfSearch } from "../lib/pdf-search.js";
+import { createPdfIndexReader, pdfIndexSearch, PDF_INDEX_BUILD } from "../lib/pdf-index.js";
 import { searchLean } from "../lib/lean-search.js";
 import { leanCheck, comparator } from "../lib/lean.js";
 import { findExecutable, resolveRoots, safePath } from "../lib/paths.js";
@@ -32,6 +34,13 @@ assert(search({ query: "family:003 has:lean", limit: 20 }).every(r => r.manuscri
 assert.equal(plugin.id, "math-toolkit");
 assert.equal(typeof plugin.setup, "function");
 const tools = new Map();
+const originalReadFile = fs.readFileSync;
+let manuscriptIndexReads = 0;
+fs.readFileSync = function (filename, ...args) {
+  if (String(filename).endsWith("math-index.json")) manuscriptIndexReads++;
+  return originalReadFile.call(this, filename, ...args);
+};
+try {
 await plugin.setup({
   location: { directory: workspace, project: { directory: workspace } },
   tool: {
@@ -47,8 +56,21 @@ await plugin.setup({
     },
   },
 });
-assert.equal(tools.size, 13);
+assert.equal(manuscriptIndexReads, 0, "Plugin startup must not parse the manuscript index");
+await tools.get("math_search").execute({ query: "Riemann" });
+await tools.get("math_search").execute({ query: "Riemann" });
+assert.equal(manuscriptIndexReads, 1, "First use loads the index once");
+} finally { fs.readFileSync = originalReadFile; }
+assert.equal(tools.size, 15);
 console.log(`PASS: ${tools.size} registered tools.`);
+assert.deepEqual(tools.get("math_doctor").input, { type: "object", properties: {}, additionalProperties: false });
+const excerptSchema = tools.get("math_pdf_index_search").input;
+assert.deepEqual(excerptSchema.required, ["query"]);
+assert.equal(excerptSchema.properties.limit.default, 10);
+assert.equal(excerptSchema.properties.limit.maximum, 20);
+assert.equal(excerptSchema.properties.literal.default, true);
+assert.equal(excerptSchema.additionalProperties, false);
+assert.equal(excerptSchema.properties.path, undefined);
 const corpusSchema = tools.get("math_pdf_corpus_search").input;
 assert.deepEqual(corpusSchema.required, ["query"]);
 assert.equal(corpusSchema.properties.candidates.maximum, 10);
@@ -138,6 +160,89 @@ assert.match(fixtureSearch, /page 1, line \d+/i, fixtureSearch);
 assert.match(await pdfSearch({ math: path.join(workspace, "test/fixtures"), workspace }, {
   path: "overview.pdf", query: "[", pages: "1", literal: false,
 }), /Invalid regex/i);
+
+const cacheFixture = fs.mkdtempSync(path.join(os.tmpdir(), "math-toolkit-pdf-cache-"));
+const cacheEnv = Object.fromEntries(["MATH_TOOLKIT_PDF_CACHE", "MATH_TOOLKIT_DISABLE_PDF_CACHE"].map(name => [name, process.env[name]]));
+try {
+  const filename = path.join(cacheFixture, "sample.pdf");
+  fs.copyFileSync(path.join(workspace, "test/fixtures/overview.pdf"), filename);
+  process.env.MATH_TOOLKIT_PDF_CACHE = path.join(cacheFixture, "cache");
+  delete process.env.MATH_TOOLKIT_DISABLE_PDF_CACHE;
+  const roots = { math: cacheFixture, workspace: cacheFixture };
+  const args = { path: "sample.pdf", pages: "1", maxChars: 50000 };
+  let reads = 0;
+  fs.readFileSync = function (file, ...options) {
+    if (file === filename) reads++;
+    return originalReadFile.call(this, file, ...options);
+  };
+  const first = await pdfText(roots, args);
+  assert.match(first, /## Page 1/);
+  assert.doesNotMatch(first, /Output truncated/);
+  assert.equal(reads, 1);
+  assert.equal(await pdfText(roots, args), first);
+  assert.equal(reads, 1, "Cache hit must avoid reading/re-extracting the PDF");
+  const cacheFiles = () => fs.readdirSync(process.env.MATH_TOOLKIT_PDF_CACHE).filter(name => name.endsWith(".json"));
+  assert.equal(cacheFiles().length, 1);
+  const stat = fs.statSync(filename);
+  fs.utimesSync(filename, stat.atime, new Date(stat.mtimeMs + 5000));
+  assert.equal(await pdfText(roots, args), first);
+  assert.equal(reads, 2, "Changed mtime must miss the cache");
+  assert.equal(cacheFiles().length, 2);
+  process.env.MATH_TOOLKIT_DISABLE_PDF_CACHE = "1";
+  assert.equal(await pdfText(roots, args), first);
+  assert.equal(reads, 3, "Disable flag must bypass cache reads");
+  assert.equal(cacheFiles().length, 2, "Disable flag must bypass writes");
+  delete process.env.MATH_TOOLKIT_DISABLE_PDF_CACHE;
+  for (const file of cacheFiles()) fs.writeFileSync(path.join(process.env.MATH_TOOLKIT_PDF_CACHE, file), "invalid json");
+  assert.equal(await pdfText(roots, args), first);
+  assert.equal(reads, 4, "Corrupt cache must fall back to extraction");
+  const truncated = await pdfText(roots, { ...args, pages: "1-2", maxChars: 1000 });
+  assert.match(truncated, /Output truncated/);
+  assert.equal(cacheFiles().length, 2, "Partial output must not be cached");
+  fs.writeFileSync(path.join(cacheFixture, "broken.pdf"), "not a pdf");
+  assert.match(await pdfText(roots, { ...args, path: "broken.pdf" }), /PDF extraction error/);
+  assert.equal(cacheFiles().length, 2, "Errors must not be cached");
+  process.env.MATH_TOOLKIT_PDF_CACHE = filename; // Not a directory: writes fail harmlessly.
+  assert.equal(await pdfText(roots, args), first);
+  console.log("PASS: PDF cache hits, disable flag, stale mtime, corrupt/inaccessible cache fallback, and no partial/error caching.");
+} finally {
+  fs.readFileSync = originalReadFile;
+  for (const [name, value] of Object.entries(cacheEnv)) {
+    if (value === undefined) delete process.env[name]; else process.env[name] = value;
+  }
+  fs.rmSync(cacheFixture, { recursive: true, force: true });
+}
+
+const excerptFixture = fs.mkdtempSync(path.join(os.tmpdir(), "math-toolkit-pdf-index-"));
+try {
+  const filename = path.join(excerptFixture, "pdf-index.json.gz");
+  const getIndex = createPdfIndexReader(filename);
+  const missing = pdfIndexSearch({ query: "alpha" }, getIndex);
+  assert.match(missing, /PDF excerpt index unavailable/);
+  assert(missing.includes(PDF_INDEX_BUILD));
+  const fixture = { version: 1, generatedAt: "2026-01-01T00:00:00.000Z", counts: { documents: 2, pages: 3, chars: 40 }, documents: [
+    { path: "preprints/one.pdf", pages: [{ page: 1, text: "Alpha.*\nAlpha beta" }, { page: 2, text: "Other\nALPHA gamma" }] },
+    { path: "two.pdf", pages: [{ page: 1, text: "Alpha delta" }] },
+  ] };
+  fs.writeFileSync(filename, gzipSync(JSON.stringify(fixture)));
+  const literal = pdfIndexSearch({ query: "Alpha.*" }, getIndex);
+  assert.match(literal, /Index version: 1; documents: 2; pages: 3; chars: 40/);
+  assert.equal((literal.match(/- page /g) || []).length, 1);
+  assert.match(literal, /## preprints\/one.pdf[\s\S]*page 1, line 1: Alpha\.\*/);
+  const regex = pdfIndexSearch({ query: "alpha (beta|gamma|delta)", literal: false }, getIndex);
+  assert.equal((regex.match(/- page /g) || []).length, 3);
+  assert.match(regex, /page 2, line 2: ALPHA gamma/);
+  assert.match(regex, /## two.pdf/);
+  const limited = pdfIndexSearch({ query: "alpha", limit: 2 }, getIndex);
+  assert.equal((limited.match(/- page /g) || []).length, 2);
+  assert.match(limited, /Showing the first 2 matches/);
+  assert.match(pdfIndexSearch({ query: "absent" }, getIndex), /No matches/);
+  assert.match(pdfIndexSearch({ query: "[", literal: false }, getIndex), /Invalid regex/);
+  for (const args of [{}, { query: " " }, { query: "a", limit: 21 }, { query: "a", limit: 0 }, { query: "a", literal: "true" }]) assert.match(pdfIndexSearch(args, getIndex), /Usage error/);
+  fs.unlinkSync(filename);
+  assert.equal(pdfIndexSearch({ query: "Alpha.*" }, getIndex), literal, "Reader must cache the parsed gzip index lazily");
+  console.log("PASS: lazy PDF excerpt gzip reader, missing index command, literal/regex search, grouping and limits.");
+} finally { fs.rmSync(excerptFixture, { recursive: true, force: true }); }
 
 const corpusFixture = fs.mkdtempSync(path.join(os.tmpdir(), "math-toolkit-pdf-corpus-"));
 try {
@@ -300,6 +405,18 @@ try {
   const absent = await call("math_status");
   assert(absent.includes("Manuscripts: 721"));
   assert(absent.includes("lake: not found on PATH"));
+  const health = await call("math_doctor");
+  assert.match(health, /# Math toolkit doctor/);
+  assert.match(health, /Corpus clone path:/);
+  assert.match(health, /Manuscript counts:.*"manuscripts":721/);
+  assert.match(health, /Lean declaration index:.*bytes/);
+  assert.match(health, /PDF cache:/);
+  assert.match(health, /PDF excerpt index:/);
+  assert.match(health, /Docker executable: missing/);
+  assert.match(health, /Comparator tools volume/);
+  assert.match(health, /lake: not found/);
+  assert.match(health, /Disk space/);
+  assert(health.length <= 16000);
   assert.match(await call("math_lean_check", { code: "example : True := by trivial" }), /install elan\/Lean/i);
   assert.match(await call("math_lean_check", { docker: true, code: "example : True := by trivial" }), /docker was not found on PATH.*Install Docker/i);
 } finally {

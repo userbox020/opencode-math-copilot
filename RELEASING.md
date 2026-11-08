@@ -60,3 +60,7 @@ For a global Git install, use `opencode plugin update` or reinstall the Git spec
 - The supported installs are project-local discovery and the global Git spec.
 - `opencode plugin add` accepts npm registry or Git package specs, not local tarballs.
 - Keep `opencode plugin add github:userbox020/opencode-math-copilot` as the no-auth global path.
+
+## Release workflow
+
+After merging the version bump and changelog into `main`, run the [Release workflow](https://github.com/userbox020/opencode-math-copilot/actions/workflows/release.yml) from `main` with the package version. It runs the checks and creates the annotated tag and GitHub release; it does not publish to npm.

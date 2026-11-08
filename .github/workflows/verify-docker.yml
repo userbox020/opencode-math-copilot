@@ -1,0 +1,75 @@
+name: Verify Docker Comparator
+
+on:
+  workflow_dispatch:
+    inputs:
+      challenge:
+        description: 'Challenge name/path; leave blank for a sorted batch'
+        type: string
+        default: QuasiRiemannHypothesis
+      limit:
+        description: 'Maximum challenges (0 = all matching); default is one'
+        type: string
+        default: '1'
+  schedule:
+    - cron: '23 3 * * 0'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-docker-comparator
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: [self-hosted, linux, x64]
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify runner prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker info
+          command -v pwsh
+      - name: Build Docker images
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker build -f docker/lean.Dockerfile -t opencode-math-lean .
+          docker build -f docker/comparator.Dockerfile -t opencode-math-comparator .
+      - name: Initialize persistent corpus and tool volumes
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker volume create opencode-math-lean
+          docker volume create opencode-comparator-tools
+          docker run --rm -v opencode-math-lean:/work -e SKIP_BUILD=1 opencode-math-lean verify-lean.sh
+          # Enumerate precisely the same challenge configs as the cached corpus.
+          mkdir -p math/lean
+          docker run --rm -v opencode-math-lean:/work:ro opencode-math-lean \
+            tar -C /work/math/lean -cf - ComparatorChallenges | tar -C math/lean -xf -
+      - name: Verify selected challenges
+        if: runner.os == 'Linux'
+        shell: pwsh
+        env:
+          REQUESTED_CHALLENGE: ${{ inputs.challenge }}
+          REQUESTED_LIMIT: ${{ inputs.limit }}
+        run: |
+          $challenge = 'QuasiRiemannHypothesis'
+          $limit = 1
+          if ($env:GITHUB_EVENT_NAME -eq 'workflow_dispatch') {
+            $challenge = $env:REQUESTED_CHALLENGE
+            if (-not [string]::IsNullOrWhiteSpace($env:REQUESTED_LIMIT)) {
+              $limit = [int]$env:REQUESTED_LIMIT
+            }
+          }
+          ./scripts/verify-challenges.ps1 -Challenge $challenge -Limit $limit -TimeoutSeconds 18000
+      - name: Upload verification reports and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: challenge-verification
+          path: artifacts/challenge-verification
+          if-no-files-found: warn

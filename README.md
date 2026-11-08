@@ -57,6 +57,7 @@ Tools are also available directly in Code Mode:
 
 ```js
 tools.math_status({})
+tools.math_doctor({})
 tools.math_search({ query: "Riemann hypothesis", limit: 5 })
 tools.math_search({ query: "family:003 has:lean", limit: 10 })
 tools.math_manuscript({ path: "preprints/The-Quasi-Riemann-Hypothesis-September-30-2026", section: "Introduction" })
@@ -67,6 +68,7 @@ tools.math_lean_search({ query: "linearizedMA_critical_density" })
 tools.math_pdf_text({ path: "overview.pdf", pages: "1-3" })
 tools.math_pdf_search({ path: "overview.pdf", query: "Research Catalog", pages: "1" })
 tools.math_pdf_corpus_search({ query: "Riemann hypothesis", candidates: 5, pages: "1-2", limit: 10 })
+tools.math_pdf_index_search({ query: "Riemann hypothesis", limit: 10 })
 tools.math_compute({ operation: "simplify", expression: "sin(x)^2 + cos(x)^2" })
 tools.math_compute({ operation: "det", matrix: [[1, 2], [3, 4]] })
 tools.math_comparator({ challenge: "QuasiRiemannHypothesis" })
@@ -86,10 +88,14 @@ tools.math_reindex({})
 | `math_pdf_text` | Extract bounded text from a manuscript PDF (no OCR). |
 | `math_pdf_search` | Search the extracted text of one manuscript PDF/preprint (bounded pages; no OCR). |
 | `math_pdf_corpus_search` | Search PDF lines across top BM25 manuscript candidates (default 5, maximum 10), grouped by path/page/line. |
+| `math_pdf_index_search` | Search prebuilt selected-page excerpts (default first 2 pages, max 5 / 20000 chars per PDF); no OCR, not full text. Use `math_pdf_search` for deeper lookup. |
 | `math_compute` | Restricted SymPy operations: simplify, factor, expand, solve, diff, integrate, limit, series, evalf, det, eigenvalues. |
 | `math_comparator` | Run an existing Comparator challenge JSON. |
 | `math_status` | Index counts and PATH availability for Lean/LaTeX/Python/rg/SymPy. |
+| `math_doctor` | Corpus/index/cache, Docker images/volumes, host tools and disk-space health; no Lean checks or builds. |
 | `math_reindex` | Rebuild the index after `math/` changes. |
+
+PDF discovery example (15 tools total): the committed excerpt index covers **789 PDFs / 1,548 pages / 1.46 MB gzip**; rebuild it with `npm run index:pdf`, then call `math_pdf_index_search` above. Complete extractions share a persistent cache (500 entries / 200 MB; `MATH_TOOLKIT_PDF_CACHE` overrides the directory, `MATH_TOOLKIT_DISABLE_PDF_CACHE=1` disables it). See the [plugin guide](.opencode/plugins/math-toolkit/README.md#pdf-cache-and-excerpt-index) for index/cache limits.
 
 ## How it works
 
@@ -122,7 +128,7 @@ await tools.math_reindex({})
 
 `index:lean` writes the gzip declaration index used when `rg` is unavailable.
 
-**Refresh indexes:** Run `scripts/refresh-indexes.ps1` to update the corpus and both indexes, or download the weekly workflow artifacts. See [index refresh](docs/index-refresh.md) for review and commit steps.
+**Refresh indexes:** Run `scripts/refresh-indexes.ps1` to update the corpus and both indexes, or download the weekly workflow artifacts. See [index refresh](docs/index-refresh.md) for review and commit steps. See also [troubleshooting](docs/troubleshooting.md), [verification automation](docs/verification-automation.md), and the [security policy](SECURITY.md).
 
 ## Test and check
 
@@ -159,7 +165,7 @@ docker run --rm -it -v opencode-math-lean:/work `
 
 The focused module builds successfully (9,201 jobs under Lean 4.34.1). The full `OAI.Analysis` target is far larger (~18k modules) and may take many hours. See `docs/verification.md`.
 
-The Comparator layer is in `docker/comparator.Dockerfile`. Comparator/lean4export build, but the standalone Comparator pulled Lean 4.35.0 and cannot read the corpus’s 4.34.1 `.olean` (`incompatible header`); this is an unresolved version-pin blocker, not a verification pass.
+The Comparator layer is in `docker/comparator.Dockerfile`. Comparator v4.34.0 is built with Lean 4.34.1, and the eleven-module `rellich-kondrachov` compatibility patch is applied idempotently. The `QuasiRiemannHypothesis` challenge passes: 7,075 solution modules, `Your solution is okay!`, and `COMPARATOR_DOCKER_OK`. See `docs/verification.md` and the batch/self-hosted setup in `docs/verification-automation.md`.
 
 **Native Windows** is still supported by `scripts/setup-lean.ps1`, which normalizes the corpus patch files to LF and runs `lake exe cache get`. It is not enough for a full build:
 

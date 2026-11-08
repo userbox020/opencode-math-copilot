@@ -13,18 +13,24 @@ A portable, project-local OpenCode math plugin. It indexes the `openai/math` cor
   lib/                                     # search, corpus, Lean, PDF, SymPy, paths
   scripts/build-index.mjs                  # corpus index builder
   scripts/build-lean-index.mjs             # Lean declaration index builder
+  scripts/build-pdf-index.mjs              # PDF excerpt index builder
   scripts/math_compute.py                  # allowlisted SymPy worker
   scripts/test-*.mjs                       # portable tests
   data/math-index.json                     # generated; do not hand-edit
   data/lean-index.json.gz                  # generated Lean index; do not hand-edit
+  data/pdf-index.json.gz                   # generated PDF excerpts; do not hand-edit
 .opencode/skills/math-workflow/SKILL.md
 .opencode/commands/math.md
 scripts/setup-lean.ps1                     # native Windows patch normalization + cache
 scripts/lean-docker.ps1                    # Docker Lean wrapper
+scripts/verify-challenges.ps1              # batch Comparator verification
 docker/                                     # Linux Lean + Comparator images
 docs/comparator-wsl.md                     # Linux/WSL Comparator constraints
+docs/verification-automation.md            # batch/self-hosted verification
+docs/troubleshooting.md                    # install/cache/Docker recovery
 test/fixtures/                              # portable PDF/Lean fixtures
 bench/                                      # with/without plugin harness
+bench/analyze.mjs                           # Wilson/CI benchmark analysis
 ```
 
 The implementation directory deliberately has `main.js`, not `index.js`, so OpenCode does not discover it as a second plugin. Keep `math-toolkit.js` as the single plugin entry.
@@ -42,15 +48,17 @@ npm install
 npm test
 npm run check
 npm run bench          # model inference; optional
+npm run bench:analyze  # analyze saved benchmark results
 npm run index          # corpus index; requires a math/ clone
 npm run index:lean     # Lean declaration index; requires math/lean
+npm run index:pdf      # PDF excerpt index; requires a math/ clone
 opencode.cmd reload    # after changing the plugin or index
 opencode.cmd plugin list
 ```
 
 `math/` is ignored and is not committed. The prebuilt `data/math-index.json` keeps `math_search` usable without the 3.3 GB clone; manuscript reads, `math_grep`, PDF extraction, Lean search, and Lean tools require `math/CONTENTS.md`.
 
-New tools: `math_lean_search`, `math_pdf_text`, `math_pdf_search`, `math_compute`. `math_lean_search` uses `rg` when available, then the 21.9 MB gzip `lean-index.json.gz`, then a bounded Node walk. `math_pdf_text`/`math_pdf_search` use `unpdf`; `math_compute` uses the fixed `math_compute.py` allowlist, never raw `sympify`. Lean tools accept `docker: true` for the Linux Docker volume.
+Fifteen tools total. `math_pdf_corpus_search` scans top BM25 candidates; `math_pdf_index_search` reads the prebuilt `pdf-index.json.gz` (789 PDFs / 1,548 selected pages / ~1.46 MB gzip; default first 2 pages, no OCR); `math_doctor` reports corpus/index/cache/Docker/toolchain/disk health. `math_lean_search` uses `rg`, then the 21.9 MB gzip `lean-index.json.gz`, then a bounded Node walk. PDF extraction uses `unpdf` with a persistent cache (500 entries / 200 MB; `MATH_TOOLKIT_PDF_CACHE` / `MATH_TOOLKIT_DISABLE_PDF_CACHE`). `math_compute` uses the fixed `math_compute.py` allowlist, never raw `sympify`. Lean tools accept `docker: true` for the Linux Docker volume.
 
 ## Docker Lean
 
