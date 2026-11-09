@@ -57,8 +57,10 @@ For each `(task, profile, repeat, attempt)`:
 
 ## Current blockers
 
-- The adapter audit is static-equivalent. `/api/agent` returns an empty list for the staged config-defined agent and does not prove the effective tool catalog; no non-inference runtime proof was found. Until one exists, `--execute` refuses.
-- Model(s), spend cap, per-episode budgets, repeats, cache regime, and owner task sign-off are not yet supplied.
+- The inventory audit is now `runtime-plugin-load`: the real server loads the staged `.js` plugin after `/api/config`, and static permissions/registrations match. `/api/agent` still does not expose a filtered catalog snapshot; this is not an OS sandbox.
+- **Provider route:** the isolated HOME exposes `opencode/deepseek-v4.1-flash-free`, but its free quota returned `provider.quota`; `opencode-go/deepseek-v4.1-flash` is not registered. `opencode models --standalone` is now a required preflight. A working isolated subscription/provider configuration or a different model is needed.
+- Auth/account provisioning into the external home and `opencode session export` usage recovery are implemented. No real episode has been run.
+- Model(s), spend cap, per-episode budgets, repeats, cache regime, and owner task sign-off are not yet supplied. The owner selected DeepSeek Flash / 90 episodes / $25, but that route is unavailable in isolation.
 - The evaluator bridge is not an independent kernel check, signature, or OS sandbox.
 
 Until those are resolved, only dry-runs and non-inference engineering smokes are permitted.

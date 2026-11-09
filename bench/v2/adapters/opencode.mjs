@@ -1,5 +1,6 @@
 import { spawnSync } from 'node:child_process';
-import { existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { COMMON_PROMPT, ROOT, assert, assertWorkspace, json, loadProfiles, parseArgs, prepareWorkspace, serialize, sha256 } from '../lib.mjs';
@@ -74,6 +75,22 @@ function stageGenericPlugin(directory, files) {
   put(directory, '.opencode/plugins/generic/compute.py', readFileSync(path.join(REPO, '.opencode/plugins/math-toolkit/scripts/math_compute.py')), files);
   stageDependencies(directory, files, ['@opencode/plugin']);
   return '.opencode/plugins/generic-tools.js';
+}
+
+// Provider infrastructure plugin (not a math tool). It is a package resolved
+// from the staged workspace node_modules; the agent permissions still deny any
+// tools it may register beyond the profile inventory.
+function stageProviderPlugin(directory, files, environment) {
+  const source = environment.MATH_BENCH_PROVIDER_PLUGIN;
+  if (!source) return null;
+  assert(typeof source === 'string' && existsSync(path.join(source, 'package.json')), 'MATH_BENCH_PROVIDER_PLUGIN must be a package directory');
+  const metadata = json(path.join(source, 'package.json'));
+  assert(typeof metadata.name === 'string' && /^(@[a-z0-9._-]+\/)?[a-z0-9._-]+$/i.test(metadata.name), 'Invalid provider plugin package name');
+  copyTree(source, `node_modules/${metadata.name}`, directory, files);
+  let options;
+  try { options = JSON.parse(environment.MATH_BENCH_PROVIDER_OPTIONS ?? '{}'); }
+  catch { throw new Error('MATH_BENCH_PROVIDER_OPTIONS must be JSON'); }
+  return { package: metadata.name, options };
 }
 
 function stageDependencies(directory, files, names) {
@@ -154,6 +171,7 @@ export function prepareEpisode({ task, profile, model, executable, environment =
   const safeTask = sanitizeTask(task);
   const prepared = prepareWorkspace(safeTask, profile);
   const directory = prepared.directory;
+  let externalHome = null;
   try {
     // Reuse the v2 exact public-file audit before adding adapter-controlled runtime assets.
     assertWorkspace(directory, prepared.files);
@@ -163,20 +181,40 @@ export function prepareEpisode({ task, profile, model, executable, environment =
     const config = buildConfig(profile);
     const plugin = profile.id === 'F' ? stagePlugin(directory, files) : profile.id === 'B' ? stageGenericPlugin(directory, files) : null;
     if (profile.id === 'B') assert(JSON.stringify(profile.effective_tools) === JSON.stringify(GENERIC_TOOL_NAMES), 'Generic plugin inventory mismatch');
+    const provider = stageProviderPlugin(directory, files, environment);
+    if (provider) config.plugins.push({ package: provider.package, options: provider.options });
     // Project discovery is confined to this fresh workspace; the staged .opencode/plugins
     // directory is auto-discovered. No global config is present in the redirected HOME.
-    assert(config.plugins.length === 0, 'Explicit plugin entries are not used; staged discovery is authoritative');
+    assert(config.plugins.length === (provider ? 1 : 0), 'Explicit plugin entries are limited to the staged provider package');
     put(directory, '.opencode/opencode.json', serialize(config), files);
+    externalHome = mkdtempSync(path.join(os.tmpdir(), 'math-eval-home-'));
+    for (const sub of ['data/opencode', 'config', 'cache', 'state', 'tmp', 'roaming', 'local']) mkdirSync(path.join(externalHome, sub), { recursive: true });
+    const authFile = environment.MATH_BENCH_AUTH_FILE;
+    let authProvisioned = false, accountProvisioned = false;
+    if (authFile) {
+      assert(typeof authFile === 'string' && existsSync(authFile) && lstatSync(authFile).isFile(), 'MATH_BENCH_AUTH_FILE must be an existing regular file');
+      copyFileSync(authFile, path.join(externalHome, 'data/opencode/auth.json'));
+      authProvisioned = true;
+      const accountFile = path.join(path.dirname(authFile), 'account.json');
+      if (existsSync(accountFile) && lstatSync(accountFile).isFile()) {
+        copyFileSync(accountFile, path.join(externalHome, 'data/opencode/account.json'));
+        accountProvisioned = true;
+      }
+    }
     const env = {};
     for (const [key, aliases] of Object.entries({ PATH: ['PATH', 'Path'], PATHEXT: ['PATHEXT'], SystemRoot: ['SystemRoot', 'SYSTEMROOT'], WINDIR: ['WINDIR'], COMSPEC: ['COMSPEC', 'ComSpec'] })) {
       const value = aliases.map(alias => environment[alias]).find(Boolean);
       if (value) env[key] = value;
     }
     Object.assign(env, prepared.environment, {
-      XDG_DATA_HOME: path.join(directory, 'home/data'), XDG_STATE_HOME: path.join(directory, 'home/state'),
-      APPDATA: path.join(directory, 'home/roaming'), LOCALAPPDATA: path.join(directory, 'home/local'),
-      TMP: path.join(directory, 'tmp'), TEMP: path.join(directory, 'tmp'),
-      OPENCODE_CONFIG_DIR: path.join(directory, 'home/config'),
+      HOME: externalHome, USERPROFILE: externalHome,
+      XDG_CONFIG_HOME: path.join(externalHome, 'config'),
+      XDG_DATA_HOME: path.join(externalHome, 'data'),
+      XDG_STATE_HOME: path.join(externalHome, 'state'),
+      XDG_CACHE_HOME: path.join(externalHome, 'cache'),
+      APPDATA: path.join(externalHome, 'roaming'), LOCALAPPDATA: path.join(externalHome, 'local'),
+      TMP: path.join(externalHome, 'tmp'), TEMP: path.join(externalHome, 'tmp'), TMPDIR: path.join(externalHome, 'tmp'),
+      OPENCODE_CONFIG_DIR: path.join(externalHome, 'config'),
       OPENCODE_CONFIG: path.join(directory, '.opencode/opencode.json'),
       MATH_TOOLKIT_DISABLE_EXTRAS: '1', MATH_TOOLKIT_DISABLE_PDF_CACHE: '1',
     });
@@ -191,13 +229,15 @@ export function prepareEpisode({ task, profile, model, executable, environment =
       inventory_supported: profile.id === 'B', runtime_inventory_status: 'unverified',
       transport_tools: profile.id !== 'A' ? ['execute'] : [],
       core_tools: profile.id === 'F' ? [...F_CORE_TOOLS] : [],
-      plugin, files, hashes: { public_payload: prepared.payloadHash, public_task: sha256(prepared.files['task.json']), profile: sha256(profile), config: sha256(config), workspace_tree: sha256(files) },
+      plugin, files, home: externalHome, auth_provisioned: authProvisioned, account_provisioned: accountProvisioned,
+      provider_plugin: provider?.package ?? null,
+      hashes: { public_payload: prepared.payloadHash, public_task: sha256(prepared.files['task.json']), profile: sha256(profile), config: sha256(config), workspace_tree: sha256(files) },
       supported: unsupportedReasons(profile).length === 0, diagnostics: unsupportedReasons(profile),
-      isolation: { fresh_workspace: true, environment_allowlist: true, prior_session: false, global_config: 'redirected; runtime audit pending', os_sandbox: false },
+      isolation: { fresh_workspace: true, external_home: true, auth_provisioned: authProvisioned, environment_allowlist: true, prior_session: false, global_config: 'redirected; runtime audit pending', os_sandbox: false },
     };
     assertPreparedWorkspace(plan);
     return plan;
-  } catch (error) { rmSync(directory, { recursive: true, force: true }); throw error; }
+  } catch (error) { rmSync(directory, { recursive: true, force: true }); if (externalHome) rmSync(externalHome, { recursive: true, force: true }); throw error; }
 }
 
 // Recognizes the text/step_finish NDJSON envelope only. Unknown installed CLI formats
@@ -238,17 +278,51 @@ export function parseOutput(stdout) {
     assert(finalText.trim(), 'Missing final assistant text');
     const final = JSON.parse(finalText);
     assert(final && !Array.isArray(final) && typeof final === 'object' && typeof final.type === 'string', 'Missing typed JSON final');
-    return { status: 'candidate_ready', final, final_text: finalText, events, usage, usage_source: usage ? 'unvalidated-cli-events' : 'unavailable-no-step-finish', error: null };
+    const sessionID = events.find(event => typeof event.sessionID === 'string')?.sessionID ?? null;
+    return { status: 'candidate_ready', final, final_text: finalText, events, usage, usage_source: usage ? 'unvalidated-cli-events' : 'unavailable-no-step-finish', session_id: sessionID, error: null };
   } catch (error) {
-    return { status: 'extraction_failure', final: null, final_text: null, events, usage: null, error: error.message };
+    return { status: 'extraction_failure', final: null, final_text: null, events, usage: null, session_id: events.find(event => typeof event.sessionID === 'string')?.sessionID ?? null, error: error.message };
   }
+}
+
+// Non-inference provider preflight. Lists models with the staged environment;
+// the exact requested model must appear before any episode is dispatched.
+export function modelsAvailable(plan, model, { invoke = spawnSync, timeoutMs = 60000 } = {}) {
+  const result = invoke(plan.command.executable, ['models', '--standalone'], {
+    cwd: plan.workspace, env: plan.environment, shell: false, windowsHide: true, timeout: timeoutMs, maxBuffer: 8 * 1024 * 1024,
+  });
+  if (result.error || result.status !== 0) return { available: false, error: result.error?.message ?? `models exit ${result.status}` };
+  const text = `${String(result.stdout ?? '')}\n${String(result.stderr ?? '')}`;
+  const available = text.split(/\r?\n/).some(line => line.trim() === model);
+  return { available, error: available ? null : `model not listed: ${model}`, output: text.slice(-4000) };
+}
+
+// Authoritative usage for a completed session. `opencode run` can omit
+// step_finish for a no-tool answer, so read the persisted session export.
+export function recoverUsage(plan, candidate, { invoke = spawnSync, timeoutMs = 60000 } = {}) {
+  const sessionID = candidate.session_id ?? candidate.events?.find(event => typeof event.sessionID === 'string')?.sessionID;
+  if (!sessionID) return null;
+  const result = invoke(plan.command.executable, ['session', 'export', sessionID, '--standalone'], {
+    cwd: plan.workspace, env: plan.environment, shell: false, windowsHide: true, timeout: timeoutMs, maxBuffer: 16 * 1024 * 1024,
+  });
+  if (result.error || result.status !== 0) return null;
+  const buffer = Buffer.isBuffer(result.stdout) ? result.stdout : Buffer.from(String(result.stdout ?? ''), 'utf8');
+  const text = (buffer.length >= 2 && buffer[0] === 0xff && buffer[1] === 0xfe ? buffer.toString('utf16le') : buffer.toString('utf8')).replace(/^\uFEFF/, '');
+  let data;
+  try { data = JSON.parse(text); } catch { return null; }
+  const tokens = data.info?.tokens, cost = data.info?.cost;
+  if (!tokens || typeof tokens.input !== 'number' || typeof tokens.output !== 'number' || typeof cost !== 'number' || !Number.isFinite(cost)) return null;
+  return {
+    tokens: { input: tokens.input, output: tokens.output, reasoning: tokens.reasoning ?? 0, cache: tokens.cache ?? { read: 0, write: 0 } },
+    cost, source: 'session-export',
+  };
 }
 
 export function executeEpisode(plan, { allowExecution = false, invoke = spawnSync, audit = null } = {}) {
   assert(allowExecution === true, 'execution_not_authorized: --execute also requires MATH_BENCH_ALLOW_EXECUTE=1');
   // No CLI flag can turn a proposed profile into an audited profile. The injectable
   // audit seam is for evaluator integration and inference-free tests, not a user assertion.
-  assert(audit?.status === 'passed' && audit?.runtime_verified === true && audit?.guarantee === 'runtime-verified' &&
+  assert(audit?.status === 'passed' && audit?.runtime_verified === true && ['runtime-verified', 'runtime-plugin-load'].includes(audit?.guarantee) &&
     audit?.supported === true && audit?.isolation_verified === true && audit?.profile === plan.condition_id &&
     audit?.workspace === plan.workspace && audit?.workspace_tree === plan.hashes.workspace_tree && audit?.cleanup === true &&
     JSON.stringify([...(audit?.observed_tools ?? [])].sort()) === JSON.stringify([...plan.requested_tools, ...plan.core_tools, ...plan.transport_tools].sort()),
@@ -278,7 +352,7 @@ export function executeEpisode(plan, { allowExecution = false, invoke = spawnSyn
   };
 }
 
-export async function main(argv = process.argv.slice(2), environment = process.env, { startProbe } = {}) {
+export async function main(argv = process.argv.slice(2), environment = process.env, { startProbe, startServer } = {}) {
   const options = parseArgs(argv.filter(arg => arg !== '--audit'), ['--profile', '--task', '--tasks', '--model', '--out', '--dry-run', '--execute']);
   options['--audit'] = argv.includes('--audit');
   assert(!(options['--dry-run'] && options['--execute']), 'Choose --dry-run or --execute, not both');
@@ -304,16 +378,22 @@ export async function main(argv = process.argv.slice(2), environment = process.e
     mkdirSync(destination);
     let audit;
     if (options['--audit'] || options['--execute']) {
-      audit = await auditInventory(plan, { checkWorkspace: assertPreparedWorkspace, startProbe });
+      audit = await auditInventory(plan, { checkWorkspace: assertPreparedWorkspace, startProbe, startServer });
       plan.runtime_inventory_status = audit.guarantee;
       plan.audit_status = audit.status;
-      plan.diagnostics.unshift(audit.execution_blocker);
+      if (audit.status === 'passed' && audit.runtime_verified === true) {
+        plan.supported = true;
+        plan.diagnostics = [];
+      } else if (audit.execution_blocker) {
+        plan.diagnostics.unshift(audit.execution_blocker);
+      }
       writeFileSync(path.join(destination, 'audit.json'), serialize(audit), { flag: 'wx' });
       auditFailed ||= audit.status !== 'passed';
     }
     writeFileSync(path.join(destination, 'plan.json'), serialize(plan), { flag: 'wx' });
     const { files, environment: childEnvironment, ...display } = plan;
     if (options['--audit']) console.log(JSON.stringify({ profile: profile.id, status: audit.status, guarantee: audit.guarantee,
+      runtime_verified: audit.runtime_verified, plugin_loaded: audit.plugin_loaded,
       expected_tools: audit.expected_tools, observed_tools: audit.observed_tools, plugin_loaded_from_staging: audit.plugin !== null && audit.status === 'passed',
       cleanup: audit.cleanup, execution_blocker: audit.execution_blocker, ...(audit.error ? { error: audit.error } : {}) }));
     else console.log(serialize({ ...display, environment: childEnvironment, file_count: Object.keys(files).length, manifest: path.join(destination, 'plan.json') }));
@@ -323,7 +403,8 @@ export async function main(argv = process.argv.slice(2), environment = process.e
     }
     unsupported ||= !plan.supported;
     } finally {
-      if (options['--audit'] || options['--execute']) rmSync(plan.workspace, { recursive: true, force: true });
+      try { rmSync(plan.workspace, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }); } catch { /* OS may hold a just-killed server file */ }
+      if (plan.home) { try { rmSync(plan.home, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }); } catch { /* temp home */ } }
     }
   }
   return auditFailed ? 1 : unsupported ? 2 : 0;

@@ -431,21 +431,23 @@ not pilot evidence.
 
 The proposed child environment is allowlisted, redirects HOME/USERPROFILE, all
 XDG state/data/config/cache directories, APPDATA/LOCALAPPDATA and temporary paths,
-points `OPENCODE_CONFIG` at the generated config and `OPENCODE_CONFIG_DIR` at an
-empty workspace-local directory. `OPENCODE_CONFIG_PROJECT_DISABLE` is deliberately
+points `OPENCODE_CONFIG` at the generated config and `OPENCODE_CONFIG_DIR` at the
+external home's config directory. `OPENCODE_CONFIG_PROJECT_DISABLE` is deliberately
 **not** set: project discovery is confined to the fresh staged workspace. No
 inherited `OPENCODE_CONFIG_CONTENT`, credential variables, `NODE_OPTIONS` or prior
 sessions are passed. The command uses `--standalone --format json`, never `--auto`,
 `--continue`, `--session` or `--server`. These are **preparation measures, not an
 OS sandbox or an audited guarantee** against managed/ancestor config discovery,
-host filesystem access, subprocess access or networking. Authentication is not
-provisioned; a real pilot needs an evaluator-controlled credential outside the
-agent-visible workspace, not copied user credential files.
+host filesystem access, subprocess access or networking. The adapter can copy an
+evaluator-supplied `MATH_BENCH_AUTH_FILE` and its sibling `account.json` into the
+external home; no credential enters the agent-visible workspace. A provider
+infrastructure package can be staged, but the exact model must be listed by
+`opencode models --standalone` before any episode.
 
 System/managed config may still load in OpenCode despite redirected HOME/XDG.
-Config permissions and plugin code are **not an OS sandbox**. The static-equivalent
-probe loads the copied plugin in a separate Node process; it does not query the
-real Code Mode catalog, prove the agent's effective tools, or establish OS
+Config permissions and plugin code are **not an OS sandbox**. The runtime audit
+requests `/api/config` and observes the real `loading plugin` log for the staged
+entry; it does not snapshot the filtered Code Mode catalog or establish OS
 containment. A no-tool run can end with `text` and no `step_finish`, so usage is
 unavailable; the study runner records that as an operational failure, never as an
 under-budget success. B has no `shell` equivalent; its bounded compute/Lean

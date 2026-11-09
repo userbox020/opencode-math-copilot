@@ -47,7 +47,7 @@ const candidateFor = plan => ({
 
 test('dry-run reports a static audit as not execution-ready and writes only plan.json', async () => {
   const out = mkdtempSync(path.join(os.tmpdir(), 'study-dry-'));
-  const plan = await dryRun({ manifest, tasks: [task], tasksFile, out, model }, { prepareEpisode: prepare, auditInventory: staticAudit, assertPreparedWorkspace: () => {} });
+  const plan = await dryRun({ manifest, tasks: [task], tasksFile, out, model }, { prepareEpisode: prepare, auditInventory: staticAudit, assertPreparedWorkspace: () => {}, modelsAvailable: () => ({ available: true, error: null }) });
   assert.equal(plan.dry_run, true);
   assert.equal(plan.episode_count, 3);
   assert.equal(plan.execution_ready, false);
@@ -63,7 +63,7 @@ test('execution refuses a static audit even with explicit authorization', async 
   process.env.MATH_BENCH_ALLOW_EXECUTE = '1';
   const out = mkdtempSync(path.join(os.tmpdir(), 'study-static-'));
   await assert.rejects(
-    executeStudy({ manifest, tasks: [task], tasksFile, out, model, leanToolchain, allowProvisional: true, spendCap: 10 }, { prepareEpisode: prepare, auditInventory: staticAudit, assertPreparedWorkspace: () => {}, executeEpisode: () => { throw new Error('must not execute'); } }),
+    executeStudy({ manifest, tasks: [task], tasksFile, out, model, leanToolchain, allowProvisional: true, spendCap: 10 }, { prepareEpisode: prepare, auditInventory: staticAudit, assertPreparedWorkspace: () => {}, modelsAvailable: () => ({ available: true, error: null }), executeEpisode: () => { throw new Error('must not execute'); } }),
     /runtime_inventory_unverified/
   );
   assert.equal(existsSync(path.join(out, 'manifest.json')), false);
@@ -74,7 +74,7 @@ test('execution refuses without the explicit environment opt-in', async () => {
   delete process.env.MATH_BENCH_ALLOW_EXECUTE;
   const out = mkdtempSync(path.join(os.tmpdir(), 'study-noauth-'));
   await assert.rejects(
-    executeStudy({ manifest, tasks: [task], tasksFile, out, model, leanToolchain, allowProvisional: true, spendCap: 10 }, { prepareEpisode: prepare, auditInventory: runtimeAudit, assertPreparedWorkspace: () => {}, executeEpisode: () => candidate }),
+    executeStudy({ manifest, tasks: [task], tasksFile, out, model, leanToolchain, allowProvisional: true, spendCap: 10 }, { prepareEpisode: prepare, auditInventory: runtimeAudit, assertPreparedWorkspace: () => {}, modelsAvailable: () => ({ available: true, error: null }), executeEpisode: () => candidate }),
     /execution_not_authorized/
   );
   rmSync(out, { recursive: true, force: true });
@@ -85,7 +85,7 @@ test('mocked runtime audit and candidate produce graded, artifact-backed episode
   const out = mkdtempSync(path.join(os.tmpdir(), 'study-exec-'));
   const result = await executeStudy(
     { manifest, tasks: [task], tasksFile, out, model, leanToolchain, allowProvisional: true, spendCap: 10 },
-    { prepareEpisode: prepare, auditInventory: runtimeAudit, assertPreparedWorkspace: () => {}, executeEpisode: plan => structuredClone(candidateFor(plan)) }
+    { prepareEpisode: prepare, auditInventory: runtimeAudit, assertPreparedWorkspace: () => {}, modelsAvailable: () => ({ available: true, error: null }), executeEpisode: plan => structuredClone(candidateFor(plan)) }
   );
   assert.equal(result.episodes, 3);
   assert.equal(result.stop, null);

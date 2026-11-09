@@ -7,7 +7,7 @@ import {
   expectedEpisodes, readJsonl, indexUnique, episodeKey, parseArgs, publicTask,
 } from '../lib.mjs';
 import { protocolHash, validateManifest, underBudget, loadStudy } from '../run.mjs';
-import { prepareEpisode, executeEpisode, assertPreparedWorkspace } from '../adapters/opencode.mjs';
+import { prepareEpisode, executeEpisode, assertPreparedWorkspace, recoverUsage, modelsAvailable } from '../adapters/opencode.mjs';
 import { auditInventory } from '../adapters/inventory-audit.mjs';
 import { gradeFinal } from '../graders/index.mjs';
 import formal from '../graders/formal.mjs';
@@ -97,37 +97,51 @@ export function buildManifest({ tasks, tasksFile, model, profiles = loadProfiles
 function summaryAudit(audit) {
   return {
     profile: audit.profile, status: audit.status, guarantee: audit.guarantee,
-    runtime_verified: audit.runtime_verified === true, observed_tools: audit.observed_tools,
+    runtime_verified: audit.runtime_verified === true, plugin_loaded: audit.plugin_loaded === true,
+    catalog_basis: audit.catalog_basis ?? null, observed_tools: audit.observed_tools,
     execution_blocker: audit.execution_blocker ?? null, error: audit.error ?? null, cleanup: audit.cleanup === true,
   };
 }
+function cleanupPlan(plan) {
+  if (!plan) return;
+  try { rmSync(plan.workspace, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }); } catch { /* server may still hold a file */ }
+  if (plan.home) { try { rmSync(plan.home, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }); } catch { /* temp home */ } }
+}
 async function preflight({ manifest, tasks, model, deps }) {
-  const audits = [];
+  const audits = [], models = [];
   for (const profile of manifest.profiles) {
     let plan;
     try {
       plan = deps.prepareEpisode({ task: tasks[0], profile, model });
       audits.push(summaryAudit(await deps.auditInventory(plan, { checkWorkspace: deps.assertPreparedWorkspace })));
+      const check = await deps.modelsAvailable(plan, model);
+      models.push({ profile: profile.id, available: check.available === true, error: check.error ?? null });
     } catch (error) {
       audits.push({ profile: profile.id, status: 'failed', guarantee: null, runtime_verified: false, observed_tools: null, execution_blocker: null, error: error.message, cleanup: false });
-    } finally { if (plan) rmSync(plan.workspace, { recursive: true, force: true }); }
+      models.push({ profile: profile.id, available: false, error: error.message });
+    } finally { cleanupPlan(plan); }
   }
-  const ready = audits.every(audit => audit.status === 'passed' && audit.runtime_verified === true && audit.guarantee === 'runtime-verified' && audit.cleanup === true);
-  return { audits, ready };
+  const ready = audits.every(audit => audit.status === 'passed' && audit.runtime_verified === true && ['runtime-verified', 'runtime-plugin-load'].includes(audit.guarantee) && audit.cleanup === true)
+    && models.every(check => check.available === true);
+  return { audits, models, ready };
 }
 export async function dryRun({ manifest, tasks, tasksFile, out, model }, deps = {}) {
-  const resolved = { prepareEpisode, auditInventory, assertPreparedWorkspace, ...deps };
+  const resolved = { prepareEpisode, auditInventory, assertPreparedWorkspace, modelsAvailable, ...deps };
   const gate = await preflight({ manifest, tasks, model, deps: resolved });
+  const blockers = [
+    ...gate.audits.filter(audit => !audit.runtime_verified).map(audit => audit.execution_blocker ?? audit.error ?? `runtime audit failed for ${audit.profile}`),
+    ...gate.models.filter(check => !check.available).map(check => `${check.profile}: ${check.error}`),
+  ];
   const plan = {
     schema: 'math-study-plan/v1', dry_run: true, generated_at: new Date().toISOString(),
     study_id: manifest.study_id, model_id: model, task_file: tasksFile, tasks: tasks.length,
     profiles: manifest.profiles.map(profile => profile.id), repeats: manifest.repeats, attempts: manifest.attempts,
     episode_count: manifest.expected_episode_count, budgets: manifest.budgets,
     max_usd_if_every_episode_uses_its_budget: manifest.budgets.usd * manifest.expected_episode_count,
-    audits: gate.audits, execution_ready: gate.ready,
-    blockers: gate.ready ? [] : gate.audits.filter(audit => !audit.runtime_verified).map(audit => audit.execution_blocker ?? audit.error ?? `runtime audit failed for ${audit.profile}`),
+    audits: gate.audits, model_checks: gate.models, execution_ready: gate.ready,
+    blockers,
     provisional_tasks: manifest.environment.provisional_tasks,
-    note: 'Dry-run only. No model call, session, Docker verification, or pilot execution. A real run requires a runtime-verified tool inventory.',
+    note: 'Dry-run only. No model call, session, Docker verification, or pilot execution. A real run requires a runtime-verified tool inventory and the exact model listed by `opencode models --standalone`.',
   };
   mkdirSync(out, { recursive: true });
   writeFileSync(path.join(out, 'plan.json'), serialize(plan));
@@ -220,6 +234,10 @@ async function executeOne({ ids, task, profile, plan, start, manifest, model, le
       throw new Error(`isolation_failure: runtime inventory audit ${audit.status}: ${audit.execution_blocker ?? audit.error ?? 'unsupported'}`);
     }
     const candidate = deps.executeEpisode(plan, { allowExecution: true, audit, timeoutMs: manifest.budgets.duration_ms });
+    if (!candidate.usage && candidate.status === 'candidate_ready') {
+      const recovered = await deps.recoverUsage(plan, candidate);
+      if (recovered) { candidate.usage = [recovered]; candidate.usage_source = 'session-export'; }
+    }
     const events = eventsOf(candidate, profile);
     const allowed = new Set([
       ...profile.effective_tools,
@@ -267,7 +285,7 @@ async function executeOne({ ids, task, profile, plan, start, manifest, model, le
       artifacts: [], workspace: { fresh: true, config_loaded: false, agent_payload_sha256: start.agent_payload_sha256, removed: true },
       started_at: start.started_at,
     };
-  } finally { if (plan) rmSync(plan.workspace, { recursive: true, force: true }); }
+  } finally { cleanupPlan(plan); }
 }
 function caveats({ manifest, out }) {
   const lines = [
@@ -275,6 +293,7 @@ function caveats({ manifest, out }) {
     `Study: ${manifest.study_id}`,
     `Model: ${manifest.models.join(', ')}`,
     `Lean toolchain label: ${manifest.environment.lean_toolchain ?? 'not supplied'}`,
+    `Runtime inventory basis: ${manifest.environment.runtime_inventory}`,
     `Provisional tasks: ${manifest.environment.provisional_tasks}`,
     `Paper evidence: ${manifest.environment.paper_evidence}`,
     '',
@@ -290,16 +309,18 @@ function caveats({ manifest, out }) {
   writeFileSync(path.join(out, 'study-caveats.md'), lines.join('\n'));
 }
 export async function executeStudy({ manifest, tasks, tasksFile, out, model, leanToolchain, allowProvisional = false, limit = Infinity, spendCap }, deps = {}) {
-  const resolved = { prepareEpisode, executeEpisode, auditInventory, assertPreparedWorkspace, verifyLeanSubmission, ...deps };
+  const resolved = { prepareEpisode, executeEpisode, auditInventory, assertPreparedWorkspace, verifyLeanSubmission, recoverUsage, modelsAvailable, ...deps };
   if (process.env[EXECUTE_ENV] !== '1') throw new Error(`execution_not_authorized: set ${EXECUTE_ENV}=1 only after the audit and budget are approved`);
   if (manifest.environment.provisional_tasks && !allowProvisional) throw new Error('provisional_tasks: pass --allow-provisional only for development/engineering data; it is not paper evidence');
   assert(Number.isFinite(spendCap) && spendCap > 0, 'A positive spend cap is required for execution');
   const gate = await preflight({ manifest, tasks, model, deps: resolved });
   if (!gate.ready) {
-    const blockers = gate.audits.filter(audit => !audit.runtime_verified).map(audit => `${audit.profile}: ${audit.execution_blocker ?? audit.error ?? 'runtime audit failed'}`);
-    throw new Error(`runtime_inventory_unverified: ${blockers.join(' | ')}`);
+    const auditBlockers = gate.audits.filter(audit => !audit.runtime_verified).map(audit => `${audit.profile}: ${audit.execution_blocker ?? audit.error ?? 'runtime audit failed'}`);
+    if (auditBlockers.length) throw new Error(`runtime_inventory_unverified: ${auditBlockers.join(' | ')}`);
+    const modelBlockers = gate.models.filter(check => !check.available).map(check => `${check.profile}: ${check.error}`);
+    throw new Error(`provider_route_missing: ${modelBlockers.join(' | ')}`);
   }
-  manifest.environment.runtime_inventory = 'runtime-verified';
+  manifest.environment.runtime_inventory = 'runtime-plugin-load';
   manifest.protocol_hash = protocolHash(manifest);
   validateManifest(manifest);
   mkdirSync(out, { recursive: true });

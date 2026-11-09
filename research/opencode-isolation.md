@@ -96,6 +96,8 @@ Unset inherited `OPENCODE_CONFIG_CONTENT`, server-selection variables and unrela
 
 Project discovery is deliberately **enabled only inside the fresh staged workspace**. OpenCode 2.0.29 auto-discovers immediate `.js` plugin files in `.opencode/plugins/`; the entry must be `.js` (`.mjs` was not discovered). The runtime stays in a subdirectory. Explicit `plugins` entries and `OPENCODE_CONFIG_PROJECT_DISABLE=1` both failed to load the staged plugin in a real smoke: the former was rejected as a file, the latter suppressed discovery. A real `opencode run` smoke with the normal HOME confirmed a `loading plugin` log for the staged entry and a working `execute` call. That smoke was **not isolated** and is not pilot evidence.
 
+The adapter now creates a **fresh HOME/XDG tree outside the workspace** and can copy evaluator-supplied `auth.json`/`account.json` there (never into the agent-visible tree). A provider infrastructure package can be staged from `MATH_BENCH_PROVIDER_PLUGIN` with `MATH_BENCH_PROVIDER_OPTIONS`. The runtime audit starts the real server, requests `/api/config`, and observes the staged math/generic plugin in the `loading plugin` log. This is `runtime-plugin-load` plus static permissions, not a filtered catalog snapshot. A provider-route preflight (`opencode models --standalone`) is still required before any episode: the isolated environment exposed `opencode/deepseek-v4.1-flash-free`, whose free quota was exhausted, while `opencode-go/deepseek-v4.1-flash` was not registered.
+
 ## Adapter audit status (2026-11-08)
 
 The dry-run adapter now stages each profile in a fresh workspace and audits the

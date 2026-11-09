@@ -37,7 +37,7 @@ Execution requires all of the following:
 
 The adapter currently reports a **static-equivalent** audit: staged IDs and permissions match exactly, but OpenCode 2.0.29 exposes no supported session-free endpoint that enumerates config-defined agents/effective tools. `/api/agent` returns an empty list for the staged `benchmark` agent, so it is not treated as proof. Therefore `--execute` intentionally fails closed.
 
-A non-isolated smoke confirmed the staged `.js` plugin is auto-discovered and the model can use `execute`; the isolated HOME still lacks provider authentication, and a no-tool run can omit `step_finish`, leaving token usage unavailable. A real pilot needs evaluator-provisioned auth outside the agent-visible workspace and the session API for authoritative usage.
+A non-isolated smoke confirmed the staged `.js` plugin is auto-discovered and the model can use `execute`; the isolated HOME now has an external auth/account copy and a staged provider-plugin package. Two remaining provider observations: `/api/agent` still lists no config-defined agent, and the isolated `opencode models --standalone` exposes `opencode/deepseek-v4.1-flash-free` rather than `opencode-go/deepseek-v4.1-flash`. The free route returned `provider.quota` (free usage limit reached). A real pilot must therefore be launched with a provider route that is actually available; the current $25 DeepSeek plan cannot run until that route/quota is resolved. The gate also requires `opencode models --standalone` to list the exact model before dispatch.
 
 ## Episode lifecycle
 

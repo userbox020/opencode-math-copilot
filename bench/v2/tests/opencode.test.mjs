@@ -25,7 +25,7 @@ function prepare(t, profile = profiles[0], input = dirtyTask) {
     PATH: process.env.PATH, SECRET_SENTINEL: 'do not inherit', OPENCODE_CONFIG: 'global-config',
     OPENCODE_CONFIG_CONTENT: 'global-override', NODE_OPTIONS: 'injected-code', MATH_BENCH_ALLOW_EXECUTE: '1',
   } });
-  t.after(() => rmSync(plan.workspace, { recursive: true, force: true }));
+  t.after(() => { rmSync(plan.workspace, { recursive: true, force: true }); if (plan.home) rmSync(plan.home, { recursive: true, force: true }); });
   return plan;
 }
 const auditFor = plan => ({ status: 'passed', guarantee: 'runtime-verified', runtime_verified: true, supported: true,
@@ -54,10 +54,11 @@ for (const profile of profiles) test(`[adapter] ${profile.id} isolated dry-run i
     assert.doesNotMatch(text, /PRIVATE_.*_SENTINEL|correct_final|grading/);
   }
   assert.ok(!Object.keys(plan.files).some(name => /(^|\/)(?:graders?|answers?|correct_final)(?:\.|\/|$)/i.test(name)));
-  assert.equal(plan.environment.HOME, path.join(plan.workspace, 'home'));
-  assert.equal(plan.environment.XDG_DATA_HOME, path.join(plan.workspace, 'home/data'));
+  assert.equal(plan.environment.HOME, plan.home);
+  assert.equal(plan.environment.XDG_DATA_HOME, path.join(plan.home, 'data'));
+  assert.ok(!plan.home.startsWith(plan.workspace + path.sep));
   for (const key of ['SECRET_SENTINEL', 'OPENCODE_CONFIG_CONTENT', 'NODE_OPTIONS', 'MATH_BENCH_ALLOW_EXECUTE', 'Path']) assert.equal(plan.environment[key], undefined);
-  assert.equal(plan.environment.OPENCODE_CONFIG_DIR, path.join(plan.workspace, 'home/config'));
+  assert.equal(plan.environment.OPENCODE_CONFIG_DIR, path.join(plan.home, 'config'));
   assert.equal(plan.environment.OPENCODE_CONFIG, path.join(plan.workspace, '.opencode/opencode.json'));
   assert.equal(plan.environment.OPENCODE_CONFIG_PROJECT_DISABLE, undefined);
   assert.equal(plan.command.shell, false);
@@ -215,7 +216,7 @@ function mockProbe(plan, response, cleanup = () => {}) {
 for (const profile of profiles) test(`[audit] ${profile.id} exact mocked registrations pass only static-equivalent; execution remains blocked`, async t => {
   const plan = prepare(t, profile);
   let cleaned = 0;
-  const audit = await auditInventory(plan, { checkWorkspace: assertPreparedWorkspace,
+  const audit = await auditInventory(plan, { checkWorkspace: assertPreparedWorkspace, startServer: null,
     startProbe: staged => mockProbe(staged, undefined, () => { cleaned++; }) });
   assert.equal(audit.status, 'passed');
   assert.equal(audit.guarantee, 'static-equivalent');
@@ -225,6 +226,22 @@ for (const profile of profiles) test(`[audit] ${profile.id} exact mocked registr
   assert.equal(cleaned, 1);
   assert.equal(audit.execution_blocker, STATIC_BLOCKER);
   assert.throws(() => executeEpisode(plan, { allowExecution: true, audit, invoke: () => assert.fail('No inference') }), /static-equivalent: no supported session-free/);
+});
+
+test('[audit] mocked real plugin load upgrades the guarantee without inference', async t => {
+  const plan = prepare(t, profiles[2]);
+  const entry = pathToFileURL(path.join(plan.workspace, plan.plugin)).href;
+  const audit = await auditInventory(plan, { checkWorkspace: assertPreparedWorkspace, startServer: () => ({
+    result: Promise.resolve({ loaded: true, entrypoint: entry, log: 'loading plugin' }),
+    close: async () => true,
+  }) });
+  assert.equal(audit.status, 'passed');
+  assert.equal(audit.guarantee, 'runtime-plugin-load');
+  assert.equal(audit.runtime_verified, true);
+  assert.equal(audit.plugin_loaded, true);
+  assert.equal(audit.execution_blocker, null);
+  assert.equal(audit.catalog_basis, 'static-permissions+plugin-load');
+  assert.equal(audit.cleanup, true);
 });
 
 test('[audit] mocked extra/missing tools, host plugin, plugin failure, missing response, timeout and cleanup failure close the probe', async t => {
@@ -241,7 +258,7 @@ test('[audit] mocked extra/missing tools, host plugin, plugin failure, missing r
   ];
   for (const [name, result, error] of cases) {
     let cleaned = 0;
-    const audit = await auditInventory(plan, { checkWorkspace: assertPreparedWorkspace, timeoutMs: 10,
+    const audit = await auditInventory(plan, { checkWorkspace: assertPreparedWorkspace, timeoutMs: 10, startServer: null,
       startProbe: staged => mockProbe(staged, result(), () => { cleaned++; if (name === 'cleanup') throw new Error('cleanup failed'); }) });
     assert.equal(audit.status, 'failed', name);
     assert.equal(audit.runtime_verified, false);
@@ -281,11 +298,13 @@ test('[audit] --audit with --dry-run exits blocked, writes evidence and removes 
   try {
     const status = await main(['--audit', '--dry-run', '--profile', 'B', '--task', task.id, '--model', model, '--out', root], { PATH: '' }, {
       startProbe: plan => { workspace = plan.workspace; return mockProbe(plan, undefined, () => { cleaned++; }); },
+      startServer: null,
     });
     assert.equal(status, 2);
   } finally { console.log = log; }
   assert.equal(output.length, 1);
   assert.equal(output[0].status, 'passed');
+  assert.equal(output[0].runtime_verified, false);
   assert.equal(cleaned, 1);
   assert.equal(existsSync(workspace), false);
   const saved = json(path.join(root, path.basename(workspace), 'audit.json'));
