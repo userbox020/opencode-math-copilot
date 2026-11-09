@@ -37,3 +37,26 @@ The queue uses the safe credential home, the staged math indexes and `MATH_TOOLK
 - The main paper pilot is the 90-episode `opencode-go/deepseek-v4.1-flash` run in `bench/v2/real/`.
 - This free matrix is exploratory and may take hours/days because of quota waits.
 - The screen and full results must be labeled accordingly; a free model that fails B/F is a negative feasibility result, not a general claim about all models.
+
+## Other-provider matrix (parallel)
+
+`models-other.json` contains the **569 direct-provider models** from the safe
+credential home: `openai/*`, `opencode-go/*`, `opencode/*` paid, `google/*`,
+`groq/*`, `cloudflare-workers-ai/*`, `ollama-cloud/*`, `openrouter/*` and
+`zai/*`; `free-*`, `opencode/*-free` and local `ollama/*` are excluded because
+the free queue covers them. The direct provider's `:free` variants remain and
+are charged at zero by the free-model accounting.
+
+```text
+node bench/v2/free-models/run-matrix.mjs --mode all \
+  --models bench/v2/free-models/models-other.json \
+  --out C:\Users\MiPC\AppData\Local\Temp\opencode\other-matrix \
+  --wait-minutes 30 --total-cap-usd 25 --max-passes 0
+```
+
+The queue has a **global $25 cap** across screening and full studies, in
+addition to each study's per-episode budget. When the cap is reached it stops
+and records the state; rerun with a higher cap to continue. The free queue and
+the other-provider queue can run in parallel; both use the safe credential home
+and the staged math indexes. The first direct model in the list is
+`cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4.1-flash-1017`.

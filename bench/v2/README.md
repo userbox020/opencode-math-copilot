@@ -505,8 +505,8 @@ evaluator-controlled receipt.
 - `real/pilot-2026-11-09-opencode-go-deepseek-v4.1-flash/`: 90-episode
   exploratory real-adapter artifact (manifest, starts, episodes, receipts,
   immutable final/event artifacts, reports); not confirmatory.
-- `free-models/`: 75-model free-community screening/full queue (`run-matrix.mjs`),
-  model list, state/report policy; exploratory feasibility, not paper evidence.
+- `free-models/`: 75 free + 569 direct-provider model list and screening/full
+  queues (`run-matrix.mjs`); exploratory feasibility, not paper evidence.
 - `adapters/generic-tools.mjs`, `adapters/generic-runtime.mjs`,
   `tests/generic-tools.test.mjs`: exact four-tool B implementation and bounded,
   public-only retrieval / mocked subprocess tests.

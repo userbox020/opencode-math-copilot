@@ -5,11 +5,8 @@ import path from 'node:path';
 const REPO = 'C:/_Work/opencode-math-copilot';
 const SAFE = 'C:/Users/MiPC/AppData/Local/Temp/opencode/safe-home';
 const MATH = 'C:/_Work/__OPENAI_MATH/math';
-const OUT = 'C:/Users/MiPC/AppData/Local/Temp/opencode/free-matrix';
-const MODELS_FILE = path.join(REPO, 'bench/v2/free-models/models.json');
-const STATE_FILE = path.join(OUT, 'state.json');
-const REPORT_JSON = path.join(OUT, 'matrix-report.json');
-const REPORT_MD = path.join(OUT, 'matrix-report.md');
+const OUT_DEFAULT = 'C:/Users/MiPC/AppData/Local/Temp/opencode/free-matrix';
+const STATE_FILE_DEFAULT = OUT_DEFAULT + '/state.json';
 const args = process.argv.slice(2);
 const option = (name, fallback) => {
   const index = args.indexOf(name);
@@ -21,14 +18,33 @@ const maxPasses = Number(option('--max-passes', '0'));
 const screenLimit = Number(option('--screen-limit', '3'));
 const only = option('--only', null);
 const dry = args.includes('--dry');
+const OUT = option('--out', OUT_DEFAULT);
+const MODELS_FILE = option('--models', path.join(REPO, 'bench/v2/free-models/models.json'));
+const label = path.basename(MODELS_FILE, '.json');
+const STATE_FILE = path.join(OUT, 'state.json');
+const REPORT_JSON = path.join(OUT, 'matrix-report.json');
+const REPORT_MD = path.join(OUT, 'matrix-report.md');
+const totalCap = Number(option('--total-cap-usd', '25'));
 mkdirSync(OUT, { recursive: true });
 const allModels = JSON.parse(readFileSync(MODELS_FILE, 'utf8')).models.filter(model => !only || new RegExp(only).test(model));
-const state = existsSync(STATE_FILE) ? JSON.parse(readFileSync(STATE_FILE, 'utf8')) : { created_at: new Date().toISOString(), source: 'bench/v2/free-models/models.json', models: {} };
+const state = existsSync(STATE_FILE) ? JSON.parse(readFileSync(STATE_FILE, 'utf8')) : { created_at: new Date().toISOString(), source: MODELS_FILE, models: {} };
 const save = () => writeFileSync(STATE_FILE, JSON.stringify(state, null, 2) + '\n');
 const safeName = model => model.replace(/[^a-z0-9._-]+/gi, '-').replace(/-+/g, '-').slice(0, 110);
 const now = () => new Date().toISOString();
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const tail = (value, max = 4000) => String(value ?? '').slice(-max);
+const spent = () => {
+  let sum = 0;
+  for (const model of allModels) {
+    const entry = state.models[model];
+    for (const group of ['screen', 'full']) {
+      for (const episode of entry?.[group]?.episodes ?? []) {
+        if (typeof episode.cost === 'number') sum += episode.cost;
+      }
+    }
+  }
+  return sum;
+};
 
 function episodes(out) {
   const file = path.join(out, 'episodes.jsonl');
@@ -58,7 +74,7 @@ function runStudy(model, out, limit) {
     path.join(REPO, 'bench/v2/study/run-study.mjs'),
     '--tasks', path.join(REPO, 'bench/v2/tasks/pilot-v1.json'),
     '--model', model, '--out', out, '--execute', '--allow-provisional',
-    '--lean-toolchain', 'leanprover/lean4:v4.34.1', '--budget-usd', '1', '--spend-cap-usd', '25',
+    '--lean-toolchain', 'leanprover/lean4:v4.34.1', '--budget-usd', '1', '--spend-cap-usd', String(Math.max(0.01, totalCap - spent())),
   ];
   if (limit) studyArgs.push('--limit', String(limit));
   const env = {
@@ -120,13 +136,14 @@ function full(model) {
 }
 function report() {
   const entries = allModels.map(model => ({ model, ...(state.models[model] ?? { status: 'pending' }) }));
-  writeFileSync(REPORT_JSON, JSON.stringify({ generated_at: now(), mode, wait_minutes: waitMinutes, max_passes: maxPasses, models: entries }, null, 2) + '\n');
+  writeFileSync(REPORT_JSON, JSON.stringify({ generated_at: now(), mode, wait_minutes: waitMinutes, max_passes: maxPasses, total_cap_usd: totalCap, total_spent_usd: spent(), models: entries }, null, 2) + '\n');
   const counts = {};
   for (const entry of entries) counts[entry.status] = (counts[entry.status] ?? 0) + 1;
   const lines = [
-    '# Free-model screening matrix', '',
+    `# ${label} screening matrix`, '',
     `Generated: ${now()}`,
     `Models: ${entries.length}`,
+    `Total cap: $${totalCap}; observed spend: $${spent().toFixed(4)}`,
     `Status counts: ${JSON.stringify(counts)}`, '',
     '| Model | Status | Screen | Full |',
     '| --- | --- | --- | --- |',
@@ -141,6 +158,7 @@ function report() {
 
 let pass = 0;
 for (;;) {
+  if (spent() >= totalCap) { console.log(`[cap] observed spend $${spent().toFixed(4)} >= cap $${totalCap}`); break; }
   let pending = false;
   for (const model of allModels) {
     const entry = state.models[model] ??= { status: 'pending', attempts: 0, screen: null, full: null };
