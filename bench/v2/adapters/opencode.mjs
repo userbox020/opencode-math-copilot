@@ -3,7 +3,7 @@ import { copyFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSy
 import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { COMMON_PROMPT, ROOT, assert, assertWorkspace, json, loadProfiles, parseArgs, prepareWorkspace, serialize, sha256 } from '../lib.mjs';
+import { COMMON_PROMPT, ROOT, assert, assertWorkspace, isFreeModel, json, loadProfiles, parseArgs, prepareWorkspace, serialize, sha256 } from '../lib.mjs';
 import { GENERIC_TOOL_NAMES } from './generic-runtime.mjs';
 import { auditInventory, F_CORE_TOOLS, STATIC_BLOCKER } from './inventory-audit.mjs';
 
@@ -333,7 +333,7 @@ export function recoverUsage(plan, candidate, { invoke = spawnSync, timeoutMs = 
   try { data = JSON.parse(text); } catch { return null; }
   const tokens = data.info?.tokens, cost = data.info?.cost;
   if (!tokens || typeof tokens.input !== 'number' || typeof tokens.output !== 'number') return null;
-  const free = /(?::free|-free)$/.test(plan.model_id ?? '');
+  const free = isFreeModel(plan.model_id);
   const resolvedCost = typeof cost === 'number' && Number.isFinite(cost) ? cost : free ? 0 : null;
   return {
     tokens: { input: tokens.input, output: tokens.output, reasoning: tokens.reasoning ?? 0, cache: tokens.cache ?? { read: 0, write: 0 } },

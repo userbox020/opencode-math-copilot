@@ -65,6 +65,7 @@ export function loadProfiles() { return ['A', 'B', 'F'].map(id => validateProfil
 export function publicTask(task) {
   return { id: task.id, type: task.type, prompt: task.prompt, answer_contract: task.answer_contract, excerpts: task.excerpts ?? [] };
 }
+export const isFreeModel = model => typeof model === 'string' && (/^free-/.test(model) || /^opencode\/.*-free$/.test(model) || /(?::free|-free)$/.test(model));
 export function agentPayload(task, profile) {
   const files = { 'task.json': serialize(publicTask(task)), 'profile.json': serialize(profile), 'instructions.txt': COMMON_PROMPT + '\n' };
   if (profile.corpus_access) files['corpus/excerpts.json'] = serialize(task.excerpts ?? []);

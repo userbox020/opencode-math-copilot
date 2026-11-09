@@ -4,7 +4,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import {
   ROOT, VERSION, COMMON_PROMPT, assert, json, serialize, sha256, loadProfiles,
-  expectedEpisodes, readJsonl, indexUnique, episodeKey, parseArgs, publicTask,
+  expectedEpisodes, readJsonl, indexUnique, episodeKey, parseArgs, publicTask, isFreeModel,
 } from '../lib.mjs';
 import { protocolHash, validateManifest, underBudget, loadStudy } from '../run.mjs';
 import { prepareEpisode, executeEpisode, assertPreparedWorkspace, recoverUsage, modelsAvailable } from '../adapters/opencode.mjs';
@@ -234,6 +234,7 @@ async function executeOne({ ids, task, profile, plan, start, manifest, model, le
       throw new Error(`isolation_failure: runtime inventory audit ${audit.status}: ${audit.execution_blocker ?? audit.error ?? 'unsupported'}`);
     }
     const candidate = deps.executeEpisode(plan, { allowExecution: true, audit, timeoutMs: manifest.budgets.duration_ms });
+    const freeModel = isFreeModel(plan.model_id);
     if (candidate.session_id) {
       const recovered = await deps.recoverUsage(plan, candidate);
       if (recovered) { candidate.usage = [recovered]; candidate.usage_source = 'session-export'; }
@@ -248,7 +249,7 @@ async function executeOne({ ids, task, profile, plan, start, manifest, model, le
     if (unexpected) throw new Error(`isolation_failure: unexpected tool ${unexpected.tool}`);
     const usage = usageOf(candidate);
     let evaluated = await evaluate({ task, candidate, leanToolchain, deps });
-    if (evaluated.status === 'completed' && !usage) {
+    if (evaluated.status === 'completed' && !usage && !freeModel) {
       evaluated = { status: 'operational_failure', final: null, grade: { correct: false, reason: 'adapter_failure: missing usage' }, error: { category: 'adapter_failure', message: 'missing usage' }, receipt: null };
     }
     const episode = {
@@ -258,7 +259,9 @@ async function executeOne({ ids, task, profile, plan, start, manifest, model, le
       grade: evaluated.grade,
       usage: usage ? { ...usage, tool_calls: events.length } : { tokens: 0, tool_calls: events.length },
       under_budget: false, duration_ms: Number(candidate.duration_ms) || 0,
-      duration_source: 'monotonic-clock', cost: costOf(candidate), artifacts: [],
+      duration_source: 'monotonic-clock',
+      cost: freeModel ? { observed_usd: 0, estimated_usd: null, source: 'free-model-zero-cost', date: new Date().toISOString().slice(0, 10) } : costOf(candidate),
+      artifacts: [],
       workspace: { fresh: true, config_loaded: false, agent_payload_sha256: start.agent_payload_sha256, removed: true },
       started_at: start.started_at,
     };
