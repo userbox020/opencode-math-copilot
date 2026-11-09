@@ -15,14 +15,17 @@ function proportional(a, b) {
   return a.length === b.length && a.some(Boolean) && b.some(Boolean) && a.every((value, i) => value * b.at(-1) === b[i] * a.at(-1));
 }
 export default function symbolic(answer, spec) {
-  const metadata = answer.domain === spec.domain && sameSet(answer.conditions, spec.conditions) && sameSet(answer.assumptions, spec.assumptions);
+  // Units are exact metadata when registered; omitted spec.units leaves units
+  // unconstrained, preserving the original unit-free fixture behavior.
+  const units = !Object.hasOwn(spec, 'units') || (Object.hasOwn(answer, 'units') && answer.units === spec.units);
+  const metadata = units && answer.domain === spec.domain && sameSet(answer.conditions, spec.conditions) && sameSet(answer.assumptions, spec.assumptions);
   if (spec.kind === 'solution-set') {
-    return verdict(metadata && Array.isArray(answer.solutions) && answer.solutions.every(Number.isFinite) && sameSet(answer.solutions, spec.solutions), 'exact complete solution set under explicit assumptions');
+    return verdict(metadata && Array.isArray(answer.solutions) && answer.solutions.every(Number.isFinite) && sameSet(answer.solutions, spec.solutions), 'exact complete solution set under explicit assumptions and registered units');
   }
   const numerator = answer.numerator, denominator = answer.denominator;
   const valid = polynomial(numerator) && polynomial(denominator) && denominator.some(Boolean);
   // Registered denominator classes rule out extra poles, including those canceled
   // in the submitted numerator. This deliberately supports only bounded fixtures.
   const denominatorAllowed = valid && spec.allowed_denominators.some(p => proportional(denominator, p));
-  return verdict(metadata && denominatorAllowed && equal(multiply(numerator, spec.denominator), multiply(spec.numerator, denominator)), 'exact rational-polynomial equivalence and registered domain restrictions');
+  return verdict(metadata && denominatorAllowed && equal(multiply(numerator, spec.denominator), multiply(spec.numerator, denominator)), 'exact rational-polynomial equivalence, registered units and domain restrictions');
 }

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["type", "status", "consulted", "prose"],
+  "properties": {
+    "type": {"const": "absence"},
+    "status": {"enum": ["not_found_in_consulted_excerpts", "nonexistent", "corpus_unavailable"]},
+    "consulted": {"type": "array", "items": {"type": "string"}},
+    "prose": {"type": "string", "pattern": "\\S"}
+  }
+}

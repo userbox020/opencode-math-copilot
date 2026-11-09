@@ -16,7 +16,7 @@ export function extractFinal(final, type) {
     citation: () => string(final.document) && string(final.locator) && string(final.claim) && typeof final.supported === 'boolean',
     formal: () => string(final.solution) && string(final.target_sha256) && string(final.receipt_sha256),
     explanation: () => string(final.text),
-    absence: () => ['not_found_in_consulted_excerpts', 'nonexistent', 'corpus_unavailable'].includes(final.status) && strings(final.consulted)
+    absence: () => ['not_found_in_consulted_excerpts', 'nonexistent', 'corpus_unavailable'].includes(final.status) && strings(final.consulted) && string(final.prose) && final.prose.trim().length > 0
   }[type];
   return valid?.() ? final : null;
 }

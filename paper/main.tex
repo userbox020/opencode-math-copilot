@@ -37,8 +37,9 @@ alone~\cite{tora2023}. Lean Copilot relates to model assistance inside Lean
 proof workflows~\cite{leanCopilot2024}. miniF2F is a public formal benchmark,
 not a contamination-free source of private test tasks~\cite{minif2f2021}.
 Lean's proof-validation reference informs the trust discussion~\cite{leanProofValidation}.
-\textbf{Pending:} primary-source metadata and passage verification, version
-pinning, and a fuller related-work review. No comparative performance is asserted.
+\textbf{Pending:} passage-level verification of the cited claims, a fuller
+related-work review, and real study results. Metadata above is verified; no
+empirical result is claimed.
 
 \section{Architecture and Tool Surface}
 \textbf{Pending:} description tied to the study's plugin commit, effective
@@ -53,8 +54,13 @@ Verification requires a controlled comparison to the trusted statement and
 inspection of transitive axioms, not merely process exit status or a printed
 success marker. File hashes provide provenance, not semantic equivalence.
 A placeholder in a challenge statement is distinct from an incomplete solution.
-\textbf{Pending:} implementation-linked checks and receipts. Restricted
-execution and protected graders are proposed controls, not a security proof.
+\textbf{Pending:} implementation-linked checks and receipts for the actual
+study. The current evaluator bridge binds a fixed theorem, expected type,
+imports, and axiom policy, and issues schema-2.1.0 receipts from the strict
+Verifier; a six-task engineering smoke accepted all six references with no
+axioms. That smoke is not a real-model result, an independent kernel check, or
+an informal-correspondence review. Restricted execution and protected graders
+are proposed controls, not a security proof.
 Any historical Comparator report is confined to its named challenge,
 commit, and environment; it does not verify all challenges or the mathematical paper.
 
@@ -78,7 +84,10 @@ and analysis before test outcomes are available.
 The proposed pilot is $30\times2\times3\times2=360$ episodes. An expanded
 example is $150\times4\times3\times3=5{,}400$ episodes before ablations.
 Neither has been run by this work; both require budget authorization.
-Any dry-run manifest must be labeled \textbf{simulated}, not measured.
+The real runner is implemented with a dry-run and a fail-closed execution gate;
+no real episode has been run, and a static-equivalent inventory audit is not
+accepted for execution. Any dry-run manifest must be labeled \textbf{simulated},
+not measured.
 
 \section{Results Separated by Retrieval, Computation, and Proof}
 \textbf{Pending. No new evaluation results are available in this skeleton.}

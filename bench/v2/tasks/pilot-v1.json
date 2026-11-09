@@ -1,0 +1,321 @@
+[
+  {
+    "id": "pilot-retrieval-geometry", "track": "retrieval", "family": "geometry", "domain": "convex geometry", "type": "citation", "negative": false,
+    "prompt": "Using only the supplied source excerpt, return the verbatim sentence about closure of linear Hanner bodies under polarity, with its document and locator and supported=true. Report source support, not independent verification of the manuscript. Copy the supplied locator unchanged; no narrower locator is allowed.",
+    "answer_contract": "{type:citation,document:string,locator:string,claim:string,supported:boolean}",
+    "excerpts": [{"document": "math/preprints/The-symmetric-Mahler-conjecture-and-its-equality-cases-September-22-2026/build/sections/convex-preliminaries.tex", "locator": "L87-L93", "text": "\\begin{lemma}[The Hanner volume product]\\label{lem:hanner}\nEvery $d$-dimensional linear Hanner body $H$ satisfies\n\\[\n P(H)=\\frac{4^d}{d!}.\n\\]\nThe polar of a linear Hanner body is again a linear Hanner body.\n\\end{lemma}"}],
+    "grading": {"document": "math/preprints/The-symmetric-Mahler-conjecture-and-its-equality-cases-September-22-2026/build/sections/convex-preliminaries.tex", "locator": "L87-L93", "supported_claim": "The polar of a linear Hanner body is again a linear Hanner body."},
+    "correct_final": {"type": "citation", "document": "math/preprints/The-symmetric-Mahler-conjecture-and-its-equality-cases-September-22-2026/build/sections/convex-preliminaries.tex", "locator": "L87-L93", "claim": "The polar of a linear Hanner body is again a linear Hanner body.", "supported": true},
+    "provisional": true, "review_status": "owner-review-pending",
+    "notes": ["Interior source section, not a first-page PDF excerpt; PDF pagination was not checked.", "Source identity and text checked locally; mathematical correctness is not established by citation."]
+  },
+  {
+    "id": "pilot-retrieval-algebra", "track": "retrieval", "family": "algebra", "domain": "bibliography of algebra", "type": "citation", "negative": false,
+    "prompt": "Find the publication-date line in the supplied README for the characteristic-two direct-finiteness manuscript. Return that complete line verbatim, document, locator, and supported=true. Copy the supplied locator unchanged; no narrower locator is allowed.",
+    "answer_contract": "{type:citation,document:string,locator:string,claim:string,supported:boolean}",
+    "excerpts": [{"document": "math/preprints/A-Counterexample-to-Kaplanskys-Direct-Finiteness-Conjecture-in-Characteristic-Two-September-23-2026/README.md", "locator": "L1-L5", "text": "# [A Counterexample to Kaplansky's Direct-Finiteness Conjecture in Characteristic Two](paper.pdf)\n\n**Author:** OpenAI\n\n**Date:** September 23, 2026"}],
+    "grading": {"document": "math/preprints/A-Counterexample-to-Kaplanskys-Direct-Finiteness-Conjecture-in-Characteristic-Two-September-23-2026/README.md", "locator": "L1-L5", "supported_claim": "**Date:** September 23, 2026"},
+    "correct_final": {"type": "citation", "document": "math/preprints/A-Counterexample-to-Kaplanskys-Direct-Finiteness-Conjecture-in-Characteristic-Two-September-23-2026/README.md", "locator": "L1-L5", "claim": "**Date:** September 23, 2026", "supported": true},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Bibliographic metadata only; no endorsement of the claimed counterexample."]
+  },
+  {
+    "id": "pilot-retrieval-analysis", "track": "retrieval", "family": "analysis", "domain": "analytic number theory", "type": "citation", "negative": false,
+    "prompt": "Quote the complete supplied catalogue paragraph describing the quasi-Riemann manuscript's zero-free half-plane, retaining its pole caveat and markup. Return document, locator and supported=true. This asks what the source claims, not whether the claim has been independently verified. Copy the supplied locator unchanged; no narrower locator is allowed.",
+    "answer_contract": "{type:citation,document:string,locator:string,claim:string,supported:boolean}",
+    "excerpts": [{"document": "math/CONTENTS.md", "locator": "L75-L75", "text": "We prove that all finite-order Hecke <i>L</i>-functions over $`\\mathbb Q(\\sqrt{-3})`$ and all Dirichlet <i>L</i>-functions are zero-free in the half-plane $`\\Re s\\gt 7/8`$, with the principal pole at <i>s</i> = 1 allowed. In particular, the Riemann zeta function is zero-free in this half-plane, proving the quasi-Riemann hypothesis."}],
+    "grading": {"document": "math/CONTENTS.md", "locator": "L75-L75", "supported_claim": "We prove that all finite-order Hecke <i>L</i>-functions over $`\\mathbb Q(\\sqrt{-3})`$ and all Dirichlet <i>L</i>-functions are zero-free in the half-plane $`\\Re s\\gt 7/8`$, with the principal pole at <i>s</i> = 1 allowed. In particular, the Riemann zeta function is zero-free in this half-plane, proving the quasi-Riemann hypothesis."},
+    "correct_final": {"type": "citation", "document": "math/CONTENTS.md", "locator": "L75-L75", "claim": "We prove that all finite-order Hecke <i>L</i>-functions over $`\\mathbb Q(\\sqrt{-3})`$ and all Dirichlet <i>L</i>-functions are zero-free in the half-plane $`\\Re s\\gt 7/8`$, with the principal pole at <i>s</i> = 1 allowed. In particular, the Riemann zeta function is zero-free in this half-plane, proving the quasi-Riemann hypothesis.", "supported": true},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Exact catalogue attribution, not a proof or verification receipt. Related preprint README was also inspected."]
+  },
+  {
+    "id": "pilot-retrieval-number-theory", "track": "retrieval", "family": "number-theory", "domain": "bibliography of number theory", "type": "citation", "negative": false,
+    "prompt": "Quote the body paragraph of the supplied BSD manuscript version note verbatim, excluding the heading but including the link, and return its document and locator with supported=true. Do not infer that any theorem was reverified. Copy the supplied locator unchanged; no narrower locator is allowed.",
+    "answer_contract": "{type:citation,document:string,locator:string,claim:string,supported:boolean}",
+    "excerpts": [{"document": "math/preprints/Exact-Birch-Swinnerton-Dyer-Formula-from-Low-Selmer-Corank-October-7-2026/README.md", "locator": "L19-L21", "text": "## Version note\n\nThis version removes an obsolete supporting citation and updates citations to revised manuscripts in this collection; see the [previous version](../Exact-Birch-Swinnerton-Dyer-Formula-from-Low-Selmer-Corank-October-3-2026/exact-bsd-low-selmer-corank.pdf)."}],
+    "grading": {"document": "math/preprints/Exact-Birch-Swinnerton-Dyer-Formula-from-Low-Selmer-Corank-October-7-2026/README.md", "locator": "L19-L21", "supported_claim": "This version removes an obsolete supporting citation and updates citations to revised manuscripts in this collection; see the [previous version](../Exact-Birch-Swinnerton-Dyer-Formula-from-Low-Selmer-Corank-October-3-2026/exact-bsd-low-selmer-corank.pdf)."},
+    "correct_final": {"type": "citation", "document": "math/preprints/Exact-Birch-Swinnerton-Dyer-Formula-from-Low-Selmer-Corank-October-7-2026/README.md", "locator": "L19-L21", "claim": "This version removes an obsolete supporting citation and updates citations to revised manuscripts in this collection; see the [previous version](../Exact-Birch-Swinnerton-Dyer-Formula-from-Low-Selmer-Corank-October-3-2026/exact-bsd-low-selmer-corank.pdf).", "supported": true},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Version-history evidence only; linked prior PDF was not opened."]
+  },
+  {
+    "id": "pilot-retrieval-evidence", "track": "retrieval", "family": "evidence", "domain": "evidence limitations", "type": "citation", "negative": false,
+    "prompt": "Return the complete two-sentence supplied paragraph stating how the collection should be understood and its stance on credit, with document, locator and supported=true. Copy the supplied locator unchanged; no narrower locator is allowed.",
+    "answer_contract": "{type:citation,document:string,locator:string,claim:string,supported:boolean}",
+    "excerpts": [{"document": "math/README.md", "locator": "L12-L12", "text": "In our view, these manuscripts are best understood as a form of raw research data, rather than polished academic papers. We defer to the math community completely on matters of credit, precedence, and concurrent work."}],
+    "grading": {"document": "math/README.md", "locator": "L12-L12", "supported_claim": "In our view, these manuscripts are best understood as a form of raw research data, rather than polished academic papers. We defer to the math community completely on matters of credit, precedence, and concurrent work."},
+    "correct_final": {"type": "citation", "document": "math/README.md", "locator": "L12-L12", "claim": "In our view, these manuscripts are best understood as a form of raw research data, rather than polished academic papers. We defer to the math community completely on matters of credit, precedence, and concurrent work.", "supported": true},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Repository-level attribution; no quality judgment independently established."]
+  },
+  {
+    "id": "pilot-retrieval-foundations", "track": "retrieval", "family": "foundations", "domain": "formalization coverage", "type": "citation", "negative": false,
+    "prompt": "Quote the complete supplied two-line passage about Lean coverage and the recommended build scope, with document, locator and supported=true. Do not turn some results into all results. Copy the supplied locator unchanged; no narrower locator is allowed.",
+    "answer_contract": "{type:citation,document:string,locator:string,claim:string,supported:boolean}",
+    "excerpts": [{"document": "math/lean/README.md", "locator": "L3-L4", "text": "This directory contains Lean formalizations of some results in this repository.\nThey are organized in a single large library, so we recommend compiling only small portions at a time."}],
+    "grading": {"document": "math/lean/README.md", "locator": "L3-L4", "supported_claim": "This directory contains Lean formalizations of some results in this repository.\nThey are organized in a single large library, so we recommend compiling only small portions at a time."},
+    "correct_final": {"type": "citation", "document": "math/lean/README.md", "locator": "L3-L4", "claim": "This directory contains Lean formalizations of some results in this repository.\nThey are organized in a single large library, so we recommend compiling only small portions at a time.", "supported": true},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Coverage wording is source-supported, not an inventory audit."]
+  },
+  {
+    "id": "pilot-computation-geometry", "track": "computation", "family": "geometry", "domain": "Euclidean geometry", "type": "numeric", "negative": false,
+    "prompt": "A Euclidean triangle has base 6 m and perpendicular height 4 m. Compute its exact area. Use domain nonnegative-real, units m^2, and condition perpendicular height.",
+    "answer_contract": "{type:numeric,value:number,domain:string,units:string,conditions:string[]}", "excerpts": [],
+    "grading": {"value": 12, "tolerance": {"absolute": 0, "relative": 0}, "domain": "nonnegative-real", "units": "m^2", "conditions": ["perpendicular height"]},
+    "correct_final": {"type": "numeric", "value": 12, "domain": "nonnegative-real", "units": "m^2", "conditions": ["perpendicular height"]},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Constructed elementary problem; exact reference calculation: 6*4/2 = 12. No corpus claim."]
+  },
+  {
+    "id": "pilot-computation-algebra", "track": "computation", "family": "algebra", "domain": "real algebra", "type": "symbolic", "negative": false,
+    "prompt": "Give an equivalent expression for (x^2-1)/(x-1) for real dimensionless x, preserving the original domain. An equivalent unsimplified expression is permitted; simplification is not required. Return integer polynomial coefficient arrays in low-to-high order, domain real, units dimensionless, assumptions [x is real], and all restrictions as conditions using != notation.",
+    "answer_contract": "{type:symbolic,numerator:number[],denominator:number[],domain:string,units:string,assumptions:string[],conditions:string[]}", "excerpts": [],
+    "grading": {"kind": "rational-polynomial", "numerator": [1, 1], "denominator": [1], "allowed_denominators": [[1], [-1, 1]], "tolerance": {"absolute": 0, "relative": 0}, "domain": "real", "units": "dimensionless", "assumptions": ["x is real"], "conditions": ["x != 1"]},
+    "correct_final": {"type": "symbolic", "numerator": [1, 1], "denominator": [1], "domain": "real", "units": "dimensionless", "assumptions": ["x is real"], "conditions": ["x != 1"]},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Factorization (x-1)(x+1); cancellation does not restore x=1. Units are explicitly registered as dimensionless. This task asks for equivalence, not simplification, so the constant and original denominator classes are both permitted."]
+  },
+  {
+    "id": "pilot-computation-analysis", "track": "computation", "family": "analysis", "domain": "real integration", "type": "numeric", "negative": false,
+    "prompt": "Evaluate the definite integral of 6*x from x=0 to x=1 over the reals. x and the integrand are dimensionless. Use domain real, units dimensionless, and conditions [real integration variable, bounds 0 to 1].",
+    "answer_contract": "{type:numeric,value:number,domain:string,units:string,conditions:string[]}", "excerpts": [],
+    "grading": {"value": 3, "tolerance": {"absolute": 0, "relative": 0}, "domain": "real", "units": "dimensionless", "conditions": ["real integration variable", "bounds 0 to 1"]},
+    "correct_final": {"type": "numeric", "value": 3, "domain": "real", "units": "dimensionless", "conditions": ["real integration variable", "bounds 0 to 1"]},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Elementary antiderivative 3*x^2 gives 3. No external computation run."]
+  },
+  {
+    "id": "pilot-computation-number-theory", "track": "computation", "family": "number-theory", "domain": "integer equations", "type": "symbolic", "negative": true,
+    "prompt": "Find the complete set of integer solutions of x^2=2. Return a numeric solutions array, domain integer, units dimensionless, assumptions [x is an integer], and conditions []. Do not include noninteger roots.",
+    "answer_contract": "{type:symbolic,solutions:number[],domain:string,units:string,assumptions:string[],conditions:string[]}", "excerpts": [],
+    "grading": {"kind": "solution-set", "solutions": [], "tolerance": {"absolute": 0, "relative": 0}, "domain": "integer", "units": "dimensionless", "assumptions": ["x is an integer"], "conditions": []},
+    "correct_final": {"type": "symbolic", "solutions": [], "domain": "integer", "units": "dimensionless", "assumptions": ["x is an integer"], "conditions": []},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["If |x|<=1 then x^2<=1; if |x|>=2 then x^2>=4. Units are explicitly registered as dimensionless in the contract, grading and reference final."]
+  },
+  {
+    "id": "pilot-computation-evidence", "track": "computation", "family": "evidence", "domain": "exact proportions", "type": "numeric", "negative": false,
+    "prompt": "In a constructed example, exactly 3 of 8 distinct citation claims are unsupported. Compute the unsupported proportion, not its percentage. Use domain unit-interval, units dimensionless, and conditions [eight distinct claims, three unsupported claims]. This is not observed model data.",
+    "answer_contract": "{type:numeric,value:number,domain:string,units:string,conditions:string[]}", "excerpts": [],
+    "grading": {"value": 0.375, "tolerance": {"absolute": 0, "relative": 0}, "domain": "unit-interval", "units": "dimensionless", "conditions": ["eight distinct claims", "three unsupported claims"]},
+    "correct_final": {"type": "numeric", "value": 0.375, "domain": "unit-interval", "units": "dimensionless", "conditions": ["eight distinct claims", "three unsupported claims"]},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["3/8 is exactly representable as a binary floating-point number. Constructed counts are not paper evidence."]
+  },
+  {
+    "id": "pilot-computation-foundations", "track": "computation", "family": "foundations", "domain": "finite sets", "type": "numeric", "negative": false,
+    "prompt": "Let S={a,b,c}, where a,b,c are pairwise distinct. How many subsets does S have, including the empty set and S? Use domain nonnegative-integer, units subsets, and conditions [a b c pairwise distinct, empty and full subsets included].",
+    "answer_contract": "{type:numeric,value:number,domain:string,units:string,conditions:string[]}", "excerpts": [],
+    "grading": {"value": 8, "tolerance": {"absolute": 0, "relative": 0}, "domain": "nonnegative-integer", "units": "subsets", "conditions": ["a b c pairwise distinct", "empty and full subsets included"]},
+    "correct_final": {"type": "numeric", "value": 8, "domain": "nonnegative-integer", "units": "subsets", "conditions": ["a b c pairwise distinct", "empty and full subsets included"]},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Independent binary membership choices give 2^3=8; elementary constructed task."]
+  },
+  {
+    "id": "pilot-formal-geometry", "track": "formal", "family": "geometry", "domain": "equality of natural-number coordinates", "type": "formal", "negative": false,
+    "prompt": "Construct Lean code using only import Init declaring theorem pilot_geometry_identity with exactly the type (n : Nat) -> n = n. Do not change the target or add premises or axioms. Return the solution code, not a claimed verification receipt.",
+    "answer_contract": "Draft {type:formal,solution:string,target_sha256:null,receipt_sha256:null}; evaluator identifiers and receipt remain pending.", "excerpts": [],
+    "formal": {"imports": ["Init"], "theorem": "pilot_geometry_identity", "expected_type": "(n : Nat) -> n = n", "solution_code": "import Init\n\ntheorem pilot_geometry_identity : (n : Nat) -> n = n := by\n  intro n\n  rfl\n", "allowed_axioms": [], "verifier_integration": "pending", "verification_status": "not-run"},
+    "grading": {"status": "verifier-integration-pending", "theorem": "pilot_geometry_identity", "expected_type": "(n : Nat) -> n = n", "policy": {"allowed_axioms": []}},
+    "correct_final": {"type": "formal", "solution": "import Init\n\ntheorem pilot_geometry_identity : (n : Nat) -> n = n := by\n  intro n\n  rfl\n", "target_sha256": null, "receipt_sha256": null},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Reference proof candidate only; no Lean execution or trusted receipt. Geometry family is a provisional coordinate-themed grouping, not a corpus-family claim."]
+  },
+  {
+    "id": "pilot-formal-algebra", "track": "formal", "family": "algebra", "domain": "natural-number arithmetic", "type": "formal", "negative": false,
+    "prompt": "Construct Lean code using only import Init declaring theorem pilot_algebra_add_zero with exactly the type (n : Nat) -> n + 0 = n. Do not change the target or add premises or axioms. Return solution code without claiming verification.",
+    "answer_contract": "Draft {type:formal,solution:string,target_sha256:null,receipt_sha256:null}; evaluator identifiers and receipt remain pending.", "excerpts": [],
+    "formal": {"imports": ["Init"], "theorem": "pilot_algebra_add_zero", "expected_type": "(n : Nat) -> n + 0 = n", "solution_code": "import Init\n\ntheorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by\n  intro n\n  rfl\n", "allowed_axioms": [], "verifier_integration": "pending", "verification_status": "not-run"},
+    "grading": {"status": "verifier-integration-pending", "theorem": "pilot_algebra_add_zero", "expected_type": "(n : Nat) -> n + 0 = n", "policy": {"allowed_axioms": []}},
+    "correct_final": {"type": "formal", "solution": "import Init\n\ntheorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by\n  intro n\n  rfl\n", "target_sha256": null, "receipt_sha256": null},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Reference proof candidate only; no Lean execution or trusted receipt. Definitional equality and equivalent imported results require contamination review."]
+  },
+  {
+    "id": "pilot-formal-analysis", "track": "formal", "family": "analysis", "domain": "composition of implications", "type": "formal", "negative": false,
+    "prompt": "Construct Lean code using only import Init declaring theorem pilot_analysis_implications with exactly the type (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R. No added premises or axioms. Return solution code without claiming verification.",
+    "answer_contract": "Draft {type:formal,solution:string,target_sha256:null,receipt_sha256:null}; evaluator identifiers and receipt remain pending.", "excerpts": [],
+    "formal": {"imports": ["Init"], "theorem": "pilot_analysis_implications", "expected_type": "(P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R", "solution_code": "import Init\n\ntheorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := by\n  intro P Q R hPQ hQR hP\n  exact hQR (hPQ hP)\n", "allowed_axioms": [], "verifier_integration": "pending", "verification_status": "not-run"},
+    "grading": {"status": "verifier-integration-pending", "theorem": "pilot_analysis_implications", "expected_type": "(P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R", "policy": {"allowed_axioms": []}},
+    "correct_final": {"type": "formal", "solution": "import Init\n\ntheorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := by\n  intro P Q R hPQ hQR hP\n  exact hQR (hPQ hP)\n", "target_sha256": null, "receipt_sha256": null},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Reference proof candidate only; no Lean execution or trusted receipt. Logic exercise assigned to a provisional analysis-reasoning family."]
+  },
+  {
+    "id": "pilot-formal-number-theory", "track": "formal", "family": "number-theory", "domain": "closed natural-number arithmetic", "type": "formal", "negative": false,
+    "prompt": "Construct Lean code using only import Init declaring theorem pilot_number_theory_sum with exactly the type (2 : Nat) + 3 = 5. No added premises or axioms. Return solution code without claiming verification.",
+    "answer_contract": "Draft {type:formal,solution:string,target_sha256:null,receipt_sha256:null}; evaluator identifiers and receipt remain pending.", "excerpts": [],
+    "formal": {"imports": ["Init"], "theorem": "pilot_number_theory_sum", "expected_type": "(2 : Nat) + 3 = 5", "solution_code": "import Init\n\ntheorem pilot_number_theory_sum : (2 : Nat) + 3 = 5 := by\n  rfl\n", "allowed_axioms": [], "verifier_integration": "pending", "verification_status": "not-run"},
+    "grading": {"status": "verifier-integration-pending", "theorem": "pilot_number_theory_sum", "expected_type": "(2 : Nat) + 3 = 5", "policy": {"allowed_axioms": []}},
+    "correct_final": {"type": "formal", "solution": "import Init\n\ntheorem pilot_number_theory_sum : (2 : Nat) + 3 = 5 := by\n  rfl\n", "target_sha256": null, "receipt_sha256": null},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Reference proof candidate only; no Lean execution or trusted receipt."]
+  },
+  {
+    "id": "pilot-formal-evidence", "track": "formal", "family": "evidence", "domain": "conjunction of evidence propositions", "type": "formal", "negative": false,
+    "prompt": "Construct Lean code using only import Init declaring theorem pilot_evidence_conjunction with exactly the type (P Q : Prop) -> P ∧ Q -> Q ∧ P. No added premises or axioms. Return solution code without claiming verification.",
+    "answer_contract": "Draft {type:formal,solution:string,target_sha256:null,receipt_sha256:null}; evaluator identifiers and receipt remain pending.", "excerpts": [],
+    "formal": {"imports": ["Init"], "theorem": "pilot_evidence_conjunction", "expected_type": "(P Q : Prop) -> P ∧ Q -> Q ∧ P", "solution_code": "import Init\n\ntheorem pilot_evidence_conjunction : (P Q : Prop) -> P ∧ Q -> Q ∧ P := by\n  intro P Q h\n  exact And.intro h.right h.left\n", "allowed_axioms": [], "verifier_integration": "pending", "verification_status": "not-run"},
+    "grading": {"status": "verifier-integration-pending", "theorem": "pilot_evidence_conjunction", "expected_type": "(P Q : Prop) -> P ∧ Q -> Q ∧ P", "policy": {"allowed_axioms": []}},
+    "correct_final": {"type": "formal", "solution": "import Init\n\ntheorem pilot_evidence_conjunction : (P Q : Prop) -> P ∧ Q -> Q ∧ P := by\n  intro P Q h\n  exact And.intro h.right h.left\n", "target_sha256": null, "receipt_sha256": null},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Reference proof candidate only; no Lean execution or trusted receipt. Provisional evidence-themed logic task, not evidence of empirical claims."]
+  },
+  {
+    "id": "pilot-formal-foundations", "track": "formal", "family": "foundations", "domain": "propositional truth", "type": "formal", "negative": false,
+    "prompt": "Construct Lean code using only import Init declaring theorem pilot_foundations_true with exactly the type True. No added premises or axioms. Return solution code without claiming verification.",
+    "answer_contract": "Draft {type:formal,solution:string,target_sha256:null,receipt_sha256:null}; evaluator identifiers and receipt remain pending.", "excerpts": [],
+    "formal": {"imports": ["Init"], "theorem": "pilot_foundations_true", "expected_type": "True", "solution_code": "import Init\n\ntheorem pilot_foundations_true : True := by\n  exact True.intro\n", "allowed_axioms": [], "verifier_integration": "pending", "verification_status": "not-run"},
+    "grading": {"status": "verifier-integration-pending", "theorem": "pilot_foundations_true", "expected_type": "True", "policy": {"allowed_axioms": []}},
+    "correct_final": {"type": "formal", "solution": "import Init\n\ntheorem pilot_foundations_true : True := by\n  exact True.intro\n", "target_sha256": null, "receipt_sha256": null},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Reference proof candidate only; no Lean execution or trusted receipt. Trivial public target, unsuitable as novel-proof evidence."]
+  },
+  {
+    "id": "pilot-error-geometry", "track": "error-detection", "family": "geometry", "domain": "Euclidean triangle conditions", "type": "explanation", "negative": true,
+    "prompt": "Assess whether the argument is valid; if invalid, identify the specific defect and give a valid correction; if valid, explain why. Argument: A Euclidean triangle has adjacent sides 3 m and 4 m, so its area is (3*4)/2=6 m^2, regardless of their included angle.",
+    "answer_contract": "{type:explanation,text:string}", "excerpts": [],
+    "grading": {"rubric": ["identifies_defect", "valid_correction"], "labels": {"d2e9b5e98a40037c9fd9ef678d0be077b40c72a4a1624149ded92a192bf8b43e":{"identifies_defect":true,"valid_correction":true},"844fbedcf207a392e1c79cc9d8fe915e9acf1e32eaebebe5d8603ac2949c1852":{"identifies_defect":false,"valid_correction":false}}, "fixture_scores": {"correct": {"identifies_defect": true, "valid_correction": true}, "plausible_wrong": {"identifies_defect": false, "valid_correction": false}}},
+    "correct_final": {"type": "explanation", "text": "The included angle is missing. The area is 6*sin(theta) m^2 for 0 < theta < pi, and it equals 6 m^2 only when theta = pi/2."},
+    "plausible_wrong_final": {"type": "explanation", "text": "There is no defect: the product of any two adjacent side lengths divided by two is the triangle's area."},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Constructed argument; exact-text rubric fixtures are author-scored proposals, not independent judgments. Unknown prose requires review, never an LLM judge."]
+  },
+  {
+    "id": "pilot-error-algebra", "track": "error-detection", "family": "algebra", "domain": "cancellation hypotheses", "type": "explanation", "negative": true,
+    "prompt": "Assess whether the argument is valid; if invalid, identify the specific defect and give a counterexample or correction; if valid, explain why. Argument for real a,b,c: From ab=ac, divide both sides by a to conclude b=c.",
+    "answer_contract": "{type:explanation,text:string}", "excerpts": [],
+    "grading": {"rubric": ["identifies_defect", "valid_correction"], "labels": {"29dd9cc2ca1affa73028a4f39f9692a0e73d86524aae3c46259f98b1bedf5754":{"identifies_defect":true,"valid_correction":true},"b37ee6d777c2e773ece03cb082af12171d7e444d8c25f822b4e9568c4c372d24":{"identifies_defect":false,"valid_correction":false}}, "fixture_scores": {"correct": {"identifies_defect": true, "valid_correction": true}, "plausible_wrong": {"identifies_defect": false, "valid_correction": false}}},
+    "correct_final": {"type": "explanation", "text": "Cancellation requires a != 0. With a=0, b=1, c=2, ab=ac but b!=c. Adding a != 0 makes the division valid."},
+    "plausible_wrong_final": {"type": "explanation", "text": "No hypothesis is missing because the same factor can always be canceled from both sides of an equality."},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Exact-text labels are provisional; counterexample uses only elementary real arithmetic."]
+  },
+  {
+    "id": "pilot-error-analysis", "track": "error-detection", "family": "analysis", "domain": "limits and finite sums", "type": "explanation", "negative": false,
+    "prompt": "Assess whether the argument is valid; if invalid, identify the specific defect; if valid, explain why. Argument for real sequences: If a_n tends to a and b_n tends to b, then for every epsilon>0 both errors are eventually less than epsilon/2. The triangle inequality then shows a_n+b_n tends to a+b.",
+    "answer_contract": "{type:explanation,text:string}", "excerpts": [],
+    "grading": {"rubric": ["recognizes_valid_argument", "explains_common_index"], "labels": {"9341a402469d09be703f899395224c7878982df03bcc2b9a720a48c038c8cd69":{"recognizes_valid_argument":true,"explains_common_index":true},"708fb07ed93f7f242c807d6faeff72956b2e4a6fba784e99510c011ba6a89902":{"recognizes_valid_argument":false,"explains_common_index":false}}, "fixture_scores": {"correct": {"recognizes_valid_argument": true, "explains_common_index": true}, "plausible_wrong": {"recognizes_valid_argument": false, "explains_common_index": false}}},
+    "correct_final": {"type": "explanation", "text": "The argument is valid. Choose N as the maximum of the two epsilon/2 thresholds. For n>=N, |(a_n+b_n)-(a+b)| <= |a_n-a|+|b_n-b| < epsilon."},
+    "plausible_wrong_final": {"type": "explanation", "text": "The argument is invalid unless both sequences converge at exactly the same rate, so an extra rate hypothesis is required."},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Positive control: do not label every argument defective. Exact-text rubric is provisional."]
+  },
+  {
+    "id": "pilot-error-number-theory", "track": "error-detection", "family": "number-theory", "domain": "primality", "type": "explanation", "negative": true,
+    "prompt": "Assess whether the argument is valid; if invalid, identify the specific defect and provide a counterexample or corrected criterion; if valid, explain why. Argument: Every integer n>1 is prime because it is divisible by 1 and itself.",
+    "answer_contract": "{type:explanation,text:string}", "excerpts": [],
+    "grading": {"rubric": ["identifies_defect", "valid_correction"], "labels": {"d28a148188f2df4f035f1714575c6a6295fa3b9c1488fd91385d937400645c60":{"identifies_defect":true,"valid_correction":true},"402d0f2b4aa6b54d7528363ac7614c7001f54869e4f0772c5376fd5a64f97a1d":{"identifies_defect":false,"valid_correction":false}}, "fixture_scores": {"correct": {"identifies_defect": true, "valid_correction": true}, "plausible_wrong": {"identifies_defect": false, "valid_correction": false}}},
+    "correct_final": {"type": "explanation", "text": "Being divisible by 1 and itself is not sufficient. A prime integer greater than 1 has no other positive divisors. The integer 4 also has divisor 2, so it is a counterexample."},
+    "plausible_wrong_final": {"type": "explanation", "text": "The claim is correct because divisibility by 1 and itself is the complete definition of a prime integer."},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Elementary counterexample 4=2*2; author-scored labels await independent review."]
+  },
+  {
+    "id": "pilot-error-evidence", "track": "error-detection", "family": "evidence", "domain": "verification evidence", "type": "explanation", "negative": true,
+    "prompt": "Assess whether the argument is valid; if invalid, identify the specific defect and state what evidence would be needed; if valid, explain why. In a hypothetical run, an agent prints VERIFIED in its own final message. No evaluator receipt, target comparison, or axiom audit is supplied. A report concludes that the fixed target was independently verified.",
+    "answer_contract": "{type:explanation,text:string}", "excerpts": [],
+    "grading": {"rubric": ["rejects_unsupported_verification", "identifies_required_evidence"], "labels": {"13ccfe6cb60ad6f175f1f17b1e14ab526f071047448a8beec9351a8eb10e42bc":{"rejects_unsupported_verification":true,"identifies_required_evidence":true},"6e0bb6b60aff4674c74c646f3076ca12191f2ca152e9d1d576b5cfb4f4e94e9a":{"rejects_unsupported_verification":false,"identifies_required_evidence":false}}, "fixture_scores": {"correct": {"rejects_unsupported_verification": true, "identifies_required_evidence": true}, "plausible_wrong": {"rejects_unsupported_verification": false, "identifies_required_evidence": false}}},
+    "correct_final": {"type": "explanation", "text": "The printed marker is not verification evidence. The outcome is unverified without an evaluator-controlled receipt matching the fixed target and submitted solution and checking the allowed axiom policy."},
+    "plausible_wrong_final": {"type": "explanation", "text": "The VERIFIED marker is sufficient evidence of independent verification because the agent would not print it if the proof were invalid."},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Hypothetical scenario, not a report of an actual run. Rubric follows the supplied protocol's evidence distinction."]
+  },
+  {
+    "id": "pilot-error-foundations", "track": "error-detection", "family": "foundations", "domain": "quantifier order", "type": "explanation", "negative": true,
+    "prompt": "Assess whether the argument is valid; if invalid, identify the specific defect and justify the correction; if valid, explain why. Argument over natural numbers: Since for every n there exists m with m>n, there exists one natural number m such that m>n for every n.",
+    "answer_contract": "{type:explanation,text:string}", "excerpts": [],
+    "grading": {"rubric": ["identifies_defect", "valid_correction"], "labels": {"1ae7619cbfeaa403a7f02479d4a80c8689afa76cc33c4b2bde553fcf028f5321":{"identifies_defect":true,"valid_correction":true},"0d35207adbb2d85744f871fd7d0577ea47083b36131c6d986a0caeec644d305f":{"identifies_defect":false,"valid_correction":false}}, "fixture_scores": {"correct": {"identifies_defect": true, "valid_correction": true}, "plausible_wrong": {"identifies_defect": false, "valid_correction": false}}},
+    "correct_final": {"type": "explanation", "text": "The quantifiers cannot be exchanged. The premise holds by choosing m=n+1 separately for each n. A single m cannot exceed every n, since taking n=m would require m>m."},
+    "plausible_wrong_final": {"type": "explanation", "text": "The inference is valid: the choices m=n+1 collectively provide one natural number greater than all natural numbers."},
+    "provisional": true, "review_status": "owner-review-pending", "notes": ["Constructed elementary logic task; pre-scored labels are not independent ground truth yet."]
+  },
+  {
+    "id": "pilot-absence-geometry",
+    "track": "absence",
+    "family": "geometry",
+    "domain": "bounded geometry evidence",
+    "type": "absence",
+    "negative": true,
+    "prompt": "The supplied lemma is the entire consulted inventory for this task, not the entire corpus. It is available to read. Does it state a classification of all nonconvex volume-product minimizers? Return an absence status, consulted document#locator identifiers, and a scope explanation distinguishing not found here from nonexistent or unavailable. Do not search beyond the supplied excerpt. Put the scope explanation in prose, using the words not found in consulted excerpts and explicitly stating that the consulted inventory is non-exhaustive; do not claim corpus-wide nonexistence.",
+    "answer_contract": "{type:absence,status:not_found_in_consulted_excerpts|nonexistent|corpus_unavailable,consulted:string[],prose:string}",
+    "excerpts": [{"document":"math/preprints/The-symmetric-Mahler-conjecture-and-its-equality-cases-September-22-2026/build/sections/convex-preliminaries.tex","locator":"L87-L93","text":"\\begin{lemma}[The Hanner volume product]\\label{lem:hanner}\nEvery $d$-dimensional linear Hanner body $H$ satisfies\n\\[\n P(H)=\\frac{4^d}{d!}.\n\\]\nThe polar of a linear Hanner body is again a linear Hanner body.\n\\end{lemma}"}],
+    "grading": {"status":"not_found_in_consulted_excerpts","consulted":["math/preprints/The-symmetric-Mahler-conjecture-and-its-equality-cases-September-22-2026/build/sections/convex-preliminaries.tex#L87-L93"],"exhaustive_inventory":false,"rubric":["bounded_scope","availability_distinction"],"labels":{"21b1fd0dabb9b58b3129a1518853c6c5b8828020d81dc8163b343c2e828f4739":{"bounded_scope":true,"availability_distinction":true},"229c3656c9ef6a554ca7c48a580f7b410437302f070d23752a5b3c8e137065ca":{"bounded_scope":false,"availability_distinction":true}},"fixture_scores":{"correct":{"bounded_scope":true,"availability_distinction":true},"plausible_wrong":{"bounded_scope":false,"availability_distinction":true}},"explanation_integration":"pending","prose_grader":"tasks/grade-absence.mjs"},
+    "correct_final": {"type":"absence","status":"not_found_in_consulted_excerpts","consulted":["math/preprints/The-symmetric-Mahler-conjecture-and-its-equality-cases-September-22-2026/build/sections/convex-preliminaries.tex#L87-L93"],"prose":"The requested classification was not found in consulted excerpts. The Hanner lemma is available, but this limited inventory does not establish corpus-wide nonexistence. The consulted inventory is non-exhaustive."},
+    "plausible_wrong_final": {"type":"absence","status":"nonexistent","consulted":["math/preprints/The-symmetric-Mahler-conjecture-and-its-equality-cases-September-22-2026/build/sections/convex-preliminaries.tex#L87-L93"],"prose":"The available lemma does not mention nonconvex minimizers, so no such classification exists anywhere in the corpus."},
+    "provisional": true,
+    "review_status": "owner-review-pending",
+    "notes": ["Only the listed excerpt was assessed for the requested proposition; no corpus-wide absence search. Task-local exact-prose grading is available; runner integration remains pending."],
+    "prose_variants": {"same_status_wrong_prose":{"type":"absence","status":"not_found_in_consulted_excerpts","consulted":["math/preprints/The-symmetric-Mahler-conjecture-and-its-equality-cases-September-22-2026/build/sections/convex-preliminaries.tex#L87-L93"],"prose":"The available lemma does not mention nonconvex minimizers, so no such classification exists anywhere in the corpus."}}
+  },
+  {
+    "id": "pilot-absence-algebra",
+    "track": "absence",
+    "family": "algebra",
+    "domain": "bounded algebra bibliography",
+    "type": "absence",
+    "negative": true,
+    "prompt": "Only the supplied, available README header has been consulted. Find a DOI for this manuscript in that header. Return an absence status, consulted document#locator identifiers, and explain whether this establishes that the manuscript has no DOI anywhere. This is not a complete bibliographic inventory. Put the scope explanation in prose, using the words not found in consulted excerpts and explicitly stating that the consulted inventory is non-exhaustive; do not claim corpus-wide nonexistence.",
+    "answer_contract": "{type:absence,status:not_found_in_consulted_excerpts|nonexistent|corpus_unavailable,consulted:string[],prose:string}",
+    "excerpts": [{"document":"math/preprints/A-Counterexample-to-Kaplanskys-Direct-Finiteness-Conjecture-in-Characteristic-Two-September-23-2026/README.md","locator":"L1-L5","text":"# [A Counterexample to Kaplansky's Direct-Finiteness Conjecture in Characteristic Two](paper.pdf)\n\n**Author:** OpenAI\n\n**Date:** September 23, 2026"}],
+    "grading": {"status":"not_found_in_consulted_excerpts","consulted":["math/preprints/A-Counterexample-to-Kaplanskys-Direct-Finiteness-Conjecture-in-Characteristic-Two-September-23-2026/README.md#L1-L5"],"exhaustive_inventory":false,"rubric":["bounded_scope","availability_distinction"],"labels":{"c557b32bf78238a743542ae6a0d2f14aaada7ca2aac807e32ff839133d17edd5":{"bounded_scope":true,"availability_distinction":true},"ecf60018a7978a49f6d1f384e422365934d2ea2432307b7c4f594d914dcf9a95":{"bounded_scope":false,"availability_distinction":true}},"fixture_scores":{"correct":{"bounded_scope":true,"availability_distinction":true},"plausible_wrong":{"bounded_scope":false,"availability_distinction":true}},"explanation_integration":"pending","prose_grader":"tasks/grade-absence.mjs"},
+    "correct_final": {"type":"absence","status":"not_found_in_consulted_excerpts","consulted":["math/preprints/A-Counterexample-to-Kaplanskys-Direct-Finiteness-Conjecture-in-Characteristic-Two-September-23-2026/README.md#L1-L5"],"prose":"A DOI was not found in consulted excerpts. The header was available; its silence does not prove that the manuscript has no DOI elsewhere. The consulted inventory is non-exhaustive."},
+    "plausible_wrong_final": {"type":"absence","status":"nonexistent","consulted":["math/preprints/A-Counterexample-to-Kaplanskys-Direct-Finiteness-Conjecture-in-Characteristic-Two-September-23-2026/README.md#L1-L5"],"prose":"The header is available and contains no DOI, so the manuscript has no DOI anywhere."},
+    "provisional": true,
+    "review_status": "owner-review-pending",
+    "notes": ["No external DOI lookup or complete bibliography search. Task-local exact-prose grading is available; runner integration remains pending."],
+    "prose_variants": {"same_status_wrong_prose":{"type":"absence","status":"not_found_in_consulted_excerpts","consulted":["math/preprints/A-Counterexample-to-Kaplanskys-Direct-Finiteness-Conjecture-in-Characteristic-Two-September-23-2026/README.md#L1-L5"],"prose":"The header is available and contains no DOI, so the manuscript has no DOI anywhere."}}
+  },
+  {
+    "id": "pilot-absence-analysis",
+    "track": "absence",
+    "family": "analysis",
+    "domain": "bounded analytic claims",
+    "type": "absence",
+    "negative": true,
+    "prompt": "The supplied catalogue paragraph is available and is the only consulted excerpt. Find a statement that all nontrivial zeta zeros have real part exactly 1/2. Return the absence status, consulted identifiers and a scope explanation. Do not confuse a stated zero-free half-plane with a statement of the full Riemann hypothesis, or infer corpus-wide nonexistence. Put the scope explanation in prose, using the words not found in consulted excerpts and explicitly stating that the consulted inventory is non-exhaustive; do not claim corpus-wide nonexistence.",
+    "answer_contract": "{type:absence,status:not_found_in_consulted_excerpts|nonexistent|corpus_unavailable,consulted:string[],prose:string}",
+    "excerpts": [{"document":"math/CONTENTS.md","locator":"L75-L75","text":"We prove that all finite-order Hecke <i>L</i>-functions over $`\\mathbb Q(\\sqrt{-3})`$ and all Dirichlet <i>L</i>-functions are zero-free in the half-plane $`\\Re s\\gt 7/8`$, with the principal pole at <i>s</i> = 1 allowed. In particular, the Riemann zeta function is zero-free in this half-plane, proving the quasi-Riemann hypothesis."}],
+    "grading": {"status":"not_found_in_consulted_excerpts","consulted":["math/CONTENTS.md#L75-L75"],"exhaustive_inventory":false,"rubric":["bounded_scope","availability_distinction"],"labels":{"00cf2df67c5b94e31b723e4b3bbbfad4b6bef8e229c596ba82f41433d5ef429c":{"bounded_scope":true,"availability_distinction":true},"c7a7763cbc2ed39c16405872a01359310e5b851aef46efa67b582bf8ea82a25b":{"bounded_scope":false,"availability_distinction":true}},"fixture_scores":{"correct":{"bounded_scope":true,"availability_distinction":true},"plausible_wrong":{"bounded_scope":false,"availability_distinction":true}},"explanation_integration":"pending","prose_grader":"tasks/grade-absence.mjs"},
+    "correct_final": {"type":"absence","status":"not_found_in_consulted_excerpts","consulted":["math/CONTENTS.md#L75-L75"],"prose":"The full critical-line statement was not found in consulted excerpts. This available paragraph states a zero-free half-plane, not that every nontrivial zero has real part 1/2; other corpus material was not assessed. The consulted inventory is non-exhaustive."},
+    "plausible_wrong_final": {"type":"absence","status":"nonexistent","consulted":["math/CONTENTS.md#L75-L75"],"prose":"The available paragraph gives only the 7/8 half-plane, proving that no full critical-line statement exists anywhere in the corpus."},
+    "provisional": true,
+    "review_status": "owner-review-pending",
+    "notes": ["Source claims only; no assessment of either hypothesis's mathematical truth. Task-local exact-prose grading is available; runner integration remains pending."],
+    "prose_variants": {"same_status_wrong_prose":{"type":"absence","status":"not_found_in_consulted_excerpts","consulted":["math/CONTENTS.md#L75-L75"],"prose":"The available paragraph gives only the 7/8 half-plane, proving that no full critical-line statement exists anywhere in the corpus."}}
+  },
+  {
+    "id": "pilot-absence-number-theory",
+    "track": "absence",
+    "family": "number-theory",
+    "domain": "bounded version evidence",
+    "type": "absence",
+    "negative": true,
+    "prompt": "Only the supplied BSD version note has been consulted and it is available. Find an evaluator-issued Lean verification receipt with a target hash in this note. Return an absence status, consulted identifiers and an explanation. Do not infer that no proof or receipt exists elsewhere. Put the scope explanation in prose, using the words not found in consulted excerpts and explicitly stating that the consulted inventory is non-exhaustive; do not claim corpus-wide nonexistence.",
+    "answer_contract": "{type:absence,status:not_found_in_consulted_excerpts|nonexistent|corpus_unavailable,consulted:string[],prose:string}",
+    "excerpts": [{"document":"math/preprints/Exact-Birch-Swinnerton-Dyer-Formula-from-Low-Selmer-Corank-October-7-2026/README.md","locator":"L19-L21","text":"## Version note\n\nThis version removes an obsolete supporting citation and updates citations to revised manuscripts in this collection; see the [previous version](../Exact-Birch-Swinnerton-Dyer-Formula-from-Low-Selmer-Corank-October-3-2026/exact-bsd-low-selmer-corank.pdf)."}],
+    "grading": {"status":"not_found_in_consulted_excerpts","consulted":["math/preprints/Exact-Birch-Swinnerton-Dyer-Formula-from-Low-Selmer-Corank-October-7-2026/README.md#L19-L21"],"exhaustive_inventory":false,"rubric":["bounded_scope","availability_distinction"],"labels":{"ac3d7056853dfa36c9d30984e51b0bdf6b181de7b3df9b2e5574f5e626fba4fd":{"bounded_scope":true,"availability_distinction":true},"5c9a4703eafde0bfcae67964d5b46189861feb938127d03dff714925ac64953b":{"bounded_scope":false,"availability_distinction":true}},"fixture_scores":{"correct":{"bounded_scope":true,"availability_distinction":true},"plausible_wrong":{"bounded_scope":false,"availability_distinction":true}},"explanation_integration":"pending","prose_grader":"tasks/grade-absence.mjs"},
+    "correct_final": {"type":"absence","status":"not_found_in_consulted_excerpts","consulted":["math/preprints/Exact-Birch-Swinnerton-Dyer-Formula-from-Low-Selmer-Corank-October-7-2026/README.md#L19-L21"],"prose":"A target-hashed verification receipt was not found in consulted excerpts. The available version note discusses citation changes; it does not establish that receipts or formal proofs are absent elsewhere. The consulted inventory is non-exhaustive."},
+    "plausible_wrong_final": {"type":"absence","status":"nonexistent","consulted":["math/preprints/Exact-Birch-Swinnerton-Dyer-Formula-from-Low-Selmer-Corank-October-7-2026/README.md#L19-L21"],"prose":"The available version note has no target hash, so there is no formal proof or verification receipt for this manuscript anywhere."},
+    "provisional": true,
+    "review_status": "owner-review-pending",
+    "notes": ["A version note is not a verification inventory. Task-local exact-prose grading is available; runner integration remains pending."],
+    "prose_variants": {"same_status_wrong_prose":{"type":"absence","status":"not_found_in_consulted_excerpts","consulted":["math/preprints/Exact-Birch-Swinnerton-Dyer-Formula-from-Low-Selmer-Corank-October-7-2026/README.md#L19-L21"],"prose":"The available version note has no target hash, so there is no formal proof or verification receipt for this manuscript anywhere."}}
+  },
+  {
+    "id": "pilot-absence-evidence",
+    "track": "absence",
+    "family": "evidence",
+    "domain": "bounded collection policy",
+    "type": "absence",
+    "negative": true,
+    "prompt": "Only the supplied, available collection README paragraph has been consulted. Find an assertion in it that every manuscript passed independent peer review. Return absence status, consulted identifiers and a bounded explanation distinguishing missing evidence, nonexistence and unavailability. Put the scope explanation in prose, using the words not found in consulted excerpts and explicitly stating that the consulted inventory is non-exhaustive; do not claim corpus-wide nonexistence.",
+    "answer_contract": "{type:absence,status:not_found_in_consulted_excerpts|nonexistent|corpus_unavailable,consulted:string[],prose:string}",
+    "excerpts": [{"document":"math/README.md","locator":"L12-L12","text":"In our view, these manuscripts are best understood as a form of raw research data, rather than polished academic papers. We defer to the math community completely on matters of credit, precedence, and concurrent work."}],
+    "grading": {"status":"not_found_in_consulted_excerpts","consulted":["math/README.md#L12-L12"],"exhaustive_inventory":false,"rubric":["bounded_scope","availability_distinction"],"labels":{"4bcae18579426b9bf07ca871fa9d6228226459a990c5017dff014d946ca6aa05":{"bounded_scope":true,"availability_distinction":true},"ced76520fdbff08a4bce914175a6711f5ea75c8c3ccc6900cc94496a5dc42dcb":{"bounded_scope":false,"availability_distinction":true}},"fixture_scores":{"correct":{"bounded_scope":true,"availability_distinction":true},"plausible_wrong":{"bounded_scope":false,"availability_distinction":true}},"explanation_integration":"pending","prose_grader":"tasks/grade-absence.mjs"},
+    "correct_final": {"type":"absence","status":"not_found_in_consulted_excerpts","consulted":["math/README.md#L12-L12"],"prose":"An assertion of universal independent peer review was not found in consulted excerpts. The paragraph is available but does not inventory review histories; no corpus-wide nonexistence conclusion follows. The consulted inventory is non-exhaustive."},
+    "plausible_wrong_final": {"type":"absence","status":"nonexistent","consulted":["math/README.md#L12-L12"],"prose":"Because the available paragraph calls these manuscripts raw research data, no manuscript in the corpus has ever been independently peer reviewed."},
+    "provisional": true,
+    "review_status": "owner-review-pending",
+    "notes": ["No claim is made about actual peer-review histories. Task-local exact-prose grading is available; runner integration remains pending."],
+    "prose_variants": {"same_status_wrong_prose":{"type":"absence","status":"not_found_in_consulted_excerpts","consulted":["math/README.md#L12-L12"],"prose":"Because the available paragraph calls these manuscripts raw research data, no manuscript in the corpus has ever been independently peer reviewed."}}
+  },
+  {
+    "id": "pilot-absence-foundations",
+    "track": "absence",
+    "family": "foundations",
+    "domain": "unavailable evidence scenario",
+    "type": "absence",
+    "negative": true,
+    "prompt": "Hypothetical task environment: the corpus cannot be mounted or read, and no excerpts, search results, or inventory are supplied. You are asked whether it contains a proof of a named target. Return the appropriate absence status, an empty consulted list, and explain why neither a negative search result nor nonexistence follows. These conditions are a scenario, not a report of this machine's state. Put the scope explanation in prose; distinguish unavailable evidence from not found in consulted excerpts and from nonexistence.",
+    "answer_contract": "{type:absence,status:not_found_in_consulted_excerpts|nonexistent|corpus_unavailable,consulted:string[],prose:string}",
+    "excerpts": [],
+    "grading": {"status":"corpus_unavailable","consulted":[],"exhaustive_inventory":false,"scenario_corpus_available":false,"rubric":["bounded_scope","availability_distinction"],"labels":{"7af2821aea1258161cf5e5ebb28120c2c91a38cd758ec08f77862160e71df951":{"bounded_scope":true,"availability_distinction":true},"7b7652902a473b6ec7c355f6d650b8f26bc5407b25d5dc8a253c5e42bd15db4b":{"bounded_scope":false,"availability_distinction":false}},"fixture_scores":{"correct":{"bounded_scope":true,"availability_distinction":true},"plausible_wrong":{"bounded_scope":false,"availability_distinction":false}},"explanation_integration":"pending","prose_grader":"tasks/grade-absence.mjs"},
+    "correct_final": {"type":"absence","status":"corpus_unavailable","consulted":[],"prose":"The corpus is unavailable in the stated scenario, and no excerpts were consulted. This is not an executed search yielding no match and does not establish nonexistence of a proof."},
+    "plausible_wrong_final": {"type":"absence","status":"not_found_in_consulted_excerpts","consulted":[],"prose":"An empty result means a complete search found no proof, so the target has no proof in the corpus."},
+    "provisional": true,
+    "review_status": "owner-review-pending",
+    "notes": ["Hypothetical unavailability must be passed as evaluator context, not inferred from actual host access. Task-local exact-prose grading is available; runner integration remains pending."],
+    "prose_variants": {"same_status_wrong_prose":{"type":"absence","status":"corpus_unavailable","consulted":[],"prose":"An empty result means a complete search found no proof, so the target has no proof in the corpus."}}
+  }
+]

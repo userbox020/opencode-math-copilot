@@ -1,44 +1,48 @@
-% Initial source-linked metadata from handoffv1.md E01--E04.
-% Verify full author metadata and chosen publication versions before submission.
-% Surnames are retained as supplied; omitted metadata is not invented.
-% These are cited-source authors, not proposed authors of this manuscript.
+% Primary-source metadata verified 2026-11-08 against arXiv, official ICLR
+% listings, PMLR, and the Lean Language Reference. Keep citation keys stable.
+% These are cited-source authors, not authors of this manuscript.
 
-@misc{tora2023,
-  author = {Gou and others},
+@inproceedings{tora2023,
+  author = {Gou, Zhibin and Shao, Zhihong and Gong, Yeyun and
+            Shen, Yelong and Yang, Yujiu and Huang, Minlie and
+            Duan, Nan and Chen, Weizhu},
   title = {{ToRA}: A Tool-Integrated Reasoning Agent for Mathematical Problem Solving},
-  year = {2023},
+  booktitle = {International Conference on Learning Representations},
+  year = {2024},
   eprint = {2309.17452},
   archivePrefix = {arXiv},
-  howpublished = {arXiv:2309.17452},
-  url = {https://arxiv.org/abs/2309.17452},
-  note = {Full author metadata and selected version to be verified before submission}
+  url = {https://www.iclr.cc/virtual/2024/poster/19091}
 }
 
-@misc{leanCopilot2024,
-  author = {Song and Yang and Anandkumar},
-  title = {Towards Large Language Models as Copilots for Theorem Proving in {Lean}},
-  year = {2024},
+@inproceedings{leanCopilot2024,
+  author = {Song, Peiyang and Yang, Kaiyu and Anandkumar, Anima},
+  title = {{Lean Copilot}: Large Language Models as Copilots for Theorem Proving in {Lean}},
+  booktitle = {Proceedings of the International Conference on Neuro-symbolic Systems},
+  year = {2025},
+  series = {Proceedings of Machine Learning Research},
+  volume = {288},
+  pages = {144--169},
+  publisher = {PMLR},
   eprint = {2404.12534},
   archivePrefix = {arXiv},
-  howpublished = {arXiv:2404.12534},
-  url = {https://arxiv.org/abs/2404.12534},
-  note = {Software: https://github.com/lean-dojo/LeanCopilot. Full author metadata and selected version to be verified before submission}
+  url = {https://proceedings.mlr.press/v288/song25a.html},
+  note = {Software: \url{https://github.com/lean-dojo/LeanCopilot}}
 }
 
-@misc{minif2f2021,
-  author = {Zheng and Han and Polu},
-  title = {{MiniF2F}: a cross-system benchmark for formal Olympiad-level mathematics},
-  year = {2021},
+@inproceedings{minif2f2021,
+  author = {Zheng, Kunhao and Han, Jesse Michael and Polu, Stanislas},
+  title = {{miniF2F}: a cross-system benchmark for formal {Olympiad}-level mathematics},
+  booktitle = {International Conference on Learning Representations},
+  year = {2022},
   eprint = {2109.00110},
   archivePrefix = {arXiv},
-  howpublished = {arXiv:2109.00110},
-  url = {https://arxiv.org/abs/2109.00110},
-  note = {Full author metadata and selected version to be verified; pin the actual Lean implementation separately}
+  url = {https://iclr.cc/virtual/2022/poster/6258}
 }
 
 @misc{leanProofValidation,
-  title = {{Lean Language Reference}: Validating a {Lean} Proof},
-  howpublished = {Lean language documentation},
-  url = {https://lean-lang.org/doc/reference/latest/ValidatingProofs/},
-  note = {Mutable latest URL supplied by the handoff; verify and pin documentation applicable to Lean 4.34.1 before submission}
+  title = {Validating a {Lean} Proof},
+  howpublished = {The Lean Language Reference, version 4.34.0},
+  url = {https://lean-lang.org/doc/reference/4.34.0/ValidatingProofs/},
+  note = {Accessed 2026-11-08. Version 4.34.0 documentation;
+          no corresponding 4.34.1 documentation deployment was found}
 }

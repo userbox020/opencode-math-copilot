@@ -84,7 +84,14 @@ export function inspectLedger(manifest, episodes, starts) {
     const start = started.get(episode.key);
     assert(start.started_at === episode.started_at && start.agent_payload_sha256 === episode.workspace.agent_payload_sha256, 'Episode/start provenance mismatch');
     const profile = manifest.profiles.find(item => item.id === episode.condition_id);
-    episode.events.forEach((event, index) => assert(event.seq === index + 1 && profile.effective_tools.includes(event.tool) && event.simulated === manifest.simulated, 'Event outside effective tools, provenance or sequence'));
+    // Real adapters add audited core tools and the Code Mode `execute`
+    // transport to the domain inventory. Simulated episodes use only the
+    // profile's registered tools, so their allowlist is unchanged.
+    const realExtras = manifest.simulated ? [] : profile.id === 'F'
+      ? ['read', 'glob', 'grep', 'shell', 'execute']
+      : profile.id === 'B' ? ['execute'] : [];
+    const allowedTools = new Set([...profile.effective_tools, ...realExtras]);
+    episode.events.forEach((event, index) => assert(event.seq === index + 1 && allowedTools.has(event.tool) && event.simulated === manifest.simulated, 'Event outside effective tools, provenance or sequence'));
     assert(episode.events.length === episode.usage.tool_calls, 'Tool count mismatch');
     assert(episode.under_budget === underBudget(episode, manifest.budgets), 'Budget mismatch');
     assert((episode.status === 'completed') === (episode.error === null), 'Status/error mismatch');

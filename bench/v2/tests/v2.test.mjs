@@ -58,12 +58,13 @@ test('absence distinguishes limited search, nonexistence and unavailable corpus'
   assert.equal(gradeFinal(task, task.correct_final, {}).grade.correct, false);
   for (const status of ['nonexistent', 'corpus_unavailable']) assert.equal(gradeFinal(task, { ...task.correct_final, status }, context).grade.correct, false);
   const unavailable = { type: 'absence', grading: { status: 'corpus_unavailable', consulted: [] } };
-  const unavailableAnswer = { type: 'absence', status: 'corpus_unavailable', consulted: [] };
+  const unavailableAnswer = { type: 'absence', status: 'corpus_unavailable', consulted: [], prose: 'No consulted excerpts were available because the corpus is unavailable.' };
   assert.equal(gradeFinal(unavailable, unavailableAnswer, { corpus_available: false }).grade.correct, true);
   assert.equal(gradeFinal(unavailable, unavailableAnswer, { corpus_available: true }).grade.correct, false);
   const exhaustive = { type: 'absence', grading: { status: 'nonexistent', consulted: ['inventory'], exhaustive_inventory: true } };
-  assert.equal(gradeFinal(exhaustive, { type: 'absence', status: 'nonexistent', consulted: ['inventory'] }, { exhaustive_inventory: true }).grade.correct, true);
-  assert.equal(gradeFinal(exhaustive, { type: 'absence', status: 'nonexistent', consulted: ['inventory'] }).grade.correct, false);
+  const exhaustiveAnswer = { type: 'absence', status: 'nonexistent', consulted: ['inventory'], prose: 'Not found in consulted excerpts; the exhaustive inventory establishes nonexistence.' };
+  assert.equal(gradeFinal(exhaustive, exhaustiveAnswer, { exhaustive_inventory: true }).grade.correct, true);
+  assert.equal(gradeFinal(exhaustive, exhaustiveAnswer).grade.correct, false);
 });
 test('explanation grading is blind fixture labeling, not word overlap', () => {
   assert.equal(gradeFinal(explanationTask, { type: 'explanation', text: explanationText }).grade.correct, true);

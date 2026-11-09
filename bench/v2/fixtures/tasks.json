@@ -26,9 +26,9 @@
   {
     "id": "absence-unicorn", "family": "retrieval", "domain": "evidence", "type": "absence", "negative": true,
     "prompt": "Search the available toy excerpt for the unicorn lemma. Distinguish absence from consulted excerpts, corpus-wide nonexistence, and unavailable corpus. List consulted document#locator identifiers.",
-    "answer_contract": "{type:absence,status:not_found_in_consulted_excerpts|nonexistent|corpus_unavailable,consulted:string[]}",
+    "answer_contract": "{type:absence,status:not_found_in_consulted_excerpts|nonexistent|corpus_unavailable,consulted:string[],prose:string}",
     "excerpts": [{"document": "toy-geometry", "locator": "section-1", "text": "A triangle has three sides. This is a partial excerpt, not the complete corpus."}],
     "grading": {"status": "not_found_in_consulted_excerpts", "consulted": ["toy-geometry#section-1"], "exhaustive_inventory": false},
-    "correct_final": {"type": "absence", "status": "not_found_in_consulted_excerpts", "consulted": ["toy-geometry#section-1"]}
+    "correct_final": {"type": "absence", "status": "not_found_in_consulted_excerpts", "consulted": ["toy-geometry#section-1"], "prose": "The unicorn lemma was not found in consulted excerpts. This is a partial, non-exhaustive toy inventory, so it does not establish corpus-wide nonexistence."}
   }
 ]

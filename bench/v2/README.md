@@ -1,4 +1,4 @@
-# Evaluation v2 — deterministic simulation only
+# Evaluation v2 — simulator and fail-closed adapter preparation
 
 This standalone, dependency-free Node harness implements EVAL-01/02/03,
 STAT-01 and the EXEC-01 restricted execution preparation profile. It does not
@@ -58,8 +58,9 @@ outside the agent workspace. **This same-process simulator is not a security
 sandbox for a real agent.** The future real adapter must be a separate restricted
 process/container, receive only the public workspace and allowlisted environment,
 deny traversal into evaluator files, and independently audit effective tool
-availability. Merely changing HOME is not sufficient OS isolation. No real-model
-adapter or API path is enabled here.
+availability. Merely changing HOME is not sufficient OS isolation. The simulator
+does not enable real inference. The separate adapter below prepares real CLI
+invocations but currently refuses execution without an audited runtime boundary.
 
 Task text, common prompt, token/tool/time/USD budgets and cold-cache state are
 identical across A/B/F. Unavoidable interface differences are the available tool
@@ -271,6 +272,202 @@ was **not run** for this delivery. Tests exercise dry-run and mock execution onl
 including Docker absence and timeout cleanup. They do not establish that an image,
 Lean compiler or real formal verifier works.
 
+## OpenCode adapter: dry-run first, no real pilot
+
+`adapters/opencode.mjs` is separate from the unchanged simulator/graders. **No real
+model call, real pilot, Docker challenge or release has been run for this adapter.**
+The real integration layer is `study/run-study.mjs`; see `study/README.md`. Its
+dry-run builds the full matrix and its `--execute` gate refuses a static-equivalent
+inventory audit. No real episode has been run.
+It supports `--tasks <JSON-array-file>` (including provisional task sets) and an
+optional `--task <id>` filter. Without `--tasks`, `--task` selects a toy fixture.
+
+```text
+node bench/v2/adapters/opencode.mjs --profile A --task numeric-speed --model provider/model --out <output-directory>
+node bench/v2/adapters/opencode.mjs --profile B --task citation-toy --model provider/model --out <output-directory> --dry-run
+node bench/v2/adapters/opencode.mjs --profile F --tasks <task-file> --task <id> --model provider/model --out <output-directory> --dry-run
+node bench/v2/adapters/opencode.mjs --profile F --task citation-toy --model test/no-inference --out <output-directory> --audit --dry-run
+node --test bench/v2/tests/v2.test.mjs bench/v2/tests/opencode.test.mjs bench/v2/tests/generic-tools.test.mjs
+```
+
+Dry-run is the default. Without `--audit`, it does not launch OpenCode, resolve providers, load user
+credentials, run model inference, invoke plugin tools, or install dependencies.
+Each task gets a fresh temporary workspace and a uniquely named output directory
+containing `plan.json`. The printed JSON includes the exact executable/argv/cwd,
+sanitized environment, proposed config, requested inventory, public-input/config/
+profile/workspace hashes and diagnostics. Workspaces are retained for inspection;
+remove only the explicitly reported temporary directories when finished.
+
+### Non-inference inventory audit (`--audit`)
+
+`--audit` runs the audit and exits, optionally with `--dry-run`; it cannot be
+combined with `--execute`. **The current guarantee is static-equivalent, not
+runtime-verified.** It creates no OpenCode session, sends no prompt, invokes no
+tool implementation and makes no model call. The model argument is only a plan
+label. No OpenCode server or port is opened by this fallback.
+
+Read-only investigation of installed CLI 2.0.29 covered `--help`, `serve --help`,
+`agent --help` (no such subcommand), `debug --help`, `debug agents --help`,
+`debug config --help`, and `api --help`. The installed 2.0.29 client contract
+(`@opencode/client/dist/promise/generated/{client,types}.d.ts` and its generated
+HTTP implementation) exposes GET `/api/agent`, `/api/agent/{agentID}` and
+`/api/plugin`, but agent results contain permissions, not an effective tool
+snapshot. Config sources/plugin metadata do not prove catalog filtering. No
+supported session-free effective inventory endpoint was found; no guessed tool
+endpoint, session creation or inference was used as a substitute.
+
+The fallback imports the **copied staged V2 plugin** in a bounded Node child
+process with staged cwd and fresh HOME/XDG/OPENCODE_CONFIG_DIR and
+`OPENCODE_CONFIG_PROJECT_DISABLE=1`. It observes `ctx.tool.transform` registrations
+in that process, without calling their executors. This is not OpenCode's plugin
+loader or resolver. It checks the exact hashed staging tree before and after,
+the manifest, explicit local plugin URL and exact registrations. Ordered agent
+permissions (the adapter's agent is `benchmark`) and `tool.use` policies are
+normalized last-match-wins. Unsupported rules, wildcard/unknown allows, duplicate,
+extra or missing tools, plugin failures, malformed responses, timeout and cleanup
+failure all fail closed. Expected inventories are:
+
+- A: no plugin and zero tools.
+- B: `corpus_search`, `read_excerpt`, `compute`, `lean_check`, plus `execute`;
+  no `math_*`, core read/grep or shell equivalent.
+- F: the manifest's 16 `math_*` tools, core `read`, `glob`, `grep`, `shell`,
+  plus `execute`. Core tools are adapter allowances, not plugin registrations.
+
+Reports retain `runtime_verified: false`, `supported: false` and
+`isolation_verified: false` even when the deterministic comparison passes.
+`plan.json` and `audit.json` remain in the output directory; audit child processes
+are closed and the entire temporary workspace is removed on success/failure.
+The stdout summary reports the comparison and blocker. Exit 2 means static
+comparison passed but execution remains unsupported; exit 1 means audit/error
+failure. There is no runtime-proof override. The exact execution blocker is:
+
+```text
+static-equivalent: no supported session-free effective tool inventory endpoint was found in OpenCode 2.0.29; runtime inventory remains unverified
+```
+
+### Current unsupported cases (exit code 2 for prepared dry-runs)
+
+All three unaudited plans report `supported: false` and
+`runtime_inventory_status: "unverified"`. B now reports `inventory_supported: true`,
+`inventory_status: "staged-plugin-exact"` and the four exact `effective_tools` of
+its local plugin. This is a **staged plugin inventory**, not a successful OpenCode
+runtime/isolation audit. A/F retain `effective_tools: null` and
+`inventory_status: "unverified"`. The installed CLI was inspected with `opencode run --help` and
+`opencode --version` (2.0.29); the local 2.0.29 schema supplies `agents`,
+`permissions`, and `policies`. The concurrent source inspection in
+[`research/opencode-isolation.md`](../../research/opencode-isolation.md) confirms
+deny-based tool snapshot filtering, including the Code Mode transport. This is
+not yet a per-episode runtime inventory or exclusive-config audit. No legacy
+`agent.tools` setting is assumed to work.
+
+- **A:** requests zero tools; exact zero-tool runtime exposure remains unaudited.
+- **B:** explicitly stages the V2 generic plugin with exactly `corpus_search`,
+  `read_excerpt`, `compute`, `lean_check`, plus the separately listed `execute`
+  transport. Wildcard-deny permissions/policies allow only those five identifiers.
+  No shell, generic read/grep, math plugin or `math_*` tool is exposed. Tests import
+  the staged plugin and check its registrations and public-only retrieval.
+  Real execution remains refused pending the runtime/isolation audit.
+- **F:** copies the actual 16-tool plugin entry, implementation, worker/reindex
+  scripts and installed runtime dependencies into the temporary workspace. Tests
+  import that local copy and observe its 16 registrations without executing tools.
+  No symlink, global plugin, generated archive index, user skill, full corpus or
+  Lean toolchain is copied. Its required `execute` transport is allowed separately
+  from the 16 logical plugin tools, alongside the adapter's four core allowances.
+  The public excerpt JSON is **not** a native plugin
+  corpus; retrieval/Lean availability and transport filtering are not established.
+  Missing corpus/indexes must not be reported as evidence of mathematical absence.
+
+### B generic plugin limits
+
+`generic-tools.mjs` uses `Plugin.define` and `ctx.tool.transform`. Its runtime and
+installed `@opencode/plugin` dependency closure are copied, not linked or loaded
+from global config. Tool implementations do not perform network requests, install
+packages or invoke a shell. Subprocess tests are mocked; installed Python/SymPy
+and Lean availability has not been established by this delivery.
+
+- Retrieval snapshots only the adapter's `corpus/excerpts.json` (at most 2 MiB /
+  2000 entries). Extra/private fields and linked files are rejected. Search is
+  case-insensitive literal substring matching, at most 10 results / 2000 characters
+  each. Read accepts exact public document/locator identifiers, not paths, and
+  returns at most 8000 characters. No grader/answer files are consulted. A miss is
+  not evidence of corpus-wide nonexistence.
+- Compute copies the unchanged fixed `math_compute.py` worker as `generic/compute.py`
+  and invokes preinstalled Python with `-I -B`, a bounded JSON argument, no shell
+  and a 10-second maximum timeout. It supports simplify/factor/expand/solve,
+  differentiation/integration, limit/series/evalf and determinant/eigenvalues.
+  The worker's AST allowlist limits expressions to 2000 characters, 500 nodes,
+  depth 50, bounded numeric powers and at most 10×10 matrices. Strings, arbitrary
+  function calls and Python evaluation are forbidden. Results are strings, not
+  graded answers; simplification does not preserve/report domain restrictions for
+  the model automatically. Python and SymPy must already be installed.
+- Lean accepts one theorem/example with a single-line type and a bounded `by`
+  proof (8000 characters, 40 tactic lines). Supported tactics are `trivial`, `rfl`,
+  `decide`, `assumption`, `constructor`, `simp`, `intro <names>` and
+  `exact <identifier>` / `exact True.intro`. Imports are limited to `Init`,
+  `Init.Data.Nat.Basic`, `Init.Data.Int.Basic`, `Init.Data.List.Basic`; no Mathlib,
+  custom imports, file arguments, strings, comments, commands, IO, `#eval`,
+  `run_tac` or metaprogramming. A preinstalled native `lean` compiles a fresh
+  temporary file with one thread, 256 MiB compiler limit and at most 10 seconds;
+  that temporary directory is removed afterward. Elan shims and package/build
+  downloads are not used. **This is compilation only:** even `compiled` returns
+  `verification: "not-performed"`, `receipt: null`, with no target/axiom audit or
+  `math_lean_verify` semantics.
+
+These bounds and trusted-runtime assumptions are not an OS sandbox. Real execution
+still requires evaluator-controlled containment against host filesystem/network
+access and an audited Code Mode transport; the inventory fix does not bypass it.
+
+### Isolation and execution boundary
+
+Preparation uses `prepareWorkspace`/`assertWorkspace` on sanitized public task
+fields and excerpts, then extends the exact-file/content allowlist for adapter
+runtime assets. Grading/correct finals and private-marked excerpts are excluded.
+It records per-file SHA-256 values and audits the complete staging tree. Unknown
+files, payload changes and links fail closed. B/F plugins are loaded by their
+explicit temporary file URLs; automatic project discovery is disabled.
+
+The proposed child environment is allowlisted, redirects HOME/USERPROFILE, all
+XDG state/data/config/cache directories, APPDATA/LOCALAPPDATA and temporary paths,
+sets `OPENCODE_CONFIG_PROJECT_DISABLE=1`, points `OPENCODE_CONFIG` at the generated
+config and `OPENCODE_CONFIG_DIR` at an empty workspace-local directory. No inherited
+`OPENCODE_CONFIG_CONTENT`, credential variables, `NODE_OPTIONS` or prior sessions
+are passed. The command uses `--standalone --format json`, never `--auto`,
+`--continue`, `--session` or `--server`. These are **preparation measures, not an
+OS sandbox or an audited guarantee** against managed/ancestor config discovery,
+host filesystem access, subprocess access or networking. Authentication is not
+provisioned; it must eventually use an evaluator-controlled mechanism, not copied
+user credential files.
+
+System/managed config may still load in OpenCode despite redirected HOME/XDG and
+disabled project discovery. Config permissions and plugin code are **not an OS
+sandbox**. The static-equivalent probe does not resolve those system sources,
+prove OpenCode loaded the plugin, or prove its final Code Mode catalog. B has no
+`shell` equivalent; its bounded compute/Lean wrappers are not arbitrary shell.
+
+`--execute` is separate and additionally requires `MATH_BENCH_ALLOW_EXECUTE=1`.
+That environment variable **does not bypass unsupported profiles**: the CLI has
+no runtime-audit override: it runs this audit and stops before invoking OpenCode. The
+exported execution seam is tested only with mock subprocess output and a mock
+evaluator audit. A passing static-equivalent report can never authorize execution,
+even with the opt-in. The execution seam requires a passing runtime-verified,
+workspace/hash-bound exact inventory (including core and transport), verified
+isolation and successful cleanup. Before enabling real execution, integrate a version-specific,
+inference-free runtime inventory/isolation audit, a public corpus bridge for F,
+and evaluator-controlled process containment and
+authentication. Do not set an audit flag merely because the requested config
+looks plausible.
+
+The execution seam captures stdout/stderr, exit status and duration and emits an
+**ungraded episode candidate**, not a study ledger entry. Its conservative parser
+recognizes source-documented NDJSON `text` plus final `step_finish`
+(`stop`/`end_turn`), grouped by final assistant `messageID`; this envelope has not
+been confirmed against a real 2.0.29 inference stream. Other
+formats, malformed JSON, error events, nonzero exits, missing terminal text or
+non-JSON finals fail closed. CLI usage/cost fields remain unvalidated observations,
+not budget verification. Formal candidates always have `verification: pending`
+and no trusted receipt. Even an agent's plugin verifier output is not an
+evaluator-controlled receipt.
+
 ## Files
 
 - `run.mjs`, `lib.mjs`, `simulator.mjs`: isolated simulation and provenance.
@@ -280,6 +477,11 @@ Lean compiler or real formal verifier works.
 - `profiles/`, `graders/`, `fixtures/`: preregistered conditions and deterministic checks.
 - `exec/restricted.mjs`: prepare/execute separation and restricted Docker arguments.
 - `tests/v2.test.mjs`: deterministic, inference-free validation.
+- `adapters/opencode.mjs`, `tests/opencode.test.mjs`: dry-run preparation and mocked,
+  fail-closed real-adapter execution boundary; no real pilot results.
+- `adapters/generic-tools.mjs`, `adapters/generic-runtime.mjs`,
+  `tests/generic-tools.test.mjs`: exact four-tool B implementation and bounded,
+  public-only retrieval / mocked subprocess tests.
 - `simulated/simulated-pilot-receipt-v2.1/`: current schema-update simulation manifest, starts, 48 terminal
   episodes, separate artifacts, and JSON/Markdown analysis reports.
 - `simulated/simulated-pilot-full-plugin/`: unchanged earlier 16-tool simulation snapshot.
