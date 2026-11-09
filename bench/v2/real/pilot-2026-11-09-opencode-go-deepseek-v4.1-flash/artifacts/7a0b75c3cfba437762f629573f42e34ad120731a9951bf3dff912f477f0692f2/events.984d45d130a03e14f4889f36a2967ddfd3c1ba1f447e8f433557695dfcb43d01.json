@@ -1,0 +1,17 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await Promise.allSettled([\n  tools.compute({operation:\"simplify\", expression:\"(x**2-1)/(x-1)\", variable:\"x\"}),\n  tools.compute({operation:\"expand\", expression:\"(x**2-1)/(x-1)\", variable:\"x\"}),\n  tools.corpus_search({query:\"pilot-computation-algebra\", limit:5})\n]);\nreturn JSON.stringify(r, null, 1);"
+    },
+    "result": {
+      "status": "completed",
+      "output": "[\n {\n  \"status\": \"fulfilled\",\n  \"value\": \"{\\\"status\\\":\\\"completed\\\",\\\"result\\\":\\\"x + 1\\\"}\"\n },\n {\n  \"status\": \"fulfilled\",\n  \"value\": \"{\\\"status\\\":\\\"completed\\\",\\\"result\\\":\\\"x**2/(x - 1) - 1/(x - 1)\\\"}\"\n },\n {\n  \"status\": \"fulfilled\",\n  \"value\": \"{\\\"scope\\\":\\\"public-excerpts-only\\\",\\\"exhaustive_inventory\\\":false,\\\"total_matches\\\":0,\\\"excerpts\\\":[]}\"\n }\n]",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "type": "absence",
+  "status": "not_found_in_consulted_excerpts",
+  "consulted": [
+    "math/CONTENTS.md:L75-L75"
+  ],
+  "prose": "The statement that all nontrivial zeros of the Riemann zeta function have real part exactly 1/2 is not found in consulted excerpts. The sole consulted excerpt, math/CONTENTS.md at L75-L75, states that the Riemann zeta function is zero-free in the half-plane Re(s) > 7/8, with the principal pole at s = 1 allowed, and calls this the quasi-Riemann hypothesis; that is a zero-free half-plane statement, not the full Riemann hypothesis. This absence is limited to the single consulted identifier, and the consulted inventory is non-exhaustive, so it does not establish corpus-wide nonexistence."
+}

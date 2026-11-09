@@ -1,0 +1,17 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.read_excerpt({document:\"math/README.md\", locator:\"L12-L12\", maxChars:8000});\nreturn r;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"document\":\"math/README.md\",\"locator\":\"L12-L12\",\"text\":\"In our view, these manuscripts are best understood as a form of raw research data, rather than polished academic papers. We defer to the math community completely on matters of credit, precedence, and concurrent work.\",\"truncated\":false,\"scope\":\"public-excerpts-only\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

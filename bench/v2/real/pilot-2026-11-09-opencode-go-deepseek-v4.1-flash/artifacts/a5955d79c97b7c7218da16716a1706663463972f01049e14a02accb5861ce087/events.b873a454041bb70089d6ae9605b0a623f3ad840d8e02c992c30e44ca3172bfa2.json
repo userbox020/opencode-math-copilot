@@ -1,0 +1,47 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "glob",
+    "arguments": {
+      "pattern": "corpus/**"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 2,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await Promise.allSettled([\n  tools.math_compute({operation:\"simplify\", expression:\"(x**2-1)/(x-1)\"}),\n  tools.math_compute({operation:\"factor\", expression:\"x**2-1\"})\n]);\nreturn JSON.stringify(r.map(x=>x.status===\"fulfilled\"?x.value:String(x.reason)));"
+    },
+    "result": {
+      "status": "completed",
+      "output": "[\"### SymPy: simplify\\n\\n```text\\nInput: (x**2-1)/(x-1)\\nResult: x + 1\\n```\",\"### SymPy: factor\\n\\n```text\\nInput: x**2-1\\nResult: (x - 1)*(x + 1)\\n```\"]",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 3,
+    "kind": "tool_call",
+    "tool": "read",
+    "arguments": {
+      "path": "corpus/excerpts.json"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

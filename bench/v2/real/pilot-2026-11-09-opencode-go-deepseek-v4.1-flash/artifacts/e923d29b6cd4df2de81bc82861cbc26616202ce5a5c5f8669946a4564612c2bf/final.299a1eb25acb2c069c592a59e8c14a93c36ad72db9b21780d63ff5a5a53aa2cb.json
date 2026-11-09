@@ -1,0 +1,6 @@
+{
+  "type": "formal",
+  "solution": "import Init\n\ntheorem pilot_foundations_true : True := True.intro",
+  "target_sha256": null,
+  "receipt_sha256": null
+}

@@ -1,0 +1,6 @@
+{
+  "type": "formal",
+  "solution": "import Init\n\ntheorem pilot_evidence_conjunction : (P Q : Prop) -> P ∧ Q -> Q ∧ P :=\n  fun P Q h => And.intro (And.right h) (And.left h)\n",
+  "target_sha256": null,
+  "receipt_sha256": null
+}

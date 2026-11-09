@@ -1,0 +1,4 @@
+{
+  "type": "explanation",
+  "text": "Domain: real numbers a,b,c. Units: none. Verdict: the argument is invalid as stated. Specific defect: it divides both sides by a without establishing a ≠ 0; division by zero is undefined. From ab = ac we get a(b - c) = 0. The valid cancellation inference is: if a ≠ 0, then b - c = 0, hence b = c. Counterexample: take a = 0, b = 1, c = 2. Then ab = 0 = ac, but b ≠ c. Correction: for all real a,b,c, if ab = ac and a ≠ 0, then b = c; the original conclusion is valid only with the added nonzero condition. Sources/excerpts: the task pilot-error-algebra supplies excerpts: [] (empty array), so no excerpt document or locator exists to cite. This is excerpt absence, not a claim that relevant corpus documents are nonexistent; corpus availability was not established."
+}

@@ -1,0 +1,8 @@
+{
+  "type": "absence",
+  "status": "not_found_in_consulted_excerpts",
+  "consulted": [
+    "math/preprints/A-Counterexample-to-Kaplanskys-Direct-Finiteness-Conjecture-in-Characteristic-Two-September-23-2026/README.md#L1-L5"
+  ],
+  "prose": "Domain: bibliographic metadata (a DOI identifier) for a mathematics preprint; units: not applicable. Conditions: only the supplied README header at L1-L5 was consulted, and that excerpt contains a title link, an author line, and a date line but no DOI string. A literal case-insensitive search of the public excerpts for \"DOI\" also returned zero matches in a public-excerpts-only, non-exhaustive index; that search is corroborating evidence only and is bounded by excerpt availability. Accordingly, a DOI is not found in consulted excerpts, and the status is not_found_in_consulted_excerpts rather than nonexistent. This does not establish that the manuscript has no DOI anywhere: the consulted inventory is non-exhaustive, the header is a short metadata fragment that may omit identifiers present in the PDF, publisher record, or external DOI registry, and excerpt absence must not be conflated with corpus-wide nonexistence. The corpus_unavailable status does not apply because the requested README excerpt was successfully retrieved and read (scope reported as public-excerpts-only, not truncated)."
+}

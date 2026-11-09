@@ -1,0 +1,4 @@
+{
+  "type": "explanation",
+  "text": "Invalid as stated. Domain: real numbers a,b,c; no units apply. The argument assumes division by a is legitimate, but division by zero is undefined, so the necessary condition is a ≠ 0. Counterexample: let a = 0, b = 1, c = 2. Then ab = 0 = ac, but b ≠ c. Correction: from ab = ac, subtract ac to get a(b − c) = 0; hence either a = 0 or b = c. If a ≠ 0, cancellation is valid and b = c follows. The provided excerpts list is empty, so no document is cited; this reflects absence of supplied excerpts, not a claim that relevant sources do not exist. No corpus or tools were available for external citation."
+}

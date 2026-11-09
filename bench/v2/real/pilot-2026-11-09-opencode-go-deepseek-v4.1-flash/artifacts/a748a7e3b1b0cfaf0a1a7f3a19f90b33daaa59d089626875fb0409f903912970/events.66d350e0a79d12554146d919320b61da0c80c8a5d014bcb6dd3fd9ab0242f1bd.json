@@ -1,0 +1,92 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.lean_check({\n  code: `import Init\n\ntheorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R :=\n  fun P Q R hPQ hQR hP => hQR (hPQ hP)`,\n  imports: [\"Init\"],\n  timeoutMs: 10000\n});\nconsole.log(r);\nreturn r;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"rejected\",\"error\":\"Expected one theorem/example with a single-line type and a bounded by proof\"}\n\nLogs:\n{\"status\":\"rejected\",\"error\":\"Expected one theorem/example with a single-line type and a bounded by proof\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 2,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.lean_check({\n  code: `import Init\n\ntheorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := by\n  intro P Q R hPQ hQR hP\n  exact hQR (hPQ hP)`,\n  imports: [\"Init\"],\n  timeoutMs: 10000\n});\nconsole.log(r);\nreturn r;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"rejected\",\"error\":\"Expected one theorem/example with a single-line type and a bounded by proof\"}\n\nLogs:\n{\"status\":\"rejected\",\"error\":\"Expected one theorem/example with a single-line type and a bounded by proof\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 3,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const variants = [\n`theorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := by intro P Q R hPQ hQR hP; exact hQR (hPQ hP)`,\n`import Init\ntheorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := by intro P Q R hPQ hQR hP; exact hQR (hPQ hP)`,\n`theorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := by\n  intro P Q R hPQ hQR hP\n  exact hQR (hPQ hP)`\n];\nfor (const c of variants) {\n  const r = await tools.lean_check({code: c, imports: [\"Init\"], timeoutMs: 10000});\n  console.log(JSON.stringify({c, r}));\n}\nreturn \"done\";"
+    },
+    "result": {
+      "status": "completed",
+      "output": "done\n\nLogs:\n{\"c\":\"theorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := by intro P Q R hPQ hQR hP; exact hQR (hPQ hP)\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\"}\n{\"c\":\"import Init\\ntheorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := by intro P Q R hPQ hQR hP; exact hQR (hPQ hP)\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"}\n{\"c\":\"theorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := by\\n  intro P Q R hPQ hQR hP\\n  exact hQR (hPQ hP)\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 4,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const variants = [\n`theorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := fun P Q R hPQ hQR hP => hQR (hPQ hP)`,\n`theorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := by\n  exact fun P Q R hPQ hQR hP => hQR (hPQ hP)`,\n`theorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := by\n  intro P Q R hPQ hQR hP\n  apply hQR\n  apply hPQ\n  exact hP`,\n`theorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := by\n  intros P Q R hPQ hQR hP\n  exact hQR (hPQ hP)`\n];\nfor (const c of variants) {\n  const r = await tools.lean_check({code: c, imports: [\"Init\"], timeoutMs: 10000});\n  console.log(JSON.stringify({c, r}));\n}\nreturn \"done\";"
+    },
+    "result": {
+      "status": "completed",
+      "output": "done\n\nLogs:\n{\"c\":\"theorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := fun P Q R hPQ hQR hP => hQR (hPQ hP)\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"}\n{\"c\":\"theorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := by\\n  exact fun P Q R hPQ hQR hP => hQR (hPQ hP)\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\"}\n{\"c\":\"theorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := by\\n  intro P Q R hPQ hQR hP\\n  apply hQR\\n  apply hPQ\\n  exact hP\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\"}\n{\"c\":\"theorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := by\\n  intros P Q R hPQ hQR hP\\n  exact hQR (hPQ hP)\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 5,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const variants = [\n`theorem t1 : True := by trivial`,\n`theorem t2 : 1 = 1 := by rfl`,\n`theorem t3 : 1 = 1 := by simp`,\n`theorem t4 (P : Prop) (h : P) : P := by exact h`,\n`theorem t5 (P : Prop) (h : P) : P := by assumption`,\n`theorem t6 (P Q : Prop) (h : P) (h2 : P -> Q) : Q := by exact h2 h`,\n`theorem t7 : forall P : Prop, P -> P := by intro P h; exact h`\n];\nfor (const c of variants) {\n  const r = await tools.lean_check({code: c, imports: [\"Init\"], timeoutMs: 10000});\n  console.log(JSON.stringify({c, r}));\n}\nreturn \"done\";"
+    },
+    "result": {
+      "status": "completed",
+      "output": "done\n\nLogs:\n{\"c\":\"theorem t1 : True := by trivial\",\"r\":\"{\\\"verification\\\":\\\"not-performed\\\",\\\"receipt\\\":null,\\\"scope\\\":\\\"compiler-check-only\\\",\\\"status\\\":\\\"missing-tool\\\",\\\"compilation\\\":\\\"not-run\\\",\\\"error\\\":\\\"Preinstalled native Lean required; no elan download or lake build is performed\\\"}\"}\n{\"c\":\"theorem t2 : 1 = 1 := by rfl\",\"r\":\"{\\\"verification\\\":\\\"not-performed\\\",\\\"receipt\\\":null,\\\"scope\\\":\\\"compiler-check-only\\\",\\\"status\\\":\\\"missing-tool\\\",\\\"compilation\\\":\\\"not-run\\\",\\\"error\\\":\\\"Preinstalled native Lean required; no elan download or lake build is performed\\\"}\"}\n{\"c\":\"theorem t3 : 1 = 1 := by simp\",\"r\":\"{\\\"verification\\\":\\\"not-performed\\\",\\\"receipt\\\":null,\\\"scope\\\":\\\"compiler-check-only\\\",\\\"status\\\":\\\"missing-tool\\\",\\\"compilation\\\":\\\"not-run\\\",\\\"error\\\":\\\"Preinstalled native Lean required; no elan download or lake build is performed\\\"}\"}\n{\"c\":\"theorem t4 (P : Prop) (h : P) : P := by exact h\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"}\n{\"c\":\"theorem t5 (P : Prop) (h : P) : P := by assumption\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"}\n{\"c\":\"theorem t6 (P Q : Prop) (h : P) (h2 : P -> Q) : Q := by exact h2 h\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"}\n{\"c\":\"theorem t7 : forall P : Prop, P -> P := by intro P h; exact h\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 6,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const variants = [\n`theorem t7 : forall P : Prop, P -> P := by exact fun P h => h`,\n`theorem t8 : (P : Prop) -> P -> P := by exact fun P h => h`,\n`theorem t9 : True -> True := by exact fun h => h`,\n`theorem t10 : True -> True := by intro h; exact h`,\n`theorem t11 : True -> True := by simp`,\n`theorem t12 : True -> True := by trivial`,\n`theorem t13 : True -> True := by auto`,\n`theorem t14 : True -> True := by exact id`\n];\nfor (const c of variants) {\n  const r = await tools.lean_check({code: c, imports: [\"Init\"], timeoutMs: 10000});\n  console.log(JSON.stringify({c, r}));\n}\nreturn \"done\";"
+    },
+    "result": {
+      "status": "completed",
+      "output": "done\n\nLogs:\n{\"c\":\"theorem t7 : forall P : Prop, P -> P := by exact fun P h => h\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\"}\n{\"c\":\"theorem t8 : (P : Prop) -> P -> P := by exact fun P h => h\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\"}\n{\"c\":\"theorem t9 : True -> True := by exact fun h => h\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\"}\n{\"c\":\"theorem t10 : True -> True := by intro h; exact h\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\"}\n{\"c\":\"theorem t11 : True -> True := by simp\",\"r\":\"{\\\"verification\\\":\\\"not-performed\\\",\\\"receipt\\\":null,\\\"scope\\\":\\\"compiler-check-only\\\",\\\"status\\\":\\\"missing-tool\\\",\\\"compilation\\\":\\\"not-run\\\",\\\"error\\\":\\\"Preinstalled native Lean required; no elan download or lake build is performed\\\"}\"}\n{\"c\":\"theorem t12 : True -> True := by trivial\",\"r\":\"{\\\"verification\\\":\\\"not-performed\\\",\\\"receipt\\\":null,\\\"scope\\\":\\\"compiler-check-only\\\",\\\"status\\\":\\\"missing-tool\\\",\\\"compilation\\\":\\\"not-run\\\",\\\"error\\\":\\\"Preinstalled native Lean required; no elan download or lake build is performed\\\"}\"}\n{\"c\":\"theorem t13 : True -> True := by auto\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\"}\n{\"c\":\"theorem t14 : True -> True := by exact id\",\"r\":\"{\\\"verification\\\":\\\"not-performed\\\",\\\"receipt\\\":null,\\\"scope\\\":\\\"compiler-check-only\\\",\\\"status\\\":\\\"missing-tool\\\",\\\"compilation\\\":\\\"not-run\\\",\\\"error\\\":\\\"Preinstalled native Lean required; no elan download or lake build is performed\\\"}\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

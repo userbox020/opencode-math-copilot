@@ -1,0 +1,4 @@
+{
+  "type": "explanation",
+  "text": "Domain: number theory; integers n > 1. Units: none. The argument is invalid. Its premise—that n is divisible by 1 and by itself—is true for every integer n > 1, but this is only a necessary condition for primality, not a sufficient one. Primality requires that the only positive divisors of n are 1 and n (equivalently, that n has exactly two distinct positive divisors). Counterexample: n = 4. It is greater than 1 and divisible by 1 and 4, but it is also divisible by 2 (4 = 2 x 2), so 4 is composite, not prime. Corrected criterion: an integer n > 1 is prime if and only if its only positive divisors are 1 and n; equivalently, there is no integer d with 1 < d < n that divides n. Excerpt status: the excerpts array is empty and no corpus or tools are available, so no document or locator can be cited; this absence of excerpts is not evidence that no supporting source exists."
+}

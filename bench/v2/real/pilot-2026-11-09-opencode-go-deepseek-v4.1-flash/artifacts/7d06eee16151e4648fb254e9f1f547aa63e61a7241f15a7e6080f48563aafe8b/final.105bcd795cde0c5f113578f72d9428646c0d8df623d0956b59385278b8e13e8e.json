@@ -1,0 +1,11 @@
+{
+  "type": "numeric",
+  "value": 12,
+  "domain": "nonnegative-real",
+  "units": "m^2",
+  "conditions": [
+    "perpendicular height"
+  ],
+  "citations": [],
+  "source_status": "No corpus or tools were available and the excerpts list was empty. No documents or locators can be cited; this is excerpt absence/corpus unavailability, not evidence that supporting documents do not exist."
+}

@@ -1,0 +1,6 @@
+{
+  "type": "absence",
+  "status": "corpus_unavailable",
+  "consulted": [],
+  "prose": "Scope and conditions: this is a hypothetical scenario in which the corpus cannot be mounted or read, and no excerpts, search results, or inventory were supplied; it is not a report about this machine. Domain: document-corpus evidence assessment regarding an alleged proof of a named target; units: not applicable; no locators or citations can be given because no document was accessible and no excerpt was examined. The appropriate status is corpus_unavailable: the evidence channel itself is unavailable, so no conclusion about the corpus contents is licensed. This differs from not_found_in_consulted_excerpts, which would require that some defined set of excerpts was actually consulted and the target proof did not appear there; here the consulted list is empty and there were no excerpts to search, so no negative search result exists. It also differs from nonexistent, which is a claim about the corpus itself (that no proof of the target exists in it); unavailable access supports no such claim, and absence of evidence under these conditions is not evidence of absence. Because the corpus was neither mounted nor read, neither a negative search result nor nonexistence follows; the only supportable finding is that the question is unanswered owing to corpus unavailability."
+}

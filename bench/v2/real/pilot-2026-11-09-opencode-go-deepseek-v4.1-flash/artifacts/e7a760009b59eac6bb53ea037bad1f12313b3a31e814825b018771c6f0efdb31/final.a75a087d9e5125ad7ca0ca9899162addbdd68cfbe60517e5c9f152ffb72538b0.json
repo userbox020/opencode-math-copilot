@@ -1,0 +1,10 @@
+{
+  "type": "numeric",
+  "value": 0.375,
+  "domain": "unit-interval",
+  "units": "dimensionless",
+  "conditions": [
+    "eight distinct claims",
+    "three unsupported claims"
+  ]
+}

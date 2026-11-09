@@ -1,0 +1,8 @@
+{
+  "type": "absence",
+  "status": "not_found_in_consulted_excerpts",
+  "consulted": [
+    "math/README.md:L12-L12"
+  ],
+  "prose": "Only the supplied README paragraph at math/README.md L12-L12 was consulted; no assertion that every manuscript passed independent peer review is not found in consulted excerpts. This is missing evidence within a single excerpt, not proof of nonexistence: proving nonexistence would require an exhaustive search of all relevant manuscripts and review records. The consulted inventory is non-exhaustive, and the broader corpus and tools are unavailable, so no corpus-wide nonexistence claim is made. Domain: manuscript peer-review provenance; units: not applicable."
+}

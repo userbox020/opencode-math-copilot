@@ -1,0 +1,49 @@
+{
+  "schema_version": "2.1.0",
+  "format": "math-study-verification/v1",
+  "simulated": false,
+  "issuer": "restricted-verifier",
+  "target_sha256": "359e0472eb8b1e16aa5af3ecb728948f874ca0db1cf78fb4f0cad6d439b105f0",
+  "solution_sha256": "9f3fa079a061f7514fa25a6bb696d48e45cfeb69ab61d538b359fbfefb706e44",
+  "policy_sha256": "e5555461e61c966449dca5f1fb8c3798c832a440045bae94402ca6f8260c1df7",
+  "verifier": {
+    "version": "math-lean-verify/v1",
+    "execution": {
+      "status": "completed",
+      "mode": "docker",
+      "exitCode": 0,
+      "durationMs": 15338
+    },
+    "compilation": {
+      "status": "compiled"
+    },
+    "target": {
+      "theorem": "pilot_foundations_true",
+      "expectedType": "True",
+      "status": "identified"
+    },
+    "proof": {
+      "status": "verified",
+      "axioms": [],
+      "allowedAxioms": [],
+      "unauthorizedAxioms": [],
+      "sorryAx": false
+    },
+    "checker": {
+      "tool": "lake env lean"
+    },
+    "note": "Informal correspondence is not assessed. This receipt checks a user solution against the supplied trusted type, not the meaning of an informal claim."
+  },
+  "provenance": {
+    "issuance": "evaluator-controlled",
+    "evidence": "verifier-output",
+    "source_receipt_sha256": "e955f2ca874e34a3ef034b5812d2cd7e2447f7136e95bc74536dbd2048586dfc",
+    "independent_kernel_check": false
+  },
+  "correspondence": {
+    "status": "not-assessed",
+    "scope": "fixed-lean-target-only"
+  },
+  "toolchain": "leanprover/lean4:v4.34.1",
+  "receipt_sha256": "169f880a4558a60331377638f167b7382ef1c81e27899a904a43f5be6152d99d"
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const [s1, s2] = await Promise.allSettled([\n  tools.corpus_search({ query: \"ab=ac\", limit: 5 }),\n  tools.compute({ operation: \"solve\", expression: \"a*b - a*c\", variable: \"a\" })\n]);\nreturn { corpus: s1, compute: s2 };"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\n  \"corpus\": {\n    \"status\": \"fulfilled\",\n    \"value\": \"{\\\"scope\\\":\\\"public-excerpts-only\\\",\\\"exhaustive_inventory\\\":false,\\\"total_matches\\\":0,\\\"excerpts\\\":[]}\"\n  },\n  \"compute\": {\n    \"status\": \"fulfilled\",\n    \"value\": \"{\\\"status\\\":\\\"completed\\\",\\\"result\\\":\\\"[0]\\\"}\"\n  }\n}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

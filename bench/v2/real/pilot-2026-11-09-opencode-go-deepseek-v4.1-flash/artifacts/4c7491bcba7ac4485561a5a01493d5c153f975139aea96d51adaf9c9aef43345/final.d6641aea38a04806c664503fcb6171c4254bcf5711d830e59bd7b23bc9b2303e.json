@@ -1,0 +1,8 @@
+{
+  "type": "absence",
+  "status": "not_found_in_consulted_excerpts",
+  "consulted": [
+    "math/preprints/The-symmetric-Mahler-conjecture-and-its-equality-cases-September-22-2026/build/sections/convex-preliminaries.tex#L87-L93"
+  ],
+  "prose": "In the domain of convex geometry and volume products, with no units, the consulted excerpt at math/preprints/The-symmetric-Mahler-conjecture-and-its-equality-cases-September-22-2026/build/sections/convex-preliminaries.tex#L87-L93 states Lemma Hanner: every d-dimensional linear Hanner body H satisfies P(H)=4^d/d!, and the polar of a linear Hanner body is again one. It does not state a classification of all nonconvex volume-product minimizers; that is not found in consulted excerpts. This absence is not evidence of nonexistence and is not corpus unavailability: the consulted inventory is non-exhaustive, so I make no corpus-wide nonexistence claim."
+}

@@ -1,0 +1,4 @@
+{
+  "type": "explanation",
+  "text": "Invalid. Domain: Euclidean plane geometry; side lengths are in metres (m) and area in square metres (m²). For two sides a and b with included angle C, the general area formula is K = ½ab sin C, not ½ab. With a = 3 m and b = 4 m, K = ½·3·4·sin C = 6 sin C m², where 0 < C < π for a nondegenerate triangle. Thus K ∈ (0, 6] m², and K = 6 m² exactly when sin C = 1, i.e. C = 90°. For example, C = 30° gives K = 3 m², not 6 m². The specific defect is the omission of the factor sin C (equivalently, treating one given side as though it were the perpendicular height to the other). Valid correction: K = 6 sin C m²; only when the included angle is known to be a right angle does K = 6 m². No excerpts were supplied (task id 'pilot-error-geometry', field 'excerpts' = []), so no document citation is possible; this excerpt absence is not evidence that the formula is absent from any corpus."
+}

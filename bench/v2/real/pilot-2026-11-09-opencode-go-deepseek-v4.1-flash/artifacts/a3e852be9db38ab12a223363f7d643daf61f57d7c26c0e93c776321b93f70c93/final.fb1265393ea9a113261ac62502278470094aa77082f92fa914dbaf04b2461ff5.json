@@ -1,0 +1,6 @@
+{
+  "type": "formal",
+  "solution": "import Init\n\ntheorem pilot_geometry_identity : (n : Nat) -> n = n := by\n  intro n\n  rfl",
+  "target_sha256": null,
+  "receipt_sha256": null
+}

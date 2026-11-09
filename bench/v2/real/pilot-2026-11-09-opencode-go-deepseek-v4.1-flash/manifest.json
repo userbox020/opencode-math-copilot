@@ -1,0 +1,451 @@
+{
+  "schema_version": "2.0.0",
+  "study_id": "real-opencode-go-deepseek-v4.1-flash-2026-11-09",
+  "simulated": false,
+  "clock": {
+    "kind": "wall-clock",
+    "epoch": "2026-11-09T09:41:04.303Z"
+  },
+  "versions": {
+    "harness": "2.0.0",
+    "adapter": "opencode-adapter-v1",
+    "grader": "2.1.0",
+    "receipt_schema": "2.1.0",
+    "node": "v24.21.0"
+  },
+  "commits": {
+    "repository": "465b3c614370e97d65ff92b0b26a3bb2e4a67b8a",
+    "corpus": null
+  },
+  "hashes": {
+    "tasks": "c6e8ab0f922c78beaca4a8bca078a1b55a03f8f465f91f4160ee399c8d409578",
+    "graders/index": "6539d3d80214e0a912463f4d00e01ec0b4e01ba4625332db2f781f0082fb7b4e",
+    "graders/formal": "44268efd84a43d78bd3cc9ff95371acd1531fbaf58a4b45c03583df885a8334c",
+    "graders/absence": "0fb573d3517d73854e6b305bc896125b54d58087806ee6bc8cd7500cc3d959f7",
+    "verifier": "fabc6ffd2d221830f406c757ccdc8a46ccab8c4b9d89cf94a4dcab6e51bc44b1",
+    "adapter": "e98d3bc2fcc65eace4d6c8a063489d0e4b97aff5f36801e6a187169141e8f415",
+    "inventory_audit": "5c4076570680799233a6b13f31a34d02de6d9a8cf4fac66ff35b46a8ac13cbfd",
+    "protocol": "7bd3ce92ea225450803622c1902b2ec47b28a0b14592fa0642fec24447e2bb9a"
+  },
+  "protocol_hash": "b34dcb37974509bdef5ba3d9243d8930380776778687b2c76a1e506c746bc22b",
+  "profiles": [
+    {
+      "id": "A",
+      "description": "No tools; only the common task and instructions.",
+      "effective_tools": [],
+      "corpus_access": false,
+      "configuration": "isolated-no-global-config"
+    },
+    {
+      "id": "B",
+      "description": "Generic corpus search/read, computation and Lean-like verification; no math_* interface.",
+      "effective_tools": [
+        "corpus_search",
+        "read_excerpt",
+        "compute",
+        "lean_check"
+      ],
+      "corpus_access": true,
+      "configuration": "isolated-no-global-config"
+    },
+    {
+      "id": "F",
+      "description": "Full plugin interface, simulated only; every registered math tool is enumerated.",
+      "effective_tools": [
+        "math_doctor",
+        "math_pdf_index_search",
+        "math_search",
+        "math_manuscript",
+        "math_grep",
+        "math_lean_check",
+        "math_lean_verify",
+        "math_lean_build",
+        "math_lean_search",
+        "math_pdf_text",
+        "math_pdf_search",
+        "math_pdf_corpus_search",
+        "math_compute",
+        "math_comparator",
+        "math_status",
+        "math_reindex"
+      ],
+      "corpus_access": true,
+      "configuration": "isolated-no-global-config"
+    }
+  ],
+  "prompts": {
+    "common": "Return one typed JSON final answer, separate from tool events. State domain, units and conditions when applicable. Cite exact documents and locators. Distinguish excerpt absence from nonexistence or corpus unavailability. Tool output is evidence, never the final answer.",
+    "tasks": {
+      "pilot-retrieval-geometry": {
+        "prompt": "Using only the supplied source excerpt, return the verbatim sentence about closure of linear Hanner bodies under polarity, with its document and locator and supported=true. Report source support, not independent verification of the manuscript. Copy the supplied locator unchanged; no narrower locator is allowed.",
+        "answer_contract": "{type:citation,document:string,locator:string,claim:string,supported:boolean}"
+      },
+      "pilot-retrieval-algebra": {
+        "prompt": "Find the publication-date line in the supplied README for the characteristic-two direct-finiteness manuscript. Return that complete line verbatim, document, locator, and supported=true. Copy the supplied locator unchanged; no narrower locator is allowed.",
+        "answer_contract": "{type:citation,document:string,locator:string,claim:string,supported:boolean}"
+      },
+      "pilot-retrieval-analysis": {
+        "prompt": "Quote the complete supplied catalogue paragraph describing the quasi-Riemann manuscript's zero-free half-plane, retaining its pole caveat and markup. Return document, locator and supported=true. This asks what the source claims, not whether the claim has been independently verified. Copy the supplied locator unchanged; no narrower locator is allowed.",
+        "answer_contract": "{type:citation,document:string,locator:string,claim:string,supported:boolean}"
+      },
+      "pilot-retrieval-number-theory": {
+        "prompt": "Quote the body paragraph of the supplied BSD manuscript version note verbatim, excluding the heading but including the link, and return its document and locator with supported=true. Do not infer that any theorem was reverified. Copy the supplied locator unchanged; no narrower locator is allowed.",
+        "answer_contract": "{type:citation,document:string,locator:string,claim:string,supported:boolean}"
+      },
+      "pilot-retrieval-evidence": {
+        "prompt": "Return the complete two-sentence supplied paragraph stating how the collection should be understood and its stance on credit, with document, locator and supported=true. Copy the supplied locator unchanged; no narrower locator is allowed.",
+        "answer_contract": "{type:citation,document:string,locator:string,claim:string,supported:boolean}"
+      },
+      "pilot-retrieval-foundations": {
+        "prompt": "Quote the complete supplied two-line passage about Lean coverage and the recommended build scope, with document, locator and supported=true. Do not turn some results into all results. Copy the supplied locator unchanged; no narrower locator is allowed.",
+        "answer_contract": "{type:citation,document:string,locator:string,claim:string,supported:boolean}"
+      },
+      "pilot-computation-geometry": {
+        "prompt": "A Euclidean triangle has base 6 m and perpendicular height 4 m. Compute its exact area. Use domain nonnegative-real, units m^2, and condition perpendicular height.",
+        "answer_contract": "{type:numeric,value:number,domain:string,units:string,conditions:string[]}"
+      },
+      "pilot-computation-algebra": {
+        "prompt": "Give an equivalent expression for (x^2-1)/(x-1) for real dimensionless x, preserving the original domain. An equivalent unsimplified expression is permitted; simplification is not required. Return integer polynomial coefficient arrays in low-to-high order, domain real, units dimensionless, assumptions [x is real], and all restrictions as conditions using != notation.",
+        "answer_contract": "{type:symbolic,numerator:number[],denominator:number[],domain:string,units:string,assumptions:string[],conditions:string[]}"
+      },
+      "pilot-computation-analysis": {
+        "prompt": "Evaluate the definite integral of 6*x from x=0 to x=1 over the reals. x and the integrand are dimensionless. Use domain real, units dimensionless, and conditions [real integration variable, bounds 0 to 1].",
+        "answer_contract": "{type:numeric,value:number,domain:string,units:string,conditions:string[]}"
+      },
+      "pilot-computation-number-theory": {
+        "prompt": "Find the complete set of integer solutions of x^2=2. Return a numeric solutions array, domain integer, units dimensionless, assumptions [x is an integer], and conditions []. Do not include noninteger roots.",
+        "answer_contract": "{type:symbolic,solutions:number[],domain:string,units:string,assumptions:string[],conditions:string[]}"
+      },
+      "pilot-computation-evidence": {
+        "prompt": "In a constructed example, exactly 3 of 8 distinct citation claims are unsupported. Compute the unsupported proportion, not its percentage. Use domain unit-interval, units dimensionless, and conditions [eight distinct claims, three unsupported claims]. This is not observed model data.",
+        "answer_contract": "{type:numeric,value:number,domain:string,units:string,conditions:string[]}"
+      },
+      "pilot-computation-foundations": {
+        "prompt": "Let S={a,b,c}, where a,b,c are pairwise distinct. How many subsets does S have, including the empty set and S? Use domain nonnegative-integer, units subsets, and conditions [a b c pairwise distinct, empty and full subsets included].",
+        "answer_contract": "{type:numeric,value:number,domain:string,units:string,conditions:string[]}"
+      },
+      "pilot-formal-geometry": {
+        "prompt": "Construct Lean code using only import Init declaring theorem pilot_geometry_identity with exactly the type (n : Nat) -> n = n. Do not change the target or add premises or axioms. Return the solution code, not a claimed verification receipt.",
+        "answer_contract": "Draft {type:formal,solution:string,target_sha256:null,receipt_sha256:null}; evaluator identifiers and receipt remain pending."
+      },
+      "pilot-formal-algebra": {
+        "prompt": "Construct Lean code using only import Init declaring theorem pilot_algebra_add_zero with exactly the type (n : Nat) -> n + 0 = n. Do not change the target or add premises or axioms. Return solution code without claiming verification.",
+        "answer_contract": "Draft {type:formal,solution:string,target_sha256:null,receipt_sha256:null}; evaluator identifiers and receipt remain pending."
+      },
+      "pilot-formal-analysis": {
+        "prompt": "Construct Lean code using only import Init declaring theorem pilot_analysis_implications with exactly the type (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R. No added premises or axioms. Return solution code without claiming verification.",
+        "answer_contract": "Draft {type:formal,solution:string,target_sha256:null,receipt_sha256:null}; evaluator identifiers and receipt remain pending."
+      },
+      "pilot-formal-number-theory": {
+        "prompt": "Construct Lean code using only import Init declaring theorem pilot_number_theory_sum with exactly the type (2 : Nat) + 3 = 5. No added premises or axioms. Return solution code without claiming verification.",
+        "answer_contract": "Draft {type:formal,solution:string,target_sha256:null,receipt_sha256:null}; evaluator identifiers and receipt remain pending."
+      },
+      "pilot-formal-evidence": {
+        "prompt": "Construct Lean code using only import Init declaring theorem pilot_evidence_conjunction with exactly the type (P Q : Prop) -> P ∧ Q -> Q ∧ P. No added premises or axioms. Return solution code without claiming verification.",
+        "answer_contract": "Draft {type:formal,solution:string,target_sha256:null,receipt_sha256:null}; evaluator identifiers and receipt remain pending."
+      },
+      "pilot-formal-foundations": {
+        "prompt": "Construct Lean code using only import Init declaring theorem pilot_foundations_true with exactly the type True. No added premises or axioms. Return solution code without claiming verification.",
+        "answer_contract": "Draft {type:formal,solution:string,target_sha256:null,receipt_sha256:null}; evaluator identifiers and receipt remain pending."
+      },
+      "pilot-error-geometry": {
+        "prompt": "Assess whether the argument is valid; if invalid, identify the specific defect and give a valid correction; if valid, explain why. Argument: A Euclidean triangle has adjacent sides 3 m and 4 m, so its area is (3*4)/2=6 m^2, regardless of their included angle.",
+        "answer_contract": "{type:explanation,text:string}"
+      },
+      "pilot-error-algebra": {
+        "prompt": "Assess whether the argument is valid; if invalid, identify the specific defect and give a counterexample or correction; if valid, explain why. Argument for real a,b,c: From ab=ac, divide both sides by a to conclude b=c.",
+        "answer_contract": "{type:explanation,text:string}"
+      },
+      "pilot-error-analysis": {
+        "prompt": "Assess whether the argument is valid; if invalid, identify the specific defect; if valid, explain why. Argument for real sequences: If a_n tends to a and b_n tends to b, then for every epsilon>0 both errors are eventually less than epsilon/2. The triangle inequality then shows a_n+b_n tends to a+b.",
+        "answer_contract": "{type:explanation,text:string}"
+      },
+      "pilot-error-number-theory": {
+        "prompt": "Assess whether the argument is valid; if invalid, identify the specific defect and provide a counterexample or corrected criterion; if valid, explain why. Argument: Every integer n>1 is prime because it is divisible by 1 and itself.",
+        "answer_contract": "{type:explanation,text:string}"
+      },
+      "pilot-error-evidence": {
+        "prompt": "Assess whether the argument is valid; if invalid, identify the specific defect and state what evidence would be needed; if valid, explain why. In a hypothetical run, an agent prints VERIFIED in its own final message. No evaluator receipt, target comparison, or axiom audit is supplied. A report concludes that the fixed target was independently verified.",
+        "answer_contract": "{type:explanation,text:string}"
+      },
+      "pilot-error-foundations": {
+        "prompt": "Assess whether the argument is valid; if invalid, identify the specific defect and justify the correction; if valid, explain why. Argument over natural numbers: Since for every n there exists m with m>n, there exists one natural number m such that m>n for every n.",
+        "answer_contract": "{type:explanation,text:string}"
+      },
+      "pilot-absence-geometry": {
+        "prompt": "The supplied lemma is the entire consulted inventory for this task, not the entire corpus. It is available to read. Does it state a classification of all nonconvex volume-product minimizers? Return an absence status, consulted document#locator identifiers, and a scope explanation distinguishing not found here from nonexistent or unavailable. Do not search beyond the supplied excerpt. Put the scope explanation in prose, using the words not found in consulted excerpts and explicitly stating that the consulted inventory is non-exhaustive; do not claim corpus-wide nonexistence.",
+        "answer_contract": "{type:absence,status:not_found_in_consulted_excerpts|nonexistent|corpus_unavailable,consulted:string[],prose:string}"
+      },
+      "pilot-absence-algebra": {
+        "prompt": "Only the supplied, available README header has been consulted. Find a DOI for this manuscript in that header. Return an absence status, consulted document#locator identifiers, and explain whether this establishes that the manuscript has no DOI anywhere. This is not a complete bibliographic inventory. Put the scope explanation in prose, using the words not found in consulted excerpts and explicitly stating that the consulted inventory is non-exhaustive; do not claim corpus-wide nonexistence.",
+        "answer_contract": "{type:absence,status:not_found_in_consulted_excerpts|nonexistent|corpus_unavailable,consulted:string[],prose:string}"
+      },
+      "pilot-absence-analysis": {
+        "prompt": "The supplied catalogue paragraph is available and is the only consulted excerpt. Find a statement that all nontrivial zeta zeros have real part exactly 1/2. Return the absence status, consulted identifiers and a scope explanation. Do not confuse a stated zero-free half-plane with a statement of the full Riemann hypothesis, or infer corpus-wide nonexistence. Put the scope explanation in prose, using the words not found in consulted excerpts and explicitly stating that the consulted inventory is non-exhaustive; do not claim corpus-wide nonexistence.",
+        "answer_contract": "{type:absence,status:not_found_in_consulted_excerpts|nonexistent|corpus_unavailable,consulted:string[],prose:string}"
+      },
+      "pilot-absence-number-theory": {
+        "prompt": "Only the supplied BSD version note has been consulted and it is available. Find an evaluator-issued Lean verification receipt with a target hash in this note. Return an absence status, consulted identifiers and an explanation. Do not infer that no proof or receipt exists elsewhere. Put the scope explanation in prose, using the words not found in consulted excerpts and explicitly stating that the consulted inventory is non-exhaustive; do not claim corpus-wide nonexistence.",
+        "answer_contract": "{type:absence,status:not_found_in_consulted_excerpts|nonexistent|corpus_unavailable,consulted:string[],prose:string}"
+      },
+      "pilot-absence-evidence": {
+        "prompt": "Only the supplied, available collection README paragraph has been consulted. Find an assertion in it that every manuscript passed independent peer review. Return absence status, consulted identifiers and a bounded explanation distinguishing missing evidence, nonexistence and unavailability. Put the scope explanation in prose, using the words not found in consulted excerpts and explicitly stating that the consulted inventory is non-exhaustive; do not claim corpus-wide nonexistence.",
+        "answer_contract": "{type:absence,status:not_found_in_consulted_excerpts|nonexistent|corpus_unavailable,consulted:string[],prose:string}"
+      },
+      "pilot-absence-foundations": {
+        "prompt": "Hypothetical task environment: the corpus cannot be mounted or read, and no excerpts, search results, or inventory are supplied. You are asked whether it contains a proof of a named target. Return the appropriate absence status, an empty consulted list, and explain why neither a negative search result nor nonexistence follows. These conditions are a scenario, not a report of this machine's state. Put the scope explanation in prose; distinguish unavailable evidence from not found in consulted excerpts and from nonexistence.",
+        "answer_contract": "{type:absence,status:not_found_in_consulted_excerpts|nonexistent|corpus_unavailable,consulted:string[],prose:string}"
+      }
+    }
+  },
+  "budgets": {
+    "tokens": 200000,
+    "tool_calls": 40,
+    "duration_ms": 600000,
+    "usd": 1
+  },
+  "cache_state": {
+    "episode": "cold",
+    "shared": "disabled"
+  },
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "config": "not-loaded",
+    "network": "provider-only",
+    "execution": "isolated-adapter",
+    "runtime_inventory": "runtime-plugin-load",
+    "provisional_tasks": true,
+    "paper_evidence": false,
+    "lean_toolchain": "leanprover/lean4:v4.34.1"
+  },
+  "models": [
+    "opencode-go/deepseek-v4.1-flash"
+  ],
+  "tasks": [
+    {
+      "id": "pilot-retrieval-geometry",
+      "family": "geometry",
+      "domain": "convex geometry",
+      "type": "citation",
+      "negative": false
+    },
+    {
+      "id": "pilot-retrieval-algebra",
+      "family": "algebra",
+      "domain": "bibliography of algebra",
+      "type": "citation",
+      "negative": false
+    },
+    {
+      "id": "pilot-retrieval-analysis",
+      "family": "analysis",
+      "domain": "analytic number theory",
+      "type": "citation",
+      "negative": false
+    },
+    {
+      "id": "pilot-retrieval-number-theory",
+      "family": "number-theory",
+      "domain": "bibliography of number theory",
+      "type": "citation",
+      "negative": false
+    },
+    {
+      "id": "pilot-retrieval-evidence",
+      "family": "evidence",
+      "domain": "evidence limitations",
+      "type": "citation",
+      "negative": false
+    },
+    {
+      "id": "pilot-retrieval-foundations",
+      "family": "foundations",
+      "domain": "formalization coverage",
+      "type": "citation",
+      "negative": false
+    },
+    {
+      "id": "pilot-computation-geometry",
+      "family": "geometry",
+      "domain": "Euclidean geometry",
+      "type": "numeric",
+      "negative": false
+    },
+    {
+      "id": "pilot-computation-algebra",
+      "family": "algebra",
+      "domain": "real algebra",
+      "type": "symbolic",
+      "negative": false
+    },
+    {
+      "id": "pilot-computation-analysis",
+      "family": "analysis",
+      "domain": "real integration",
+      "type": "numeric",
+      "negative": false
+    },
+    {
+      "id": "pilot-computation-number-theory",
+      "family": "number-theory",
+      "domain": "integer equations",
+      "type": "symbolic",
+      "negative": true
+    },
+    {
+      "id": "pilot-computation-evidence",
+      "family": "evidence",
+      "domain": "exact proportions",
+      "type": "numeric",
+      "negative": false
+    },
+    {
+      "id": "pilot-computation-foundations",
+      "family": "foundations",
+      "domain": "finite sets",
+      "type": "numeric",
+      "negative": false
+    },
+    {
+      "id": "pilot-formal-geometry",
+      "family": "geometry",
+      "domain": "equality of natural-number coordinates",
+      "type": "formal",
+      "negative": false
+    },
+    {
+      "id": "pilot-formal-algebra",
+      "family": "algebra",
+      "domain": "natural-number arithmetic",
+      "type": "formal",
+      "negative": false
+    },
+    {
+      "id": "pilot-formal-analysis",
+      "family": "analysis",
+      "domain": "composition of implications",
+      "type": "formal",
+      "negative": false
+    },
+    {
+      "id": "pilot-formal-number-theory",
+      "family": "number-theory",
+      "domain": "closed natural-number arithmetic",
+      "type": "formal",
+      "negative": false
+    },
+    {
+      "id": "pilot-formal-evidence",
+      "family": "evidence",
+      "domain": "conjunction of evidence propositions",
+      "type": "formal",
+      "negative": false
+    },
+    {
+      "id": "pilot-formal-foundations",
+      "family": "foundations",
+      "domain": "propositional truth",
+      "type": "formal",
+      "negative": false
+    },
+    {
+      "id": "pilot-error-geometry",
+      "family": "geometry",
+      "domain": "Euclidean triangle conditions",
+      "type": "explanation",
+      "negative": true
+    },
+    {
+      "id": "pilot-error-algebra",
+      "family": "algebra",
+      "domain": "cancellation hypotheses",
+      "type": "explanation",
+      "negative": true
+    },
+    {
+      "id": "pilot-error-analysis",
+      "family": "analysis",
+      "domain": "limits and finite sums",
+      "type": "explanation",
+      "negative": false
+    },
+    {
+      "id": "pilot-error-number-theory",
+      "family": "number-theory",
+      "domain": "primality",
+      "type": "explanation",
+      "negative": true
+    },
+    {
+      "id": "pilot-error-evidence",
+      "family": "evidence",
+      "domain": "verification evidence",
+      "type": "explanation",
+      "negative": true
+    },
+    {
+      "id": "pilot-error-foundations",
+      "family": "foundations",
+      "domain": "quantifier order",
+      "type": "explanation",
+      "negative": true
+    },
+    {
+      "id": "pilot-absence-geometry",
+      "family": "geometry",
+      "domain": "bounded geometry evidence",
+      "type": "absence",
+      "negative": true
+    },
+    {
+      "id": "pilot-absence-algebra",
+      "family": "algebra",
+      "domain": "bounded algebra bibliography",
+      "type": "absence",
+      "negative": true
+    },
+    {
+      "id": "pilot-absence-analysis",
+      "family": "analysis",
+      "domain": "bounded analytic claims",
+      "type": "absence",
+      "negative": true
+    },
+    {
+      "id": "pilot-absence-number-theory",
+      "family": "number-theory",
+      "domain": "bounded version evidence",
+      "type": "absence",
+      "negative": true
+    },
+    {
+      "id": "pilot-absence-evidence",
+      "family": "evidence",
+      "domain": "bounded collection policy",
+      "type": "absence",
+      "negative": true
+    },
+    {
+      "id": "pilot-absence-foundations",
+      "family": "foundations",
+      "domain": "unavailable evidence scenario",
+      "type": "absence",
+      "negative": true
+    }
+  ],
+  "repeats": [
+    1
+  ],
+  "attempts": [
+    1
+  ],
+  "analysis": {
+    "primary": "correct-under-budget/all-started",
+    "contrast": "F-B",
+    "seed": 20261108,
+    "resamples": 10000,
+    "cluster": "task-family"
+  },
+  "expected_episode_count": 90
+}

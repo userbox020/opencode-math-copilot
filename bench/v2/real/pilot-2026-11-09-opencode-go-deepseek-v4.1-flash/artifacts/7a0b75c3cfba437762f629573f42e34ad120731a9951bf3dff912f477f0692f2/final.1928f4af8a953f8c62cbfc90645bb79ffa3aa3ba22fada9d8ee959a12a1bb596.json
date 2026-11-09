@@ -1,0 +1,37 @@
+{
+  "type": "symbolic",
+  "numerator": [
+    -1,
+    0,
+    1
+  ],
+  "denominator": [
+    -1,
+    1
+  ],
+  "domain": "real",
+  "units": "dimensionless",
+  "assumptions": [
+    "x is real"
+  ],
+  "conditions": [
+    "x != 1"
+  ],
+  "evidence": {
+    "computation": "tools.compute simplify of (x^2-1)/(x-1) in x returned \"x + 1\" (status completed); this is consistent with the returned unsimplified form (x^2-1)/(x-1), numerator x^2-1 -> [-1,0,1] and denominator x-1 -> [-1,1] in low-to-high order.",
+    "citations": [
+      {
+        "document": "task",
+        "locator": "id=pilot-computation-algebra, prompt",
+        "note": "Defines the expression (x^2-1)/(x-1), real dimensionless x, preservation of original domain, integer coefficient arrays in low-to-high order, and != notation for restrictions."
+      },
+      {
+        "document": "task",
+        "locator": "id=pilot-computation-algebra, excerpts",
+        "note": "The public excerpts array is empty ([]); corpus_search over public excerpts for \"pilot-computation-algebra\" returned total_matches 0 with scope public-excerpts-only and exhaustive_inventory false."
+      }
+    ],
+    "excerpt_status": "No excerpts are present in the task (excerpts: []) and no public-excerpt matches exist in the corpus index. This is an absence of excerpt evidence only; it does not assert nonexistence of any underlying documents, nor that the corpus is unavailable. Consequently no direct source-document quote can be cited for this item.",
+    "restriction_justification": "The original expression is undefined at x = 1 (division by zero), so preserving the original domain requires the condition x != 1."
+  }
+}

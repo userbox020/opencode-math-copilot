@@ -1,0 +1,8 @@
+{
+  "type": "absence",
+  "status": "not_found_in_consulted_excerpts",
+  "consulted": [
+    "math/README.md:L12-L12"
+  ],
+  "prose": "Domain: manuscript peer-review claims; units: not applicable. Condition: only the available public excerpt math/README.md:L12-L12 was consulted. The assertion that every manuscript passed independent peer review is not found in consulted excerpts. This is missing evidence in the supplied paragraph, not a finding that the assertion is nonexistent collection-wide, and not a case of corpus unavailability: the excerpt was available and untruncated. The consulted inventory is non-exhaustive, so no corpus-wide nonexistence is claimed."
+}

@@ -1,0 +1,6 @@
+{
+  "type": "absence",
+  "status": "corpus_unavailable",
+  "consulted": [],
+  "prose": "Domain: a mathematical proof corpus; units: not applicable. Under the stipulated hypothetical conditions, the corpus cannot be mounted or read, and no excerpts, search results, or inventory were supplied. Accordingly, the evidence base is unavailable, so the appropriate status is corpus_unavailable. This is not a negative search result: not_found_in_consulted_excerpts would require that at least one excerpt or search result was actually consulted and did not contain the target proof, whereas the consulted list here is necessarily empty. It is also not a claim of nonexistence: nonexistent would require either exhaustive coverage of the corpus or some independent proof that no such proof exists, and neither is available when the corpus is entirely inaccessible. No document citations or locators can be given because no document was readable or consulted; this reflects unavailable evidence, not an established absence of the target proof. The named target is also not specified in the supplied materials, which further prevents any negative or nonexistence conclusion."
+}

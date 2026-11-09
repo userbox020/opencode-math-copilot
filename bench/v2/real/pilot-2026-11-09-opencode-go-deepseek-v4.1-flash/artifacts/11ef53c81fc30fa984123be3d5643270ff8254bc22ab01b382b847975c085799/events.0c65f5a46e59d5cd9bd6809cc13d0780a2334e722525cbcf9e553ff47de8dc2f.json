@@ -1,0 +1,33 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "shell",
+    "arguments": {
+      "command": "Get-Content -Raw -LiteralPath 'corpus/excerpts.json'",
+      "workdir": "C:\\Users\\MiPC\\AppData\\Local\\Temp\\math-eval-v2-4gcJ3e"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 2,
+    "kind": "tool_call",
+    "tool": "read",
+    "arguments": {
+      "path": "corpus/excerpts.json"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

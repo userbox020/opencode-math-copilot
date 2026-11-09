@@ -1,0 +1,10 @@
+{
+  "type": "citation",
+  "document": "math/preprints/The-symmetric-Mahler-conjecture-and-its-equality-cases-September-22-2026/build/sections/convex-preliminaries.tex",
+  "locator": "L87-L93",
+  "claim": "The polar of a linear Hanner body is again a linear Hanner body.",
+  "supported": true,
+  "domain": "Convex geometry / geometry of Banach spaces (Hanner bodies and volume products)",
+  "units": "Dimensionless volume product; the cited lemma states P(H) = 4^d/d!",
+  "conditions": "For d-dimensional linear Hanner bodies H. This reports source support only, not independent verification of the manuscript."
+}

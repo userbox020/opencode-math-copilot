@@ -1,0 +1,14 @@
+{
+  "type": "numeric",
+  "value": 8,
+  "domain": "nonnegative-integer",
+  "units": "subsets",
+  "conditions": [
+    "a, b, c are pairwise distinct",
+    "empty set and full set are included"
+  ],
+  "citations": [],
+  "documents": [],
+  "locators": [],
+  "evidence_note": "No corpus or tools were available, and the provided excerpts list was empty. Excerpt absence is not evidence of nonexistence or corpus unavailability."
+}

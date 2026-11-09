@@ -1,0 +1,12 @@
+{
+  "type": "numeric",
+  "value": 3,
+  "domain": "real",
+  "units": "dimensionless",
+  "conditions": [
+    "real integration variable",
+    "bounds 0 to 1"
+  ],
+  "citations": [],
+  "excerpt_status": "absent: no public excerpts were provided (excerpts: []); this does not imply nonexistence or corpus unavailability."
+}

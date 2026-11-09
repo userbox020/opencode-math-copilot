@@ -1,0 +1,13 @@
+{
+  "type": "formal",
+  "solution": "import Init\n\ntheorem pilot_evidence_conjunction : (P Q : Prop) -> P ∧ Q -> Q ∧ P :=\n  fun P Q h => And.intro h.right h.left",
+  "target_sha256": null,
+  "receipt_sha256": null,
+  "notes": {
+    "domain": "Formal logic / Lean 4 (Init-only)",
+    "units": "Not applicable",
+    "conditions": "Uses only `import Init`; declares exactly the requested explicit type; no additional premises or axioms are introduced. No compiler verification is claimed.",
+    "excerpt_status": "The public task supplies `excerpts: []`. No document or locator is available to cite. This is absence of supplied excerpts, not evidence of nonexistence or corpus unavailability.",
+    "citations": []
+  }
+}

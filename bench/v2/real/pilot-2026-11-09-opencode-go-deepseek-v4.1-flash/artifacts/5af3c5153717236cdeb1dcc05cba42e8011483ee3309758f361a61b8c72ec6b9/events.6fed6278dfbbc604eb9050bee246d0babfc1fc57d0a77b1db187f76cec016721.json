@@ -1,0 +1,32 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const res = await tools.lean_check({\n  code: \"import Init\\n\\ntheorem pilot_number_theory_sum : (2 : Nat) + 3 = 5 := rfl\",\n  imports: [\"Init\"],\n  timeoutMs: 10000\n});\nreturn res;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"rejected\",\"error\":\"Expected one theorem/example with a single-line type and a bounded by proof\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 2,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const variants = [\n  \"import Init\\ntheorem pilot_number_theory_sum : (2 : Nat) + 3 = 5 := by rfl\",\n  \"theorem pilot_number_theory_sum : (2 : Nat) + 3 = 5 := by rfl\",\n  \"import Init\\ntheorem pilot_number_theory_sum : (2 : Nat) + 3 = 5 := by decide\",\n  \"theorem pilot_number_theory_sum : (2 : Nat) + 3 = 5 := by decide\"\n];\nconst out = [];\nfor (const code of variants) {\n  try {\n    const r = await tools.lean_check({ code, imports: [\"Init\"], timeoutMs: 10000 });\n    out.push({code, r});\n  } catch (e) {\n    out.push({code, error: String(e)});\n  }\n}\nreturn out;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "[\n  {\n    \"code\": \"import Init\\ntheorem pilot_number_theory_sum : (2 : Nat) + 3 = 5 := by rfl\",\n    \"r\": \"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"\n  },\n  {\n    \"code\": \"theorem pilot_number_theory_sum : (2 : Nat) + 3 = 5 := by rfl\",\n    \"r\": \"{\\\"verification\\\":\\\"not-performed\\\",\\\"receipt\\\":null,\\\"scope\\\":\\\"compiler-check-only\\\",\\\"status\\\":\\\"missing-tool\\\",\\\"compilation\\\":\\\"not-run\\\",\\\"error\\\":\\\"Preinstalled native Lean required; no elan download or lake build is performed\\\"}\"\n  },\n  {\n    \"code\": \"import Init\\ntheorem pilot_number_theory_sum : (2 : Nat) + 3 = 5 := by decide\",\n    \"r\": \"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"\n  },\n  {\n    \"code\": \"theorem pilot_number_theory_sum : (2 : Nat) + 3 = 5 := by decide\",\n    \"r\": \"{\\\"verification\\\":\\\"not-performed\\\",\\\"receipt\\\":null,\\\"scope\\\":\\\"compiler-check-only\\\",\\\"status\\\":\\\"missing-tool\\\",\\\"compilation\\\":\\\"not-run\\\",\\\"error\\\":\\\"Preinstalled native Lean required; no elan download or lake build is performed\\\"}\"\n  }\n]",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

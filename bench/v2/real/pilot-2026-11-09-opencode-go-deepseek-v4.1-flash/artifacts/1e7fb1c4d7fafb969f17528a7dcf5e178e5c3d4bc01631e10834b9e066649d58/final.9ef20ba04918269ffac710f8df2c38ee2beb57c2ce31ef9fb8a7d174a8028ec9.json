@@ -1,0 +1,12 @@
+{
+  "type": "numeric",
+  "value": 0.375,
+  "domain": "unit-interval",
+  "units": "dimensionless",
+  "conditions": [
+    "eight distinct claims",
+    "three unsupported claims"
+  ],
+  "citations": [],
+  "citation_status": "No public excerpts were supplied: the public excerpts array is empty, and corpus searches returned no matches. This is excerpt absence in the available public-excerpt collection, not evidence that relevant documents do not exist and not evidence that the corpus is unavailable; therefore no exact excerpt document or locator can be cited."
+}

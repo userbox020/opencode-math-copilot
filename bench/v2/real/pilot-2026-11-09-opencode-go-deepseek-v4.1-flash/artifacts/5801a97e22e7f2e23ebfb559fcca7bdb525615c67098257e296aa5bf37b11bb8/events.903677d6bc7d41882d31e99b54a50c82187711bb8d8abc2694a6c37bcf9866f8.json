@@ -1,0 +1,32 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.math_lean_check({code: \"import Init\\n\\ntheorem pilot_number_theory_sum : (2 : Nat) + 3 = 5 := by\\n  rfl\", imports: [\"Init\"], timeoutMs: 60000});\nconsole.log(r);"
+    },
+    "result": {
+      "status": "completed",
+      "output": "null\n\nLogs:\n**FAIL** — exit code: 1\n```text\nwarning: belyi: repository 'C:\\_Work\\__OPENAI_MATH\\math\\lean\\.lake/packages\\belyi' has local changes\nwarning: formal-schemes: repository 'C:\\_Work\\__OPENAI_MATH\\math\\lean\\.lake/packages\\formal-schemes' has local changes\nwarning: elliptic-curves: repository 'C:\\_Work\\__OPENAI_MATH\\math\\lean\\.lake/packages\\elliptic-curves' has local changes\nwarning: tempered-fundamental-groups: repository 'C:\\_Work\\__OPENAI_MATH\\math\\lean\\.lake/packages\\tempered-fundamental-groups' has local changes\nwarning: oka: repository 'C:\\_Work\\__OPENAI_MATH\\math\\lean\\.lake/packages\\oka' has local changes\nwarning: orbicurve-cores: repository 'C:\\_Work\\__OPENAI_MATH\\math\\lean\\.lake/packages\\orbicurve-cores' has local changes\nwarning: pi1: repository 'C:\\_Work\\__OPENAI_MATH\\math\\lean\\.lake/packages\\pi1' has local changes\nwarning: heights: repository 'C:\\_Work\\__OPENAI_MATH\\math\\lean\\.lake/packages\\heights' has local changes\nwarning: genl: repository 'C:\\_Work\\__OPENAI_MATH\\math\\lean\\.lake/packages\\genl' has local changes\nwarning: tate-curves-theta: repository 'C:\\_Work\\__OPENAI_MATH\\math\\lean\\.lake/packages\\tate-curves-theta' has local changes\nwarning: iut: repository 'C:\\_Work\\__OPENAI_MATH\\math\\lean\\.lake/packages\\iut' has local changes\ninfo: AINTLIB: checking out revision '160e446617a2168c34c95bbe7a76c4105b392434'\ninfo: stderr:\nerror: invalid path '2026-07-16T07:39:08Z'\nerror: external command 'git' exited with code 1\n\n```",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 2,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.math_lean_check({code: \"import Init\\n\\ntheorem pilot_number_theory_sum : (2 : Nat) + 3 = 5 := by\\n  rfl\", imports: [\"Init\"], docker: true, timeoutMs: 120000});\nconsole.log(r);"
+    },
+    "result": {
+      "status": "completed",
+      "output": "null\n\nLogs:\n[docker] **PASS** — exit code: 0\n```text\nwarning: belyi: repository '/work/math/lean/.lake/packages/belyi' has local changes\nwarning: formal-schemes: repository '/work/math/lean/.lake/packages/formal-schemes' has local changes\nwarning: elliptic-curves: repository '/work/math/lean/.lake/packages/elliptic-curves' has local changes\nwarning: tempered-fundamental-groups: repository '/work/math/lean/.lake/packages/tempered-fundamental-groups' has local changes\nwarning: oka: repository '/work/math/lean/.lake/packages/oka' has local changes\nwarning: orbicurve-cores: repository '/work/math/lean/.lake/packages/orbicurve-cores' has local changes\nwarning: pi1: repository '/work/math/lean/.lake/packages/pi1' has local changes\nwarning: heights: repository '/work/math/lean/.lake/packages/heights' has local changes\nwarning: genl: repository '/work/math/lean/.lake/packages/genl' has local changes\nwarning: tate-curves-theta: repository '/work/math/lean/.lake/packages/tate-curves-theta' has local changes\nwarning: iut: repository '/work/math/lean/.lake/packages/iut' has local changes\nwarning: rellich-kondrachov: repository '/work/math/lean/.lake/packages/rellich-kondrachov' has local changes\n\n```",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "type": "symbolic",
+  "solutions": [],
+  "domain": "integer",
+  "units": "dimensionless",
+  "assumptions": [
+    "x is an integer"
+  ],
+  "conditions": []
+}

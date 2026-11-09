@@ -1,0 +1,23 @@
+{
+  "type": "numeric",
+  "value": 8,
+  "domain": "nonnegative-integer",
+  "units": "subsets",
+  "conditions": [
+    "a, b, c pairwise distinct",
+    "empty and full subsets included"
+  ],
+  "citations": [
+    {
+      "document": "Public task pilot-computation-foundations",
+      "locator": "prompt field: S={a,b,c}, with a,b,c pairwise distinct and empty/full subsets included",
+      "supports": "The set has 3 distinct elements, so it has 2^3 = 8 subsets."
+    },
+    {
+      "document": "Public task pilot-computation-foundations",
+      "locator": "excerpts field: []",
+      "supports": "No public excerpt was supplied, so no excerpt document locator is available."
+    }
+  ],
+  "evidence_note": "The empty excerpts array reflects absence of supplied excerpts only; it is not evidence that relevant documents do not exist or that the corpus is unavailable."
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "glob",
+    "arguments": {
+      "pattern": "**/*",
+      "path": "C:\\Users\\MiPC\\AppData\\Local\\Temp\\math-eval-v2-QfLIqv"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

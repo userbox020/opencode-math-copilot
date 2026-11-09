@@ -1,44 +1,40 @@
 # Real pilot readiness
 
-**Status: not run.** No model inference, real adapter execution, Docker challenge, publication, or release was performed for the real pilot.
+**Status: exploratory 90-episode pilot completed; confirmatory pilot not run.** The pilot used one model (`opencode-go/deepseek-v4.1-flash`), one repeat, and the 30 provisional tasks. It is not confirmatory paper evidence and does not support an improvement claim.
 
-The owner has granted broad authorization to continue the work. Authorization is not the same as having a valid study: the handoff requires independently reviewed tasks, an isolated real adapter, trusted verification, and a budget/model plan. Running a real matrix before those exist would create non-reproducible or misleading data.
+## What was run
 
-## Implemented
+- 90/90 episodes started and terminal; 0 missing, 0 pending, 0 unknown-cost, 0 over-budget.
+- Conditions: A 18/30, B 15/30, F 14/30.
+- Primary paired contrast F−B: −3.33 percentage points; exploratory 95% family-bootstrap interval [−10, 0] over six thematic families (10,000 resamples, seed 20261108).
+- Extraction failures: A 0, B 6, F 4. Tool calls: A 0, B 68, F 104. Tokens: 72,002 / 220,464 / 340,275.
+- Total observed provider cost: **$0.1680**; maximum single episode $0.0103; all episodes within the registered token, tool-call, wall-clock and USD budgets.
+- Formal: 18/18 formal episodes graded correct; all 18 receipts `completed/compiled/identified/verified` under the empty axiom policy.
+- Report: `bench/v2/real/pilot-2026-11-09-opencode-go-deepseek-v4.1-flash/report.md`; manifest, starts, episodes, receipts and immutable final/event artifacts are in the same directory (about 0.8 MB).
 
-- `bench/v2` deterministic simulation: A/B/F profiles, clean workspaces, typed graders, append-only provenance/resume, family bootstrap.
-- Receipt envelope schema 2.1.0 aligned with `math-lean-verify/v1`; formal grading rejects unknown/alias statuses and requires a trusted side-channel.
-- Restricted execution profile (`bench/v2/exec/restricted.mjs`) with preparation/execution separation, no network, read-only root, resource limits, no Docker socket; dry-run and mocked tests only.
-- Strict `math_lean_verify` contract with generated-declaration axiom audit, malformed-report rejection, null/`notRun` handling, and real Docker negative fixtures.
-- Research protocol, claims/evidence map, related work, paper skeleton, acceptance checklist.
-- OpenCode 2.0.29 isolation contract in `research/opencode-isolation.md`: native `agents` + `permissions`, A wildcard-deny, B no `math_*`, F staged plugin discovery plus `execute`, fresh HOME/XDG/OPENCODE config roots, and NDJSON extraction. A non-isolated smoke confirmed the staged `.js` plugin loads; isolated auth/usage and the runtime catalog remain unverified.
+## Methods and constraints
 
-## Draft assets (not paper evidence)
+- OpenCode 2.0.29 CLI; fresh staged workspace per episode; staged `.js` plugin discovery; runtime plugin-load audit plus static permission/registration checks.
+- Safe credential-home copy: config/cache plus a 19 MB SQLite store containing the host credential rows only. The host's 42 GB session database was not copied. No credential is in the artifact.
+- F used staged math indexes (`math-index.json`, `pdf-index.json.gz`, `lean-index.json.gz`) and `MATH_TOOLKIT_MATH_ROOT`. The corpus is the local `math/` archive.
+- The model was resolved by `opencode models --standalone` before dispatch; usage was recovered from `opencode session export`.
+- The credential home is a copy, not an OS sandbox. The F interface retains shell-equivalent capability; do not treat this as a security guarantee.
 
-- `bench/v2/tasks/pilot-v1.json`: 30 provisional tasks, six per track and five per provisional family; 12 negative cases. The structural validator passes, including units, absence prose, and same-status/wrong-prose controls. An independent review found no incorrect reference mathematics or fabricated citations; its scoring-gate findings were applied. Owner sign-off is still pending, families are thematic rather than independent, and retrieval/absence/error tasks are extraction/scope/validation smoke tests.
-- All six formal reference solutions were compiled and proof-verified through `bench/v2/verifiers/lean.mjs` with real Docker: schema-2.1.0 envelopes, `proof.status: verified`, no axioms, and 6/6 accepted by the formal grader. This is an evaluator-controlled local smoke, not an independent kernel check or informal-correspondence review.
-- `bench/v2/adapters/opencode.mjs`: dry-run A/B/F adapter with an external HOME/XDG tree, optional evaluator-supplied `auth.json`/`account.json`, staged `.js` plugin auto-discovery inside the workspace, and NDJSON final-message grouping. B stages a generic four-tool plugin (`corpus_search`, `read_excerpt`, `compute`, `lean_check`) with no shell and no `math_*`; a provider infrastructure package can be staged separately. The audit requests `/api/config` and observes the real `loading plugin` log (`runtime-plugin-load` + static permissions); a no-step_finish answer is parsed with `usage:null` and recovered via `opencode session export`. `/api/agent` still does not list the staged agent. The isolated model route exposed only `opencode/deepseek-v4.1-flash-free`, whose free quota is exhausted; `opencode-go/deepseek-v4.1-flash` is not registered in isolation. `--execute` therefore remains blocked until a provider-route preflight passes.
-- `bench/v2/study/run-study.mjs`: dry-run-first real study runner. It validates tasks, builds the A/B/F matrix, runs the inventory audit, prints episode count and maximum USD exposure, and writes `plan.json`; `--execute` refuses without a runtime-verified audit, explicit budgets/model/toolchain, and `--allow-provisional` for provisional tasks. Four mocked tests pass; no real episode has been run.
-- `bench/v2/verifiers/lean.mjs`: evaluator-controlled bridge that turns a strict v1 receipt into the study envelope and fails closed on execution, target, policy, or source mismatches. It is not a signature or OS sandbox.
-- `research/opencode-isolation.md`: exact native OpenCode 2.0.29 `agents`/`permissions`/`plugins` contract and its residual trust limits.
-- `research/real-study-runner.md`: integration design for the real study; no real-run implementation yet.
-- These assets remain **provisional**: owner task review and a real runtime audit are still required.
+## What the pilot does not establish
 
-## Blocking gaps before a real pilot
+- No plugin improvement: F−B is negative with an interval including zero.
+- The 30 tasks are provisional development/validation material; owner review is still required, and this set is not an untouched confirmatory test.
+- Retrieval/computation are extraction-style tasks with supplied excerpts; they do not measure open corpus search.
+- Error-detection and absence rows use exact-text/hash/scope fixtures; their near-zero rates are not general explanation quality or human adjudication.
+- Formal targets are simple Init-only statements; 18/18 is a ceiling check, not broad formalization ability. Receipts are not independent kernel checks or informal-correspondence reviews.
+- One model, one repeat, six families; no variance, power, or population-of-models inference.
+- Free-model feasibility was negative: the `opencode` free routes were quota-limited; `free-kilo` Nemotron/Kilo-auto produced B/F extraction failures; `free-ollama-cloud/...:1017` was not in the free plan. The pilot is not a free-model comparison.
 
-1. **Task set.** The 30 provisional tasks pass structural validation and an independent review found no incorrect reference mathematics or fabricated citations. Remaining gaps: owner sign-off, independent rubric/family adjudication, blind prose scoring for explanation/absence, and the fact that the tracks are extraction/scope/validation smoke tests. The set is not paper evidence.
-2. **Real A/B/F adapter.** The dry-run adapter and the study runner exist, including the generic B plugin and the evaluator-controlled receipt bridge. The inventory audit remains **static-equivalent**: `/api/agent` does not enumerate the staged config-defined agent, so no non-inference runtime proof was found. No real model call has been made and `--execute` remains blocked. The adapter is not an OS sandbox.
-3. **Trusted verification side channel.** The evaluator bridge issues schema-2.1.0 envelopes and passed all six formal references with real Docker. The study runner still has to attach those receipts by hash, and the bridge remains a local evaluator-controlled check, not an independent kernel check or authentication.
-4. **Budget and model plan.** Broad authorization does not specify a dollar cap, model list, retry policy, or stop-loss. A 30-task × 2-model × 3-condition × 2-repeat pilot is 360 episodes; the expanded example is 5,400 before ablations. The owner must choose the actual allocation, or explicitly authorize a smaller engineering smoke.
-5. **Data protection and partitions.** Freeze development/validation/test families, protect answers/graders, define redaction/licensing, and record immutable hashes before any confirmatory run.
-6. **Real execution and analysis.** No real episode has been run. Paper results remain pending; no table may be generated from simulated values.
+## Remaining gates for a confirmatory study
 
-## Recommended next gate
-
-1. Owner reviews and signs off the 30 provisional tasks, or supplies replacements; freeze the reviewed set and family map.
-2. Complete the runtime inventory/isolation audit and run one engineering smoke episode per condition with an explicit model and budget.
-3. Wire the real study runner (adapter -> grader -> evaluator verifier side channel), then dry-run the full matrix with a printed maximum spend.
-4. Freeze model versions, spend cap, retry rules, cache regime, and the analysis script.
-5. Only then run the authorized pilot and generate paper tables from the resulting immutable artifacts.
-
-Until steps 1–4 are evidenced, the honest status remains **engineering/simulation complete; real pilot not started**.
+1. Owner review and freeze of the task set (or a larger independently reviewed set), with family/track partitions, reference answers, rubrics and adjudication rules.
+2. The planned 360-episode pilot (30 tasks × 2 models × 3 conditions × 2 repeats), fixed model versions, spend cap, retry/stop rules and cache regime; or an explicitly authorized smaller confirmatory design.
+3. A second model and repeats; analysis of extraction failures and tool-use overhead; the F condition's negative pilot signal must be retained, not hidden.
+4. Confirm the isolation/credential provisioning method and the runtime inventory guarantee; the pilot's safe credential copy is not an OS sandbox.
+5. Freeze the protocol, graders, verifier and artifact hashes before test outcomes; keep development, validation and confirmatory tasks separate.
+6. Generate confirmatory tables only from the frozen real artifacts; the current paper reports the exploratory pilot separately and leaves confirmatory results pending.

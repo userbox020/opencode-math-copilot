@@ -1,0 +1,17 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await Promise.allSettled([\n  tools.compute({operation:\"simplify\", expression:\"2**3\"}),\n  tools.corpus_search({query:\"pilot-computation-foundations\", limit:5})\n]);\nreturn r;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "[\n  {\n    \"status\": \"fulfilled\",\n    \"value\": \"{\\\"status\\\":\\\"completed\\\",\\\"result\\\":\\\"8\\\"}\"\n  },\n  {\n    \"status\": \"fulfilled\",\n    \"value\": \"{\\\"scope\\\":\\\"public-excerpts-only\\\",\\\"exhaustive_inventory\\\":false,\\\"total_matches\\\":0,\\\"excerpts\\\":[]}\"\n  }\n]",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

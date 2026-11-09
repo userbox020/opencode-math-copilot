@@ -300,7 +300,7 @@ function caveats({ manifest, out }) {
     '- This is a real-adapter study, not a simulated fixture run.',
     '- The evaluator bridge is not an independent kernel check, a signature, or an OS sandbox.',
     '- Absence and explanation prose are heuristic/fixture checks, not blinded human adjudication.',
-    '- The adapter inventory was static-equivalent unless the manifest records runtime verification.',
+    '- The adapter inventory is runtime plugin-load (real plugin load plus static permissions); it is not a filtered catalog snapshot or an OS sandbox.',
     '- Unknown monetary cost cannot count as under budget; all-started denominators include failures.',
     '- Family-level intervals are exploratory, especially with six thematic families.',
     '',

@@ -1,0 +1,64 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "glob",
+    "arguments": {
+      "pattern": "**/*",
+      "path": "C:\\Users\\MiPC\\AppData\\Local\\Temp\\math-eval-v2-FjuHeK"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 2,
+    "kind": "tool_call",
+    "tool": "shell",
+    "arguments": {
+      "command": "Get-ChildItem -Force | Select-Object Name,Length,Mode",
+      "workdir": "C:\\Users\\MiPC\\AppData\\Local\\Temp\\math-eval-v2-FjuHeK"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 3,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.math_status();\nreturn r;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "# Math toolkit status\n- Math root: C:\\_Work\\__OPENAI_MATH\\math\n- Index: C:\\Users\\MiPC\\AppData\\Local\\Temp\\math-eval-v2-FjuHeK\\.opencode\\plugins\\math-toolkit\\data\\math-index.json\n- Index size: 9060468 bytes\n- Index mtime: 2026-11-09T10:22:51.767Z\n- Generated: 2026-11-06T22:01:42.396Z\n- Families: 373\n- Manuscripts: 721\n- Formalized: 175\n- Sections: 22723\n- Lean docs: 245\n- Lean toolchain: leanprover/lean4:v4.34.1\n- Libraries: 26\n\n## PATH availability\n- lake: C:\\Users\\MiPC\\.elan\\bin\\lake.exe\n- lean: C:\\Users\\MiPC\\.elan\\bin\\lean.exe\n- comparator: not found on PATH\n- landrun: not found on PATH\n- lean4export: not found on PATH\n- latexmk: not found on PATH\n- pdflatex: not found on PATH\n- python: C:\\Users\\MiPC\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\n- rg: C:\\Users\\MiPC\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BurntSushi.ripgrep.MSVC_Microsoft.Winget.Source_8wekyb3d8bbwe\\ripgrep-15.2.0-x86_64-pc-windows-msvc\\rg.exe\n- sympy: 1.14.0\n\nIf the index is stale: Rebuild with `node .opencode/plugins/math-toolkit/scripts/build-index.mjs` from the workspace root, then reload/restart the plugin.",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 4,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.math_grep({query: \"ab=ac\", path: \"C:\\\\Users\\\\MiPC\\\\AppData\\\\Local\\\\Temp\\\\math-eval-v2-FjuHeK\\\\corpus\", limit: 5});\nreturn r;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "Error: Path must stay inside C:\\_Work\\__OPENAI_MATH\\math.",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

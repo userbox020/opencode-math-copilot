@@ -1,0 +1,32 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.compute({operation:\"integrate\", expression:\"6*x\", variable:\"x\", point:\"0 to 1\"});\nreturn r;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"completed\",\"result\":\"3*x**2\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 2,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const a = await tools.compute({operation:\"evalf\", expression:\"3*1**2 - 3*0**2\"});\nreturn a;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"completed\",\"result\":\"3.00000000000000\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

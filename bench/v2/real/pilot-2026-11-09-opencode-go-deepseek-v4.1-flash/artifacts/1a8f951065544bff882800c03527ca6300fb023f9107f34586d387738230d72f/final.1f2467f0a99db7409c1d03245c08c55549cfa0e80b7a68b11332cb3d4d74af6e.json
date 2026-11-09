@@ -1,0 +1,22 @@
+{
+  "type": "formal",
+  "solution": "import Init\n\ntheorem pilot_geometry_identity : (n : Nat) -> n = n := fun n => rfl",
+  "target_sha256": null,
+  "receipt_sha256": null,
+  "domain": "formal mathematics — Lean 4 dependent type theory",
+  "units": "not applicable; no physical or measurement units",
+  "conditions": "Only `import Init` is used; the theorem name and type are unchanged as `(n : Nat) -> n = n`; no premises, axioms, or extra imports are added.",
+  "citations": [
+    {
+      "document": "public task prompt",
+      "locator": "id: pilot-formal-geometry; prompt and answer_contract fields",
+      "note": "Source of the required theorem name, exact target type, import restriction, and draft output shape."
+    },
+    {
+      "document": "corpus/excerpts.json",
+      "locator": "excerpts array referenced by the public task",
+      "note": "The task's excerpts field is empty (`[]`); no excerpt text is supplied."
+    }
+  ],
+  "excerpt_status": "Excerpt absence only: the public task provides no excerpts. This is not evidence that relevant material does not exist, and it is not evidence that the corpus is unavailable."
+}

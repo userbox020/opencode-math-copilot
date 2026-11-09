@@ -1,6 +1,6 @@
 # OpenCode isolation contract (v2.0.29)
 
-**Status:** proposed and source-verified for the installed `@opencode/cli` 2.0.29; not yet exercised by a real model pilot. This is an adapter/design contract, not a security sandbox.
+**Status:** proposed and source-verified for the installed `@opencode/cli` 2.0.29; exercised by the exploratory 90-episode pilot (one model, one repeat, 30 provisional tasks) with a safe credential-home copy and a runtime plugin-load audit. This is an adapter/design contract, not a security sandbox; the confirmatory pilot remains pending.
 
 ## Configuration model
 
@@ -107,14 +107,15 @@ transport; F stages the full math toolkit with the core allowlist plus `execute`
 The audit loads the copied plugin in the staged environment, normalizes the
 permission rules with last-match-wins, and compares exact tool IDs.
 
-This is **static-equivalent**, not runtime proof. OpenCode 2.0.29 exposes no
-supported session-free endpoint (found so far) that returns the resolved
-effective tool catalog; `/api/agent` returned an empty list for the staged
-config-defined agent. The CLI's `--standalone` does not provide exclusive config
-or an empty OS environment. `--execute` therefore remains blocked even with the
-opt-in environment variable. A real smoke proved the staged plugin loads under
-auto-discovery, but the effective Code Mode catalog and token usage still lack a
-session-free proof.
+The runtime audit starts the real server, requests `/api/config`, and observes
+the staged math/generic plugin in the `loading plugin` log. This is
+`runtime-plugin-load` plus static permissions/registrations, not a filtered
+catalog snapshot. `/api/agent` still returns an empty list for the staged
+config-defined agent, so it is not treated as a full catalog proof. The
+exploratory pilot passed this audit with a safe credential-home copy and the
+`opencode-go/deepseek-v4.1-flash` model. `--execute` also requires the exact
+model to be listed by `opencode models --standalone`; the free routes were
+quota-limited or extraction-failure prone.
 
 The adapter also checks workspace contents, plugin staging, timeout, and cleanup.
 It is not an OS sandbox, plugin code is application code, and `shell`-equivalent
@@ -160,7 +161,9 @@ Tool events are completion/failure records, not a complete start/progress stream
 - [ ] No grader, answer, reference report or evaluator file in the agent workspace.
 - [ ] Staged `.js` plugin discovery works inside the temporary workspace; no silent fallback to the host/global plugin.
 - [ ] NDJSON parsed fail-closed; missing final answer/tool events are errors, not successes.
-- [ ] One engineering smoke per condition before any pilot matrix; no real pilot until the task set is reviewed.
+- [ ] The exploratory pilot ran after owner acceptance of the provisional set;
+  a confirmatory pilot requires the owner-reviewed frozen set and the planned
+  360-episode allocation.
 - [ ] No trusted-receipt claim from stdout alone; formal grading requires the evaluator-controlled verifier side channel.
 
 ## Sources

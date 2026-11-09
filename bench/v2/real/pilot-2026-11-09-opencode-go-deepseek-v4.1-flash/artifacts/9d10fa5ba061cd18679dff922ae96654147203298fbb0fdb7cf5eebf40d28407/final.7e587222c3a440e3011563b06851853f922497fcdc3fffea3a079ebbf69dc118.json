@@ -1,0 +1,8 @@
+{
+  "type": "absence",
+  "status": "not_found_in_consulted_excerpts",
+  "consulted": [
+    "math/CONTENTS.md#L75-L75"
+  ],
+  "prose": "Domain: number theory, specifically the Riemann zeta function; units: not applicable. The only consulted excerpt, math/CONTENTS.md L75-L75, states zero-freeness in the half-plane Re(s) > 7/8 for certain Hecke and Dirichlet L-functions, including the Riemann zeta function, and calls this the quasi-Riemann hypothesis. A statement that all nontrivial zeta zeros have real part exactly 1/2 is not found in consulted excerpts. That is different from the stated zero-free half-plane and does not amount to the full Riemann hypothesis. This absence is limited to this excerpt and does not establish corpus-wide nonexistence; the consulted inventory is non-exhaustive, so corpus_unavailable and nonexistent are not supported."
+}

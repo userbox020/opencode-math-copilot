@@ -1,0 +1,9 @@
+{
+  "type": "absence",
+  "status": "not_found_in_consulted_excerpts",
+  "consulted": [
+    "math/README.md L12-L12"
+  ],
+  "prose": "Scope: only one supplied excerpt was consulted — math/README.md, locator L12-L12, whose text discusses manuscripts as raw research data and defers to the math community on credit, precedence and concurrent work. An assertion that every manuscript passed independent peer review is not found in consulted excerpts. This is a statement about missing evidence within the excerpt inspected (local file reads were blocked by policy, so the file itself could not be re-opened or searched beyond the given paragraph). It is not a finding that such an assertion does not exist anywhere in the collection, nor that the corpus is unavailable: the excerpt was available and readable. The consulted inventory is non-exhaustive — only one line of one README was examined — so no corpus-wide nonexistence is claimed. Domain: documentary/metadata (no units).",
+  "conditions": "Single document line (math/README.md L12); no other README lines or manuscript records were consulted; direct filesystem access was denied, so verification is limited to the supplied excerpt."
+}

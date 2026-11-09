@@ -3,10 +3,11 @@
 **provisional: true**  
 **review_status: owner-review-pending**
 
-This is a 30-task **development/review draft**, not an executed pilot, untouched
-test set, independent ground truth, or paper evidence. No model inference,
-simulation, Docker, Lean, or Comparator run was performed to prepare it.
-`correct_final` names an author-proposed reference fixture, not a verified outcome.
+This is a 30-task **development/review draft**. It was prepared without model
+inference, and it is still not an untouched test set, independent ground truth,
+or paper evidence. An exploratory 90-episode pilot later exercised the set with
+one model and one repeat (A 18/30, B 15/30, F 14/30); the draft and its
+`correct_final` references remain owner-review-pending.
 
 ## Contents and allocation
 
@@ -130,9 +131,10 @@ derivations or counterexamples, not invented manuscript references.
   informal-correspondence review. Target and receipt identifiers in
   `correct_final` remain deliberately `null`; the runner must construct the
   fixed target spec and attach evaluator-issued receipts. Do not interpret a
-  supplied candidate proof as a trusted receipt.
-- The set is consumable by `bench/v2/study/run-study.mjs --dry-run`; execution is
-  gated on a runtime-verified inventory. It is not wired into a real run.
+  supplied candidate proof as a trusted receipt. The exploratory pilot later
+  produced 18/18 verified formal receipts under the same fixed policy.
+- The set was exercised by the exploratory `bench/v2/study/run-study.mjs` pilot
+  with a runtime plugin-load audit. It remains provisional and not confirmatory.
 
 ## Validation
 

@@ -1,0 +1,17 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const results = await Promise.allSettled([\n  tools.corpus_search({query:\"pilot-error-evidence\", limit:10}),\n  tools.corpus_search({query:\"VERIFIED\", limit:10}),\n  tools.corpus_search({query:\"axiom audit\", limit:10})\n]);\nreturn results.map(r => r.status === \"fulfilled\" ? r.value : {error:String(r.reason)});"
+    },
+    "result": {
+      "status": "completed",
+      "output": "[\n  \"{\\\"scope\\\":\\\"public-excerpts-only\\\",\\\"exhaustive_inventory\\\":false,\\\"total_matches\\\":0,\\\"excerpts\\\":[]}\",\n  \"{\\\"scope\\\":\\\"public-excerpts-only\\\",\\\"exhaustive_inventory\\\":false,\\\"total_matches\\\":0,\\\"excerpts\\\":[]}\",\n  \"{\\\"scope\\\":\\\"public-excerpts-only\\\",\\\"exhaustive_inventory\\\":false,\\\"total_matches\\\":0,\\\"excerpts\\\":[]}\"\n]",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const results = await Promise.allSettled([\n  tools.compute({operation:\"simplify\", expression:\"3/8\"}),\n  tools.corpus_search({query:\"pilot-computation-evidence\", limit:10}),\n  tools.corpus_search({query:\"exactly 3 of 8 distinct citation claims\", limit:10})\n]);\nreturn results;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "[\n  {\n    \"status\": \"fulfilled\",\n    \"value\": \"{\\\"status\\\":\\\"completed\\\",\\\"result\\\":\\\"3/8\\\"}\"\n  },\n  {\n    \"status\": \"fulfilled\",\n    \"value\": \"{\\\"scope\\\":\\\"public-excerpts-only\\\",\\\"exhaustive_inventory\\\":false,\\\"total_matches\\\":0,\\\"excerpts\\\":[]}\"\n  },\n  {\n    \"status\": \"fulfilled\",\n    \"value\": \"{\\\"scope\\\":\\\"public-excerpts-only\\\",\\\"exhaustive_inventory\\\":false,\\\"total_matches\\\":0,\\\"excerpts\\\":[]}\"\n  }\n]",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 2,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "return await tools.compute({operation:\"evalf\", expression:\"3/8\"});"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"completed\",\"result\":\"0.375000000000000\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

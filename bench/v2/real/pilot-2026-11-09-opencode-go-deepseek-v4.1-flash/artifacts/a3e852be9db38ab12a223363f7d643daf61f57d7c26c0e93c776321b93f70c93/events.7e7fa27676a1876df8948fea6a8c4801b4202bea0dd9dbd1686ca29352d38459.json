@@ -1,0 +1,122 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const code = `import Init\n\ntheorem pilot_geometry_identity : (n : Nat) -> n = n :=\n  fun n => rfl`;\nconst res = await tools.lean_check({ code, imports: [\"Init\"], timeoutMs: 10000 });\nreturn res;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"rejected\",\"error\":\"Expected one theorem/example with a single-line type and a bounded by proof\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 2,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const code = `import Init\n\ntheorem pilot_geometry_identity : (n : Nat) -> n = n := by\n  intro n\n  rfl`;\nconst res = await tools.lean_check({ code, imports: [\"Init\"], timeoutMs: 10000 });\nreturn res;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"rejected\",\"error\":\"Expected one theorem/example with a single-line type and a bounded by proof\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 3,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const code = `import Init\n\ntheorem pilot_geometry_identity : (n : Nat) -> n = n := by intro n; rfl`;\nconst res = await tools.lean_check({ code, imports: [\"Init\"], timeoutMs: 10000 });\nreturn res;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"rejected\",\"error\":\"Expected one theorem/example with a single-line type and a bounded by proof\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 4,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const code = `theorem pilot_geometry_identity : (n : Nat) -> n = n := by intro n; rfl`;\nconst res = await tools.lean_check({ code, imports: [\"Init\"], timeoutMs: 10000 });\nreturn res;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"rejected\",\"error\":\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 5,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const code = `theorem pilot_geometry_identity : (n : Nat) -> n = n := fun n => rfl`;\nconst res = await tools.lean_check({ code, imports: [\"Init\"], timeoutMs: 10000 });\nreturn res;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"rejected\",\"error\":\"Expected one theorem/example with a single-line type and a bounded by proof\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 6,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const code = `theorem pilot_geometry_identity : (n : Nat) -> n = n := by exact fun n => rfl`;\nconst res = await tools.lean_check({ code, imports: [\"Init\"], timeoutMs: 10000 });\nreturn res;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"rejected\",\"error\":\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 7,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const out = {};\nfor (const [name, code] of Object.entries({\n  a: `theorem t : 1 = 1 := by rfl`,\n  b: `theorem t : (n : Nat) -> n = n := by intro n; rfl`,\n  c: `theorem t : (n : Nat) -> n = n := by fun n => rfl`,\n  d: `theorem t : (n : Nat) -> n = n := by exact (fun n => rfl)`,\n  e: `theorem t : (n : Nat) -> n = n := by intro n; exact rfl`,\n  f: `theorem t : (n : Nat) -> n = n := by intro n; simp`\n})) {\n  out[name] = await tools.lean_check({ code, imports: [\"Init\"], timeoutMs: 10000 });\n}\nreturn out;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\n  \"a\": \"{\\\"verification\\\":\\\"not-performed\\\",\\\"receipt\\\":null,\\\"scope\\\":\\\"compiler-check-only\\\",\\\"status\\\":\\\"missing-tool\\\",\\\"compilation\\\":\\\"not-run\\\",\\\"error\\\":\\\"Preinstalled native Lean required; no elan download or lake build is performed\\\"}\",\n  \"b\": \"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\",\n  \"c\": \"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\",\n  \"d\": \"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\",\n  \"e\": \"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\",\n  \"f\": \"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\"\n}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 8,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const out = {};\nfor (const [name, code] of Object.entries({\n  a: `theorem pilot_geometry_identity : (n : Nat) -> n = n := by rfl`,\n  b: `theorem pilot_geometry_identity : (n : Nat) -> n = n := by\n  rfl`,\n  c: `theorem pilot_geometry_identity : (n : Nat) -> n = n := by\n  intro n\n  rfl`\n})) {\n  out[name] = await tools.lean_check({ code, imports: [\"Init\"], timeoutMs: 10000 });\n}\nreturn out;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\n  \"a\": \"{\\\"verification\\\":\\\"not-performed\\\",\\\"receipt\\\":null,\\\"scope\\\":\\\"compiler-check-only\\\",\\\"status\\\":\\\"missing-tool\\\",\\\"compilation\\\":\\\"not-run\\\",\\\"error\\\":\\\"Preinstalled native Lean required; no elan download or lake build is performed\\\"}\",\n  \"b\": \"{\\\"verification\\\":\\\"not-performed\\\",\\\"receipt\\\":null,\\\"scope\\\":\\\"compiler-check-only\\\",\\\"status\\\":\\\"missing-tool\\\",\\\"compilation\\\":\\\"not-run\\\",\\\"error\\\":\\\"Preinstalled native Lean required; no elan download or lake build is performed\\\"}\",\n  \"c\": \"{\\\"verification\\\":\\\"not-performed\\\",\\\"receipt\\\":null,\\\"scope\\\":\\\"compiler-check-only\\\",\\\"status\\\":\\\"missing-tool\\\",\\\"compilation\\\":\\\"not-run\\\",\\\"error\\\":\\\"Preinstalled native Lean required; no elan download or lake build is performed\\\"}\"\n}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

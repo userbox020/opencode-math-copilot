@@ -1,0 +1,8 @@
+{
+  "type": "absence",
+  "status": "not_found_in_consulted_excerpts",
+  "consulted": [
+    "math/preprints/A-Counterexample-to-Kaplanskys-Direct-Finiteness-Conjecture-in-Characteristic-Two-September-23-2026/README.md#L1-L5"
+  ],
+  "prose": "In the bibliographic metadata domain, no DOI is not found in consulted excerpts from the supplied README header at L1-L5; the header contains the title, author, and date but no DOI field or DOI string. This establishes absence only within that consulted header, not that the manuscript has no DOI anywhere. The consulted inventory is non-exhaustive, so no corpus-wide nonexistence is claimed."
+}

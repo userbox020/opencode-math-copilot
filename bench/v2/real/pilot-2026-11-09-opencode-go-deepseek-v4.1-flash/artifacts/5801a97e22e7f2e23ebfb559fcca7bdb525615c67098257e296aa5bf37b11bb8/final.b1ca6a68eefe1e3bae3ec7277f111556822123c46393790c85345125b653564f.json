@@ -1,0 +1,6 @@
+{
+  "type": "formal",
+  "solution": "import Init\n\ntheorem pilot_number_theory_sum : (2 : Nat) + 3 = 5 := by\n  rfl",
+  "target_sha256": null,
+  "receipt_sha256": null
+}

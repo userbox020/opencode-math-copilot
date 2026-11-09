@@ -1,0 +1,92 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.lean_check({code: \"import Init\\n\\ntheorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := fun n => Nat.add_zero n\", imports: [\"Init\"], timeoutMs: 10000});\nreturn r;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"rejected\",\"error\":\"Expected one theorem/example with a single-line type and a bounded by proof\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 2,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.lean_check({code: \"import Init\\n\\ntheorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by\\n  intro n\\n  exact Nat.add_zero n\", imports: [\"Init\"], timeoutMs: 10000});\nreturn r;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"rejected\",\"error\":\"Expected one theorem/example with a single-line type and a bounded by proof\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 3,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const variants = [\n\"import Init\\ntheorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by\\n  intro n\\n  exact Nat.add_zero n\",\n\"import Init\\n\\ntheorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by exact Nat.add_zero\",\n\"import Init\\n\\ntheorem pilot_algebra_add_zero : (n : Nat) → n + 0 = n := by\\n  intro n\\n  exact Nat.add_zero n\",\n\"import Init\\n\\ntheorem pilot_algebra_add_zero (n : Nat) : n + 0 = n := by\\n  exact Nat.add_zero n\"\n];\nfor (const code of variants) {\n  try { const r = await tools.lean_check({code, imports:[\"Init\"], timeoutMs:10000}); console.log(JSON.stringify({code, r})); }\n  catch(e){ console.log(JSON.stringify({code, error:String(e)})); }\n}"
+    },
+    "result": {
+      "status": "completed",
+      "output": "null\n\nLogs:\n{\"code\":\"import Init\\ntheorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by\\n  intro n\\n  exact Nat.add_zero n\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"}\n{\"code\":\"import Init\\n\\ntheorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by exact Nat.add_zero\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"}\n{\"code\":\"import Init\\n\\ntheorem pilot_algebra_add_zero : (n : Nat) → n + 0 = n := by\\n  intro n\\n  exact Nat.add_zero n\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"}\n{\"code\":\"import Init\\n\\ntheorem pilot_algebra_add_zero (n : Nat) : n + 0 = n := by\\n  exact Nat.add_zero n\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 4,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const variants = [\n\"theorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by\\n  intro n\\n  exact Nat.add_zero n\",\n\"example : (n : Nat) -> n + 0 = n := by\\n  intro n\\n  exact Nat.add_zero n\",\n\"theorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by exact Nat.add_zero n\",\n\"theorem pilot_algebra_add_zero : ∀ n : Nat, n + 0 = n := by\\n  intro n\\n  exact Nat.add_zero n\"\n];\nfor (const code of variants) {\n  try { const r = await tools.lean_check({code, imports:[\"Init\"], timeoutMs:10000}); console.log(JSON.stringify({code, r})); }\n  catch(e){ console.log(JSON.stringify({code, error:String(e)})); }\n}"
+    },
+    "result": {
+      "status": "completed",
+      "output": "null\n\nLogs:\n{\"code\":\"theorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by\\n  intro n\\n  exact Nat.add_zero n\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\"}\n{\"code\":\"example : (n : Nat) -> n + 0 = n := by\\n  intro n\\n  exact Nat.add_zero n\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\"}\n{\"code\":\"theorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by exact Nat.add_zero n\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\"}\n{\"code\":\"theorem pilot_algebra_add_zero : ∀ n : Nat, n + 0 = n := by\\n  intro n\\n  exact Nat.add_zero n\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 5,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const variants = [\n\"import Init\\n\\ntheorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by\\n  intro n\\n  rfl\",\n\"import Init\\n\\ntheorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := fun n => rfl\",\n\"theorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by\\n  intro n\\n  rfl\",\n\"theorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := fun n => rfl\"\n];\nfor (const code of variants) {\n  try { const r = await tools.lean_check({code, imports:[\"Init\"], timeoutMs:10000}); console.log(JSON.stringify({code, r})); }\n  catch(e){ console.log(JSON.stringify({code, error:String(e)})); }\n}"
+    },
+    "result": {
+      "status": "completed",
+      "output": "null\n\nLogs:\n{\"code\":\"import Init\\n\\ntheorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by\\n  intro n\\n  rfl\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"}\n{\"code\":\"import Init\\n\\ntheorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := fun n => rfl\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"}\n{\"code\":\"theorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by\\n  intro n\\n  rfl\",\"r\":\"{\\\"verification\\\":\\\"not-performed\\\",\\\"receipt\\\":null,\\\"scope\\\":\\\"compiler-check-only\\\",\\\"status\\\":\\\"missing-tool\\\",\\\"compilation\\\":\\\"not-run\\\",\\\"error\\\":\\\"Preinstalled native Lean required; no elan download or lake build is performed\\\"}\"}\n{\"code\":\"theorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := fun n => rfl\",\"r\":\"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 6,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.corpus_search({query: \"pilot_algebra_add_zero\", limit: 10});\nreturn r;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"scope\":\"public-excerpts-only\",\"exhaustive_inventory\":false,\"total_matches\":0,\"excerpts\":[]}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

@@ -1,6 +1,11 @@
 # Real study runner — integration design
 
-**Status:** runner implemented (`bench/v2/study/run-study.mjs`); the dry-run works and `--execute` intentionally refuses a static-equivalent inventory audit. No real-run pilot has been executed. `bench/v2/run.mjs` remains the simulated harness.
+**Status:** the runner was exercised by the exploratory 90-episode real pilot
+(`opencode-go/deepseek-v4.1-flash`, one repeat, 30 provisional tasks): A 18/30,
+B 15/30, F 14/30; F−B −3.33 pp, exploratory 95% CI [−10, 0]; 18/18 formal
+receipts verified; $0.168. The confirmatory pilot has **not** been run. The
+artifact is `bench/v2/real/pilot-2026-11-09-opencode-go-deepseek-v4.1-flash/`.
+`bench/v2/run.mjs` remains the simulated harness.
 
 ## Purpose
 
@@ -21,7 +26,7 @@ Run the reviewed task set through A/B/F with real model processes while keeping 
 
 1. Validate the task file and freeze hashes for tasks, graders, verifier bridge, adapter, plugin payload, Node/OpenCode versions, and protocol.
 2. Build the episode matrix and print the maximum spend estimate.
-3. Run the adapter inventory audit for A/B/F. Execution requires a **runtime-verified** audit; static-equivalent evidence is insufficient. A failed or unsupported audit stops before the first model call.
+3. Run the adapter inventory audit for A/B/F. Execution requires a **runtime plugin-load** audit (the real server loads the staged `.js` plugin after `/api/config`, and static permissions/registrations match); a static-only report is insufficient. A failed or unsupported audit stops before the first model call.
 4. Refuse `--execute` if the task file is provisional without `--allow-provisional`, or if budgets/model/toolchain are missing.
 5. Verify no grading, reference, answer, receipt, or evaluator file is in the agent workspace.
 
@@ -57,10 +62,12 @@ For each `(task, profile, repeat, attempt)`:
 
 ## Current blockers
 
-- The inventory audit is now `runtime-plugin-load`: the real server loads the staged `.js` plugin after `/api/config`, and static permissions/registrations match. `/api/agent` still does not expose a filtered catalog snapshot; this is not an OS sandbox.
-- **Provider route:** the isolated HOME exposes `opencode/deepseek-v4.1-flash-free`, but its free quota returned `provider.quota`; `opencode-go/deepseek-v4.1-flash` is not registered. `opencode models --standalone` is now a required preflight. A working isolated subscription/provider configuration or a different model is needed.
-- Auth/account provisioning into the external home and `opencode session export` usage recovery are implemented. No real episode has been run.
-- Model(s), spend cap, per-episode budgets, repeats, cache regime, and owner task sign-off are not yet supplied. The owner selected DeepSeek Flash / 90 episodes / $25, but that route is unavailable in isolation.
-- The evaluator bridge is not an independent kernel check, signature, or OS sandbox.
+- The inventory audit is `runtime-plugin-load`: the real server loads the staged `.js` plugin after `/api/config`, and static permissions/registrations match. `/api/agent` still does not expose a filtered catalog snapshot; this is not an OS sandbox. The exploratory pilot used the safe credential-home copy and passed the audit.
+- **Provider route:** the safe credential home exposes `opencode-go/deepseek-v4.1-flash` and the pilot ran it. The free routes were quota-limited or produced B/F extraction failures; `free-ollama-cloud/...:1017` was not included in the free plan. `opencode models --standalone` remains a required preflight.
+- Auth/credential provisioning and `opencode session export` usage recovery are implemented and were exercised by the 90-episode pilot. The confirmatory study has not been run.
+- The exploratory pilot used one model, one repeat, 30 provisional tasks, and $0.168 total. The planned 360-episode pilot (two models, two repeats) and owner task sign-off remain pending.
+- The evaluator bridge is not an independent kernel check, signature, or OS sandbox. The safe credential home is a copy, not an OS sandbox.
 
-Until those are resolved, only dry-runs and non-inference engineering smokes are permitted.
+The exploratory pilot is complete and preserved; the confirmatory study remains
+blocked on owner-reviewed tasks, the 360-episode model/spend plan, and the
+remaining isolation/audit decisions.

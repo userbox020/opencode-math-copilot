@@ -1,0 +1,29 @@
+{
+  "type": "numeric",
+  "value": 8,
+  "domain": "nonnegative-integer",
+  "units": "subsets",
+  "conditions": [
+    "a b c pairwise distinct",
+    "empty and full subsets included"
+  ],
+  "citations": [
+    {
+      "document": "task:pilot-computation-foundations",
+      "locator": "prompt",
+      "note": "Defines S={a,b,c} with a,b,c pairwise distinct, and asks for all subsets including empty set and S."
+    },
+    {
+      "document": "corpus/excerpts.json",
+      "locator": "excerpts",
+      "note": "No public excerpts were supplied (empty list). A corpus search for 'pilot-computation-foundations' returned 0 matches with scope 'public-excerpts-only' and exhaustive_inventory false; this is excerpt absence, not evidence that relevant sources do not exist."
+    }
+  ],
+  "evidence": {
+    "computation": {
+      "expression": "2**3",
+      "result": "8",
+      "note": "A set with 3 pairwise-distinct elements has 2^3 subsets, including the empty set and the full set."
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "formal",
+  "solution": "import Init\n\ntheorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by\n  intro n\n  rfl\n",
+  "target_sha256": null,
+  "receipt_sha256": null,
+  "domain": "Lean 4 formal proof; Nat arithmetic",
+  "units": "none",
+  "conditions": "Only `import Init` is used; the stated type is unchanged; no premises or axioms are added. This is a draft solution and does not claim verification.",
+  "citations": [
+    {
+      "document": "public task pilot-formal-algebra",
+      "locator": "prompt, answer_contract, and excerpts fields"
+    },
+    {
+      "document": "corpus/excerpts.json",
+      "locator": "not read: access was blocked by configuration policy"
+    }
+  ],
+  "excerpt_status": "The public task supplies `excerpts: []`, so no public excerpts were provided. `corpus/excerpts.json` was inaccessible, so excerpt absence is not evidence of nonexistence or of corpus unavailability."
+}

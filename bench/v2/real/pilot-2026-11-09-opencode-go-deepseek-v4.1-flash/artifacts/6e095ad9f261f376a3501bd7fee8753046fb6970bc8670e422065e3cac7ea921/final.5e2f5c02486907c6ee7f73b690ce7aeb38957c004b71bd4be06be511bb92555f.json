@@ -1,0 +1,13 @@
+{
+  "type": "explanation",
+  "text": "Verdict: invalid.\n\nDomain and units: Euclidean plane geometry; side lengths in metres (m), area in square metres (m²); θ is the included angle between the two given sides, taken in degrees or radians consistently.\n\nSpecific defect: the argument applies the right-triangle formula A = (1/2)·leg₁·leg₂ to two arbitrary adjacent sides. For a general triangle with sides a = 3 m and b = 4 m meeting at included angle θ, the altitude to side a is b·sin θ, not b. Hence A = (1/2)·a·b·sin θ = (1/2)(3 m)(4 m)sin θ = 6 sin θ m². The step '(3*4)/2 = 6 m²' silently assumes sin θ = 1, i.e. θ = 90°. So the claimed independence from the included angle is false.\n\nValid correction: A = 6 sin θ m² for 0 < θ < 180° (nondegenerate triangle). Equivalently, A = (1/2)·a·b·sin θ with a = 3 m, b = 4 m. The area equals 6 m² exactly when θ = 90°; for example θ = 30° gives A = 6·(1/2) = 3 m², and θ = 150° also gives 3 m². The maximum is 6 m² at θ = 90°, while A → 0 as θ → 0° or 180° (degenerate limits). Thus the original conclusion holds only under the additional condition that the included angle is a right angle.\n\nEvidence and citation status: the supplied public-excerpt list is empty ('excerpts': []), and a search of the public excerpts for 'triangle area' returned 0 matches (scope: public-excerpts-only; the search reports exhaustive_inventory: false). Therefore no document or locator can be cited for this item. This is an absence of excerpts in the provided public corpus, not proof that no relevant source exists, and it is not a finding that the corpus itself is unavailable.",
+  "domain": "Euclidean plane geometry",
+  "units": {
+    "side_lengths": "metres (m)",
+    "area": "square metres (m^2)",
+    "angle": "degrees or radians"
+  },
+  "conditions": "Nondegenerate Euclidean triangle, 0 < θ < 180°, where θ is the angle included between the sides of lengths 3 m and 4 m.",
+  "citations": [],
+  "citation_status": "No public excerpts were supplied ('excerpts': []); a public-excerpt corpus search for 'triangle area' returned 0 matches (public-excerpts-only, non-exhaustive inventory). Excerpt absence is not asserted as nonexistence or corpus unavailability."
+}

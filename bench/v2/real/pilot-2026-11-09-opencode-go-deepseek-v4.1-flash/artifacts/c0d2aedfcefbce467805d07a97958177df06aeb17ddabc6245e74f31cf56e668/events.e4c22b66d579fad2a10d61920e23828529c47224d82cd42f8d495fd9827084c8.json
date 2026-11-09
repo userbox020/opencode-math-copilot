@@ -1,0 +1,47 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "glob",
+    "arguments": {
+      "pattern": "**/excerpts.json"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 2,
+    "kind": "tool_call",
+    "tool": "read",
+    "arguments": {
+      "path": "corpus/excerpts.json"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 3,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.math_grep({query: \"quasi-Riemann hypothesis\", path: \"math/CONTENTS.md\", limit: 5, context: 1});\nreturn r;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "```text\nCONTENTS.md:65: \nCONTENTS.md:66: **003. The quasi-Riemann hypothesis.** Proves that every Dirichlet <i>L</i>-function, including $`\\zeta(s)`$, is zero-free in $`\\Re s\\gt 7/8`$, resolving the quasi-Riemann hypothesis. The same half-plane is zero-free for every finite-order Hecke <i>L</i>-function over $`\\mathbb Q(\\sqrt{-3})`$. A companion gives a different proof of the zero-free half-plane $`\\Re s\\gt 11/12`$. ([Lean](lean/docs/003.md))\nCONTENTS.md:67: \nCONTENTS.md:74: \nCONTENTS.md:75: We prove that all finite-order Hecke <i>L</i>-functions over $`\\mathbb Q(\\sqrt{-3})`$ and all Dirichlet <i>L</i>-functions are zero-free in the half-plane $`\\Re s\\gt 7/8`$, with the principal pole at <i>s</i> = 1 allowed. In particular, the Riemann zeta function is zero-free in this half-plane, proving the quasi-Riemann hypothesis.\nCONTENTS.md:76: \nCONTENTS.md:83: \nCONTENTS.md:84: We establish the quasi-Riemann hypothesis by proving that every Dirichlet <i>L</i>-function, including Riemann's zeta function, has no zeros in the half-plane $`\\mathop{\\mathrm{Re}}\\nolimits s\\gt 11/12`$. More generally, we prove the same zero-free half-plane for every finite-order Hecke <i>L</i>-function over $`K=\\mathbb Q(\\sqrt{-3})`$. In particular, this rules out the existence of Landau–Siegel zeros.\nCONTENTS.md:85: \n```",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

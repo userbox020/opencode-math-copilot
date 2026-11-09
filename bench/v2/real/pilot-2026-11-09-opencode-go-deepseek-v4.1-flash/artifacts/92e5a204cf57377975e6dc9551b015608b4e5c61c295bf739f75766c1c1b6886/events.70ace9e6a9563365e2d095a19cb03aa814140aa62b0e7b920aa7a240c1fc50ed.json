@@ -1,0 +1,17 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await Promise.allSettled([\n  tools.read_excerpt({document: \"math/lean/README.md\", locator: \"L3-L4\", maxChars: 2000}),\n  tools.corpus_search({query: \"single large library\", limit: 5})\n]);\nreturn JSON.stringify(r, null, 2);"
+    },
+    "result": {
+      "status": "completed",
+      "output": "[\n  {\n    \"status\": \"fulfilled\",\n    \"value\": \"{\\\"document\\\":\\\"math/lean/README.md\\\",\\\"locator\\\":\\\"L3-L4\\\",\\\"text\\\":\\\"This directory contains Lean formalizations of some results in this repository.\\\\nThey are organized in a single large library, so we recommend compiling only small portions at a time.\\\",\\\"truncated\\\":false,\\\"scope\\\":\\\"public-excerpts-only\\\"}\"\n  },\n  {\n    \"status\": \"fulfilled\",\n    \"value\": \"{\\\"scope\\\":\\\"public-excerpts-only\\\",\\\"exhaustive_inventory\\\":false,\\\"total_matches\\\":1,\\\"excerpts\\\":[{\\\"document\\\":\\\"math/lean/README.md\\\",\\\"locator\\\":\\\"L3-L4\\\",\\\"text\\\":\\\"This directory contains Lean formalizations of some results in this repository.\\\\nThey are organized in a single large library, so we recommend compiling only small portions at a time.\\\",\\\"truncated\\\":false}]}\"\n  }\n]",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

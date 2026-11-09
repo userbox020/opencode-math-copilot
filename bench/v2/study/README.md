@@ -1,6 +1,10 @@
 # Real study runner (dry-run first)
 
-**Status:** implemented; **no real model episode has been run.** `--execute` refuses until a runtime-verified tool inventory exists. This is not paper evidence.
+**Status:** implemented and exercised by the exploratory 90-episode pilot with
+`opencode-go/deepseek-v4.1-flash`; the confirmatory pilot is not run. The pilot
+is not confirmatory paper evidence. `--execute` requires a runtime plugin-load
+audit, the exact model listed by `opencode models --standalone`, explicit
+budgets/toolchain, and `--allow-provisional` for provisional tasks.
 
 `run-study.mjs` is the integration layer between the staged OpenCode adapter, the task set, the evaluator graders, and the Lean receipt bridge. It is separate from the simulated `bench/v2/run.mjs`.
 
@@ -30,14 +34,27 @@ node bench/v2/study/run-study.mjs \
 Execution requires all of the following:
 
 - `MATH_BENCH_ALLOW_EXECUTE=1`;
-- a **runtime-verified** audit for A, B and F (static-equivalent is refused);
+- a **runtime plugin-load** audit for A, B and F: the real server loads the
+  staged `.js` plugin after `/api/config`, and the static
+  permission/registration audit matches (this is not a filtered catalog
+  snapshot or an OS sandbox);
 - explicit model, budgets, spend cap, and Lean toolchain label;
 - `--allow-provisional` if the task file still has `provisional: true`;
 - a fresh output directory or a resumable study with the same protocol hash.
 
-The adapter currently reports a **static-equivalent** audit: staged IDs and permissions match exactly, but OpenCode 2.0.29 exposes no supported session-free endpoint that enumerates config-defined agents/effective tools. `/api/agent` returns an empty list for the staged `benchmark` agent, so it is not treated as proof. Therefore `--execute` intentionally fails closed.
+The exploratory 90-episode pilot passed the audit with
+`opencode-go/deepseek-v4.1-flash` and a `MATH_BENCH_SAFE_HOME` copy (config/cache
+plus a 19 MB credential DB; no 42 GB session database). It produced A 18/30,
+B 15/30, F 14/30; F−B −3.33 percentage points, exploratory 95% CI [−10, 0];
+18/18 formal receipts verified; total $0.168. The result is negative/neutral
+for F and is **not confirmatory**. The free-model routes were quota-limited or
+produced B/F extraction failures; see `real/README.md`.
 
-A non-isolated smoke confirmed the staged `.js` plugin is auto-discovered and the model can use `execute`; the isolated HOME now has an external auth/account copy and a staged provider-plugin package. Two remaining provider observations: `/api/agent` still lists no config-defined agent, and the isolated `opencode models --standalone` exposes `opencode/deepseek-v4.1-flash-free` rather than `opencode-go/deepseek-v4.1-flash`. The free route returned `provider.quota` (free usage limit reached). A real pilot must therefore be launched with a provider route that is actually available; the current $25 DeepSeek plan cannot run until that route/quota is resolved. The gate also requires `opencode models --standalone` to list the exact model before dispatch.
+The adapter also requires `opencode models --standalone` to list the exact
+requested model before dispatch; the pilot used the safe credential DB and the
+`opencode-go` provider. `/api/agent` still does not list the staged
+config-defined agent, so the audit's guarantee is plugin-load plus static
+permissions, not a filtered catalog snapshot.
 
 ## Episode lifecycle
 
@@ -61,7 +78,9 @@ A non-isolated smoke confirmed the staged `.js` plugin is auto-discovered and th
 
 - The evaluator bridge is not an independent kernel check, a signature, or an OS sandbox.
 - Absence/explanation prose checks are heuristics or frozen fixture labels, not blinded human adjudication.
-- The adapter audit is static-equivalent until a runtime proof exists.
+- The adapter audit is runtime plugin-load, not a filtered catalog snapshot;
+  the safe credential home is a copy, not an OS sandbox. The exploratory pilot
+  is one model/one repeat and provisional tasks.
 - Provisional tasks are development/validation material. A study that allows them is not confirmatory paper evidence.
 - Family-level intervals are exploratory, especially with six thematic families.
 

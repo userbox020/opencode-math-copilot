@@ -1,5 +1,12 @@
 # Math plugin benchmark
 
+> **V2 exploratory real-adapter pilot (not confirmatory):** 90 episodes with
+> `opencode-go/deepseek-v4.1-flash`, one repeat, 30 provisional tasks: A 18/30,
+> B 15/30, F 14/30; F−B −3.33 pp, exploratory 95% CI [−10, 0]; 18/18 formal
+> receipts verified; $0.168. Artifact: `bench/v2/real/pilot-2026-11-09-...`.
+> This is separate from the historical keyword benchmark below and does not
+> establish mathematical accuracy or a plugin improvement.
+
 10 problems, 1 repeat, with/without `math-toolkit`, each run with `--standalone`.
 
 | Model | Condition | Passed | Errors | Mean time | Mean tool calls |

@@ -1,0 +1,18 @@
+{
+  "type": "symbolic",
+  "numerator": [
+    1,
+    1
+  ],
+  "denominator": [
+    1
+  ],
+  "domain": "real",
+  "units": "dimensionless",
+  "assumptions": [
+    "x is real"
+  ],
+  "conditions": [
+    "x != 1"
+  ]
+}

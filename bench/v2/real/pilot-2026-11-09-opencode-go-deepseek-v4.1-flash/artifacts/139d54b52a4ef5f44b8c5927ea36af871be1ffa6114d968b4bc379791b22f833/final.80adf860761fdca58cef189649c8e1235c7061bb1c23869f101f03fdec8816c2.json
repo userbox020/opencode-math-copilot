@@ -1,0 +1,7 @@
+{
+  "type": "citation",
+  "document": "math/lean/README.md",
+  "locator": "L3-L4",
+  "claim": "This directory contains Lean formalizations of some results in this repository.\nThey are organized in a single large library, so we recommend compiling only small portions at a time.",
+  "supported": true
+}

@@ -1,0 +1,8 @@
+{
+  "type": "absence",
+  "status": "not_found_in_consulted_excerpts",
+  "consulted": [
+    "math/CONTENTS.md:L75-L75"
+  ],
+  "prose": "Domain: analytic number theory, specifically zero-free regions for L-functions and the Riemann zeta function; units: none (real parts of complex arguments are dimensionless). Condition: only the single supplied catalogue excerpt, math/CONTENTS.md L75-L75, was consulted, and it was available. That excerpt states zero-freeness in the half-plane Re(s) > 7/8 for finite-order Hecke L-functions over Q(sqrt(-3)) and Dirichlet L-functions, with the principal pole at s = 1 allowed, and says this proves the quasi-Riemann hypothesis for the Riemann zeta function. A statement that all nontrivial zeta zeros have real part exactly 1/2 is not found in consulted excerpts. The stated zero-free half-plane Re(s) > 7/8 is not the full Riemann hypothesis and does not assert that every nontrivial zero lies on Re(s) = 1/2. This is an absence only from the consulted excerpt, not evidence of corpus-wide nonexistence; the consulted inventory is non-exhaustive."
+}

@@ -1,24 +1,29 @@
 \documentclass{article}
 \usepackage[T1]{fontenc}
+\usepackage{booktabs}
 \usepackage{hyperref}
 
 \title{OpenCode Math Copilot: A Model-Agnostic Tool Layer for Mathematical Retrieval, Computation, and Verification}
 \author{[Author names and affiliations pending owner decision]}
-\date{Draft protocol and manuscript skeleton}
+\date{Draft protocol and exploratory pilot; confirmatory study pending}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-This manuscript skeleton specifies an evaluation of a mathematical tool layer
+This manuscript specifies an evaluation of a mathematical tool layer
 combining retrieval, symbolic computation, and formal verification in an agent
 workflow without changing model weights. The proposed study compares an
 unassisted condition, a generic agent with comparable corpus and tool access,
 and the full plugin. Its principal contrast concerns the full plugin versus
-the generic agent. New experimental results are \textbf{pending}; study sizes
-are proposed, not executed. Future dry-run outputs must be labeled simulated
-and cannot establish mathematical performance. No improvement, universal
-expertise, or security guarantee is claimed.
+the generic agent. A 90-episode exploratory pilot with one model, one repeat,
+and 30 provisional tasks found A 18/30, B 15/30, and F 14/30; the paired
+F$-$B difference was $-3.3$ percentage points with an exploratory 95\%
+family-bootstrap interval of $[-10,0]$. The pilot does not support an
+improvement claim. The planned 360-episode confirmatory study remains
+\textbf{pending}; study sizes are proposed, not executed. Future dry-run
+outputs must be labeled simulated and cannot establish mathematical
+performance. No universal expertise or security guarantee is claimed.
 \end{abstract}
 
 \section{Introduction and Scope of Claims}
@@ -54,18 +59,22 @@ Verification requires a controlled comparison to the trusted statement and
 inspection of transitive axioms, not merely process exit status or a printed
 success marker. File hashes provide provenance, not semantic equivalence.
 A placeholder in a challenge statement is distinct from an incomplete solution.
-\textbf{Pending:} implementation-linked checks and receipts for the actual
-study. The current evaluator bridge binds a fixed theorem, expected type,
-imports, and axiom policy, and issues schema-2.1.0 receipts from the strict
-Verifier; a six-task engineering smoke accepted all six references with no
-axioms. That smoke is not a real-model result, an independent kernel check, or
-an informal-correspondence review. Restricted execution and protected graders
-are proposed controls, not a security proof.
+\textbf{Pending:} implementation-linked checks and receipts for the planned
+study. The evaluator bridge binds a fixed theorem, expected type, imports, and
+axiom policy, and issues schema-2.1.0 receipts from the strict Verifier. The
+exploratory pilot's 18 formal episodes all produced
+\texttt{completed/compiled/identified/verified} receipts under the empty axiom
+policy; the earlier six-task reference smoke also accepted 6/6. These are not
+independent kernel checks, signatures, or informal-correspondence reviews.
+Restricted execution and protected graders are proposed controls, not a
+security proof.
 Any historical Comparator report is confined to its named challenge,
 commit, and environment; it does not verify all challenges or the mathematical paper.
 
 \section{Preregistered Experimental Protocol}
-\textbf{Status: proposed; completed preregistration and budget authorization pending.}
+\textbf{Status: exploratory 90-episode pilot completed (one model, one repeat,
+provisional tasks); confirmatory preregistration and budget authorization
+pending.}
 The companion protocol is
 \href{../research/protocol.md}{\texttt{research/protocol.md}}.
 RQ1 concerns utility, RQ2 integration value, RQ3 reliability, and RQ4
@@ -81,40 +90,120 @@ repeats. Preserve all started episodes in operational accounting and pair
 conditions in a family bootstrap. Freeze prompts, budgets, rubrics, weights,
 and analysis before test outcomes are available.
 
-The proposed pilot is $30\times2\times3\times2=360$ episodes. An expanded
+The planned pilot is $30\times2\times3\times2=360$ episodes. An expanded
 example is $150\times4\times3\times3=5{,}400$ episodes before ablations.
-Neither has been run by this work; both require budget authorization.
-The real runner is implemented with a dry-run and a fail-closed execution gate;
-no real episode has been run, and a static-equivalent inventory audit is not
-accepted for execution. Any dry-run manifest must be labeled \textbf{simulated},
-not measured.
+A 90-episode exploratory pilot ($30\times1\times3\times1$, one model, one
+repeat, 30 provisional tasks) was executed; the 360-episode planned pilot and
+the expanded study remain \textbf{pending}. The real runner was exercised with
+a runtime plugin-load audit, a safe credential home, evaluator-controlled Lean
+receipts, and session-export usage accounting. The planned study still requires
+owner-reviewed tasks, a fixed model/spend plan, and the remaining isolation and
+audit gates. Any dry-run manifest must be labeled \textbf{simulated}, not
+measured; the exploratory pilot is real but not confirmatory.
 
 \section{Results Separated by Retrieval, Computation, and Proof}
-\textbf{Pending. No new evaluation results are available in this skeleton.}
-No simulated outputs or plausible result tables are supplied. Historical
-keyword-heuristic reports are documented separately in the claim/evidence map
-and must not be described as mathematical accuracy.
+\subsection{Exploratory real-adapter pilot (not confirmatory)}
+A 90-episode exploratory pilot was run with the real adapter: one model
+(\texttt{opencode-go/deepseek-v4.1-flash}), one repeat, three conditions, and
+the 30 provisional development tasks. All 90 episodes started and terminated;
+none was over budget or missing, and the total observed provider cost was
+\$0.168 (maximum single episode \$0.0103). The tasks are owner-review-pending
+and the pilot is not confirmatory paper evidence.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Track & A & B & F \\
+\midrule
+Retrieval (supplied excerpts) & 6/6 & 4/6 & 5/6 \\
+Computation & 5/6 & 4/6 & 2/6 \\
+Formal (fixed Init targets) & 6/6 & 6/6 & 6/6 \\
+Error detection / explanation & 0/6 & 0/6 & 0/6 \\
+Absence / scope & 1/6 & 1/6 & 1/6 \\
+\midrule
+Overall correct under budget & 18/30 & 15/30 & 14/30 \\
+Extraction failures & 0 & 6 & 4 \\
+\bottomrule
+\end{tabular}
+\caption{Exploratory 90-episode pilot on 30 provisional tasks (one model,
+one repeat). Correct means externally graded success under every registered
+budget; failures remain in the all-started denominator. The error-detection
+and absence rows use exact-text/hash/scope fixtures and are not estimates of
+general explanation quality.}
+\label{tab:pilot}
+\end{table}
+
+The primary paired contrast is F$-$B: $-3.33$ percentage points, with an
+exploratory 95\% family-bootstrap interval of $[-10,0]$ over six thematic
+families (10{,}000 resamples, seed 20261108). The point estimate is negative
+and the interval includes zero. This pilot does not support a claim that the
+full plugin improves success over the generic agent, and it does not support a
+universal or component-level causal claim. The F condition used more tool calls
+(104 versus 68 for B and 0 for A) and more tokens (340{,}275 versus 220{,}464
+and 72{,}002), with costs of \$0.0802, \$0.0633, and \$0.0246 respectively.
 
 \subsection{Bibliographic Retrieval and Evidence}
-\textbf{Pending:} source-supported grading, coverage, and failure accounting.
+The supplied-excerpt retrieval track produced A 6/6, B 4/6, and F 5/6. These
+are bounded extraction tasks: the excerpt and locator are in the public
+\texttt{task.json} for every condition, so the track does not measure open
+corpus search. The two B and one F failures were extraction failures, not
+wrong citations.
+
 \subsection{Exact and Symbolic Computation}
-\textbf{Pending:} correctness under registered assumptions and domains.
+The computation track produced A 5/6, B 4/6, and F 2/6. The F condition's tool
+use increased the extraction-failure rate; the result is a warning about
+workflow overhead, not evidence that symbolic computation is intrinsically
+harmful. The exact units/domain/conditions contracts and the registered wrong
+answers remain in the artifact.
+
 \subsection{Fixed-Statement Lean Proof Construction}
-\textbf{Pending:} target-specific receipts; reproduction results kept separate.
+All 18 formal episodes (six fixed Init-only targets across A/B/F) were graded
+correct. The evaluator-controlled bridge issued 18 receipts, all with
+\texttt{execution=completed}, \texttt{compilation=compiled},
+\texttt{target=identified}, and \texttt{proof=verified} under the empty axiom
+policy. This establishes those recorded targets under that policy; it is not an
+independent kernel recheck, an informal-correspondence review, or evidence of
+general formalization ability. The targets are simple and do not discriminate
+between conditions.
+
 \subsection{Error and Hypothesis Detection}
-\textbf{Pending:} blinded rubric outcomes and adjudication records.
+All conditions scored 0/6. The grader recognizes two frozen text hashes per
+task; valid paraphrases are rejected by design. This row is a fixture check,
+not blind human adjudication and not an estimate of error-detection ability.
+Across the 12 tasks marked negative, correct counts were A 2/12, B 1/12, and
+F 2/12; these use the exact fixture graders and are not general defect
+detection. The negative-case control and the five defective arguments remain
+in the task set for review.
+
 \subsection{Out-of-Corpus Explanation}
-\textbf{Pending:} reviewed explanations and uncertainty by family/model.
+The absence/scope track produced 1/6 in every condition. The grader requires a
+specific excerpt-scope phrase and rejects unsupported global-absence claims;
+the task-local exact-prose rubric is a smoke test. The broader out-of-corpus
+explanation track from the protocol is not covered by this pilot.
+
+\subsection{Confirmatory study}
+The planned 360-episode pilot (30 owner-reviewed tasks, two models, three
+conditions, two repeats) and the expanded study remain \textbf{pending}. No
+confirmatory table, population-of-models inference, or superiority claim is
+made. The exploratory pilot's negative/neutral result is retained rather than
+replaced by a favorable subset.
 
 \section{Ablations, Costs, and Negative Cases}
 Only a leave-one-out design is proposed: remove retrieval, computation, or
 resolution-time verification from F while retaining external final grading.
-\textbf{Pending:} authorized ablations and cost analysis. Cost per correct
-episode includes failed attempts; undefined or missing costs are not zero.
-Report cold and warm caches, setup time, failures, and timeouts rather than
-only successful latencies. Preserve negative results, including the historical
-GPT landau-siegel keyword score of $2/3$ with versus $3/3$ without the plugin,
-as a preliminary project report rather than new mathematical evidence.
+No ablation was executed in the exploratory pilot. The pilot observed a total
+provider cost of \$0.168 for 90 episodes (A \$0.0246, B \$0.0633, F \$0.0802;
+maximum single episode \$0.0103); all episodes were within the registered USD,
+token, tool-call, and wall-clock budgets. Cost per correct episode includes
+failed attempts; undefined or missing costs are not zero. The exploratory
+F$-$B point estimate is negative ($-3.33$ percentage points, interval
+$[-10,0]$), and the B/F extraction failures remain in the denominator. Report
+cold and warm caches, setup time, failures, and timeouts rather than only
+successful latencies. Preserve negative results, including the historical GPT
+landau-siegel keyword score of $2/3$ with versus $3/3$ without the plugin, as a
+preliminary project report rather than new mathematical evidence.
 
 \section{Limitations, Contamination, and Threats to Validity}
 Public benchmarks may overlap model training or accessible proofs. Repeated
@@ -122,19 +211,43 @@ episodes are not independent tasks. Corpus access, interface differences,
 human grading, unknown model revisions, small family samples, and API drift
 limit interpretation. Formal validity does not establish faithful informal
 translation. No claim of universal expertise or broad causal superiority follows.
-\textbf{Pending:} study-specific deviations, missing data, and limitations.
+
+The exploratory pilot has additional limits: 30 provisional tasks, one model,
+one repeat, and six thematic families; the retrieval/computation tasks supply
+their excerpts and are extraction-style; the error-detection and absence rows
+use exact-text/hash/scope fixtures and are not semantic explanation grading;
+the formal targets are simple Init-only statements; the F condition had more
+extraction failures and higher cost than A/B; and the safe credential home is a
+copy, not an OS sandbox. Free-model feasibility tests were negative (quota
+errors or B/F extraction failures), so the pilot is not a free-model
+comparison. The 360-episode confirmatory pilot, further models, repeats,
+owner-reviewed tasks, ablations, and provisional-versus-confirmatory partitions
+remain pending. Study-specific deviations and missing data must be reported
+alongside the negative pilot result.
 
 \section{Reproducibility, Licenses, and Artifact Availability}
-\textbf{Pending:} immutable study manifests, records, protected evaluation
-release policy, receipts, dependency/image/patch hashes, license review,
-redacted logs, and regeneration commands. No archive or public dataset release
-is claimed. Document actual tools and AI assistance under the chosen venue's
-policy; author names and affiliations remain placeholders.
+The exploratory pilot artifact is committed under
+\href{../bench/v2/real/README.md}{\texttt{bench/v2/real/}} with the study
+manifest, starts, episodes, evaluator receipts, immutable final/event
+artifacts, and reports (about 0.8 MB). The manifest records the model ID, task,
+grader, verifier, adapter and protocol hashes, budgets, one repeat, and the
+90-episode count. The safe credential home used to launch the provider is not
+committed; it contains a copy of the host credential store and is not evidence.
+The public artifact contains no credentials or session database. The LaTeX/PDF
+build, license review, release policy, redacted event logs, and dependency/image
+hashes for a confirmatory release remain \textbf{pending}. No archive or public
+dataset release is claimed. Document actual tools and AI assistance under the
+chosen venue's policy; author names and affiliations remain placeholders.
 
 \section{Conclusion Limited to Observed Evidence}
-This skeleton specifies evaluation and evidence requirements. Empirical
-utility, reliability gains, efficiency, and generalization remain
-\textbf{pending}. A final conclusion must follow the completed evidence,
+The exploratory 90-episode pilot observed A 18/30, B 15/30, and F 14/30, with a
+paired F$-$B difference of $-3.33$ percentage points and an exploratory 95\%
+family-bootstrap interval of $[-10,0]$. The pilot does not support an
+improvement claim; the point estimate is negative and the interval includes
+zero. It also exposed extraction failures and higher tool/token costs in B/F.
+Empirical utility, reliability gains, efficiency, and generalization remain
+\textbf{pending} for the planned 360-episode confirmatory study and the
+expanded design. A final conclusion must follow the completed evidence,
 including null and negative outcomes, rather than a predetermined claim.
 
 \bibliographystyle{plain}

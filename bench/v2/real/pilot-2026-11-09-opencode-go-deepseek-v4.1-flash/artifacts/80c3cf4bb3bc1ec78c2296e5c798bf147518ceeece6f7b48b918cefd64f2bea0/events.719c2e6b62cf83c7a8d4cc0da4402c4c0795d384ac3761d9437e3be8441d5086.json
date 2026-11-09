@@ -1,0 +1,77 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const calls = await Promise.allSettled([\n  tools.corpus_search({query: \"for every n there exists m\", limit: 10}),\n  tools.corpus_search({query: \"m>n for every n\", limit: 10}),\n  tools.corpus_search({query: \"quantifier\", limit: 10}),\n  tools.lean_check({\n    imports: [\"Init.Data.Nat.Basic\"],\n    code: `example : (∀ n : Nat, ∃ m : Nat, m > n) := by\n  intro n\n  exact ⟨n + 1, Nat.lt_succ_self n⟩\n\nexample : ¬ (∃ m : Nat, ∀ n : Nat, m > n) := by\n  intro h\n  rcases h with ⟨m, hm⟩\n  exact (Nat.lt_irrefl m) (hm m)`,\n    timeoutMs: 10000\n  })\n]);\nreturn calls.map((c, i) => ({i, status: c.status, value: c.status === \"fulfilled\" ? c.value : String(c.reason)}));"
+    },
+    "result": {
+      "status": "completed",
+      "output": "[\n  {\n    \"i\": 0,\n    \"status\": \"fulfilled\",\n    \"value\": \"{\\\"scope\\\":\\\"public-excerpts-only\\\",\\\"exhaustive_inventory\\\":false,\\\"total_matches\\\":0,\\\"excerpts\\\":[]}\"\n  },\n  {\n    \"i\": 1,\n    \"status\": \"fulfilled\",\n    \"value\": \"{\\\"scope\\\":\\\"public-excerpts-only\\\",\\\"exhaustive_inventory\\\":false,\\\"total_matches\\\":0,\\\"excerpts\\\":[]}\"\n  },\n  {\n    \"i\": 2,\n    \"status\": \"fulfilled\",\n    \"value\": \"{\\\"scope\\\":\\\"public-excerpts-only\\\",\\\"exhaustive_inventory\\\":false,\\\"total_matches\\\":0,\\\"excerpts\\\":[]}\"\n  },\n  {\n    \"i\": 3,\n    \"status\": \"fulfilled\",\n    \"value\": \"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Unsupported Lean tactic; executable commands/metaprograms are forbidden\\\"}\"\n  }\n]",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 2,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.lean_check({\n  imports: [\"Init.Data.Nat.Basic\"],\n  code: `example : (∀ n : Nat, ∃ m : Nat, m > n) := fun n => ⟨n + 1, Nat.lt_succ_self n⟩\n\nexample : ¬ (∃ m : Nat, ∀ n : Nat, m > n) := fun h =>\n  match h with\n  | ⟨m, hm⟩ => (Nat.lt_irrefl m) (hm m)`,\n  timeoutMs: 10000\n});\nreturn r;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"rejected\",\"error\":\"Expected one theorem/example with a single-line type and a bounded by proof\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 3,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.lean_check({\n  imports: [\"Init.Data.Nat.Basic\"],\n  code: `example : (∀ n : Nat, ∃ m : Nat, m > n) ∧ ¬ (∃ m : Nat, ∀ n : Nat, m > n) := ⟨fun n => ⟨n + 1, Nat.lt_succ_self n⟩, fun h => match h with | ⟨m, hm⟩ => (Nat.lt_irrefl m) (hm m)⟩`,\n  timeoutMs: 10000\n});\nreturn r;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"rejected\",\"error\":\"Expected one theorem/example with a single-line type and a bounded by proof\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 4,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.lean_check({imports:[\"Init\"], code:`example : 1 = 1 := rfl`, timeoutMs:10000}); return r;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"rejected\",\"error\":\"Expected one theorem/example with a single-line type and a bounded by proof\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 5,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.lean_check({imports:[\"Init\"], code:`theorem t : 1 = 1 := by rfl`, timeoutMs:10000}); return r;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"verification\":\"not-performed\",\"receipt\":null,\"scope\":\"compiler-check-only\",\"status\":\"missing-tool\",\"compilation\":\"not-run\",\"error\":\"Preinstalled native Lean required; no elan download or lake build is performed\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

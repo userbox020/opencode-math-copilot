@@ -1,0 +1,6 @@
+{
+  "type": "formal",
+  "solution": "import Init\n\ntheorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by\n  intro n\n  exact Nat.add_zero n",
+  "target_sha256": null,
+  "receipt_sha256": null
+}

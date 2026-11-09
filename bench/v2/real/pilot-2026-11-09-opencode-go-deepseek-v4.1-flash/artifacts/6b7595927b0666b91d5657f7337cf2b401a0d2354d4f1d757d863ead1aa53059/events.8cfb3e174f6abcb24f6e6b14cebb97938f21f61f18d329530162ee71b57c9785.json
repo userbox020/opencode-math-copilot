@@ -1,0 +1,32 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "glob",
+    "arguments": {
+      "pattern": "**/excerpts.json"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 2,
+    "kind": "tool_call",
+    "tool": "glob",
+    "arguments": {
+      "pattern": "**/Exact-Birch-Swinnerton-Dyer-Formula-from-Low-Selmer-Corank-October-7-2026/**"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

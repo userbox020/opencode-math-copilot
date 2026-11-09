@@ -1,0 +1,8 @@
+{
+  "type": "absence",
+  "status": "not_found_in_consulted_excerpts",
+  "consulted": [
+    "math/preprints/Exact-Birch-Swinnerton-Dyer-Formula-from-Low-Selmer-Corank-October-7-2026/README.md L19-L21"
+  ],
+  "prose": "Domain: number theory, specifically a Birch–Swinnerton-Dyer preprint version note; units: not applicable. Condition: only the supplied excerpt was consulted and it was available. An evaluator-issued Lean verification receipt with a target hash is not found in consulted excerpts from math/preprints/Exact-Birch-Swinnerton-Dyer-Formula-from-Low-Selmer-Corank-October-7-2026/README.md L19-L21; that excerpt only describes a version note removing an obsolete supporting citation and linking to a previous PDF. The consulted inventory is non-exhaustive, so this does not establish corpus-wide nonexistence and does not infer that no proof or receipt exists elsewhere."
+}

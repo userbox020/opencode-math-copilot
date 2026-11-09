@@ -1,0 +1,4 @@
+{
+  "type": "explanation",
+  "text": "Valid. Domain: real sequences with the usual absolute-value metric on R; units: none. Conditions: a_n→a and b_n→b in R, epsilon>0, and n→∞. Proof: given epsilon>0, convergence of a_n gives N_a such that |a_n−a|<epsilon/2 for all n≥N_a, and convergence of b_n gives N_b such that |b_n−b|<epsilon/2 for all n≥N_b. Taking N=max(N_a,N_b), both error bounds hold simultaneously for all n≥N. Then |(a_n+b_n)−(a+b)| = |(a_n−a)+(b_n−b)| ≤ |a_n−a|+|b_n−b| < epsilon/2+epsilon/2 = epsilon. Hence a_n+b_n→a+b. The only latent quantifier issue would be claiming the same threshold works without taking the maximum; the stated “both errors are eventually” is justified by that finite maximum, so the argument is valid. No excerpts were supplied and no corpus/tools are available; therefore no document or locator can be cited, and this absence is not evidence that no source exists."
+}

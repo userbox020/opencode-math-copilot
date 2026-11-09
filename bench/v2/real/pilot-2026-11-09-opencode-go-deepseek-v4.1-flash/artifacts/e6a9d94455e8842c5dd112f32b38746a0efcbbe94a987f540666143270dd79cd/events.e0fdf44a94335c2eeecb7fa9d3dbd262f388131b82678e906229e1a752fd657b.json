@@ -1,0 +1,32 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "shell",
+    "arguments": {
+      "command": "if (Test-Path corpus/excerpts.json) { Get-Content corpus/excerpts.json -Raw } else { \"ABSENT: corpus/excerpts.json\" }"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 2,
+    "kind": "tool_call",
+    "tool": "glob",
+    "arguments": {
+      "pattern": "corpus/**"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.lean_check({code: \"import Init\\n\\ntheorem pilot_foundations_true : True := True.intro\", imports: [\"Init\"], timeoutMs: 10000});\nreturn r;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\"status\":\"rejected\",\"error\":\"Expected one theorem/example with a single-line type and a bounded by proof\"}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 2,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const results = await Promise.allSettled([\n  tools.lean_check({code: \"import Init\\n\\ntheorem pilot_foundations_true : True := by\\n  trivial\", imports: [\"Init\"], timeoutMs: 10000}),\n  tools.lean_check({code: \"import Init\\n\\ntheorem pilot_foundations_true : True := by\\n  exact True.intro\", imports: [\"Init\"], timeoutMs: 10000}),\n  tools.lean_check({code: \"import Init\\n\\ntheorem pilot_foundations_true : True := by\\n  constructor\", imports: [\"Init\"], timeoutMs: 10000})\n]);\nreturn results.map(r => r.status === \"fulfilled\" ? r.value : String(r.reason));"
+    },
+    "result": {
+      "status": "completed",
+      "output": "[\n  \"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\",\n  \"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\",\n  \"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"\n]",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 3,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const cases = [\n\"import Init\\ntheorem pilot_foundations_true : True := by exact True.intro\",\n\"import Init\\ntheorem pilot_foundations_true : True := by trivial\",\n\"import Init\\ntheorem pilot_foundations_true : True := by constructor\",\n\"import Init\\ntheorem pilot_foundations_true : True := by\\n  exact True.intro\\n\",\n\"import Init\\n\\nexample : True := by\\n  exact True.intro\"\n];\nconst results = [];\nfor (const c of cases) {\n  results.push([c, await tools.lean_check({code: c, imports: [\"Init\"], timeoutMs: 10000})]);\n}\nreturn results;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "[\n  [\n    \"import Init\\ntheorem pilot_foundations_true : True := by exact True.intro\",\n    \"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"\n  ],\n  [\n    \"import Init\\ntheorem pilot_foundations_true : True := by trivial\",\n    \"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"\n  ],\n  [\n    \"import Init\\ntheorem pilot_foundations_true : True := by constructor\",\n    \"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"\n  ],\n  [\n    \"import Init\\ntheorem pilot_foundations_true : True := by\\n  exact True.intro\\n\",\n    \"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"\n  ],\n  [\n    \"import Init\\n\\nexample : True := by\\n  exact True.intro\",\n    \"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"\n  ]\n]",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 4,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const cases = [\n\"theorem pilot_foundations_true : True := by\\n  exact True.intro\",\n\"theorem pilot_foundations_true : True := by trivial\",\n\"theorem pilot_foundations_true : True := by\\n  constructor\",\n\"theorem pilot_foundations_true : True := True.intro\"\n];\nconst results = [];\nfor (const c of cases) {\n  results.push([c, await tools.lean_check({code: c, imports: [\"Init\"], timeoutMs: 10000})]);\n}\nreturn results;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "[\n  [\n    \"theorem pilot_foundations_true : True := by\\n  exact True.intro\",\n    \"{\\\"verification\\\":\\\"not-performed\\\",\\\"receipt\\\":null,\\\"scope\\\":\\\"compiler-check-only\\\",\\\"status\\\":\\\"missing-tool\\\",\\\"compilation\\\":\\\"not-run\\\",\\\"error\\\":\\\"Preinstalled native Lean required; no elan download or lake build is performed\\\"}\"\n  ],\n  [\n    \"theorem pilot_foundations_true : True := by trivial\",\n    \"{\\\"verification\\\":\\\"not-performed\\\",\\\"receipt\\\":null,\\\"scope\\\":\\\"compiler-check-only\\\",\\\"status\\\":\\\"missing-tool\\\",\\\"compilation\\\":\\\"not-run\\\",\\\"error\\\":\\\"Preinstalled native Lean required; no elan download or lake build is performed\\\"}\"\n  ],\n  [\n    \"theorem pilot_foundations_true : True := by\\n  constructor\",\n    \"{\\\"verification\\\":\\\"not-performed\\\",\\\"receipt\\\":null,\\\"scope\\\":\\\"compiler-check-only\\\",\\\"status\\\":\\\"missing-tool\\\",\\\"compilation\\\":\\\"not-run\\\",\\\"error\\\":\\\"Preinstalled native Lean required; no elan download or lake build is performed\\\"}\"\n  ],\n  [\n    \"theorem pilot_foundations_true : True := True.intro\",\n    \"{\\\"status\\\":\\\"rejected\\\",\\\"error\\\":\\\"Expected one theorem/example with a single-line type and a bounded by proof\\\"}\"\n  ]\n]",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

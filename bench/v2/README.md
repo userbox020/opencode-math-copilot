@@ -2,8 +2,11 @@
 
 This standalone, dependency-free Node harness implements EVAL-01/02/03,
 STAT-01 and the EXEC-01 restricted execution preparation profile. It does not
-modify or replace the historical keyword benchmark. **The committed pilot is
+modify or replace the historical keyword benchmark. **The committed simulated pilot is
 simulated; its scores say nothing about real models or mathematical validity.**
+A separate exploratory real-adapter pilot (90 episodes, one model, one repeat,
+30 provisional tasks) is preserved under `real/pilot-2026-11-09-...`; it is not
+confirmatory and its F−B result is negative/neutral. See `real/README.md`.
 
 From the repository root (Node 20+):
 
@@ -272,13 +275,15 @@ was **not run** for this delivery. Tests exercise dry-run and mock execution onl
 including Docker absence and timeout cleanup. They do not establish that an image,
 Lean compiler or real formal verifier works.
 
-## OpenCode adapter: dry-run first, no real pilot
+## OpenCode adapter: exploratory real pilot; no confirmatory pilot
 
-`adapters/opencode.mjs` is separate from the unchanged simulator/graders. **No real
-model call, real pilot, Docker challenge or release has been run for this adapter.**
+`adapters/opencode.mjs` is separate from the unchanged simulator/graders. **An
+exploratory 90-episode real-adapter pilot was run with one model, one repeat,
+and 30 provisional tasks; see `real/README.md`.** It is not confirmatory.
 The real integration layer is `study/run-study.mjs`; see `study/README.md`. Its
-dry-run builds the full matrix and its `--execute` gate refuses a static-equivalent
-inventory audit. No real episode has been run.
+dry-run builds the full matrix; the pilot used a runtime plugin-load audit, a
+safe credential-home copy, evaluator receipts, and session-export usage. Free
+model routes were tested and were not viable for B/F.
 It supports `--tasks <JSON-array-file>` (including provisional task sets) and an
 optional `--task <id>` filter. Without `--tasks`, `--task` selects a toy fixture.
 
@@ -301,10 +306,15 @@ remove only the explicitly reported temporary directories when finished.
 ### Non-inference inventory audit (`--audit`)
 
 `--audit` runs the audit and exits, optionally with `--dry-run`; it cannot be
-combined with `--execute`. **The current guarantee is static-equivalent, not
-runtime-verified.** It creates no OpenCode session, sends no prompt, invokes no
-tool implementation and makes no model call. The model argument is only a plan
-label. No OpenCode server or port is opened by this fallback.
+combined with `--execute`. **The current runtime guarantee is
+`runtime-plugin-load`: the real server loads the staged `.js` plugin after
+`/api/config`, and the static permission/registration audit matches.** It is
+not a filtered catalog snapshot or an OS sandbox. It creates no OpenCode
+session, sends no prompt, invokes no tool implementation and makes no model
+call. The model argument is only a plan label. A `MATH_BENCH_SAFE_HOME` copy of
+the host config/cache and credential DB is supported for the real adapter; the
+exploratory pilot used it. No OpenCode server or port is opened by the
+static-only fallback.
 
 Read-only investigation of installed CLI 2.0.29 covered `--help`, `serve --help`,
 `agent --help` (no such subcommand), `debug --help`, `debug agents --help`,
@@ -486,8 +496,15 @@ evaluator-controlled receipt.
 - `profiles/`, `graders/`, `fixtures/`: preregistered conditions and deterministic checks.
 - `exec/restricted.mjs`: prepare/execute separation and restricted Docker arguments.
 - `tests/v2.test.mjs`: deterministic, inference-free validation.
-- `adapters/opencode.mjs`, `tests/opencode.test.mjs`: dry-run preparation and mocked,
-  fail-closed real-adapter execution boundary; no real pilot results.
+- `adapters/opencode.mjs`, `tests/opencode.test.mjs`: dry-run preparation,
+  runtime plugin-load audit, safe credential-home mode, and a mocked fail-closed
+  execution boundary. The exploratory 90-episode real pilot is under `real/`.
+- `study/run-study.mjs`, `tests/study.test.mjs`, `study/README.md`: real study
+  runner, provider/model preflight, append-only ledger, evaluator grading and
+  receipts; the 90-episode exploratory pilot ran through it.
+- `real/pilot-2026-11-09-opencode-go-deepseek-v4.1-flash/`: 90-episode
+  exploratory real-adapter artifact (manifest, starts, episodes, receipts,
+  immutable final/event artifacts, reports); not confirmatory.
 - `adapters/generic-tools.mjs`, `adapters/generic-runtime.mjs`,
   `tests/generic-tools.test.mjs`: exact four-tool B implementation and bounded,
   public-only retrieval / mocked subprocess tests.

@@ -1,0 +1,4 @@
+{
+  "type": "explanation",
+  "text": "Invalid. Domain: natural numbers with the usual order; no units apply. The premise ∀n∃m(m>n) is true: for each n, m=n+1 works. But the conclusion ∃m∀n(m>n) does not follow. The defect is an illicit quantifier inversion (scope fallacy): ∀n∃m was replaced by ∃m∀n. The conclusion is in fact false, because any proposed natural m fails when n=m: m>m is false (equivalently, n=m+1 gives m<n). A single m cannot exceed every natural number, since the naturals have no maximum. Correction: retain the dependence of m on n—∀n∃m(m>n)—and do not export m outside the scope of n. A correct stronger finite version is: for every finite set F of naturals, ∃m∀n∈F(m>n), e.g. m=1+max(F); this does not extend to all n. Documents: none supplied; excerpts: []. No corpus or tools were available, so excerpt absence is not evidence of documentary nonexistence or corpus unavailability beyond the stated absence of supplied excerpts."
+}

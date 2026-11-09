@@ -1,0 +1,107 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "glob",
+    "arguments": {
+      "pattern": "corpus/**"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 2,
+    "kind": "tool_call",
+    "tool": "glob",
+    "arguments": {
+      "pattern": "**/README.md"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 3,
+    "kind": "tool_call",
+    "tool": "read",
+    "arguments": {
+      "path": "corpus/excerpts.json"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 4,
+    "kind": "tool_call",
+    "tool": "shell",
+    "arguments": {
+      "command": "Get-ChildItem -Force | Select-Object Name,Length"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 5,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const r = await tools.math_grep({query: \"Lean formalizations of some results\", literal: true, limit: 10, context: 1});\nreturn r;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "No matches found.",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 6,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const [s, g] = await Promise.allSettled([\n  tools.math_status(),\n  tools.math_grep({query: \"recommend compiling only small portions\", literal: true, limit: 10})\n]);\nreturn {status: s, grep: g};"
+    },
+    "result": {
+      "status": "completed",
+      "output": "{\n  \"status\": {\n    \"status\": \"fulfilled\",\n    \"value\": \"# Math toolkit status\\n- Math root: C:\\\\_Work\\\\__OPENAI_MATH\\\\math\\n- Index: C:\\\\Users\\\\MiPC\\\\AppData\\\\Local\\\\Temp\\\\math-eval-v2-SHxkle\\\\.opencode\\\\plugins\\\\math-toolkit\\\\data\\\\math-index.json\\n- Index size: 9060468 bytes\\n- Index mtime: 2026-11-09T09:48:23.514Z\\n- Generated: 2026-11-06T22:01:42.396Z\\n- Families: 373\\n- Manuscripts: 721\\n- Formalized: 175\\n- Sections: 22723\\n- Lean docs: 245\\n- Lean toolchain: leanprover/lean4:v4.34.1\\n- Libraries: 26\\n\\n## PATH availability\\n- lake: C:\\\\Users\\\\MiPC\\\\.elan\\\\bin\\\\lake.exe\\n- lean: C:\\\\Users\\\\MiPC\\\\.elan\\\\bin\\\\lean.exe\\n- comparator: not found on PATH\\n- landrun: not found on PATH\\n- lean4export: not found on PATH\\n- latexmk: not found on PATH\\n- pdflatex: not found on PATH\\n- python: C:\\\\Users\\\\MiPC\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python311\\\\python.exe\\n- rg: C:\\\\Users\\\\MiPC\\\\AppData\\\\Local\\\\Microsoft\\\\WinGet\\\\Packages\\\\BurntSushi.ripgrep.MSVC_Microsoft.Winget.Source_8wekyb3d8bbwe\\\\ripgrep-15.2.0-x86_64-pc-windows-msvc\\\\rg.exe\\n- sympy: 1.14.0\\n\\nIf the index is stale: Rebuild with `node .opencode/plugins/math-toolkit/scripts/build-index.mjs` from the workspace root, then reload/restart the plugin.\"\n  },\n  \"grep\": {\n    \"status\": \"fulfilled\",\n    \"value\": \"No matches found.\"\n  }\n}",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 7,
+    "kind": "tool_call",
+    "tool": "execute",
+    "arguments": {
+      "code": "const results = await Promise.allSettled([\n  tools.math_grep({query: \"This directory contains Lean formalizations\", path: \"math/lean/README.md\", literal: true, limit: 5, context: 2}),\n  tools.math_grep({query: \"single large library\", literal: true, limit: 5, context: 2}),\n  tools.math_manuscript({path: \"math/lean/README.md\", maxChars: 5000})\n]);\nreturn results;"
+    },
+    "result": {
+      "status": "completed",
+      "output": "[\n  {\n    \"status\": \"fulfilled\",\n    \"value\": \"```text\\nlean/README.md:1: # Lean formalizations\\nlean/README.md:2: \\nlean/README.md:3: This directory contains Lean formalizations of some results in this repository.\\nlean/README.md:4: They are organized in a single large library, so we recommend compiling only small portions at a time.\\nlean/README.md:5: \\n```\"\n  },\n  {\n    \"status\": \"fulfilled\",\n    \"value\": \"No matches found.\"\n  },\n  {\n    \"status\": \"fulfilled\",\n    \"value\": \"No manuscript found. Use math_search to find an indexed title or PDF path.\"\n  }\n]",
+      "error": null
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

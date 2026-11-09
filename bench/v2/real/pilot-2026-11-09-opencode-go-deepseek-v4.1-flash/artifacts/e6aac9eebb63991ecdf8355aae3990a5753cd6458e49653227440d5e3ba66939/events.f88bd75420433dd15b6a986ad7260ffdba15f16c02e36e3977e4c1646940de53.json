@@ -1,0 +1,49 @@
+[
+  {
+    "seq": 1,
+    "kind": "tool_call",
+    "tool": "shell",
+    "arguments": {
+      "command": "Get-ChildItem -Force -Recurse -Depth 2 | Select-Object FullName, Length | Format-Table -AutoSize",
+      "workdir": "C:\\Users\\MiPC\\AppData\\Local\\Temp\\math-eval-v2-wXmWsS"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 2,
+    "kind": "tool_call",
+    "tool": "glob",
+    "arguments": {
+      "pattern": "**/*",
+      "path": "C:\\Users\\MiPC\\AppData\\Local\\Temp\\math-eval-v2-wXmWsS"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  },
+  {
+    "seq": 3,
+    "kind": "tool_call",
+    "tool": "read",
+    "arguments": {
+      "path": "C:\\Users\\MiPC\\AppData\\Local\\Temp\\math-eval-v2-wXmWsS\\corpus\\excerpts.json"
+    },
+    "result": {
+      "status": "error",
+      "output": null,
+      "error": "Blocked by configuration policy"
+    },
+    "duration_ms": 0,
+    "simulated": false
+  }
+]

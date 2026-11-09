@@ -1,0 +1,17 @@
+{
+  "type": "formal",
+  "solution": "import Init\n\ntheorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := fun n => rfl",
+  "target_sha256": null,
+  "receipt_sha256": null,
+  "domain": "Lean 4 / Nat arithmetic",
+  "units": "none",
+  "conditions": "Uses only import Init; theorem name exactly pilot_algebra_add_zero; target type exactly (n : Nat) -> n + 0 = n; no added premises or axioms; verification is not claimed.",
+  "citations": [
+    {
+      "document": "corpus/excerpts.json",
+      "locator": "excerpts[]",
+      "finding": "empty public excerpt list"
+    }
+  ],
+  "excerpt_status": "Public excerpts are empty, and corpus_search for pilot_algebra_add_zero returned 0 matches in public excerpts. This is excerpt absence only; it does not establish nonexistence or corpus unavailability."
+}

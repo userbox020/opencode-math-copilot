@@ -1,0 +1,20 @@
+{
+  "type": "formal",
+  "solution": "import Init\n\ntheorem pilot_foundations_true : True := True.intro",
+  "target_sha256": null,
+  "receipt_sha256": null,
+  "domain": "Lean 4 formal theorem proving",
+  "units": "not applicable",
+  "conditions": "The code uses only `import Init`; declares `theorem pilot_foundations_true`; its type is exactly `True`; there are no added premises or axioms; the proof term is `True.intro`.",
+  "citations": [
+    {
+      "document": "public task JSON",
+      "locator": "id: pilot-formal-foundations; excerpts: []",
+      "supports": "The public excerpts array is empty, so no excerpt citation is available."
+    }
+  ],
+  "excerpt_status": "The supplied public excerpts list is empty. This is excerpt absence only; it is not evidence of nonexistence or corpus unavailability.",
+  "verification_claimed": false,
+  "evaluator_identifiers": "pending",
+  "receipt": "pending"
+}

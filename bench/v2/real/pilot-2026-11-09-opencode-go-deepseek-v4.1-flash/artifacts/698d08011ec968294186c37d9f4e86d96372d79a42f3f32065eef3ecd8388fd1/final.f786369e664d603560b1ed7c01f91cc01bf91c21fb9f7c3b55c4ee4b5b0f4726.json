@@ -1,0 +1,4 @@
+{
+  "type": "explanation",
+  "text": "Invalid under the standard definition of prime. Domain: integers n > 1; units: not applicable. The stated reason—n is divisible by 1 and itself—is true for every n > 1 and is only a necessary condition for primality, not a sufficient one. Primality requires that 1 and n be the only positive divisors. Counterexample: n = 4. It is divisible by 1 and 4, but also by 2, so it is composite. Corrected criterion: n > 1 is prime iff its only positive divisors are 1 and n; equivalently, iff there is no integer d with 1 < d < n and d | n (or no prime p <= sqrt(n) divides n). The defect is therefore treating 'has divisors 1 and n' as 'has only divisors 1 and n.' Citations: none available; the public excerpts are empty (task pilot-error-number-theory, locator excerpts: []). This is excerpt absence, not a finding that relevant documents do not exist or that the corpus is unavailable."
+}

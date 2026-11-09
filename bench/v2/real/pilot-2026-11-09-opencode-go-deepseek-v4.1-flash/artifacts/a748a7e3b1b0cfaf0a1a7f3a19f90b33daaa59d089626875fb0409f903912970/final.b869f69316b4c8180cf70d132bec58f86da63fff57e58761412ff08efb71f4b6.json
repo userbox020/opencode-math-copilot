@@ -1,0 +1,6 @@
+{
+  "type": "formal",
+  "solution": "import Init\n\ntheorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R :=\n  fun P Q R hPQ hQR hP => hQR (hPQ hP)",
+  "target_sha256": null,
+  "receipt_sha256": null
+}

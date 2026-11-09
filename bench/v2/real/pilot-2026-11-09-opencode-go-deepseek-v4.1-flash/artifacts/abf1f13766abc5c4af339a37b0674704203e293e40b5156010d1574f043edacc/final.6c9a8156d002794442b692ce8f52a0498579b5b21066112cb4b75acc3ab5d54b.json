@@ -1,0 +1,12 @@
+{
+  "type": "numeric",
+  "value": 3,
+  "domain": "real",
+  "units": "dimensionless",
+  "conditions": [
+    "real integration variable",
+    "bounds 0 to 1"
+  ],
+  "citations": [],
+  "note": "The excerpts list is empty and no corpus or tools were available, so no documents or locators can be cited. This reflects excerpt absence/corpus unavailability, not a claim that relevant documents do not exist. Direct computation: ∫₀¹ 6x dx = [3x²]₀¹ = 3."
+}
