@@ -138,14 +138,21 @@ export async function auditInventory(plan, { checkWorkspace, startProbe = startP
     const relativeHome = path.relative(plan.workspace, plan.home);
     assert(relativeHome.startsWith('..') || path.isAbsolute(relativeHome), 'audit_failed: home must be outside the workspace');
     assert(existsSync(path.join(plan.home, 'data')) && existsSync(path.join(plan.home, 'config')), 'audit_failed: external home missing');
+    if (plan.safe_home) {
+      assert(path.isAbsolute(plan.safe_home) && !path.resolve(plan.safe_home).startsWith(path.resolve(plan.workspace) + path.sep), 'audit_failed: safe home inside workspace');
+      assert(existsSync(path.join(plan.safe_home, 'config')), 'audit_failed: safe config missing');
+      assert(existsSync(path.join(plan.home, 'data/opencode/opencode.db')), 'audit_failed: safe credential DB missing');
+    }
     if (plan.auth_provisioned) assert(existsSync(path.join(plan.home, 'data/opencode/auth.json')), 'audit_failed: provisioned auth missing');
+    const configDir = plan.safe_home ? path.join(plan.safe_home, 'config') : path.join(plan.home, 'config');
+    const cacheDir = plan.safe_home ? path.join(plan.safe_home, 'cache') : path.join(plan.home, 'cache');
     for (const [key, expectedPath] of Object.entries({
       HOME: plan.home, USERPROFILE: plan.home,
-      XDG_CONFIG_HOME: path.join(plan.home, 'config'),
+      XDG_CONFIG_HOME: configDir,
       XDG_DATA_HOME: path.join(plan.home, 'data'),
       XDG_STATE_HOME: path.join(plan.home, 'state'),
-      XDG_CACHE_HOME: path.join(plan.home, 'cache'),
-      OPENCODE_CONFIG_DIR: path.join(plan.home, 'config'),
+      XDG_CACHE_HOME: cacheDir,
+      OPENCODE_CONFIG_DIR: configDir,
     })) assert(plan.environment[key] === expectedPath, `audit_failed: non-staged ${key}`);
     const config = json(plan.environment.OPENCODE_CONFIG);
     assert(sha256(config) === plan.hashes.config, 'audit_failed: config mismatch');

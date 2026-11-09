@@ -234,7 +234,7 @@ async function executeOne({ ids, task, profile, plan, start, manifest, model, le
       throw new Error(`isolation_failure: runtime inventory audit ${audit.status}: ${audit.execution_blocker ?? audit.error ?? 'unsupported'}`);
     }
     const candidate = deps.executeEpisode(plan, { allowExecution: true, audit, timeoutMs: manifest.budgets.duration_ms });
-    if (!candidate.usage && candidate.session_id) {
+    if (candidate.session_id) {
       const recovered = await deps.recoverUsage(plan, candidate);
       if (recovered) { candidate.usage = [recovered]; candidate.usage_source = 'session-export'; }
     }

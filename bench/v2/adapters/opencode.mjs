@@ -178,6 +178,7 @@ export function prepareEpisode({ task, profile, model, executable, environment =
   const safeTask = sanitizeTask(task);
   const prepared = prepareWorkspace(safeTask, profile);
   const directory = prepared.directory;
+  const safeHome = environment.MATH_BENCH_SAFE_HOME ? path.resolve(environment.MATH_BENCH_SAFE_HOME) : null;
   let externalHome = null;
   try {
     // Reuse the v2 exact public-file audit before adding adapter-controlled runtime assets.
@@ -196,6 +197,15 @@ export function prepareEpisode({ task, profile, model, executable, environment =
     put(directory, '.opencode/opencode.json', serialize(config), files);
     externalHome = mkdtempSync(path.join(os.tmpdir(), 'math-eval-home-'));
     for (const sub of ['data/opencode', 'config', 'cache', 'state', 'tmp', 'roaming', 'local']) mkdirSync(path.join(externalHome, sub), { recursive: true });
+    if (safeHome) {
+      assert(existsSync(path.join(safeHome, 'config')), 'MATH_BENCH_SAFE_HOME must contain config/');
+      assert(existsSync(path.join(safeHome, 'data/opencode/opencode.db')), 'MATH_BENCH_SAFE_HOME must contain data/opencode/opencode.db');
+      copyFileSync(path.join(safeHome, 'data/opencode/opencode.db'), path.join(externalHome, 'data/opencode/opencode.db'));
+      for (const name of ['auth.json', 'account.json']) {
+        const source = path.join(safeHome, 'data/opencode', name);
+        if (existsSync(source)) copyFileSync(source, path.join(externalHome, 'data/opencode', name));
+      }
+    }
     const authFile = environment.MATH_BENCH_AUTH_FILE;
     let authProvisioned = false, accountProvisioned = false;
     if (authFile) {
@@ -213,15 +223,17 @@ export function prepareEpisode({ task, profile, model, executable, environment =
       const value = aliases.map(alias => environment[alias]).find(Boolean);
       if (value) env[key] = value;
     }
+    const configDir = safeHome ? path.join(safeHome, 'config') : path.join(externalHome, 'config');
+    const cacheDir = safeHome ? path.join(safeHome, 'cache') : path.join(externalHome, 'cache');
     Object.assign(env, prepared.environment, {
       HOME: externalHome, USERPROFILE: externalHome,
-      XDG_CONFIG_HOME: path.join(externalHome, 'config'),
+      XDG_CONFIG_HOME: configDir,
       XDG_DATA_HOME: path.join(externalHome, 'data'),
       XDG_STATE_HOME: path.join(externalHome, 'state'),
-      XDG_CACHE_HOME: path.join(externalHome, 'cache'),
+      XDG_CACHE_HOME: cacheDir,
       APPDATA: path.join(externalHome, 'roaming'), LOCALAPPDATA: path.join(externalHome, 'local'),
       TMP: path.join(externalHome, 'tmp'), TEMP: path.join(externalHome, 'tmp'), TMPDIR: path.join(externalHome, 'tmp'),
-      OPENCODE_CONFIG_DIR: path.join(externalHome, 'config'),
+      OPENCODE_CONFIG_DIR: configDir,
       OPENCODE_CONFIG: path.join(directory, '.opencode/opencode.json'),
       MATH_TOOLKIT_DISABLE_EXTRAS: '1', MATH_TOOLKIT_DISABLE_PDF_CACHE: '1',
       ...(environment.MATH_BENCH_MATH_ROOT ? { MATH_TOOLKIT_MATH_ROOT: environment.MATH_BENCH_MATH_ROOT } : {}),
@@ -237,7 +249,7 @@ export function prepareEpisode({ task, profile, model, executable, environment =
       inventory_supported: profile.id === 'B', runtime_inventory_status: 'unverified',
       transport_tools: profile.id !== 'A' ? ['execute'] : [],
       core_tools: profile.id === 'F' ? [...F_CORE_TOOLS] : [],
-      plugin, files, home: externalHome, auth_provisioned: authProvisioned, account_provisioned: accountProvisioned,
+      plugin, files, home: externalHome, safe_home: safeHome, db_provisioned: Boolean(safeHome), auth_provisioned: authProvisioned, account_provisioned: accountProvisioned,
       provider_plugin: provider?.package ?? null,
       hashes: { public_payload: prepared.payloadHash, public_task: sha256(prepared.files['task.json']), profile: sha256(profile), config: sha256(config), workspace_tree: sha256(files) },
       supported: unsupportedReasons(profile).length === 0, diagnostics: unsupportedReasons(profile),
@@ -261,10 +273,10 @@ export function parseOutput(stdout) {
     assert(events.length, 'Empty event stream');
     assert(!events.some(event => event.type === 'error'), 'CLI emitted error event');
     const lastFinish = events.findLastIndex(event => event.type === 'step_finish');
+    const validFinish = lastFinish >= 0 && ['stop', 'end_turn'].includes(events[lastFinish].part?.reason)
+      && !events.slice(lastFinish + 1).some(event => ['text', 'step_start', 'tool_use'].includes(event.type));
     let messageID, finalText, usage;
-    if (lastFinish >= 0) {
-      assert(['stop', 'end_turn'].includes(events[lastFinish].part?.reason), 'Missing successful final step_finish');
-      assert(!events.slice(lastFinish + 1).some(event => ['text', 'step_start', 'tool_use'].includes(event.type)), 'Output after final step_finish');
+    if (validFinish) {
       messageID = events[lastFinish].part?.messageID;
       assert(typeof messageID === 'string' && messageID.length, 'Missing final messageID');
       finalText = events.slice(0, lastFinish).filter(event => event.type === 'text' && event.part?.messageID === messageID).map(event => {
@@ -273,15 +285,16 @@ export function parseOutput(stdout) {
       }).join('');
       usage = events.filter(event => event.type === 'step_finish').map(event => ({ tokens: event.part?.tokens ?? null, cost: event.part?.cost ?? null }));
     } else {
-      // A no-tool answer can end with a text event and no step_finish in 2.0.29.
-      // Accept the final text but never invent usage; the study runner treats
-      // missing usage as an operational failure, not an under-budget success.
+      // A no-tool answer, or a final text after tool-call steps, can end without
+      // a stop/end_turn step_finish in 2.0.29. Use the last text as the final;
+      // the study runner recovers authoritative usage via `session export`.
       const texts = events.filter(event => event.type === 'text' && typeof event.part?.text === 'string');
       assert(texts.length, 'Missing final assistant text');
       messageID = texts[texts.length - 1].part?.messageID;
       assert(typeof messageID === 'string' && messageID.length, 'Missing final messageID');
       finalText = texts.filter(event => event.part?.messageID === messageID).map(event => event.part.text).join('');
-      usage = null;
+      const steps = events.filter(event => event.type === 'step_finish').map(event => ({ tokens: event.part?.tokens ?? null, cost: event.part?.cost ?? null }));
+      usage = steps.length ? steps : null;
     }
     assert(finalText.trim(), 'Missing final assistant text');
     const final = JSON.parse(finalText);

@@ -63,7 +63,7 @@ export function validateProfile(profile) {
 }
 export function loadProfiles() { return ['A', 'B', 'F'].map(id => validateProfile(json(path.join(ROOT, 'profiles', `${id}.json`)))); }
 export function publicTask(task) {
-  return { id: task.id, type: task.type, prompt: task.prompt, answer_contract: task.answer_contract };
+  return { id: task.id, type: task.type, prompt: task.prompt, answer_contract: task.answer_contract, excerpts: task.excerpts ?? [] };
 }
 export function agentPayload(task, profile) {
   const files = { 'task.json': serialize(publicTask(task)), 'profile.json': serialize(profile), 'instructions.txt': COMMON_PROMPT + '\n' };
