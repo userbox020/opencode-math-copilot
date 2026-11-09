@@ -316,16 +316,15 @@ snapshot. Config sources/plugin metadata do not prove catalog filtering. No
 supported session-free effective inventory endpoint was found; no guessed tool
 endpoint, session creation or inference was used as a substitute.
 
-The fallback imports the **copied staged V2 plugin** in a bounded Node child
-process with staged cwd and fresh HOME/XDG/OPENCODE_CONFIG_DIR and
-`OPENCODE_CONFIG_PROJECT_DISABLE=1`. It observes `ctx.tool.transform` registrations
-in that process, without calling their executors. This is not OpenCode's plugin
-loader or resolver. It checks the exact hashed staging tree before and after,
-the manifest, explicit local plugin URL and exact registrations. Ordered agent
-permissions (the adapter's agent is `benchmark`) and `tool.use` policies are
-normalized last-match-wins. Unsupported rules, wildcard/unknown allows, duplicate,
-extra or missing tools, plugin failures, malformed responses, timeout and cleanup
-failure all fail closed. Expected inventories are:
+The fallback imports the **copied staged V2 plugin entry** in a bounded Node child
+process with staged cwd and fresh HOME/XDG/OPENCODE_CONFIG_DIR. It observes
+`ctx.tool.transform` registrations in that process, without calling their executors.
+This is not OpenCode's plugin loader or resolver. It checks the exact hashed staging
+tree before and after, the manifest, the staged `.js` entry and exact registrations.
+Ordered agent permissions (the adapter's agent is `benchmark`) and `tool.use`
+policies are normalized last-match-wins. Unsupported rules, wildcard/unknown
+allows, duplicate, extra or missing tools, plugin failures, malformed responses,
+timeout and cleanup failure all fail closed. Expected inventories are:
 
 - A: no plugin and zero tools.
 - B: `corpus_search`, `read_excerpt`, `compute`, `lean_check`, plus `execute`;
@@ -423,26 +422,34 @@ Preparation uses `prepareWorkspace`/`assertWorkspace` on sanitized public task
 fields and excerpts, then extends the exact-file/content allowlist for adapter
 runtime assets. Grading/correct finals and private-marked excerpts are excluded.
 It records per-file SHA-256 values and audits the complete staging tree. Unknown
-files, payload changes and links fail closed. B/F plugins are loaded by their
-explicit temporary file URLs; automatic project discovery is disabled.
+files, payload changes and links fail closed. B/F plugins are **auto-discovered
+from the staged `.opencode/plugins` directory**: the entry file must be `.js`
+(the runtime lives in a subdirectory so it is not loaded as a second plugin).
+A real `opencode run` smoke with the normal HOME confirmed the staged plugin
+load log and a working `execute` call, but that smoke was not isolated and is
+not pilot evidence.
 
 The proposed child environment is allowlisted, redirects HOME/USERPROFILE, all
 XDG state/data/config/cache directories, APPDATA/LOCALAPPDATA and temporary paths,
-sets `OPENCODE_CONFIG_PROJECT_DISABLE=1`, points `OPENCODE_CONFIG` at the generated
-config and `OPENCODE_CONFIG_DIR` at an empty workspace-local directory. No inherited
-`OPENCODE_CONFIG_CONTENT`, credential variables, `NODE_OPTIONS` or prior sessions
-are passed. The command uses `--standalone --format json`, never `--auto`,
+points `OPENCODE_CONFIG` at the generated config and `OPENCODE_CONFIG_DIR` at an
+empty workspace-local directory. `OPENCODE_CONFIG_PROJECT_DISABLE` is deliberately
+**not** set: project discovery is confined to the fresh staged workspace. No
+inherited `OPENCODE_CONFIG_CONTENT`, credential variables, `NODE_OPTIONS` or prior
+sessions are passed. The command uses `--standalone --format json`, never `--auto`,
 `--continue`, `--session` or `--server`. These are **preparation measures, not an
 OS sandbox or an audited guarantee** against managed/ancestor config discovery,
 host filesystem access, subprocess access or networking. Authentication is not
-provisioned; it must eventually use an evaluator-controlled mechanism, not copied
-user credential files.
+provisioned; a real pilot needs an evaluator-controlled credential outside the
+agent-visible workspace, not copied user credential files.
 
-System/managed config may still load in OpenCode despite redirected HOME/XDG and
-disabled project discovery. Config permissions and plugin code are **not an OS
-sandbox**. The static-equivalent probe does not resolve those system sources,
-prove OpenCode loaded the plugin, or prove its final Code Mode catalog. B has no
-`shell` equivalent; its bounded compute/Lean wrappers are not arbitrary shell.
+System/managed config may still load in OpenCode despite redirected HOME/XDG.
+Config permissions and plugin code are **not an OS sandbox**. The static-equivalent
+probe loads the copied plugin in a separate Node process; it does not query the
+real Code Mode catalog, prove the agent's effective tools, or establish OS
+containment. A no-tool run can end with `text` and no `step_finish`, so usage is
+unavailable; the study runner records that as an operational failure, never as an
+under-budget success. B has no `shell` equivalent; its bounded compute/Lean
+wrappers are not arbitrary shell.
 
 `--execute` is separate and additionally requires `MATH_BENCH_ALLOW_EXECUTE=1`.
 That environment variable **does not bypass unsupported profiles**: the CLI has

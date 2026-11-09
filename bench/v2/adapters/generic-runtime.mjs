@@ -88,7 +88,7 @@ export function leanSource(args) {
   return imports.map(name => `import ${name}\n`).join('') + code + '\n';
 }
 
-export function createGenericExecutors({ directory, environment = process.env, invoke = spawnSync, find = findNative, worker = fileURLToPath(new URL('./generic/compute.py', import.meta.url)) }) {
+export function createGenericExecutors({ directory, environment = process.env, invoke = spawnSync, find = findNative, worker = fileURLToPath(new URL('../generic/compute.py', import.meta.url)) }) {
   check(typeof directory === 'string' && path.isAbsolute(directory), 'An explicit episode workspace is required');
   const root = directory;
   // Read the one public file once; no tool-supplied filesystem location is ever used.

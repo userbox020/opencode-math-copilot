@@ -59,14 +59,14 @@ for (const profile of profiles) test(`[adapter] ${profile.id} isolated dry-run i
   for (const key of ['SECRET_SENTINEL', 'OPENCODE_CONFIG_CONTENT', 'NODE_OPTIONS', 'MATH_BENCH_ALLOW_EXECUTE', 'Path']) assert.equal(plan.environment[key], undefined);
   assert.equal(plan.environment.OPENCODE_CONFIG_DIR, path.join(plan.workspace, 'home/config'));
   assert.equal(plan.environment.OPENCODE_CONFIG, path.join(plan.workspace, '.opencode/opencode.json'));
-  assert.equal(plan.environment.OPENCODE_CONFIG_PROJECT_DISABLE, '1');
+  assert.equal(plan.environment.OPENCODE_CONFIG_PROJECT_DISABLE, undefined);
   assert.equal(plan.command.shell, false);
   assert.deepEqual(plan.command.args.slice(0, 9), ['run', '--model', model, '--agent', 'benchmark', '--format', 'json', '--standalone', '--']);
   assert.ok(!plan.command.args.some(arg => ['--auto', '--continue', '--session', '--server'].includes(arg)));
   if (profile.id === 'F') {
     assert.equal(plan.requested_tools.length, 16);
     assert.ok(existsSync(path.join(plan.workspace, plan.plugin)));
-    assert.deepEqual(plan.config.plugins, [pathToFileURL(path.join(plan.workspace, plan.plugin)).href]);
+    assert.deepEqual(plan.config.plugins, []);
     assert.deepEqual(plan.transport_tools, ['execute']);
     assert.deepEqual(plan.core_tools, F_CORE_TOOLS);
     assert.ok(existsSync(path.join(plan.workspace, 'node_modules/@opencode/plugin/package.json')));
@@ -88,7 +88,7 @@ for (const profile of profiles) test(`[adapter] ${profile.id} isolated dry-run i
     assert.ok(!JSON.stringify(plan.config).includes('shell'));
     assert.ok(!JSON.stringify(plan.config).includes('math_'));
     assert.deepEqual(plan.transport_tools, ['execute']);
-    assert.deepEqual(plan.config.plugins, [pathToFileURL(path.join(plan.workspace, plan.plugin)).href]);
+    assert.deepEqual(plan.config.plugins, []);
     assert.deepEqual(plan.config.agents.benchmark.permissions, [
       { action: '*', resource: '*', effect: 'deny' },
       ...[...profile.effective_tools, 'execute'].map(action => ({ action, resource: '*', effect: 'allow' })),
@@ -161,6 +161,13 @@ test('[adapter] mocked execution retains capture; typed final is candidate, neve
   assert.equal(candidate.usage[0].tokens.input, 10);
   const earlier = JSON.stringify({ type: 'text', part: { messageID: 'assistant-earlier', text: 'Interim prose, not the final.' } }) + '\n';
   assert.deepEqual(parseOutput(earlier + validOutput(final)).final, final);
+  const noFinish = JSON.stringify({ type: 'step_start', part: { messageID: 'assistant-final' } }) + '\n'
+    + JSON.stringify({ type: 'text', part: { messageID: 'assistant-final', text: JSON.stringify(final) } }) + '\n';
+  const parsedNoFinish = parseOutput(noFinish);
+  assert.equal(parsedNoFinish.status, 'candidate_ready');
+  assert.deepEqual(parsedNoFinish.final, final);
+  assert.equal(parsedNoFinish.usage, null);
+  assert.equal(parsedNoFinish.usage_source, 'unavailable-no-step-finish');
   assert.equal(parseOutput(validOutput(final).replace('"messageID":"assistant-final","reason"', '"messageID":"unrelated","reason"')).status, 'extraction_failure');
 });
 

@@ -1,5 +1,5 @@
 import { Plugin } from '@opencode/plugin';
-import { GENERIC_INPUTS, GENERIC_TOOL_NAMES, createGenericExecutors } from './generic-runtime.mjs';
+import { GENERIC_INPUTS, GENERIC_TOOL_NAMES, createGenericExecutors } from './lib/generic-runtime.mjs';
 
 const descriptions = {
   corpus_search: 'Literal case-insensitive search of the episode public excerpts only; at most 10 bounded matches. Not an exhaustive corpus inventory.',

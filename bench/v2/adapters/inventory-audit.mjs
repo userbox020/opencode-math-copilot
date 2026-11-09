@@ -80,10 +80,10 @@ export async function auditInventory(plan, { checkWorkspace, startProbe = startP
     const config = json(plan.environment.OPENCODE_CONFIG);
     assert(sha256(config) === plan.hashes.config, 'audit_failed: config mismatch');
     const plugin = plan.plugin ? pathToFileURL(path.join(plan.workspace, plan.plugin)).href : null;
-    assert(plan.plugin === (profile.id === 'A' ? null : profile.id === 'B' ? '.opencode/plugins/generic-tools.mjs' : '.opencode/plugins/math-toolkit.js'), 'audit_failed: wrong staged plugin');
-    assert(same(config.plugins, plugin ? [plugin] : []), 'audit_failed: plugin must load exclusively from staging');
+    assert(plan.plugin === (profile.id === 'A' ? null : profile.id === 'B' ? '.opencode/plugins/generic-tools.js' : '.opencode/plugins/math-toolkit.js'), 'audit_failed: wrong staged plugin');
+    assert(same(config.plugins, []), 'audit_failed: explicit plugin entries must be empty; staged discovery is authoritative');
+    assert(plan.environment.OPENCODE_CONFIG_PROJECT_DISABLE === undefined, 'audit_failed: project discovery must be confined to the staged workspace');
     assert(profile.id !== 'A' || plugin === null, 'audit_failed: A must not load a plugin');
-    assert(plan.environment.OPENCODE_CONFIG_PROJECT_DISABLE === '1', 'audit_failed: project discovery enabled');
     probe = startProbe(plan);
     const loaded = await Promise.race([probe.result, new Promise((_, reject) => {
       timer = setTimeout(() => reject(new Error('audit_failed: plugin audit timeout')), timeoutMs);

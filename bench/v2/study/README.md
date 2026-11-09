@@ -37,6 +37,8 @@ Execution requires all of the following:
 
 The adapter currently reports a **static-equivalent** audit: staged IDs and permissions match exactly, but OpenCode 2.0.29 exposes no supported session-free endpoint that enumerates config-defined agents/effective tools. `/api/agent` returns an empty list for the staged `benchmark` agent, so it is not treated as proof. Therefore `--execute` intentionally fails closed.
 
+A non-isolated smoke confirmed the staged `.js` plugin is auto-discovered and the model can use `execute`; the isolated HOME still lacks provider authentication, and a no-tool run can omit `step_finish`, leaving token usage unavailable. A real pilot needs evaluator-provisioned auth outside the agent-visible workspace and the session API for authoritative usage.
+
 ## Episode lifecycle
 
 1. Prepare a fresh workspace through `prepareEpisode`; append a durable start with the public payload hash.

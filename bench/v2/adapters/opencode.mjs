@@ -68,12 +68,12 @@ function stagePlugin(directory, files) {
 }
 
 function stageGenericPlugin(directory, files) {
-  for (const name of ['generic-tools.mjs', 'generic-runtime.mjs']) {
-    put(directory, `.opencode/plugins/${name}`, readFileSync(new URL(name, import.meta.url)), files);
-  }
+  // OpenCode 2.0.29 auto-discovers immediate .js plugins; the runtime stays in a subdirectory.
+  put(directory, '.opencode/plugins/generic-tools.js', readFileSync(new URL('./generic-tools.mjs', import.meta.url)), files);
+  put(directory, '.opencode/plugins/lib/generic-runtime.mjs', readFileSync(new URL('./generic-runtime.mjs', import.meta.url)), files);
   put(directory, '.opencode/plugins/generic/compute.py', readFileSync(path.join(REPO, '.opencode/plugins/math-toolkit/scripts/math_compute.py')), files);
   stageDependencies(directory, files, ['@opencode/plugin']);
-  return '.opencode/plugins/generic-tools.mjs';
+  return '.opencode/plugins/generic-tools.js';
 }
 
 function stageDependencies(directory, files, names) {
@@ -163,8 +163,9 @@ export function prepareEpisode({ task, profile, model, executable, environment =
     const config = buildConfig(profile);
     const plugin = profile.id === 'F' ? stagePlugin(directory, files) : profile.id === 'B' ? stageGenericPlugin(directory, files) : null;
     if (profile.id === 'B') assert(JSON.stringify(profile.effective_tools) === JSON.stringify(GENERIC_TOOL_NAMES), 'Generic plugin inventory mismatch');
-    // Disable project discovery; load exactly this local plugin explicitly instead.
-    if (plugin) config.plugins = [pathToFileURL(path.join(directory, plugin)).href];
+    // Project discovery is confined to this fresh workspace; the staged .opencode/plugins
+    // directory is auto-discovered. No global config is present in the redirected HOME.
+    assert(config.plugins.length === 0, 'Explicit plugin entries are not used; staged discovery is authoritative');
     put(directory, '.opencode/opencode.json', serialize(config), files);
     const env = {};
     for (const [key, aliases] of Object.entries({ PATH: ['PATH', 'Path'], PATHEXT: ['PATHEXT'], SystemRoot: ['SystemRoot', 'SYSTEMROOT'], WINDIR: ['WINDIR'], COMSPEC: ['COMSPEC', 'ComSpec'] })) {
@@ -176,7 +177,7 @@ export function prepareEpisode({ task, profile, model, executable, environment =
       APPDATA: path.join(directory, 'home/roaming'), LOCALAPPDATA: path.join(directory, 'home/local'),
       TMP: path.join(directory, 'tmp'), TEMP: path.join(directory, 'tmp'),
       OPENCODE_CONFIG_DIR: path.join(directory, 'home/config'),
-      OPENCODE_CONFIG: path.join(directory, '.opencode/opencode.json'), OPENCODE_CONFIG_PROJECT_DISABLE: '1',
+      OPENCODE_CONFIG: path.join(directory, '.opencode/opencode.json'),
       MATH_TOOLKIT_DISABLE_EXTRAS: '1', MATH_TOOLKIT_DISABLE_PDF_CACHE: '1',
     });
     const prompt = `${COMMON_PROMPT}\n\nPublic task:\n${prepared.files['task.json']}\n${profile.corpus_access ? 'Public excerpts, if any, are in corpus/excerpts.json.' : 'No corpus or tools are available.'}`;
@@ -212,19 +213,32 @@ export function parseOutput(stdout) {
     assert(events.length, 'Empty event stream');
     assert(!events.some(event => event.type === 'error'), 'CLI emitted error event');
     const lastFinish = events.findLastIndex(event => event.type === 'step_finish');
-    assert(lastFinish >= 0 && ['stop', 'end_turn'].includes(events[lastFinish].part?.reason), 'Missing successful final step_finish');
-    assert(!events.slice(lastFinish + 1).some(event => ['text', 'step_start', 'tool_use'].includes(event.type)), 'Output after final step_finish');
-    const messageID = events[lastFinish].part?.messageID;
-    assert(typeof messageID === 'string' && messageID.length, 'Missing final messageID');
-    const finalText = events.slice(0, lastFinish).filter(event => event.type === 'text' && event.part?.messageID === messageID).map(event => {
-      assert(typeof event.part?.text === 'string', 'Malformed assistant text event');
-      return event.part.text;
-    }).join('');
+    let messageID, finalText, usage;
+    if (lastFinish >= 0) {
+      assert(['stop', 'end_turn'].includes(events[lastFinish].part?.reason), 'Missing successful final step_finish');
+      assert(!events.slice(lastFinish + 1).some(event => ['text', 'step_start', 'tool_use'].includes(event.type)), 'Output after final step_finish');
+      messageID = events[lastFinish].part?.messageID;
+      assert(typeof messageID === 'string' && messageID.length, 'Missing final messageID');
+      finalText = events.slice(0, lastFinish).filter(event => event.type === 'text' && event.part?.messageID === messageID).map(event => {
+        assert(typeof event.part?.text === 'string', 'Malformed assistant text event');
+        return event.part.text;
+      }).join('');
+      usage = events.filter(event => event.type === 'step_finish').map(event => ({ tokens: event.part?.tokens ?? null, cost: event.part?.cost ?? null }));
+    } else {
+      // A no-tool answer can end with a text event and no step_finish in 2.0.29.
+      // Accept the final text but never invent usage; the study runner treats
+      // missing usage as an operational failure, not an under-budget success.
+      const texts = events.filter(event => event.type === 'text' && typeof event.part?.text === 'string');
+      assert(texts.length, 'Missing final assistant text');
+      messageID = texts[texts.length - 1].part?.messageID;
+      assert(typeof messageID === 'string' && messageID.length, 'Missing final messageID');
+      finalText = texts.filter(event => event.part?.messageID === messageID).map(event => event.part.text).join('');
+      usage = null;
+    }
     assert(finalText.trim(), 'Missing final assistant text');
     const final = JSON.parse(finalText);
     assert(final && !Array.isArray(final) && typeof final === 'object' && typeof final.type === 'string', 'Missing typed JSON final');
-    const usage = events.filter(event => event.type === 'step_finish').map(event => ({ tokens: event.part?.tokens ?? null, cost: event.part?.cost ?? null }));
-    return { status: 'candidate_ready', final, final_text: finalText, events, usage, usage_source: 'unvalidated-cli-events', error: null };
+    return { status: 'candidate_ready', final, final_text: finalText, events, usage, usage_source: usage ? 'unvalidated-cli-events' : 'unavailable-no-step-finish', error: null };
   } catch (error) {
     return { status: 'extraction_failure', final: null, final_text: null, events, usage: null, error: error.message };
   }

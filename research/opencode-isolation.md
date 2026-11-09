@@ -90,12 +90,11 @@ XDG_STATE_HOME=<fresh>/xdg-state
 XDG_CACHE_HOME=<fresh>/xdg-cache
 OPENCODE_CONFIG_DIR=<fresh>/config
 OPENCODE_CONFIG=<fresh>/project/opencode.json
-OPENCODE_CONFIG_PROJECT_DISABLE=1
 ```
 
 Unset inherited `OPENCODE_CONFIG_CONTENT`, server-selection variables and unrelated OpenCode overrides. Do not pass `--continue`, `--session`, `--fork` or `--server`. Supply only deliberately authorized provider authentication; fresh data directories do not inherit login state.
 
-Explicit plugin loading is required when project discovery is disabled. A copied entry file alone is insufficient; copy/relocate the plugin's relative imports, data indexes and any corpus root expectations, then validate the effective inventory.
+Project discovery is deliberately **enabled only inside the fresh staged workspace**. OpenCode 2.0.29 auto-discovers immediate `.js` plugin files in `.opencode/plugins/`; the entry must be `.js` (`.mjs` was not discovered). The runtime stays in a subdirectory. Explicit `plugins` entries and `OPENCODE_CONFIG_PROJECT_DISABLE=1` both failed to load the staged plugin in a real smoke: the former was rejected as a file, the latter suppressed discovery. A real `opencode run` smoke with the normal HOME confirmed a `loading plugin` log for the staged entry and a working `execute` call. That smoke was **not isolated** and is not pilot evidence.
 
 ## Adapter audit status (2026-11-08)
 
@@ -108,22 +107,27 @@ permission rules with last-match-wins, and compares exact tool IDs.
 
 This is **static-equivalent**, not runtime proof. OpenCode 2.0.29 exposes no
 supported session-free endpoint (found so far) that returns the resolved
-effective tool catalog, and the CLI's `--standalone` does not provide exclusive
-config or an empty OS environment. `--execute` therefore remains blocked even
-with the opt-in environment variable. A server-API/plugin-snapshot investigation
-is in progress; if it cannot establish runtime proof, the honest status stays
-static-equivalent and no real pilot is allowed.
+effective tool catalog; `/api/agent` returned an empty list for the staged
+config-defined agent. The CLI's `--standalone` does not provide exclusive config
+or an empty OS environment. `--execute` therefore remains blocked even with the
+opt-in environment variable. A real smoke proved the staged plugin loads under
+auto-discovery, but the effective Code Mode catalog and token usage still lack a
+session-free proof.
 
 The adapter also checks workspace contents, plugin staging, timeout, and cleanup.
 It is not an OS sandbox, plugin code is application code, and `shell`-equivalent
-power in F is broader than B.
+power in F is broader than B. The isolated HOME does not contain provider
+credentials; a real pilot needs evaluator-provisioned auth outside the
+agent-visible workspace. A no-tool answer can omit `step_finish`, leaving usage
+unavailable; the runner records that as an operational failure, never as an
+under-budget success.
 
 ## Remaining trust limits
 
 - System/managed configuration locations (`%ProgramData%\opencode`, `/etc/opencode`, managed macOS paths) may still load; 2.0.29 has no verified CLI flag for fully exclusive configuration. Use a fresh OS/container for strict claims.
 - Plugins execute application code; permissions are not a plugin-process sandbox.
 - `shell` is not filesystem/network isolation.
-- Project/automatic plugin discovery is disabled by `OPENCODE_CONFIG_PROJECT_DISABLE=1`; load the intended plugin explicitly.
+- Project/automatic plugin discovery is enabled only inside the fresh staged workspace; the entry must be `.js`, and `OPENCODE_CONFIG_PROJECT_DISABLE` must not be set.
 - Record the resolved OpenCode version and effective tool inventory before every study; do not assume later versions behave identically.
 
 ## JSON output extraction
@@ -152,7 +156,7 @@ Tool events are completion/failure records, not a complete start/progress stream
 - [ ] Fresh directories/environment per episode; no global config, history, sessions, skills or shared cache.
 - [ ] Profile manifest and effective tool inventory checked before dispatch; A has no tools, B has no `math_*`, F has the 16 math tools plus `execute`.
 - [ ] No grader, answer, reference report or evaluator file in the agent workspace.
-- [ ] Explicit plugin loading works from the temporary workspace; no silent fallback to the host/global plugin.
+- [ ] Staged `.js` plugin discovery works inside the temporary workspace; no silent fallback to the host/global plugin.
 - [ ] NDJSON parsed fail-closed; missing final answer/tool events are errors, not successes.
 - [ ] One engineering smoke per condition before any pilot matrix; no real pilot until the task set is reviewed.
 - [ ] No trusted-receipt claim from stdout alone; formal grading requires the evaluator-controlled verifier side channel.
