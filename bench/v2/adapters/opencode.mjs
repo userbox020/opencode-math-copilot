@@ -341,8 +341,9 @@ export function recoverUsage(plan, candidate, { invoke = spawnSync, timeoutMs = 
   };
 }
 
-export function executeEpisode(plan, { allowExecution = false, invoke = spawnSync, audit = null } = {}) {
+export function executeEpisode(plan, { allowExecution = false, invoke = spawnSync, audit = null, timeoutMs = 120000 } = {}) {
   assert(allowExecution === true, 'execution_not_authorized: --execute also requires MATH_BENCH_ALLOW_EXECUTE=1');
+  assert(Number.isInteger(timeoutMs) && timeoutMs >= 1000 && timeoutMs <= 1800000, 'timeoutMs must be 1000-1800000');
   // No CLI flag can turn a proposed profile into an audited profile. The injectable
   // audit seam is for evaluator integration and inference-free tests, not a user assertion.
   assert(audit?.status === 'passed' && audit?.runtime_verified === true && ['runtime-verified', 'runtime-plugin-load'].includes(audit?.guarantee) &&
@@ -356,7 +357,7 @@ export function executeEpisode(plan, { allowExecution = false, invoke = spawnSyn
   try {
     result = invoke(plan.command.executable, plan.command.args, {
       cwd: plan.workspace, env: plan.environment, shell: false, encoding: 'utf8',
-      windowsHide: true, timeout: 120000, maxBuffer: 16 * 1024 * 1024,
+      windowsHide: true, timeout: timeoutMs, maxBuffer: 16 * 1024 * 1024,
     });
   } catch (error) { result = { status: null, error, stdout: '', stderr: '' }; }
   const stdout = String(result.stdout ?? '');

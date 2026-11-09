@@ -338,7 +338,7 @@ export async function executeStudy({ manifest, tasks, tasksFile, out, model, lea
     }
     const { manifest: loaded, ledger } = loadStudy(out);
     const taskById = new Map(tasks.map(task => [task.id, task]));
-    let appended = 0, stop = null;
+    let appended = 0, stop = null, unknownCost = 0;
     let currentSpent = [...ledger.completed.values()].reduce((sum, episode) => sum + (episode.cost.observed_usd ?? 0), 0);
     for (const ids of expectedEpisodes(loaded)) {
       if (ledger.completed.has(ids.key)) continue;
@@ -372,17 +372,14 @@ export async function executeStudy({ manifest, tasks, tasksFile, out, model, lea
       episode.artifacts = ['final', 'events'].map(kind => writeArtifact(out, ids, kind, episode[kind]));
       appendDurable(path.join(out, 'episodes.jsonl'), episode);
       currentSpent += episode.cost.observed_usd ?? 0;
+      if (episode.cost.observed_usd === null) unknownCost++;
       appended++;
-      if (episode.cost.observed_usd === null) {
-        stop = { reason: 'cost_unavailable', spent_usd: currentSpent, note: 'Unknown cost cannot be bounded; study stopped before another dispatch.' };
-        break;
-      }
     }
     if (stop) writeFileSync(path.join(out, 'stop.json'), serialize(stop));
     caveats({ manifest: loaded, out });
     try { analyzeStudy(out); } catch (error) { writeFileSync(path.join(out, 'report-error.txt'), `${error.message}\n`); }
     const finished = loadStudy(out);
-    return { study_id: loaded.study_id, appended, episodes: finished.episodes.length, expected: loaded.expected_episode_count, missing: finished.ledger.missing.length, output: path.resolve(out), stop };
+    return { study_id: loaded.study_id, appended, episodes: finished.episodes.length, expected: loaded.expected_episode_count, missing: finished.ledger.missing.length, unknown_cost_episodes: unknownCost, output: path.resolve(out), stop };
   } finally { rmSync(lock, { recursive: true, force: true }); }
 }
 export async function main(argv = process.argv.slice(2)) {
