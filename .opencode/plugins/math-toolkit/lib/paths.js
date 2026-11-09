@@ -36,6 +36,10 @@ export function safePath(root, value = "") {
 
 export function resolveRoots(input = {}) {
   const directory = path.resolve(input.directory || input.worktree || process.cwd());
+  const configured = process.env.MATH_TOOLKIT_MATH_ROOT;
+  if (configured && fs.existsSync(path.join(configured, "CONTENTS.md"))) {
+    return { workspace: directory, math: path.resolve(configured) };
+  }
   const nested = path.join(directory, "math");
   if (fs.existsSync(path.join(nested, "CONTENTS.md"))) return { workspace: directory, math: nested };
   if (fs.existsSync(path.join(directory, "CONTENTS.md"))) return { workspace: path.dirname(directory), math: directory };

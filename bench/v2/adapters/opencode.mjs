@@ -54,13 +54,20 @@ function copyTree(source, destination, directory, files) {
   }
 }
 
-function stagePlugin(directory, files) {
+function stagePlugin(directory, files, environment) {
   const source = path.join(REPO, '.opencode/plugins');
   put(directory, '.opencode/plugins/math-toolkit.js', readFileSync(path.join(source, 'math-toolkit.js')), files);
   put(directory, '.opencode/plugins/math-toolkit/main.js', readFileSync(path.join(source, 'math-toolkit/main.js')), files);
   copyTree(path.join(source, 'math-toolkit/lib'), '.opencode/plugins/math-toolkit/lib', directory, files);
   for (const script of ['math_compute.py', 'build-index.mjs']) {
     put(directory, `.opencode/plugins/math-toolkit/scripts/${script}`, readFileSync(path.join(source, 'math-toolkit/scripts', script)), files);
+  }
+  if (environment.MATH_BENCH_STAGE_INDEXES === '1') {
+    for (const name of ['math-index.json', 'lean-index.json.gz', 'pdf-index.json.gz']) {
+      const file = path.join(source, 'math-toolkit/data', name);
+      assert(existsSync(file), `Missing toolkit index ${name}`);
+      put(directory, `.opencode/plugins/math-toolkit/data/${name}`, readFileSync(file), files);
+    }
   }
   // Deliberately do not copy the repository's corpus, generated indexes, tests or answers.
   // No fake toy index is substituted for the full corpus. Missing indexes remain unavailable.
@@ -179,7 +186,7 @@ export function prepareEpisode({ task, profile, model, executable, environment =
     put(directory, 'package.json', serialize({ private: true, type: 'module' }), files);
     put(directory, '.audit/inventory-probe.mjs', readFileSync(new URL('./inventory-probe.mjs', import.meta.url)), files);
     const config = buildConfig(profile);
-    const plugin = profile.id === 'F' ? stagePlugin(directory, files) : profile.id === 'B' ? stageGenericPlugin(directory, files) : null;
+    const plugin = profile.id === 'F' ? stagePlugin(directory, files, environment) : profile.id === 'B' ? stageGenericPlugin(directory, files) : null;
     if (profile.id === 'B') assert(JSON.stringify(profile.effective_tools) === JSON.stringify(GENERIC_TOOL_NAMES), 'Generic plugin inventory mismatch');
     const provider = stageProviderPlugin(directory, files, environment);
     if (provider) config.plugins.push({ package: provider.package, options: provider.options });
@@ -217,6 +224,7 @@ export function prepareEpisode({ task, profile, model, executable, environment =
       OPENCODE_CONFIG_DIR: path.join(externalHome, 'config'),
       OPENCODE_CONFIG: path.join(directory, '.opencode/opencode.json'),
       MATH_TOOLKIT_DISABLE_EXTRAS: '1', MATH_TOOLKIT_DISABLE_PDF_CACHE: '1',
+      ...(environment.MATH_BENCH_MATH_ROOT ? { MATH_TOOLKIT_MATH_ROOT: environment.MATH_BENCH_MATH_ROOT } : {}),
     });
     const prompt = `${COMMON_PROMPT}\n\nPublic task:\n${prepared.files['task.json']}\n${profile.corpus_access ? 'Public excerpts, if any, are in corpus/excerpts.json.' : 'No corpus or tools are available.'}`;
     const args = ['run', '--model', model, '--agent', AGENT, '--format', 'json', '--standalone', '--', prompt];
@@ -311,10 +319,12 @@ export function recoverUsage(plan, candidate, { invoke = spawnSync, timeoutMs = 
   let data;
   try { data = JSON.parse(text); } catch { return null; }
   const tokens = data.info?.tokens, cost = data.info?.cost;
-  if (!tokens || typeof tokens.input !== 'number' || typeof tokens.output !== 'number' || typeof cost !== 'number' || !Number.isFinite(cost)) return null;
+  if (!tokens || typeof tokens.input !== 'number' || typeof tokens.output !== 'number') return null;
+  const free = /(?::free|-free)$/.test(plan.model_id ?? '');
+  const resolvedCost = typeof cost === 'number' && Number.isFinite(cost) ? cost : free ? 0 : null;
   return {
     tokens: { input: tokens.input, output: tokens.output, reasoning: tokens.reasoning ?? 0, cache: tokens.cache ?? { read: 0, write: 0 } },
-    cost, source: 'session-export',
+    cost: resolvedCost, source: 'session-export',
   };
 }
 

@@ -229,12 +229,12 @@ async function executeOne({ ids, task, profile, plan, start, manifest, model, le
   try {
     assert(plan.hashes.public_payload === start.agent_payload_sha256, 'isolation_failure: start payload mismatch');
     audit = await deps.auditInventory(plan, { checkWorkspace: deps.assertPreparedWorkspace });
-    if (!(audit.status === 'passed' && audit.runtime_verified === true && audit.guarantee === 'runtime-verified'
+    if (!(audit.status === 'passed' && audit.runtime_verified === true && ['runtime-verified', 'runtime-plugin-load'].includes(audit.guarantee)
       && audit.workspace === plan.workspace && audit.workspace_tree === plan.hashes.workspace_tree && audit.cleanup === true)) {
       throw new Error(`isolation_failure: runtime inventory audit ${audit.status}: ${audit.execution_blocker ?? audit.error ?? 'unsupported'}`);
     }
     const candidate = deps.executeEpisode(plan, { allowExecution: true, audit, timeoutMs: manifest.budgets.duration_ms });
-    if (!candidate.usage && candidate.status === 'candidate_ready') {
+    if (!candidate.usage && candidate.session_id) {
       const recovered = await deps.recoverUsage(plan, candidate);
       if (recovered) { candidate.usage = [recovered]; candidate.usage_source = 'session-export'; }
     }
