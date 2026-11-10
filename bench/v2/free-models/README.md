@@ -43,11 +43,12 @@ node bench/v2/free-models/run-matrix.mjs --mode all --wait-minutes 30
 
 - State: `C:\Users\MiPC\AppData\Local\Temp\opencode\free-matrix\state.json` (resumable)
 - Reports: `matrix-report.json`, `matrix-report.md`
-- Screen outputs: `free-matrix/screen/<model>/`
-- Full outputs: `free-matrix/full/<model>/`
+- Screen outputs: `free-matrix/screen/<model>/attempt-N/`
+- Full outputs: `free-matrix/full/<model>/attempt-N/`
 - Subset: `--only 'free-cloudflare|opencode/'`
 - Screen only: `--mode screen`; full only: `--mode full`.
 - Reset and retry one provider now: `--only '^opencode-go/' --reset '^opencode-go/' --max-passes 1 --no-wait`.
+- Concurrency: `--per-provider 2` (default) and `--concurrency 8` (default global cap). Providers can advance in parallel, but no provider runs more than two models at once. Each model still runs A/B/F episodes sequentially.
 
 Cloudflare’s free adapters advertise a 32k output default even for the
 24k-context Llama model. The adapter now injects
@@ -91,6 +92,18 @@ episodes written so far, shows the current task/condition, elapsed time and
 last activity, and flags runs with no file activity for more than 10 minutes.
 It is a snapshot too; regenerate and reload to update it. The page keeps the
 full queue counters and retry timeline visible when no run is active.
+
+For a live view, run:
+
+```text
+npm run dashboard:serve
+```
+
+Then open `http://127.0.0.1:8765/dashboard.html` or
+`http://127.0.0.1:8765/running.html`. The server regenerates the relevant
+snapshot on each request (1s coalescing), disables caching, injects a **LIVE ·
+15s auto-refresh** badge, and reloads the page every 15 seconds. It binds only
+to `127.0.0.1`; use `--port <n>` to change the port.
 
 ## Status
 

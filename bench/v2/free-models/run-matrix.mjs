@@ -1,4 +1,4 @@
-import { spawnSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
@@ -19,6 +19,8 @@ const screenLimit = Number(option('--screen-limit', '3'));
 const only = option('--only', null);
 const reset = option('--reset', null);
 const noWait = args.includes('--no-wait');
+const perProvider = Math.max(1, Number(option('--per-provider', '2')));
+const concurrency = Math.max(1, Number(option('--concurrency', '8')));
 const dry = args.includes('--dry');
 const OUT = option('--out', OUT_DEFAULT);
 const MODELS_FILE = option('--models', path.join(REPO, 'bench/v2/free-models/models.json'));
@@ -141,17 +143,20 @@ function runStudy(model, out, limit) {
   };
   for (const key of ['MATH_BENCH_PROVIDER_PLUGIN', 'MATH_BENCH_PROVIDER_OPTIONS', 'MATH_BENCH_AUTH_FILE']) delete env[key];
   const started = Date.now();
-  const result = spawnSync(process.execPath, studyArgs, {
-    cwd: REPO, env, shell: false, encoding: 'utf8', windowsHide: true,
-    timeout: 0, maxBuffer: 64 * 1024 * 1024,
+  return new Promise(resolve => {
+    let settled = false;
+    let stdout = '', stderr = '';
+    const finish = value => { if (!settled) { settled = true; resolve(value); } };
+    const child = spawn(process.execPath, studyArgs, {
+      cwd: REPO, env, shell: false, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    child.stdout.on('data', chunk => { stdout = tail(`${stdout}${chunk.toString('utf8')}`, 1_000_000); });
+    child.stderr.on('data', chunk => { stderr = tail(`${stderr}${chunk.toString('utf8')}`, 1_000_000); });
+    child.on('error', error => finish({ status: null, error: error.message, duration_ms: Date.now() - started, stdout: tail(stdout), stderr: tail(stderr) }));
+    child.on('close', status => finish({ status, error: null, duration_ms: Date.now() - started, stdout: tail(stdout), stderr: tail(stderr) }));
   });
-  return {
-    status: result.status, error: result.error?.message ?? null,
-    duration_ms: Date.now() - started,
-    stdout: tail(result.stdout), stderr: tail(result.stderr),
-  };
 }
-function screen(model) {
+async function screen(model) {
   const entry = state.models[model] ??= { status: 'pending', attempts: 0, screen: null, full: null };
   if (terminal.has(entry.status)) return false;
   if (entry.next_attempt_at && Date.parse(entry.next_attempt_at) > Date.now()) return false;
@@ -161,7 +166,7 @@ function screen(model) {
   if (!dry) {
     entry.status = 'screening'; entry.last_error = null; entry.updated_at = now(); save();
   }
-  const run = dry ? { status: 0, error: null, duration_ms: 0, stdout: '', stderr: '' } : runStudy(model, out, screenLimit);
+  const run = dry ? { status: 0, error: null, duration_ms: 0, stdout: '', stderr: '' } : await runStudy(model, out, screenLimit);
   const eps = dry ? [] : episodes(out);
   const classification = dry ? { status: 'pending', providerError: null } : classify(eps, run);
   if (dry) { console.log(`[dry] screen ${model}`); return true; }
@@ -178,14 +183,14 @@ function screen(model) {
   console.log(`[screen] ${model} -> ${classification.status} (${eps.length} episodes, ${Math.round(run.duration_ms / 1000)}s)`);
   return ['quota_wait', 'auth_error', 'provider_output', 'error'].includes(classification.status);
 }
-function full(model) {
+async function full(model) {
   const entry = state.models[model];
   if (!entry || !['screen_passed', 'full_incomplete', 'fulling'].includes(entry.status)) return false;
   if (mode === 'screen') return false;
   entry.full_attempts = (entry.full_attempts ?? 0) + 1;
   const out = path.join(OUT, 'full', safeName(model), `attempt-${entry.full_attempts}`);
   if (!dry) { entry.status = 'fulling'; entry.updated_at = now(); save(); }
-  const run = dry ? { status: 0, error: null, duration_ms: 0, stdout: '', stderr: '' } : runStudy(model, out, null);
+  const run = dry ? { status: 0, error: null, duration_ms: 0, stdout: '', stderr: '' } : await runStudy(model, out, null);
   const eps = dry ? [] : episodes(out);
   if (dry) { console.log(`[dry] full ${model}`); return true; }
   entry.full = { out, run, classification: eps.length === 90 ? 'full_complete' : 'full_incomplete', episodes: summarize(eps) };
@@ -218,24 +223,76 @@ function report() {
   writeFileSync(REPORT_MD, lines.join('\n') + '\n');
 }
 
+function eligibleTask(model) {
+  const entry = state.models[model] ??= { status: 'pending', attempts: 0, screen: null, full: null };
+  if (terminal.has(entry.status) || entry.status === 'full_complete') return null;
+  if (entry.next_attempt_at && Date.parse(entry.next_attempt_at) > Date.now()) return null;
+  if (mode !== 'full' && ['pending', 'quota_wait', 'auth_error', 'error', 'screening', 'provider_output'].includes(entry.status)) {
+    return { model, provider: providerOf(model), phase: 'screen' };
+  }
+  if ((mode === 'all' || mode === 'full') && ['screen_passed', 'full_incomplete', 'fulling'].includes(entry.status)) {
+    return { model, provider: providerOf(model), phase: 'full' };
+  }
+  return null;
+}
+function markModelError(model, error) {
+  const entry = state.models[model] ??= { status: 'error', attempts: 0, screen: null, full: null };
+  entry.status = 'error';
+  entry.last_error = error.message;
+  entry.next_attempt_at = retryAt(model, 'error', null);
+  entry.updated_at = now();
+  save();
+}
+async function runModel(task) {
+  let waiting = false;
+  try {
+    if (task.phase === 'screen') waiting = await screen(task.model);
+    const entry = state.models[task.model];
+    if (entry && (mode === 'all' || mode === 'full') && ['screen_passed', 'full_incomplete', 'fulling'].includes(entry.status)) {
+      const fullPending = await full(task.model);
+      waiting ||= fullPending;
+    }
+  } catch (error) {
+    markModelError(task.model, error);
+    console.error(`[error] ${task.model}: ${error.message}`);
+    waiting = true;
+  }
+  return waiting;
+}
+async function runPass() {
+  const tasks = allModels.map(eligibleTask).filter(Boolean);
+  if (!tasks.length) return false;
+  let pending = false;
+  let active = 0;
+  const providerActive = new Map();
+  return new Promise(resolve => {
+    const launch = () => {
+      while (active < concurrency) {
+        const index = tasks.findIndex(task => (providerActive.get(task.provider) ?? 0) < perProvider);
+        if (index < 0) break;
+        const [task] = tasks.splice(index, 1);
+        active++;
+        providerActive.set(task.provider, (providerActive.get(task.provider) ?? 0) + 1);
+        runModel(task).then(result => { if (result) pending = true; }).catch(error => {
+          markModelError(task.model, error);
+          pending = true;
+        }).finally(() => {
+          active--;
+          providerActive.set(task.provider, (providerActive.get(task.provider) ?? 1) - 1);
+          if (active === 0 && tasks.length === 0) resolve(pending);
+          else launch();
+        });
+      }
+      if (active === 0 && tasks.length === 0) resolve(pending);
+    };
+    launch();
+  });
+}
+
 let pass = 0;
 for (;;) {
   if (spent() >= totalCap) { console.log(`[cap] observed spend $${spent().toFixed(4)} >= cap $${totalCap}`); break; }
-  let pending = false;
-  for (const model of allModels) {
-    const entry = state.models[model] ??= { status: 'pending', attempts: 0, screen: null, full: null };
-    if (terminal.has(entry.status) || entry.status === 'full_complete') continue;
-    if (entry.next_attempt_at && Date.parse(entry.next_attempt_at) > Date.now()) continue;
-    if (mode !== 'full' && ['pending', 'quota_wait', 'auth_error', 'error', 'screening', 'provider_output'].includes(entry.status)) {
-      if (screen(model)) pending = true;
-    }
-    if ((mode === 'all' || mode === 'full') && entry.status === 'screen_passed') {
-      if (full(model)) pending = true;
-    }
-    if (['full_incomplete', 'fulling'].includes(entry.status) && (mode === 'all' || mode === 'full')) {
-      if (full(model)) pending = true;
-    }
-  }
+  const pending = await runPass();
   report();
   pass++;
   if (dry) break;
