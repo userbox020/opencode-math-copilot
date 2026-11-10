@@ -93,6 +93,22 @@ if (reset) {
   console.log(`[reset] ${count} models matched ${reset}`);
 }
 
+// A single matrix state file has one owner. Any screening/fulling row found at
+// startup is therefore stale (for example after a killed background process).
+let recovered = 0;
+for (const entry of Object.values(state.models)) {
+  if (!['screening', 'fulling'].includes(entry.status)) continue;
+  entry.status = 'pending';
+  entry.next_attempt_at = null;
+  entry.last_error = 'recovered stale active status at startup';
+  entry.updated_at = now();
+  recovered++;
+}
+if (recovered) {
+  save();
+  console.log(`[recover] ${recovered} stale active entries reset to pending`);
+}
+
 function episodes(out) {
   const file = path.join(out, 'episodes.jsonl');
   if (!existsSync(file)) return [];
