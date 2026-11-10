@@ -64,6 +64,22 @@ safe home before running the OpenAI queue; without that, the queue records
 
 The queue uses the safe credential home, the staged math indexes and `MATH_TOOLKIT_MATH_ROOT`, and the study runner's 600 s/40-tool-call/200k-token/$1-per-episode budgets with a $25 cap. Free models are recorded at cost 0. No credential is written to the output; the output can be copied after the run, but the safe home must not be committed.
 
+## Dashboard
+
+`dashboard.html` is a self-contained status console for the free and
+other-provider queues. Generate a fresh sanitized snapshot before opening it:
+
+```text
+node bench/v2/free-models/build-dashboard.mjs
+```
+
+Then open `bench/v2/free-models/dashboard.html` directly. It loads
+`dashboard-data.js` (assigned to `window.DASHBOARD_DATA`) and makes no network
+requests. The snapshot excludes credentials, raw stdout/stderr, and session
+identifiers; it includes model/status rows, error categories, retry times, task
+metadata, and aggregate counts. The dashboard is read-only: it does not run
+models or mutate queue state.
+
 ## Status
 
 - The main paper pilot is the 90-episode `opencode-go/deepseek-v4.1-flash` run in `bench/v2/real/`.
