@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
@@ -21,6 +21,7 @@ const reset = option('--reset', null);
 const noWait = args.includes('--no-wait');
 const perProvider = Math.max(1, Number(option('--per-provider', '2')));
 const concurrency = Math.max(1, Number(option('--concurrency', '8')));
+const studyTimeoutMinutes = Math.max(1, Number(option('--study-timeout-min', '15')));
 const dry = args.includes('--dry');
 const OUT = option('--out', OUT_DEFAULT);
 const MODELS_FILE = option('--models', path.join(REPO, 'bench/v2/free-models/models.json'));
@@ -160,12 +161,19 @@ function runStudy(model, out, limit) {
   for (const key of ['MATH_BENCH_PROVIDER_PLUGIN', 'MATH_BENCH_PROVIDER_OPTIONS', 'MATH_BENCH_AUTH_FILE']) delete env[key];
   const started = Date.now();
   return new Promise(resolve => {
-    let settled = false;
+    let settled = false, timer;
     let stdout = '', stderr = '';
-    const finish = value => { if (!settled) { settled = true; resolve(value); } };
+    const finish = value => { if (settled) return; settled = true; if (timer) clearTimeout(timer); resolve(value); };
     const child = spawn(process.execPath, studyArgs, {
       cwd: REPO, env, shell: false, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'],
     });
+    timer = setTimeout(() => {
+      try {
+        if (process.platform === 'win32') spawnSync('taskkill.exe', ['/PID', String(child.pid), '/T', '/F'], { windowsHide: true, shell: false, timeout: 10000, encoding: 'utf8' });
+        else process.kill(-child.pid, 'SIGKILL');
+      } catch { /* the close event below still records the timeout */ }
+      finish({ status: null, error: `study timeout after ${studyTimeoutMinutes} minutes`, duration_ms: Date.now() - started, stdout: tail(stdout), stderr: tail(stderr) });
+    }, studyTimeoutMinutes * 60 * 1000);
     child.stdout.on('data', chunk => { stdout = tail(`${stdout}${chunk.toString('utf8')}`, 1_000_000); });
     child.stderr.on('data', chunk => { stderr = tail(`${stderr}${chunk.toString('utf8')}`, 1_000_000); });
     child.on('error', error => finish({ status: null, error: error.message, duration_ms: Date.now() - started, stdout: tail(stdout), stderr: tail(stderr) }));
