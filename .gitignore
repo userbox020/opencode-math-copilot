@@ -6,3 +6,8 @@ node_modules/
 bench/results/
 *.log
 .DS_Store
+
+bench/v2/free-models/dashboard-data.js
+bench/v2/free-models/dashboard-data.json
+bench/v2/free-models/running-data.js
+bench/v2/free-models/running-data.json
