@@ -1,0 +1,580 @@
+{
+  "schema": "math-copilot-live/v1",
+  "generated_at": "2026-11-10T21:52:31.353Z",
+  "project": {
+    "name": "OpenCode Math Copilot",
+    "repo": "C:/_Work/opencode-math-copilot",
+    "branch": "main",
+    "commit": "7629c76",
+    "commit_message": "Refresh dashboard snapshot",
+    "dirty": true,
+    "ci": "last known: green for e91cddc (Test + Security)",
+    "refresh_command": "node bench/v2/free-models/build-live.mjs",
+    "caveats": [
+      "Snapshot, not a live stream; regenerate and reload to update.",
+      "Progress is derived from the current attempt directory and episodes.jsonl.",
+      "A stalled badge means no file activity for more than 10 minutes.",
+      "Protocol progress is not mathematical correctness."
+    ]
+  },
+  "summary": {
+    "active": 2,
+    "stalled": 0,
+    "free_active": 1,
+    "other_active": 1,
+    "free_nonterminal": 66,
+    "other_nonterminal": 29,
+    "total_models": 644
+  },
+  "active": [
+    {
+      "model": "free-gemini/gemini-3.8-flash",
+      "provider": "free-gemini",
+      "phase": "screen",
+      "status": "screening",
+      "attempt": 2,
+      "expected": 3,
+      "completed": 1,
+      "remaining": 2,
+      "progress": 0.3333333333333333,
+      "started_at": "2026-11-10T21:44:13.298Z",
+      "elapsed_ms": 498042,
+      "last_activity_at": "2026-11-10T21:48:56.177Z",
+      "stalled": false,
+      "current_task": {
+        "task_id": "pilot-retrieval-geometry",
+        "family": "geometry",
+        "condition": "A",
+        "status": "completed",
+        "correct": true,
+        "error": null,
+        "tokens": 2338,
+        "tool_calls": 0
+      },
+      "last_error": null,
+      "next_attempt_at": null,
+      "matrix": "free"
+    },
+    {
+      "model": "opencode-go/qwen3.7-plus",
+      "provider": "opencode-go",
+      "phase": "screen",
+      "status": "screening",
+      "attempt": 2,
+      "expected": 3,
+      "completed": 0,
+      "remaining": 3,
+      "progress": 0,
+      "started_at": "2026-11-10T21:52:26.793Z",
+      "elapsed_ms": 4558,
+      "last_activity_at": "2026-11-10T21:52:26.794Z",
+      "stalled": false,
+      "current_task": null,
+      "last_error": null,
+      "next_attempt_at": null,
+      "matrix": "other"
+    }
+  ],
+  "queues": {
+    "free": {
+      "label": "Free providers",
+      "total_models": 75,
+      "state_models": 75,
+      "counts": {
+        "screen_passed": 3,
+        "provider_output": 4,
+        "not_in_plan": 1,
+        "unavailable": 1,
+        "full_complete": 7,
+        "quota_wait": 1,
+        "screening": 1,
+        "pending": 57
+      },
+      "active": [
+        {
+          "model": "free-gemini/gemini-3.8-flash",
+          "provider": "free-gemini",
+          "phase": "screen",
+          "status": "screening",
+          "attempt": 2,
+          "expected": 3,
+          "completed": 1,
+          "remaining": 2,
+          "progress": 0.3333333333333333,
+          "started_at": "2026-11-10T21:44:13.298Z",
+          "elapsed_ms": 498042,
+          "last_activity_at": "2026-11-10T21:48:56.177Z",
+          "stalled": false,
+          "current_task": {
+            "task_id": "pilot-retrieval-geometry",
+            "family": "geometry",
+            "condition": "A",
+            "status": "completed",
+            "correct": true,
+            "error": null,
+            "tokens": 2338,
+            "tool_calls": 0
+          },
+          "last_error": null,
+          "next_attempt_at": null
+        }
+      ],
+      "retries": [
+        {
+          "model": "free-cloudflare/@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+          "provider": "free-cloudflare",
+          "status": "provider_output",
+          "next_attempt_at": "2026-11-10T22:29:10.773Z"
+        },
+        {
+          "model": "free-cloudflare/@cf/mistralai/mistral-small-3.1-24b-instruct",
+          "provider": "free-cloudflare",
+          "status": "provider_output",
+          "next_attempt_at": "2026-11-10T22:31:04.555Z"
+        },
+        {
+          "model": "free-cloudflare/@cf/qwen/qwen2.5-coder-32b-instruct",
+          "provider": "free-cloudflare",
+          "status": "provider_output",
+          "next_attempt_at": "2026-11-10T22:34:11.547Z"
+        },
+        {
+          "model": "free-gemini/gemini-3.1-pro-preview",
+          "provider": "free-gemini",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-11T09:38:37.690Z"
+        },
+        {
+          "model": "free-gemini/gemini-3.6-flash",
+          "provider": "free-gemini",
+          "status": "provider_output",
+          "next_attempt_at": "2026-11-11T09:43:22.564Z"
+        }
+      ],
+      "recent": [
+        {
+          "model": "free-gemini/gemini-3.8-flash",
+          "provider": "free-gemini",
+          "status": "screening",
+          "attempts": 1,
+          "updated_at": "2026-11-10T21:43:22.568Z",
+          "last_error": null
+        },
+        {
+          "model": "free-gemini/gemini-3.6-flash",
+          "provider": "free-gemini",
+          "status": "provider_output",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:43:22.564Z",
+          "last_error": "OpenAI Chat stream ended without finish_reason"
+        },
+        {
+          "model": "free-gemini/gemini-3.5-flash-lite",
+          "provider": "free-gemini",
+          "status": "screen_passed",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:40:39.005Z",
+          "last_error": null
+        },
+        {
+          "model": "free-gemini/gemini-3.1-pro-preview",
+          "provider": "free-gemini",
+          "status": "quota_wait",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:38:37.690Z",
+          "last_error": "Provider request failed with HTTP 429: [{ \"error\": { \"code\": 429, \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/docs/rate-limits. To monitor your current usage, head to: https://ai.dev"
+        },
+        {
+          "model": "free-gemini/gemini-3-flash-preview",
+          "provider": "free-gemini",
+          "status": "unavailable",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:36:55.881Z",
+          "last_error": null
+        },
+        {
+          "model": "free-cloudflare/@cf/zai-org/glm-4.7-flash",
+          "provider": "free-cloudflare",
+          "status": "screen_passed",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:36:09.422Z",
+          "last_error": null
+        },
+        {
+          "model": "free-cloudflare/@cf/qwen/qwen2.5-coder-32b-instruct",
+          "provider": "free-cloudflare",
+          "status": "provider_output",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:34:11.547Z",
+          "last_error": "OpenAI Chat received content after the finish reason"
+        },
+        {
+          "model": "free-cloudflare/@cf/moonshotai/kimi-k2.6",
+          "provider": "free-cloudflare",
+          "status": "not_in_plan",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:32:35.934Z",
+          "last_error": "AiError: Model @cf/moonshotai/kimi-k2.6 is not available on the Workers Free plan: Model @cf/moonshotai/kimi-k2.6 is not available on the Workers Free plan. Upgrade to access this model: https://dash.cloudflare.com/?to=/:account/workers/plans (eb4e4cdf-7927-400b-990c-a39945a938e1)"
+        },
+        {
+          "model": "free-cloudflare/@cf/mistralai/mistral-small-3.1-24b-instruct",
+          "provider": "free-cloudflare",
+          "status": "provider_output",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:31:04.555Z",
+          "last_error": "Invalid free-cloudflare/cloudflare-workers-ai stream event"
+        },
+        {
+          "model": "free-cloudflare/@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+          "provider": "free-cloudflare",
+          "status": "provider_output",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:29:10.773Z",
+          "last_error": "Invalid free-cloudflare/cloudflare-workers-ai stream event"
+        },
+        {
+          "model": "free-cloudflare/@cf/deepseek-ai/deepseek-r1-distill-qwen-32b",
+          "provider": "free-cloudflare",
+          "status": "screen_passed",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:27:13.851Z",
+          "last_error": null
+        },
+        {
+          "model": "free-gemini/gemma-4-31b-it",
+          "provider": "free-gemini",
+          "status": "pending",
+          "attempts": 1,
+          "updated_at": "2026-11-10T21:24:53.260Z",
+          "last_error": null
+        }
+      ],
+      "nonterminal": 66,
+      "log_tail": [
+        "��[\u0000r\u0000e\u0000s\u0000e\u0000t\u0000]\u0000 \u00006\u00008\u0000 \u0000m\u0000o\u0000d\u0000e\u0000l\u0000s\u0000 \u0000m\u0000a\u0000t\u0000c\u0000h\u0000e\u0000d\u0000 \u0000^\u0000(\u0000f\u0000r\u0000e\u0000e\u0000-\u0000|\u0000o\u0000p\u0000e\u0000n\u0000c\u0000o\u0000d\u0000e\u0000/\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000f\u0000r\u0000e\u0000e\u0000-\u0000c\u0000l\u0000o\u0000u\u0000d\u0000f\u0000l\u0000a\u0000r\u0000e\u0000/\u0000@\u0000c\u0000f\u0000/\u0000d\u0000e\u0000e\u0000p\u0000s\u0000e\u0000e\u0000k\u0000-\u0000a\u0000i\u0000/\u0000d\u0000e\u0000e\u0000p\u0000s\u0000e\u0000e\u0000k\u0000-\u0000r\u00001\u0000-\u0000d\u0000i\u0000s\u0000t\u0000i\u0000l\u0000l\u0000-\u0000q\u0000w\u0000e\u0000n\u0000-\u00003\u00002\u0000b\u0000 \u0000-\u0000>\u0000 \u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000_\u0000p\u0000a\u0000s\u0000s\u0000e\u0000d\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00001\u00004\u00001\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000f\u0000r\u0000e\u0000e\u0000-\u0000c\u0000l\u0000o\u0000u\u0000d\u0000f\u0000l\u0000a\u0000r\u0000e\u0000/\u0000@\u0000c\u0000f\u0000/\u0000m\u0000e\u0000t\u0000a\u0000/\u0000l\u0000l\u0000a\u0000m\u0000a\u0000-\u00003\u0000.\u00003\u0000-\u00007\u00000\u0000b\u0000-\u0000i\u0000n\u0000s\u0000t\u0000r\u0000u\u0000c\u0000t\u0000-\u0000f\u0000p\u00008\u0000-\u0000f\u0000a\u0000s\u0000t\u0000 \u0000-\u0000>\u0000 \u0000p\u0000r\u0000o\u0000v\u0000i\u0000d\u0000e\u0000r\u0000_\u0000o\u0000u\u0000t\u0000p\u0000u\u0000t\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00001\u00001\u00007\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000f\u0000r\u0000e\u0000e\u0000-\u0000c\u0000l\u0000o\u0000u\u0000d\u0000f\u0000l\u0000a\u0000r\u0000e\u0000/\u0000@\u0000c\u0000f\u0000/\u0000m\u0000i\u0000s\u0000t\u0000r\u0000a\u0000l\u0000a\u0000i\u0000/\u0000m\u0000i\u0000s\u0000t\u0000r\u0000a\u0000l\u0000-\u0000s\u0000m\u0000a\u0000l\u0000l\u0000-\u00003\u0000.\u00001\u0000-\u00002\u00004\u0000b\u0000-\u0000i\u0000n\u0000s\u0000t\u0000r\u0000u\u0000c\u0000t\u0000 \u0000-\u0000>\u0000 \u0000p\u0000r\u0000o\u0000v\u0000i\u0000d\u0000e\u0000r\u0000_\u0000o\u0000u\u0000t\u0000p\u0000u\u0000t\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00001\u00001\u00004\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000f\u0000r\u0000e\u0000e\u0000-\u0000c\u0000l\u0000o\u0000u\u0000d\u0000f\u0000l\u0000a\u0000r\u0000e\u0000/\u0000@\u0000c\u0000f\u0000/\u0000m\u0000o\u0000o\u0000n\u0000s\u0000h\u0000o\u0000t\u0000a\u0000i\u0000/\u0000k\u0000i\u0000m\u0000i\u0000-\u0000k\u00002\u0000.\u00006\u0000 \u0000-\u0000>\u0000 \u0000n\u0000o\u0000t\u0000_\u0000i\u0000n\u0000_\u0000p\u0000l\u0000a\u0000n\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00009\u00001\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000f\u0000r\u0000e\u0000e\u0000-\u0000c\u0000l\u0000o\u0000u\u0000d\u0000f\u0000l\u0000a\u0000r\u0000e\u0000/\u0000@\u0000c\u0000f\u0000/\u0000q\u0000w\u0000e\u0000n\u0000/\u0000q\u0000w\u0000e\u0000n\u00002\u0000.\u00005\u0000-\u0000c\u0000o\u0000d\u0000e\u0000r\u0000-\u00003\u00002\u0000b\u0000-\u0000i\u0000n\u0000s\u0000t\u0000r\u0000u\u0000c\u0000t\u0000 \u0000-\u0000>\u0000 \u0000p\u0000r\u0000o\u0000v\u0000i\u0000d\u0000e\u0000r\u0000_\u0000o\u0000u\u0000t\u0000p\u0000u\u0000t\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00009\u00006\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000f\u0000r\u0000e\u0000e\u0000-\u0000c\u0000l\u0000o\u0000u\u0000d\u0000f\u0000l\u0000a\u0000r\u0000e\u0000/\u0000@\u0000c\u0000f\u0000/\u0000z\u0000a\u0000i\u0000-\u0000o\u0000r\u0000g\u0000/\u0000g\u0000l\u0000m\u0000-\u00004\u0000.\u00007\u0000-\u0000f\u0000l\u0000a\u0000s\u0000h\u0000 \u0000-\u0000>\u0000 \u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000_\u0000p\u0000a\u0000s\u0000s\u0000e\u0000d\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00001\u00001\u00008\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000f\u0000r\u0000e\u0000e\u0000-\u0000g\u0000e\u0000m\u0000i\u0000n\u0000i\u0000/\u0000g\u0000e\u0000m\u0000i\u0000n\u0000i\u0000-\u00003\u0000-\u0000f\u0000l\u0000a\u0000s\u0000h\u0000-\u0000p\u0000r\u0000e\u0000v\u0000i\u0000e\u0000w\u0000 \u0000-\u0000>\u0000 \u0000u\u0000n\u0000a\u0000v\u0000a\u0000i\u0000l\u0000a\u0000b\u0000l\u0000e\u0000 \u0000(\u00000\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00004\u00006\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000f\u0000r\u0000e\u0000e\u0000-\u0000g\u0000e\u0000m\u0000i\u0000n\u0000i\u0000/\u0000g\u0000e\u0000m\u0000i\u0000n\u0000i\u0000-\u00003\u0000.\u00001\u0000-\u0000p\u0000r\u0000o\u0000-\u0000p\u0000r\u0000e\u0000v\u0000i\u0000e\u0000w\u0000 \u0000-\u0000>\u0000 \u0000q\u0000u\u0000o\u0000t\u0000a\u0000_\u0000w\u0000a\u0000i\u0000t\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00001\u00000\u00002\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000f\u0000r\u0000e\u0000e\u0000-\u0000g\u0000e\u0000m\u0000i\u0000n\u0000i\u0000/\u0000g\u0000e\u0000m\u0000i\u0000n\u0000i\u0000-\u00003\u0000.\u00005\u0000-\u0000f\u0000l\u0000a\u0000s\u0000h\u0000-\u0000l\u0000i\u0000t\u0000e\u0000 \u0000-\u0000>\u0000 \u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000_\u0000p\u0000a\u0000s\u0000s\u0000e\u0000d\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00001\u00002\u00001\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000f\u0000r\u0000e\u0000e\u0000-\u0000g\u0000e\u0000m\u0000i\u0000n\u0000i\u0000/\u0000g\u0000e\u0000m\u0000i\u0000n\u0000i\u0000-\u00003\u0000.\u00006\u0000-\u0000f\u0000l\u0000a\u0000s\u0000h\u0000 \u0000-\u0000>\u0000 \u0000p\u0000r\u0000o\u0000v\u0000i\u0000d\u0000e\u0000r\u0000_\u0000o\u0000u\u0000t\u0000p\u0000u\u0000t\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00001\u00006\u00004\u0000s\u0000)\u0000 \u0000",
+        "\u0000"
+      ]
+    },
+    "other": {
+      "label": "Direct providers",
+      "total_models": 569,
+      "state_models": 569,
+      "counts": {
+        "tool_protocol_failure": 526,
+        "full_complete": 12,
+        "auth_error": 1,
+        "screen_passed": 1,
+        "quota_wait": 19,
+        "error": 4,
+        "screening": 1,
+        "pending": 3,
+        "unavailable": 2
+      },
+      "active": [
+        {
+          "model": "opencode-go/qwen3.7-plus",
+          "provider": "opencode-go",
+          "phase": "screen",
+          "status": "screening",
+          "attempt": 2,
+          "expected": 3,
+          "completed": 0,
+          "remaining": 3,
+          "progress": 0,
+          "started_at": "2026-11-10T21:52:26.793Z",
+          "elapsed_ms": 4558,
+          "last_activity_at": "2026-11-10T21:52:26.794Z",
+          "stalled": false,
+          "current_task": null,
+          "last_error": null,
+          "next_attempt_at": null
+        }
+      ],
+      "retries": [
+        {
+          "model": "openai/gpt-5.6",
+          "provider": "openai",
+          "status": "auth_error",
+          "next_attempt_at": "2026-11-10T21:28:26.707Z"
+        },
+        {
+          "model": "opencode-go/claude-haiku-5-5",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:18:45.888Z"
+        },
+        {
+          "model": "opencode-go/crouton-alpha-free",
+          "provider": "opencode-go",
+          "status": "error",
+          "next_attempt_at": "2026-11-10T22:19:22.857Z"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-pro",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:20:38.354Z"
+        },
+        {
+          "model": "opencode-go/deepseek-v4.1-flash",
+          "provider": "opencode-go",
+          "status": "error",
+          "next_attempt_at": "2026-11-10T22:21:18.210Z"
+        },
+        {
+          "model": "opencode-go/gemini-4-argon",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:22:39.376Z"
+        },
+        {
+          "model": "opencode-go/glm-5.2",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:24:09.221Z"
+        },
+        {
+          "model": "opencode-go/glm-5.3",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:26:00.068Z"
+        },
+        {
+          "model": "opencode-go/glm-5.3-flash",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:27:25.758Z"
+        },
+        {
+          "model": "opencode-go/hy3",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:29:02.421Z"
+        },
+        {
+          "model": "opencode-go/hy4",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:30:45.206Z"
+        },
+        {
+          "model": "opencode-go/hy4-preview",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:32:18.310Z"
+        },
+        {
+          "model": "opencode-go/kimi-k2.7-code",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:33:48.276Z"
+        },
+        {
+          "model": "opencode-go/kimi-k3",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:35:22.165Z"
+        },
+        {
+          "model": "opencode-go/kimi-k3.1-pro",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:36:52.693Z"
+        },
+        {
+          "model": "opencode-go/longcat-2.0",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:38:36.902Z"
+        },
+        {
+          "model": "opencode-go/mimo-v2.5",
+          "provider": "opencode-go",
+          "status": "error",
+          "next_attempt_at": "2026-11-10T22:40:13.939Z"
+        },
+        {
+          "model": "opencode-go/mimo-v2.5-pro",
+          "provider": "opencode-go",
+          "status": "error",
+          "next_attempt_at": "2026-11-10T22:41:53.483Z"
+        },
+        {
+          "model": "opencode-go/mimo-v2.6-flash",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:43:47.910Z"
+        },
+        {
+          "model": "opencode-go/mimo-v2.6-pro",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:45:17.339Z"
+        },
+        {
+          "model": "opencode-go/minimax-m3",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:46:38.000Z"
+        },
+        {
+          "model": "opencode-go/minimax-m3.1-flash",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:48:01.485Z"
+        },
+        {
+          "model": "opencode-go/muse-spark-1.2-contributor",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:49:33.238Z"
+        },
+        {
+          "model": "opencode-go/muse-spark-1.3-contributor",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "next_attempt_at": "2026-11-10T22:51:24.583Z"
+        }
+      ],
+      "recent": [
+        {
+          "model": "opencode-go/qwen3.7-plus",
+          "provider": "opencode-go",
+          "status": "screening",
+          "attempts": 1,
+          "updated_at": "2026-11-10T21:51:24.591Z",
+          "last_error": null
+        },
+        {
+          "model": "opencode-go/muse-spark-1.3-contributor",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:51:24.583Z",
+          "last_error": "OpenCode Go usage limit reached"
+        },
+        {
+          "model": "opencode-go/muse-spark-1.2-contributor",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:49:33.238Z",
+          "last_error": "OpenCode Go usage limit reached"
+        },
+        {
+          "model": "opencode-go/minimax-m3.1-flash",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:48:01.485Z",
+          "last_error": "OpenCode Go usage limit reached"
+        },
+        {
+          "model": "opencode-go/minimax-m3",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:46:38.000Z",
+          "last_error": "OpenCode Go usage limit reached"
+        },
+        {
+          "model": "opencode-go/mimo-v2.6-pro",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:45:17.339Z",
+          "last_error": "OpenCode Go usage limit reached"
+        },
+        {
+          "model": "opencode-go/mimo-v2.6-flash",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:43:47.910Z",
+          "last_error": "OpenCode Go usage limit reached"
+        },
+        {
+          "model": "opencode-go/mimo-v2.5-pro",
+          "provider": "opencode-go",
+          "status": "error",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:41:53.483Z",
+          "last_error": "Model mimo-v2.5-pro has been deprecated. Use mimo-v2.6-pro instead."
+        },
+        {
+          "model": "opencode-go/mimo-v2.5",
+          "provider": "opencode-go",
+          "status": "error",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:40:13.939Z",
+          "last_error": "Model mimo-v2.5 has been deprecated. Use mimo-v2.6-flash instead."
+        },
+        {
+          "model": "opencode-go/longcat-2.0",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:38:36.902Z",
+          "last_error": "OpenCode Go usage limit reached"
+        },
+        {
+          "model": "opencode-go/kimi-k3.1-pro",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:36:52.693Z",
+          "last_error": "OpenCode Go usage limit reached"
+        },
+        {
+          "model": "opencode-go/kimi-k3",
+          "provider": "opencode-go",
+          "status": "quota_wait",
+          "attempts": 2,
+          "updated_at": "2026-11-10T21:35:22.165Z",
+          "last_error": "OpenCode Go usage limit reached"
+        }
+      ],
+      "nonterminal": 29,
+      "log_tail": [
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000o\u0000p\u0000e\u0000n\u0000c\u0000o\u0000d\u0000e\u0000-\u0000g\u0000o\u0000/\u0000k\u0000i\u0000m\u0000i\u0000-\u0000k\u00003\u0000 \u0000-\u0000>\u0000 \u0000q\u0000u\u0000o\u0000t\u0000a\u0000_\u0000w\u0000a\u0000i\u0000t\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00009\u00004\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000o\u0000p\u0000e\u0000n\u0000c\u0000o\u0000d\u0000e\u0000-\u0000g\u0000o\u0000/\u0000k\u0000i\u0000m\u0000i\u0000-\u0000k\u00003\u0000.\u00001\u0000-\u0000p\u0000r\u0000o\u0000 \u0000-\u0000>\u0000 \u0000q\u0000u\u0000o\u0000t\u0000a\u0000_\u0000w\u0000a\u0000i\u0000t\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00009\u00001\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000o\u0000p\u0000e\u0000n\u0000c\u0000o\u0000d\u0000e\u0000-\u0000g\u0000o\u0000/\u0000l\u0000o\u0000n\u0000g\u0000c\u0000a\u0000t\u0000-\u00002\u0000.\u00000\u0000 \u0000-\u0000>\u0000 \u0000q\u0000u\u0000o\u0000t\u0000a\u0000_\u0000w\u0000a\u0000i\u0000t\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00001\u00000\u00004\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000o\u0000p\u0000e\u0000n\u0000c\u0000o\u0000d\u0000e\u0000-\u0000g\u0000o\u0000/\u0000m\u0000i\u0000m\u0000o\u0000-\u0000v\u00002\u0000.\u00005\u0000 \u0000-\u0000>\u0000 \u0000e\u0000r\u0000r\u0000o\u0000r\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00009\u00007\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000o\u0000p\u0000e\u0000n\u0000c\u0000o\u0000d\u0000e\u0000-\u0000g\u0000o\u0000/\u0000m\u0000i\u0000m\u0000o\u0000-\u0000v\u00002\u0000.\u00005\u0000-\u0000p\u0000r\u0000o\u0000 \u0000-\u0000>\u0000 \u0000e\u0000r\u0000r\u0000o\u0000r\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00001\u00000\u00000\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000o\u0000p\u0000e\u0000n\u0000c\u0000o\u0000d\u0000e\u0000-\u0000g\u0000o\u0000/\u0000m\u0000i\u0000m\u0000o\u0000-\u0000v\u00002\u0000.\u00006\u0000-\u0000f\u0000l\u0000a\u0000s\u0000h\u0000 \u0000-\u0000>\u0000 \u0000q\u0000u\u0000o\u0000t\u0000a\u0000_\u0000w\u0000a\u0000i\u0000t\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00001\u00001\u00004\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000o\u0000p\u0000e\u0000n\u0000c\u0000o\u0000d\u0000e\u0000-\u0000g\u0000o\u0000/\u0000m\u0000i\u0000m\u0000o\u0000-\u0000v\u00002\u0000.\u00006\u0000-\u0000p\u0000r\u0000o\u0000 \u0000-\u0000>\u0000 \u0000q\u0000u\u0000o\u0000t\u0000a\u0000_\u0000w\u0000a\u0000i\u0000t\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00008\u00009\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000o\u0000p\u0000e\u0000n\u0000c\u0000o\u0000d\u0000e\u0000-\u0000g\u0000o\u0000/\u0000m\u0000i\u0000n\u0000i\u0000m\u0000a\u0000x\u0000-\u0000m\u00003\u0000 \u0000-\u0000>\u0000 \u0000q\u0000u\u0000o\u0000t\u0000a\u0000_\u0000w\u0000a\u0000i\u0000t\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00008\u00001\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000o\u0000p\u0000e\u0000n\u0000c\u0000o\u0000d\u0000e\u0000-\u0000g\u0000o\u0000/\u0000m\u0000i\u0000n\u0000i\u0000m\u0000a\u0000x\u0000-\u0000m\u00003\u0000.\u00001\u0000-\u0000f\u0000l\u0000a\u0000s\u0000h\u0000 \u0000-\u0000>\u0000 \u0000q\u0000u\u0000o\u0000t\u0000a\u0000_\u0000w\u0000a\u0000i\u0000t\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00008\u00003\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000o\u0000p\u0000e\u0000n\u0000c\u0000o\u0000d\u0000e\u0000-\u0000g\u0000o\u0000/\u0000m\u0000u\u0000s\u0000e\u0000-\u0000s\u0000p\u0000a\u0000r\u0000k\u0000-\u00001\u0000.\u00002\u0000-\u0000c\u0000o\u0000n\u0000t\u0000r\u0000i\u0000b\u0000u\u0000t\u0000o\u0000r\u0000 \u0000-\u0000>\u0000 \u0000q\u0000u\u0000o\u0000t\u0000a\u0000_\u0000w\u0000a\u0000i\u0000t\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00009\u00002\u0000s\u0000)\u0000 \u0000",
+        "\u0000[\u0000s\u0000c\u0000r\u0000e\u0000e\u0000n\u0000]\u0000 \u0000o\u0000p\u0000e\u0000n\u0000c\u0000o\u0000d\u0000e\u0000-\u0000g\u0000o\u0000/\u0000m\u0000u\u0000s\u0000e\u0000-\u0000s\u0000p\u0000a\u0000r\u0000k\u0000-\u00001\u0000.\u00003\u0000-\u0000c\u0000o\u0000n\u0000t\u0000r\u0000i\u0000b\u0000u\u0000t\u0000o\u0000r\u0000 \u0000-\u0000>\u0000 \u0000q\u0000u\u0000o\u0000t\u0000a\u0000_\u0000w\u0000a\u0000i\u0000t\u0000 \u0000(\u00003\u0000 \u0000e\u0000p\u0000i\u0000s\u0000o\u0000d\u0000e\u0000s\u0000,\u0000 \u00001\u00001\u00001\u0000s\u0000)\u0000 \u0000",
+        "\u0000"
+      ]
+    }
+  },
+  "status_order": [
+    "full_complete",
+    "screen_passed",
+    "screening",
+    "fulling",
+    "quota_wait",
+    "auth_error",
+    "provider_output",
+    "error",
+    "not_in_plan",
+    "unavailable",
+    "config_error",
+    "tool_protocol_failure",
+    "pending",
+    "skipped"
+  ]
+}

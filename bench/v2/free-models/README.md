@@ -80,6 +80,18 @@ identifiers; it includes model/status rows, error categories, retry times, task
 metadata, and aggregate counts. The dashboard is read-only: it does not run
 models or mutate queue state.
 
+`running.html` is the focused current-runs view. Generate its snapshot with:
+
+```text
+node bench/v2/free-models/build-live.mjs
+```
+
+It resolves each active model's latest `attempt-N` directory, counts the
+episodes written so far, shows the current task/condition, elapsed time and
+last activity, and flags runs with no file activity for more than 10 minutes.
+It is a snapshot too; regenerate and reload to update it. The page keeps the
+full queue counters and retry timeline visible when no run is active.
+
 ## Status
 
 - The main paper pilot is the 90-episode `opencode-go/deepseek-v4.1-flash` run in `bench/v2/real/`.
