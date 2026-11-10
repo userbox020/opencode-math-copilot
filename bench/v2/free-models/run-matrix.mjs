@@ -17,6 +17,8 @@ const waitMinutes = Number(option('--wait-minutes', '30'));
 const maxPasses = Number(option('--max-passes', '0'));
 const screenLimit = Number(option('--screen-limit', '3'));
 const only = option('--only', null);
+const reset = option('--reset', null);
+const noWait = args.includes('--no-wait');
 const dry = args.includes('--dry');
 const OUT = option('--out', OUT_DEFAULT);
 const MODELS_FILE = option('--models', path.join(REPO, 'bench/v2/free-models/models.json'));
@@ -46,6 +48,49 @@ const spent = () => {
   return sum;
 };
 
+const providerWaitMinutes = {
+  openai: 15,
+  'opencode-go': 60,
+  openrouter: 360,
+  google: 720,
+  zai: 360,
+  'ollama-cloud': 360,
+  'cloudflare-workers-ai': 60,
+  'free-openrouter': 360,
+  'free-gemini': 720,
+  'free-ollama-cloud': 360,
+  'free-kilo': 60,
+  'free-groq': 30,
+  'free-cloudflare': 60,
+  'free-zai': 360,
+  opencode: 60,
+};
+const terminal = new Set(['full_complete', 'not_in_plan', 'unavailable', 'config_error', 'tool_protocol_failure']);
+const providerOf = model => model.split('/')[0];
+const waitMinutesFor = model => providerWaitMinutes[providerOf(model)] ?? waitMinutes;
+const retryAt = (model, status, providerError) => {
+  if (status === 'quota_wait' && providerError?.retry_after_ms) {
+    const timestamp = Number(providerError.retry_after_ms);
+    if (Number.isFinite(timestamp) && timestamp > Date.now()) return new Date(timestamp).toISOString();
+  }
+  return new Date(Date.now() + waitMinutesFor(model) * 60 * 1000).toISOString();
+};
+
+if (reset) {
+  const pattern = new RegExp(reset);
+  let count = 0;
+  for (const [model, entry] of Object.entries(state.models)) {
+    if (!pattern.test(model) || entry.status === 'full_complete') continue;
+    entry.status = 'pending';
+    entry.next_attempt_at = null;
+    entry.last_error = null;
+    entry.updated_at = now();
+    count++;
+  }
+  save();
+  console.log(`[reset] ${count} models matched ${reset}`);
+}
+
 function episodes(out) {
   const file = path.join(out, 'episodes.jsonl');
   if (!existsSync(file)) return [];
@@ -55,19 +100,29 @@ function summarize(eps) {
   return eps.map(episode => ({
     task: episode.task_id, condition: episode.condition_id, status: episode.status,
     correct: episode.grade?.correct === true, error: episode.error?.message ?? null,
+    category: episode.error?.category ?? null,
+    provider_error: episode.diagnostics?.provider_error ?? null,
     cost: episode.cost?.observed_usd ?? null, tokens: episode.usage?.tokens ?? null,
     tool_calls: episode.usage?.tool_calls ?? null,
   }));
 }
 function classify(eps, run) {
   const text = `${run.stdout}\n${run.stderr}\n${JSON.stringify(eps)}`;
-  if (/provider\.quota|FreeUsageLimit|free usage limit|"status"\s*:\s*429|status.?429/i.test(text)) return 'quota';
-  if (/not included in your free|"status"\s*:\s*402|status.?402/i.test(text)) return 'not_in_plan';
-  if (/model not listed|provider\.no-route|Unknown model/i.test(text)) return 'unavailable';
-  if (!eps.length) return 'error';
-  if (eps.every(episode => episode.status === 'completed')) return 'screen_passed';
-  if (eps.some(episode => episode.status === 'extraction_failure' || episode.status === 'operational_failure')) return 'tool_protocol_failure';
-  return 'error';
+  const categories = new Set(eps.map(episode => episode.error?.category).filter(Boolean));
+  const providerError = eps.map(episode => episode.diagnostics?.provider_error).find(Boolean) ?? null;
+  if (/model not listed|provider_route_missing|provider\.no-route|Unknown model/i.test(text)) return { status: 'unavailable', providerError };
+  if (run.status !== 0 && !providerError) return { status: 'error', providerError };
+  if (/not included in your free|not available on the .*plan/i.test(text)) return { status: 'not_in_plan', providerError };
+  if (categories.has('quota') || /provider\.quota|FreeUsageLimit|free usage limit|"status"\s*:\s*429|status.?429/i.test(text)) return { status: 'quota_wait', providerError };
+  if (categories.has('auth') || /provider\.auth|Integration\.Authorization/i.test(text)) return { status: 'auth_error', providerError };
+  if (categories.has('retired') || /no longer available|NOT_FOUND/i.test(text)) return { status: 'unavailable', providerError };
+  if (categories.has('context')) return { status: 'config_error', providerError };
+  if (categories.has('provider_output')) return { status: 'provider_output', providerError };
+  if (!eps.length) return { status: 'error', providerError };
+  if (eps.every(episode => episode.status === 'completed')) return { status: 'screen_passed', providerError: null };
+  if (eps.some(episode => episode.status === 'extraction_failure')) return { status: 'tool_protocol_failure', providerError };
+  if (eps.some(episode => episode.status === 'operational_failure')) return { status: 'error', providerError };
+  return { status: 'error', providerError };
 }
 function runStudy(model, out, limit) {
   const studyArgs = [
@@ -98,30 +153,37 @@ function runStudy(model, out, limit) {
 }
 function screen(model) {
   const entry = state.models[model] ??= { status: 'pending', attempts: 0, screen: null, full: null };
-  if (['not_in_plan', 'unavailable', 'tool_protocol_failure'].includes(entry.status)) return false;
+  if (terminal.has(entry.status)) return false;
+  if (entry.next_attempt_at && Date.parse(entry.next_attempt_at) > Date.now()) return false;
   if (mode === 'full') return false;
-  const out = path.join(OUT, 'screen', safeName(model));
+  const attemptNumber = (entry.attempts ?? 0) + 1;
+  const out = path.join(OUT, 'screen', safeName(model), `attempt-${attemptNumber}`);
   if (!dry) {
     entry.status = 'screening'; entry.last_error = null; entry.updated_at = now(); save();
   }
   const run = dry ? { status: 0, error: null, duration_ms: 0, stdout: '', stderr: '' } : runStudy(model, out, screenLimit);
   const eps = dry ? [] : episodes(out);
-  const classification = dry ? 'pending' : classify(eps, run);
+  const classification = dry ? { status: 'pending', providerError: null } : classify(eps, run);
   if (dry) { console.log(`[dry] screen ${model}`); return true; }
   entry.attempts = (entry.attempts ?? 0) + 1;
-  entry.screen = { out, run, classification, episodes: summarize(eps) };
-  entry.status = classification;
-  entry.last_error = run.error ?? (classification === 'error' ? run.stderr || run.stdout : null);
+  entry.screen = { out, run, classification: classification.status, episodes: summarize(eps) };
+  entry.status = classification.status;
+  entry.next_attempt_at = ['quota_wait', 'auth_error', 'provider_output', 'error'].includes(classification.status)
+    ? retryAt(model, classification.status, classification.providerError)
+    : null;
+  entry.last_error = run.error ?? classification.providerError?.message
+    ?? (classification.status === 'error' ? run.stderr || run.stdout : null);
   entry.updated_at = now();
   save();
-  console.log(`[screen] ${model} -> ${classification} (${eps.length} episodes, ${Math.round(run.duration_ms / 1000)}s)`);
-  return classification === 'quota' || classification === 'error';
+  console.log(`[screen] ${model} -> ${classification.status} (${eps.length} episodes, ${Math.round(run.duration_ms / 1000)}s)`);
+  return ['quota_wait', 'auth_error', 'provider_output', 'error'].includes(classification.status);
 }
 function full(model) {
   const entry = state.models[model];
   if (!entry || !['screen_passed', 'full_incomplete', 'fulling'].includes(entry.status)) return false;
   if (mode === 'screen') return false;
-  const out = path.join(OUT, 'full', safeName(model));
+  entry.full_attempts = (entry.full_attempts ?? 0) + 1;
+  const out = path.join(OUT, 'full', safeName(model), `attempt-${entry.full_attempts}`);
   if (!dry) { entry.status = 'fulling'; entry.updated_at = now(); save(); }
   const run = dry ? { status: 0, error: null, duration_ms: 0, stdout: '', stderr: '' } : runStudy(model, out, null);
   const eps = dry ? [] : episodes(out);
@@ -145,13 +207,13 @@ function report() {
     `Models: ${entries.length}`,
     `Total cap: $${totalCap}; observed spend: $${spent().toFixed(4)}`,
     `Status counts: ${JSON.stringify(counts)}`, '',
-    '| Model | Status | Screen | Full |',
-    '| --- | --- | --- | --- |',
+    '| Model | Status | Screen | Full | Next retry |',
+    '| --- | --- | --- | --- | --- |',
   ];
   for (const entry of entries) {
     const screen = entry.screen?.episodes?.map(e => `${e.condition}:${e.status}${e.correct ? ':correct' : ''}`).join(' ') ?? '';
     const full = entry.status === 'full_complete' ? '90/90' : entry.full ? `${entry.full.episodes?.length ?? 0}/90` : '';
-    lines.push(`| \`${entry.model}\` | ${entry.status} | ${screen} | ${full} |`);
+    lines.push(`| \`${entry.model}\` | ${entry.status} | ${screen} | ${full} | ${entry.next_attempt_at ?? ''} |`);
   }
   writeFileSync(REPORT_MD, lines.join('\n') + '\n');
 }
@@ -162,8 +224,9 @@ for (;;) {
   let pending = false;
   for (const model of allModels) {
     const entry = state.models[model] ??= { status: 'pending', attempts: 0, screen: null, full: null };
-    if (entry.status === 'full_complete' || entry.status === 'not_in_plan' || entry.status === 'unavailable' || entry.status === 'tool_protocol_failure') continue;
-    if (mode !== 'full' && (entry.status === 'pending' || entry.status === 'quota' || entry.status === 'error' || entry.status === 'screening')) {
+    if (terminal.has(entry.status) || entry.status === 'full_complete') continue;
+    if (entry.next_attempt_at && Date.parse(entry.next_attempt_at) > Date.now()) continue;
+    if (mode !== 'full' && ['pending', 'quota_wait', 'auth_error', 'error', 'screening', 'provider_output'].includes(entry.status)) {
       if (screen(model)) pending = true;
     }
     if ((mode === 'all' || mode === 'full') && entry.status === 'screen_passed') {
@@ -177,11 +240,18 @@ for (;;) {
   pass++;
   if (dry) break;
   if (!pending) break;
-  const quotaOrError = allModels.some(model => ['quota', 'error', 'screening', 'fulling', 'full_incomplete'].includes(state.models[model]?.status));
-  if (!quotaOrError) break;
+  const nextAt = allModels
+    .map(model => state.models[model]?.next_attempt_at)
+    .filter(Boolean)
+    .map(Date.parse)
+    .filter(timestamp => Number.isFinite(timestamp) && timestamp > Date.now())
+    .sort((a, b) => a - b)[0];
+  if (!nextAt) break;
+  if (noWait) break;
   if (maxPasses > 0 && pass >= maxPasses) break;
-  console.log(`[wait] ${waitMinutes} minutes before retrying quota/errors (pass ${pass})`);
-  await sleep(waitMinutes * 60 * 1000);
+  const milliseconds = Math.max(1000, Math.min(waitMinutes * 60 * 1000, nextAt - Date.now()));
+  console.log(`[wait] ${Math.ceil(milliseconds / 60000)} minutes; next retry ${new Date(nextAt).toISOString()} (pass ${pass})`);
+  await sleep(milliseconds);
 }
 report();
 console.log(`done: ${REPORT_MD}`);

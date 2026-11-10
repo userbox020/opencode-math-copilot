@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { ROOT, json, loadProfiles, serialize } from '../lib.mjs';
-import { assertPreparedWorkspace, executeEpisode, main, parseOutput, prepareEpisode, sanitizeTask } from '../adapters/opencode.mjs';
+import { assertPreparedWorkspace, executeEpisode, main, modelConfigOverrides, parseOutput, prepareEpisode, sanitizeTask } from '../adapters/opencode.mjs';
 import { auditInventory, F_CORE_TOOLS, normalizePermissions, STATIC_BLOCKER } from '../adapters/inventory-audit.mjs';
 
 const profiles = loadProfiles();
@@ -174,16 +174,41 @@ test('[adapter] mocked execution retains capture; typed final is candidate, neve
 
 test('[adapter] parse failures and nonzero exits never become successful candidates', t => {
   const plan = prepare(t);
-  for (const stdout of ['', 'not json', '{"type":"text","part":{"text":"answer"}}\n', '{"type":"step_finish","part":{"reason":"stop"}}\n', validOutput({ no_type: true }), validOutput({ type: 'numeric', value: 3 }) + '{"type":"error"}\n']) {
+  for (const stdout of ['', 'not json', '{"type":"text","part":{"text":"answer"}}\n', '{"type":"step_finish","part":{"reason":"stop"}}\n', validOutput({ no_type: true })]) {
     const candidate = executeEpisode(plan, { allowExecution: true, audit: auditFor(plan), invoke: () => ({ status: 0, stdout, stderr: '' }) });
     assert.equal(candidate.status, 'extraction_failure');
     assert.equal(candidate.final, null);
     assert.equal(candidate.stdout, stdout);
   }
+  const providerFailure = executeEpisode(plan, { allowExecution: true, audit: auditFor(plan), invoke: () => ({ status: 0, stdout: validOutput({ type: 'numeric', value: 3 }) + '{"type":"error","error":{"type":"provider.quota","message":"quota","status":429}}\n', stderr: '' }) });
+  assert.equal(providerFailure.status, 'provider_error');
+  assert.equal(providerFailure.provider_error.status, 429);
+  assert.equal(providerFailure.final, null);
   const failed = executeEpisode(plan, { allowExecution: true, audit: auditFor(plan), invoke: () => ({ status: 1, stdout: validOutput({ type: 'numeric', value: 3 }), stderr: 'failed' }) });
   assert.equal(failed.status, 'execution_failure');
   assert.equal(failed.final, null);
   assert.equal(parseOutput(validOutput({ type: 'numeric', value: 3 }) + '{"type":"text","part":{"text":"late"}}').status, 'extraction_failure');
+});
+
+test('[adapter] fenced final JSON and provider error events are handled explicitly', t => {
+  const fenced = [
+    { type: 'step_start', part: { messageID: 'assistant-final' } },
+    { type: 'text', part: { messageID: 'assistant-final', text: 'Here is the answer:\n```json\n{"type":"numeric","value":3}\n```' } },
+    { type: 'step_finish', part: { messageID: 'assistant-final', reason: 'stop' } },
+  ].map(JSON.stringify).join('\n') + '\n';
+  const parsed = parseOutput(fenced);
+  assert.equal(parsed.status, 'candidate_ready');
+  assert.deepEqual(parsed.final, { type: 'numeric', value: 3 });
+  const providerError = parseOutput(JSON.stringify({ type: 'error', error: { type: 'provider.quota', message: 'quota exceeded', status: 429 } }) + '\n');
+  assert.equal(providerError.status, 'provider_error');
+  assert.equal(providerError.provider_error.status, 429);
+  assert.match(providerError.error, /quota exceeded/);
+});
+
+test('[adapter] cloudflare model limits are injected into the benchmark config', () => {
+  const overrides = modelConfigOverrides('free-cloudflare/@cf/meta/llama-3.3-70b-instruct-fp8-fast');
+  assert.deepEqual(overrides.provider['free-cloudflare'].models['@cf/meta/llama-3.3-70b-instruct-fp8-fast'].limit, { context: 24000, output: 8192 });
+  assert.deepEqual(modelConfigOverrides('opencode-go/beam-free'), {});
 });
 
 test('[adapter] --tasks default dry-run prints command/config without CLI invocation; unsupported exit is explicit', async t => {

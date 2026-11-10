@@ -197,7 +197,23 @@ function contextFor(task) {
     ? { corpus_available: false, consulted: task.grading.consulted }
     : { corpus_available: true, consulted: task.grading.consulted };
 }
+function providerCategory(providerError) {
+  const message = String(providerError?.message ?? '');
+  const type = String(providerError?.type ?? '');
+  const status = Number(providerError?.status) || null;
+  if (/auth|unauthor|forbidden/i.test(type) || status === 401) return 'auth';
+  if (/not included in your free|not available on the .*plan|Insufficient credits|Insufficient balance|FreeUsageLimit|free usage limit|quota|rate.?limit/i.test(`${type} ${message}`) || status === 402 || status === 429) return 'quota';
+  if (/no longer available|NOT_FOUND|retired/i.test(`${type} ${message}`) || status === 404) return 'retired';
+  if (/maximum context length|context length|input tokens|max.*tokens/i.test(message)) return 'context';
+  if (/invalid-output|stream event|Empty event stream/i.test(`${type} ${message}`)) return 'provider_output';
+  return 'provider_error';
+}
+
 async function evaluate({ task, candidate, leanToolchain, deps }) {
+  if (candidate.status === 'provider_error') {
+    const category = providerCategory(candidate.provider_error);
+    return { status: 'operational_failure', final: null, grade: { correct: false, reason: candidate.error ?? 'provider_error' }, error: { category, message: candidate.error ?? 'provider_error', provider: candidate.provider_error ?? null }, receipt: null };
+  }
   if (candidate.status === 'extraction_failure') {
     return { status: 'extraction_failure', final: null, grade: { correct: false, reason: candidate.error ?? 'extraction_failure' }, error: { category: 'extraction_failure', message: candidate.error ?? 'extraction_failure' }, receipt: null };
   }
@@ -235,7 +251,7 @@ async function executeOne({ ids, task, profile, plan, start, manifest, model, le
     }
     const candidate = deps.executeEpisode(plan, { allowExecution: true, audit, timeoutMs: manifest.budgets.duration_ms });
     const freeModel = isFreeModel(plan.model_id);
-    if (candidate.session_id) {
+    if (candidate.session_id && candidate.status !== 'provider_error' && candidate.status !== 'execution_failure') {
       const recovered = await deps.recoverUsage(plan, candidate);
       if (recovered) { candidate.usage = [recovered]; candidate.usage_source = 'session-export'; }
     }
@@ -256,6 +272,12 @@ async function executeOne({ ids, task, profile, plan, start, manifest, model, le
       schema_version: VERSION, ...ids, key: ids.key, simulated: false,
       family: task.family, domain: task.domain, negative: Boolean(task.negative),
       status: evaluated.status, error: evaluated.error, final: evaluated.final, events,
+      diagnostics: {
+        exit_code: candidate.exit_code ?? null,
+        stdout_tail: String(candidate.stdout ?? '').slice(-4000),
+        stderr_tail: String(candidate.stderr ?? '').slice(-4000),
+        provider_error: candidate.provider_error ?? null,
+      },
       grade: evaluated.grade,
       usage: usage ? { ...usage, tool_calls: events.length } : { tokens: 0, tool_calls: events.length },
       under_budget: false, duration_ms: Number(candidate.duration_ms) || 0,

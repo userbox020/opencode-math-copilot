@@ -154,6 +154,28 @@ export function buildConfig(profile) {
   };
 }
 
+// Some free-provider catalogs advertise the provider default output limit even
+// when a particular model has a much smaller context window. OpenCode then asks
+// for more completion tokens than the model can accept. Keep the override local
+// to the benchmark workspace; it does not change the provider plugin globally.
+export function modelConfigOverrides(model) {
+  const slash = model.indexOf('/');
+  if (slash <= 0) return {};
+  const providerID = model.slice(0, slash);
+  const modelID = model.slice(slash + 1);
+  if (providerID !== 'free-cloudflare' && providerID !== 'cloudflare-workers-ai') return {};
+  const context = modelID === '@cf/meta/llama-3.3-70b-instruct-fp8-fast' ? 24000 : 32768;
+  return {
+    provider: {
+      [providerID]: {
+        models: {
+          [modelID]: { limit: { context, output: 8192 } },
+        },
+      },
+    },
+  };
+}
+
 export function unsupportedReasons(profile) {
   const reasons = ['OpenCode 2.0.29 source supports deny-based catalog filtering, but the effective runtime inventory and exclusive config/session isolation have not been audited. Managed config and host access require evaluator-controlled containment.'];
   if (profile.id === 'B') reasons.push('B has an exact four-tool local generic plugin plus execute transport; runtime filtering/containment and installed Python/SymPy/native Lean availability remain unaudited.');
@@ -186,7 +208,7 @@ export function prepareEpisode({ task, profile, model, executable, environment =
     const files = Object.fromEntries(Object.entries(prepared.files).map(([name, content]) => [name, sha256(content)]));
     put(directory, 'package.json', serialize({ private: true, type: 'module' }), files);
     put(directory, '.audit/inventory-probe.mjs', readFileSync(new URL('./inventory-probe.mjs', import.meta.url)), files);
-    const config = buildConfig(profile);
+    const config = { ...buildConfig(profile), ...modelConfigOverrides(model) };
     const plugin = profile.id === 'F' ? stagePlugin(directory, files, environment) : profile.id === 'B' ? stageGenericPlugin(directory, files) : null;
     if (profile.id === 'B') assert(JSON.stringify(profile.effective_tools) === JSON.stringify(GENERIC_TOOL_NAMES), 'Generic plugin inventory mismatch');
     const provider = stageProviderPlugin(directory, files, environment);
@@ -260,10 +282,62 @@ export function prepareEpisode({ task, profile, model, executable, environment =
   } catch (error) { rmSync(directory, { recursive: true, force: true }); if (externalHome) rmSync(externalHome, { recursive: true, force: true }); throw error; }
 }
 
+function providerErrorFromEvents(events) {
+  const event = events.findLast(item => item.type === 'error' && item.error);
+  if (!event) return null;
+  const error = event.error;
+  let body = error.response?.body;
+  if (typeof body === 'string') {
+    try { body = JSON.parse(body); } catch { /* keep the raw string */ }
+  }
+  const message = body?.error?.message ?? body?.message ?? error.message ?? 'Provider error';
+  const status = Number(error.status ?? body?.error?.code ?? body?.status) || null;
+  const reset = body?.error?.metadata?.headers?.['X-RateLimit-Reset'] ?? body?.retry_after ?? null;
+  const resetNumber = Number(reset);
+  return {
+    type: error.type ?? 'provider.error',
+    message: String(message),
+    status,
+    retry_after_ms: Number.isFinite(resetNumber) && resetNumber > 0
+      ? (resetNumber < 10_000_000_000 ? resetNumber * 1000 : resetNumber)
+      : null,
+  };
+}
+
+// Models often wrap the requested JSON in a markdown fence or put a short
+// explanation before it. Extract the first complete object without accepting
+// arbitrary trailing prose as a valid final.
+export function extractJsonObject(text) {
+  let value = String(text ?? '').replace(/^\uFEFF/, '').trim();
+  value = value.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
+  const fence = value.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fence) value = fence[1].trim();
+  const start = value.indexOf('{');
+  if (start < 0) throw new Error('Missing JSON object');
+  let depth = 0, inString = false, escaped = false;
+  for (let index = start; index < value.length; index++) {
+    const character = value[index];
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (character === '\\') escaped = true;
+      else if (character === '"') inString = false;
+      continue;
+    }
+    if (character === '"') inString = true;
+    else if (character === '{') depth++;
+    else if (character === '}') {
+      depth--;
+      if (depth === 0) return JSON.parse(value.slice(start, index + 1));
+    }
+  }
+  throw new Error('Unterminated JSON object');
+}
+
 // Recognizes the text/step_finish NDJSON envelope only. Unknown installed CLI formats
 // fail closed; raw captures are retained for a later version-specific parser.
 export function parseOutput(stdout) {
   const events = [];
+  const sessionID = () => events.find(event => typeof event.sessionID === 'string')?.sessionID ?? null;
   try {
     for (const line of stdout.split(/\r?\n/).filter(line => line.trim())) {
       const event = JSON.parse(line);
@@ -271,7 +345,10 @@ export function parseOutput(stdout) {
       events.push(event);
     }
     assert(events.length, 'Empty event stream');
-    assert(!events.some(event => event.type === 'error'), 'CLI emitted error event');
+    const providerError = providerErrorFromEvents(events);
+    if (providerError) {
+      return { status: 'provider_error', final: null, final_text: null, events, usage: null, session_id: sessionID(), error: providerError.message, provider_error: providerError };
+    }
     const lastFinish = events.findLastIndex(event => event.type === 'step_finish');
     const validFinish = lastFinish >= 0 && ['stop', 'end_turn'].includes(events[lastFinish].part?.reason)
       && !events.slice(lastFinish + 1).some(event => ['text', 'step_start', 'tool_use'].includes(event.type));
@@ -297,12 +374,11 @@ export function parseOutput(stdout) {
       usage = steps.length ? steps : null;
     }
     assert(finalText.trim(), 'Missing final assistant text');
-    const final = JSON.parse(finalText);
+    const final = extractJsonObject(finalText);
     assert(final && !Array.isArray(final) && typeof final === 'object' && typeof final.type === 'string', 'Missing typed JSON final');
-    const sessionID = events.find(event => typeof event.sessionID === 'string')?.sessionID ?? null;
-    return { status: 'candidate_ready', final, final_text: finalText, events, usage, usage_source: usage ? 'unvalidated-cli-events' : 'unavailable-no-step-finish', session_id: sessionID, error: null };
+    return { status: 'candidate_ready', final, final_text: finalText, events, usage, usage_source: usage ? 'unvalidated-cli-events' : 'unavailable-no-step-finish', session_id: sessionID(), error: null };
   } catch (error) {
-    return { status: 'extraction_failure', final: null, final_text: null, events, usage: null, session_id: events.find(event => typeof event.sessionID === 'string')?.sessionID ?? null, error: error.message };
+    return { status: 'extraction_failure', final: null, final_text: null, events, usage: null, session_id: sessionID(), error: error.message };
   }
 }
 
@@ -362,13 +438,19 @@ export function executeEpisode(plan, { allowExecution = false, invoke = spawnSyn
   } catch (error) { result = { status: null, error, stdout: '', stderr: '' }; }
   const stdout = String(result.stdout ?? '');
   const stderr = String(result.stderr ?? '');
-  const parsed = result.status === 0 && !result.error ? parseOutput(stdout) : {
-    status: 'execution_failure', final: null, events: [], usage: null,
-    error: result.error?.message ?? `OpenCode exit ${result.status}`,
-  };
+  const observed = parseOutput(stdout);
+  const parsed = result.status === 0 && !result.error
+    ? observed
+    : observed.status === 'provider_error'
+      ? observed
+      : {
+        status: 'execution_failure', final: null, events: observed.events ?? [], usage: null,
+        error: result.error?.message ?? `OpenCode exit ${result.status}`,
+      };
   return {
     schema: 'math-opencode-candidate/v1', simulated: false, task_id: plan.task_id,
     condition_id: plan.condition_id, model_id: plan.model_id, ...parsed,
+    provider_error: parsed.provider_error ?? null,
     duration_ms: performance.now() - start, exit_code: result.status, stdout, stderr,
     hashes: { ...plan.hashes, stdout: sha256(stdout), stderr: sha256(stderr) },
     verification: { status: plan.task_type === 'formal' ? 'pending' : 'not-requested', receipt: null },

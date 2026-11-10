@@ -14,8 +14,26 @@ A full 90-episode pilot for all 75 models would be 6,750 episodes. Instead:
 1. **Screen every model** with a 3-episode A/B/F slice of the first provisional task.
 2. **Run the full 90** only for models whose A/B/F slice completes (the model can produce a final answer with the tools).
 3. Models whose B/F slice is an extraction/operational failure are recorded as `tool_protocol_failure`; running 90 episodes would only multiply fixtures that cannot be scored.
-4. Quota errors are retried every `--wait-minutes`; `402 not included in free plan` and `model not listed` are terminal; no fake success.
+4. Quota/auth errors are recorded with `next_attempt_at` and retried after a per-provider wait; `not included in the free plan`, retired models, and context/config errors are terminal until reset; no fake success.
 5. The free matrix is an exploratory **feasibility/robustness** appendix. It is not the confirmatory DeepSeek pilot and not paper evidence.
+
+## Retry statuses
+
+The runner now records the provider error event instead of collapsing it to
+`OpenCode exit 1`:
+
+- `quota_wait` — 402/429/credit/balance exhaustion; retried after the provider wait or `X-RateLimit-Reset`.
+- `auth_error` — provider/integration authentication failure; retried after 15 minutes.
+- `not_in_plan` — model is not in the upstream free plan; terminal.
+- `unavailable` — retired or unlisted model; terminal.
+- `config_error` — context/output-limit mismatch; terminal until reset.
+- `provider_output` — provider stream/event bug; retried after the provider wait.
+- `tool_protocol_failure` / `error` — parser or adapter failure; terminal until reset.
+
+`--reset <regex>` resets matching non-`full_complete` entries to `pending`.
+`--no-wait` exits after the current pass instead of sleeping until the next
+`next_attempt_at`. Retries use a new `screen/<model>/attempt-N` directory so a
+resumed study never reuses a different protocol directory.
 
 ## Run
 
@@ -29,6 +47,20 @@ node bench/v2/free-models/run-matrix.mjs --mode all --wait-minutes 30
 - Full outputs: `free-matrix/full/<model>/`
 - Subset: `--only 'free-cloudflare|opencode/'`
 - Screen only: `--mode screen`; full only: `--mode full`.
+- Reset and retry one provider now: `--only '^opencode-go/' --reset '^opencode-go/' --max-passes 1 --no-wait`.
+
+Cloudflare’s free adapters advertise a 32k output default even for the
+24k-context Llama model. The adapter now injects
+`limit: { context: 24000, output: 8192 }` for
+`free-cloudflare/@cf/meta/llama-3.3-70b-instruct-fp8-fast`, and an 8192 output
+limit for other Cloudflare models. The remaining Cloudflare `invalid-output`
+stream events are provider/plugin bugs, not context-limit failures.
+
+OpenAI balance is not sufficient for this harness: the copied safe home has an
+OpenAI OAuth credential, but `opencode run --standalone` still returns
+`Integration.Authorization: Request failed: 400`. Re-authenticate OpenAI in the
+safe home before running the OpenAI queue; without that, the queue records
+`auth_error` and does not spend the balance.
 
 The queue uses the safe credential home, the staged math indexes and `MATH_TOOLKIT_MATH_ROOT`, and the study runner's 600 s/40-tool-call/200k-token/$1-per-episode budgets with a $25 cap. Free models are recorded at cost 0. No credential is written to the output; the output can be copied after the run, but the safe home must not be committed.
 
