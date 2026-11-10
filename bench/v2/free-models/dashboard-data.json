@@ -1,13 +1,13 @@
 {
   "schema": "math-copilot-dashboard/v1",
-  "generated_at": "2026-11-10T21:44:45.835Z",
+  "generated_at": "2026-11-10T21:45:09.080Z",
   "project": {
     "name": "OpenCode Math Copilot",
     "repo": "C:/_Work/opencode-math-copilot",
     "branch": "main",
-    "commit": "e91cddc",
-    "commit_message": "Capture provider errors and add quota retry scheduling",
-    "dirty": true,
+    "commit": "a2906a1",
+    "commit_message": "Add benchmark status dashboard",
+    "dirty": false,
     "ci": "last known: green for e91cddc (Test + Security)",
     "conditions": [
       "A",
