@@ -110,6 +110,7 @@ const report = {
       'Exploratory real-model pilot; not confirmatory evidence.',
       '30 provisional tasks, one repeat, three conditions.',
       'Contract success is not mathematical accuracy.',
+      'The pilot predates fenced-JSON extraction: 6 B and 4 F episodes were extraction failures, not tool-execution failures; scores are not retroactively changed.',
       'F−B family-bootstrap 95% interval was [−10, 0] in the recorded pilot.',
       'B only had supplied excerpts; F had corpus/index access, so the comparison is not fully resource-matched.',
     ],
