@@ -22,6 +22,7 @@ const noWait = args.includes('--no-wait');
 const perProvider = Math.max(1, Number(option('--per-provider', '2')));
 const concurrency = Math.max(1, Number(option('--concurrency', '8')));
 const studyTimeoutMinutes = Math.max(1, Number(option('--study-timeout-min', '15')));
+const fullTimeoutMinutes = Math.max(studyTimeoutMinutes, Number(option('--full-timeout-min', '240')));
 const dry = args.includes('--dry');
 const OUT = option('--out', OUT_DEFAULT);
 const MODELS_FILE = option('--models', path.join(REPO, 'bench/v2/free-models/models.json'));
@@ -99,7 +100,7 @@ if (reset) {
 let recovered = 0;
 for (const entry of Object.values(state.models)) {
   if (!['screening', 'fulling'].includes(entry.status)) continue;
-  entry.status = 'pending';
+  entry.status = entry.status === 'fulling' ? 'full_incomplete' : 'pending';
   entry.next_attempt_at = null;
   entry.last_error = 'recovered stale active status at startup';
   entry.updated_at = now();
@@ -107,7 +108,7 @@ for (const entry of Object.values(state.models)) {
 }
 if (recovered) {
   save();
-  console.log(`[recover] ${recovered} stale active entries reset to pending`);
+  console.log(`[recover] ${recovered} stale active entries reset (fulling -> full_incomplete, screening -> pending)`);
 }
 
 function episodes(out) {
@@ -163,6 +164,7 @@ function runStudy(model, out, limit) {
   return new Promise(resolve => {
     let settled = false, timer;
     let stdout = '', stderr = '';
+    const timeoutMinutes = limit ? studyTimeoutMinutes : fullTimeoutMinutes;
     const finish = value => { if (settled) return; settled = true; if (timer) clearTimeout(timer); resolve(value); };
     const child = spawn(process.execPath, studyArgs, {
       cwd: REPO, env, shell: false, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'],
@@ -172,8 +174,8 @@ function runStudy(model, out, limit) {
         if (process.platform === 'win32') spawnSync('taskkill.exe', ['/PID', String(child.pid), '/T', '/F'], { windowsHide: true, shell: false, timeout: 10000, encoding: 'utf8' });
         else process.kill(-child.pid, 'SIGKILL');
       } catch { /* the close event below still records the timeout */ }
-      finish({ status: null, error: `study timeout after ${studyTimeoutMinutes} minutes`, duration_ms: Date.now() - started, stdout: tail(stdout), stderr: tail(stderr) });
-    }, studyTimeoutMinutes * 60 * 1000);
+      finish({ status: null, error: `study timeout after ${timeoutMinutes} minutes`, duration_ms: Date.now() - started, stdout: tail(stdout), stderr: tail(stderr) });
+    }, timeoutMinutes * 60 * 1000);
     child.stdout.on('data', chunk => { stdout = tail(`${stdout}${chunk.toString('utf8')}`, 1_000_000); });
     child.stderr.on('data', chunk => { stderr = tail(`${stderr}${chunk.toString('utf8')}`, 1_000_000); });
     child.on('error', error => finish({ status: null, error: error.message, duration_ms: Date.now() - started, stdout: tail(stdout), stderr: tail(stderr) }));
