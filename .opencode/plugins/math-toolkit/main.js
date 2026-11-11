@@ -250,6 +250,23 @@ function makeExecutors(roots) {
   };
 }
 
+// Normal-use mode keeps the high-value tools and defers PDF, build, Comparator,
+// reindex and other low-frequency tools. The full toolset remains the default.
+export const MINIMAL_TOOLS = new Set([
+  "math_search",
+  "math_manuscript",
+  "math_grep",
+  "math_compute",
+  "math_lean_verify",
+  "math_status",
+]);
+export function selectedToolNames(environment = process.env) {
+  const names = Object.keys(inputs);
+  return environment.MATH_TOOLKIT_TOOLSET === "minimal"
+    ? names.filter(name => MINIMAL_TOOLS.has(name))
+    : names;
+}
+
 const descriptions = {
   math_doctor: "Report bounded corpus, index/cache, disk, Docker image/volume and host-tool health with actionable setup hints. Does not run Lean or build Docker images.",
   math_pdf_index_search: "Search prebuilt PDF excerpt lines by literal text or regex, grouped by path/page/line. Default excerpts are the first 2 pages only, not a full-text corpus; no OCR. Use math_pdf_search for deeper page lookup.",
@@ -281,7 +298,7 @@ export default Plugin.define({
     });
     const executors = makeExecutors(roots);
     await ctx.tool.transform((editor) => {
-      for (const name of Object.keys(inputs)) {
+      for (const name of selectedToolNames()) {
         editor.add({
           name,
           description: descriptions[name],

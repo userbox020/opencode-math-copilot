@@ -4,9 +4,13 @@ This track measures plugin behavior in a **normal OpenCode session**, not the
 strict A/B/F benchmark contract.
 
 - Workspace: `C:\_Work\__OPENAI_MATH` (the actual math workspace with `math/`)
-- Conditions: `plugin-on` and `plugin-off`
+- Conditions: `plugin-on` (full 16-tool plugin), `plugin-on-minimal` (six core
+  tools), and `plugin-off`
 - Plugin off: `MATH_TOOLKIT_DISABLE=1` makes the math-toolkit plugin load but
   register no tools.
+- Minimal mode: `MATH_TOOLKIT_TOOLSET=minimal` registers `math_search`,
+  `math_manuscript`, `math_grep`, `math_compute`, `math_lean_verify`, and
+  `math_status`.
 - Output: free-form final text; no typed-JSON answer contract.
 - Primary metric: **human rubric score** in `review.csv`; the runner does not
   assign mathematical correctness automatically.

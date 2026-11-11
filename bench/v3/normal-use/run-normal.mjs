@@ -9,7 +9,7 @@ const WORKSPACE = 'C:/_Work/__OPENAI_MATH';
 const OUT_DEFAULT = 'C:/Users/MiPC/AppData/Local/Temp/opencode/normal-use';
 const TASKS_DEFAULT = path.join(HERE, 'tasks/normal-v1.json');
 const EXECUTE_ENV = 'NORMAL_USE_ALLOW_EXECUTE';
-const CONDITIONS = ['plugin-on', 'plugin-off'];
+const CONDITIONS = ['plugin-on', 'plugin-on-minimal', 'plugin-off'];
 
 const args = process.argv.slice(2);
 const option = (name, fallback) => {
@@ -48,8 +48,10 @@ function resolveExecutable(env = process.env) {
 
 export function pluginEnvironment(condition, environment = process.env) {
   const env = { ...environment };
+  delete env.MATH_TOOLKIT_DISABLE;
+  delete env.MATH_TOOLKIT_TOOLSET;
   if (condition === 'plugin-off') env.MATH_TOOLKIT_DISABLE = '1';
-  else delete env.MATH_TOOLKIT_DISABLE;
+  else if (condition === 'plugin-on-minimal') env.MATH_TOOLKIT_TOOLSET = 'minimal';
   return env;
 }
 
@@ -194,7 +196,8 @@ function main() {
         const parsed = parseNormalEvents(result.stdout);
         const episode = {
           schema: 'normal-use-episode/v1', study_id: studyId, model, task_id: task.id, task_type: task.type,
-          family: task.family, condition, repeat_id: repeatId, plugin_enabled: condition === 'plugin-on',
+          family: task.family, condition, repeat_id: repeatId, plugin_enabled: condition !== 'plugin-off',
+          toolset: condition === 'plugin-on-minimal' ? 'minimal' : condition === 'plugin-on' ? 'full' : null,
           status: result.error ? 'operational_failure' : parsed.status,
           final_text: clean(parsed.final_text, 20000),
           error: result.error?.message ?? parsed.error,

@@ -35,6 +35,9 @@ test('[normal-use] plugin off uses the explicit disable hook; plugin on removes 
   assert.equal(off.MATH_TOOLKIT_DISABLE, '1');
   const on = pluginEnvironment('plugin-on', { PATH: 'x', MATH_TOOLKIT_DISABLE: '1' });
   assert.equal(on.MATH_TOOLKIT_DISABLE, undefined);
+  const minimal = pluginEnvironment('plugin-on-minimal', { PATH: 'x', MATH_TOOLKIT_TOOLSET: 'full' });
+  assert.equal(minimal.MATH_TOOLKIT_DISABLE, undefined);
+  assert.equal(minimal.MATH_TOOLKIT_TOOLSET, 'minimal');
 });
 
 test('[normal-use] prompt is free-form and read-only', () => {
