@@ -47,6 +47,9 @@ npm run normal:run -- --dry-run --limit 2
 
 ## Scope
 
+Latest result: [RESULTS.md](RESULTS.md) — both conditions 6/6, plugin-on slower
+and more expensive on this small suite.
+
 This is a user-facing evaluation track. It complements, rather than replaces,
 the controlled A/B/F benchmark. Do not compare its scores directly with
 `pilot-v1` contract success.
