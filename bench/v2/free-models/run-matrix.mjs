@@ -1,5 +1,5 @@
 import { spawn, spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 const REPO = 'C:/_Work/opencode-math-copilot';
@@ -12,17 +12,25 @@ const option = (name, fallback) => {
   const index = args.indexOf(name);
   return index >= 0 && args[index + 1] ? args[index + 1] : fallback;
 };
+const positiveInt = (value, fallback) => {
+  const number = Number(value);
+  return Number.isInteger(number) && number > 0 ? number : fallback;
+};
+const positiveNumber = (value, fallback) => {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? number : fallback;
+};
 const mode = option('--mode', 'all');
-const waitMinutes = Number(option('--wait-minutes', '30'));
-const maxPasses = Number(option('--max-passes', '0'));
-const screenLimit = Number(option('--screen-limit', '3'));
+const waitMinutes = positiveNumber(option('--wait-minutes', '30'), 30);
+const maxPasses = Math.max(0, Number(option('--max-passes', '0')) || 0);
+const screenLimit = positiveInt(option('--screen-limit', '3'), 3);
 const only = option('--only', null);
 const reset = option('--reset', null);
 const noWait = args.includes('--no-wait');
-const perProvider = Math.max(1, Number(option('--per-provider', '2')));
-const concurrency = Math.max(1, Number(option('--concurrency', '8')));
-const studyTimeoutMinutes = Math.max(1, Number(option('--study-timeout-min', '15')));
-const fullTimeoutMinutes = Math.max(studyTimeoutMinutes, Number(option('--full-timeout-min', '240')));
+const perProvider = positiveInt(option('--per-provider', '2'), 2);
+const concurrency = positiveInt(option('--concurrency', '8'), 8);
+const studyTimeoutMinutes = positiveInt(option('--study-timeout-min', '15'), 15);
+const fullTimeoutMinutes = Math.max(studyTimeoutMinutes, positiveInt(option('--full-timeout-min', '240'), 240));
 const dry = args.includes('--dry');
 const OUT = option('--out', OUT_DEFAULT);
 const MODELS_FILE = option('--models', path.join(REPO, 'bench/v2/free-models/models.json'));
@@ -32,9 +40,17 @@ const REPORT_JSON = path.join(OUT, 'matrix-report.json');
 const REPORT_MD = path.join(OUT, 'matrix-report.md');
 const totalCap = Number(option('--total-cap-usd', '25'));
 mkdirSync(OUT, { recursive: true });
-const allModels = JSON.parse(readFileSync(MODELS_FILE, 'utf8')).models.filter(model => !only || new RegExp(only).test(model));
+const loadedModels = JSON.parse(readFileSync(MODELS_FILE, 'utf8')).models.filter(model => !only || new RegExp(only).test(model));
+const allModels = [...new Set(loadedModels)];
+if (allModels.length !== loadedModels.length) throw new Error('Duplicate model IDs in the selected model list');
 const state = existsSync(STATE_FILE) ? JSON.parse(readFileSync(STATE_FILE, 'utf8')) : { created_at: new Date().toISOString(), source: MODELS_FILE, models: {} };
-const save = () => writeFileSync(STATE_FILE, JSON.stringify(state, null, 2) + '\n');
+const save = () => {
+  const content = JSON.stringify(state, null, 2) + '\n';
+  const temporary = `${STATE_FILE}.tmp`;
+  writeFileSync(temporary, content);
+  try { renameSync(temporary, STATE_FILE); }
+  catch { writeFileSync(STATE_FILE, content); }
+};
 const safeName = model => model.replace(/[^a-z0-9._-]+/gi, '-').replace(/-+/g, '-').slice(0, 110);
 const now = () => new Date().toISOString();
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -100,6 +116,7 @@ if (reset) {
 let recovered = 0;
 for (const entry of Object.values(state.models)) {
   if (!['screening', 'fulling'].includes(entry.status)) continue;
+  if (entry.status === 'screening') entry.attempts = (entry.attempts ?? 0) + 1;
   entry.status = entry.status === 'fulling' ? 'full_incomplete' : 'pending';
   entry.next_attempt_at = null;
   entry.last_error = 'recovered stale active status at startup';
@@ -221,6 +238,7 @@ async function full(model) {
   if (dry) { console.log(`[dry] full ${model}`); return true; }
   entry.full = { out, run, classification: eps.length === 90 ? 'full_complete' : 'full_incomplete', episodes: summarize(eps) };
   entry.status = eps.length === 90 ? 'full_complete' : 'full_incomplete';
+  entry.next_attempt_at = entry.status === 'full_incomplete' ? retryAt(model, 'full_incomplete', null) : null;
   entry.last_error = run.error ?? (eps.length === 90 ? null : `full episodes ${eps.length}/90`);
   entry.updated_at = now();
   save();
@@ -261,11 +279,11 @@ function eligibleTask(model) {
   }
   return null;
 }
-function markModelError(model, error) {
+function markModelError(model, error, phase = 'screen') {
   const entry = state.models[model] ??= { status: 'error', attempts: 0, screen: null, full: null };
-  entry.status = 'error';
+  entry.status = phase === 'full' ? 'full_incomplete' : 'error';
   entry.last_error = error.message;
-  entry.next_attempt_at = retryAt(model, 'error', null);
+  entry.next_attempt_at = retryAt(model, entry.status, null);
   entry.updated_at = now();
   save();
 }
@@ -279,7 +297,7 @@ async function runModel(task) {
       waiting ||= fullPending;
     }
   } catch (error) {
-    markModelError(task.model, error);
+    markModelError(task.model, error, task.phase);
     console.error(`[error] ${task.model}: ${error.message}`);
     waiting = true;
   }
@@ -300,7 +318,7 @@ async function runPass() {
         active++;
         providerActive.set(task.provider, (providerActive.get(task.provider) ?? 0) + 1);
         runModel(task).then(result => { if (result) pending = true; }).catch(error => {
-          markModelError(task.model, error);
+          markModelError(task.model, error, task.phase);
           pending = true;
         }).finally(() => {
           active--;
@@ -322,13 +340,13 @@ for (;;) {
   report();
   pass++;
   if (dry) break;
-  if (!pending) break;
   const nextAt = allModels
     .map(model => state.models[model]?.next_attempt_at)
     .filter(Boolean)
     .map(Date.parse)
     .filter(timestamp => Number.isFinite(timestamp) && timestamp > Date.now())
     .sort((a, b) => a - b)[0];
+  if (!pending && !nextAt) break;
   if (!nextAt) break;
   if (noWait) break;
   if (maxPasses > 0 && pass >= maxPasses) break;
