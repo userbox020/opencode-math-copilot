@@ -1,7 +1,9 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
-const out = path.resolve(process.argv[2] || 'C:/Users/MiPC/AppData/Local/Temp/opencode/normal-use-v1');
+const args = process.argv.slice(2);
+const outOption = args.indexOf('--out');
+const out = path.resolve(outOption >= 0 ? args[outOption + 1] : (args[0] || 'C:/Users/MiPC/AppData/Local/Temp/opencode/normal-use-v1'));
 const readJsonl = file => existsSync(file) ? readFileSync(file, 'utf8').trim().split('\n').filter(Boolean).map(line => JSON.parse(line)) : [];
 const parseCsv = text => {
   const rows = [];
