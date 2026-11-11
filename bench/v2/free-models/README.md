@@ -104,6 +104,10 @@ npm run status:models
 This writes `all-model-status.csv` and `all-model-status.md` under
 `C:\Users\MiPC\AppData\Local\Temp\opencode\`.
 
+`scores.html` is the dedicated score comparison page: historical with/without
+plugin, real pilot A/B/F, and full-complete matrix model scores. Generate its
+data with `npm run scores:report`, then open the page or use the live server.
+
 For a live view, run:
 
 ```text

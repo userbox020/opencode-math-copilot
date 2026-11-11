@@ -10,6 +10,7 @@ const port = Number(portArg ? process.argv[process.argv.indexOf('--port') + 1] :
 const generators = {
   dashboard: path.join(ROOT, 'build-dashboard.mjs'),
   live: path.join(ROOT, 'build-live.mjs'),
+  scores: path.join(ROOT, 'build-score-report.mjs'),
 };
 const cache = new Map();
 function regenerate(kind) {
@@ -29,7 +30,7 @@ function injectLive(html) {
   return html.includes('</body>') ? html.replace('</body>', `${live}</body>`) : `${html}${live}`;
 }
 const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8' };
-const files = new Set(['dashboard.html', 'dashboard-data.js', 'dashboard-data.json', 'running.html', 'running-data.js', 'running-data.json']);
+const files = new Set(['dashboard.html', 'dashboard-data.js', 'dashboard-data.json', 'running.html', 'running-data.js', 'running-data.json', 'scores.html', 'scores-data.js', 'scores-data.json']);
 
 const server = createServer((request, response) => {
   try {
@@ -50,7 +51,7 @@ const server = createServer((request, response) => {
       response.end('Not found');
       return;
     }
-    const kind = name.startsWith('running') ? 'live' : 'dashboard';
+    const kind = name.startsWith('running') ? 'live' : name.startsWith('scores') ? 'scores' : 'dashboard';
     const error = regenerate(kind);
     const file = path.join(ROOT, name);
     if (!existsSync(file)) {
