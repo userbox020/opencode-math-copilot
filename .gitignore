@@ -13,3 +13,5 @@ bench/v2/free-models/running-data.js
 bench/v2/free-models/running-data.json
 bench/v2/free-models/scores-data.js
 bench/v2/free-models/scores-data.json
+bench/v3/normal-use/normal-use-data.js
+bench/v3/normal-use/normal-use-data.json

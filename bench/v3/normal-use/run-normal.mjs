@@ -56,7 +56,7 @@ export function pluginEnvironment(condition, environment = process.env) {
 }
 
 export function normalPrompt(task) {
-  return `${task.prompt}\n\nAnswer naturally in prose. Do not wrap the whole answer in a JSON object unless the request explicitly requires it. If you use the corpus, cite the document and locator where relevant. Do not modify repository files.`;
+  return `${task.prompt}\n\nAnswer naturally in prose. Do not wrap the whole answer in a JSON object unless the request explicitly requires it. If you use the corpus, cite the document and locator where relevant. Do not modify repository files.\n\nTool policy: use the fewest calls needed. Start with one targeted search, open only the relevant source, and do not repeat the same search. Use PDF tools only when no TeX source is available.`;
 }
 
 export function parseNormalEvents(stdout) {

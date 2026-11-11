@@ -39,6 +39,7 @@
     "scores:report": "node bench/v2/free-models/build-score-report.mjs",
     "normal:run": "node bench/v3/normal-use/run-normal.mjs",
     "normal:report": "node bench/v3/normal-use/report-normal.mjs",
+    "normal:page": "node bench/v3/normal-use/build-normal-page.mjs",
     "normal:test": "node --test bench/v3/normal-use/tests/normal.test.mjs",
     "check": "node scripts/check-syntax.mjs",
     "index": "node .opencode/plugins/math-toolkit/scripts/build-index.mjs",

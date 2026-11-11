@@ -1,0 +1,28 @@
+[
+  {
+    "id": "hard-pdf-hanner-page",
+    "type": "retrieval",
+    "family": "geometry",
+    "prompt": "Using the released PDF for the symmetric Mahler conjecture manuscript rather than the TeX source, find Lemma 2.2 (“The Hanner volume product”). Report the PDF filename and page number, quote the sentence that closes the lemma, and say this is the manuscript’s claim rather than independent verification.",
+    "correct_final": {
+      "document": "math/preprints/The-symmetric-Mahler-conjecture-and-its-equality-cases-September-22-2026/paper.pdf",
+      "page": 6,
+      "claim": "The polar of a linear Hanner body is again a linear Hanner body."
+    },
+    "notes": "Hard PDF-only task for the full toolset; minimal excludes PDF tools."
+  },
+  {
+    "id": "hard-lean-verify-receipt",
+    "type": "formal",
+    "family": "foundations",
+    "prompt": "Produce Lean 4 code for `theorem pilot_geometry_identity : (n : Nat) -> n = n` using only `import Init`, then obtain a strict `math-lean-verify/v1` receipt under the allowed axioms `propext`, `Quot.sound`, and `Classical.choice`. Report the theorem name, expected type, code, and receipt status.",
+    "correct_final": {
+      "theorem": "pilot_geometry_identity",
+      "expected_type": "(n : Nat) -> n = n",
+      "code": "import Init\n\ntheorem pilot_geometry_identity : (n : Nat) -> n = n := by\n  intro n\n  rfl\n",
+      "allowed_axioms": ["propext", "Quot.sound", "Classical.choice"],
+      "receipt_status": "verified"
+    },
+    "notes": "Hard Lean task; plugin has math_lean_verify, plugin-off must use shell/toolchain."
+  }
+]
