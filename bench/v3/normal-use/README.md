@@ -51,8 +51,9 @@ npm run normal:run -- --dry-run --limit 2
 
 ## Scope
 
-Latest result: [RESULTS.md](RESULTS.md) — both conditions 6/6, plugin-on slower
-and more expensive on this small suite.
+Latest result: [RESULTS.md](RESULTS.md) — full plugin, minimal plugin, and
+plugin-off all scored 6/6; both plugin modes were slower and more expensive than
+plugin-off, and minimal mode did not reduce overhead.
 
 This is a user-facing evaluation track. It complements, rather than replaces,
 the controlled A/B/F benchmark. Do not compare its scores directly with

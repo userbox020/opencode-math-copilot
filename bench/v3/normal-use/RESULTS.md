@@ -69,6 +69,27 @@ citation, but used 25 math calls and took three times as long as plugin-off.
 - `...\report.json`
 - `...\summary.json`
 
+## Minimal-toolset follow-up (v2)
+
+A second 6-task run compared the full 16-tool plugin, the six-tool minimal
+toolset, and plugin-off.
+
+| Condition | Correct | Mean time | Tokens | Cost | Tool calls | Math calls |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| plugin-on | **6/6** | **32s** | 69,092 | **$0.01209** | 15 | 9 |
+| plugin-on-minimal | **6/6** | 37s | 72,584 | $0.01324 | 19 | 13 |
+| plugin-off | **6/6** | **23s** | 49,263 | **$0.00847** | 11 | 0 |
+
+The minimal toolset did **not** reduce latency or cost in this run. The full
+plugin was slightly faster and cheaper than minimal; plugin-off remained the
+fastest and cheapest. The Hanner task used 5 math calls with the full plugin, 6
+with minimal, and 0 with plugin-off.
+
+This is a negative result for the “fewer tools = less overhead” hypothesis.
+Toolset size alone is not the lever; tool-selection policy, redundant calls, and
+task difficulty matter more. The difference from v1 (full plugin: 60s, 29 math
+calls) also shows high run-to-run variance with six tasks.
+
 ## Next steps
 
 1. Expand to more tasks, especially retrieval/Lean tasks where tools should help.
