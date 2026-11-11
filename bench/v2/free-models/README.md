@@ -49,6 +49,8 @@ node bench/v2/free-models/run-matrix.mjs --mode all --wait-minutes 30
 - Screen only: `--mode screen`; full only: `--mode full`.
 - Reset and retry one provider now: `--only '^opencode-go/' --reset '^opencode-go/' --max-passes 1 --no-wait`.
 - Concurrency: `--per-provider 2` (default) and `--concurrency 8` (default global cap). Providers can advance in parallel, but no provider runs more than two models at once. Each model still runs A/B/F episodes sequentially.
+- Timeouts: `--study-timeout-min 15` for screening; `--full-timeout-min 240` for full 90-episode studies.
+- Score export: `npm run scores:report` writes the pilot and full-run A/B/F score report.
 
 Cloudflare’s free adapters advertise a 32k output default even for the
 24k-context Llama model. The adapter now injects
