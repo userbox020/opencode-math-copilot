@@ -20,6 +20,10 @@ const positiveNumber = (value, fallback) => {
   const number = Number(value);
   return Number.isFinite(number) && number > 0 ? number : fallback;
 };
+const positiveTimerMinutes = (value, fallback) => {
+  const minutes = positiveInt(value, fallback);
+  return minutes * 60 * 1000 <= 2_147_483_647 ? minutes : fallback;
+};
 const mode = option('--mode', 'all');
 const waitMinutes = positiveNumber(option('--wait-minutes', '30'), 30);
 const maxPasses = Math.max(0, Number(option('--max-passes', '0')) || 0);
@@ -29,8 +33,8 @@ const reset = option('--reset', null);
 const noWait = args.includes('--no-wait');
 const perProvider = positiveInt(option('--per-provider', '2'), 2);
 const concurrency = positiveInt(option('--concurrency', '8'), 8);
-const studyTimeoutMinutes = positiveInt(option('--study-timeout-min', '15'), 15);
-const fullTimeoutMinutes = Math.max(studyTimeoutMinutes, positiveInt(option('--full-timeout-min', '240'), 240));
+const studyTimeoutMinutes = positiveTimerMinutes(option('--study-timeout-min', '15'), 15);
+const fullTimeoutMinutes = Math.max(studyTimeoutMinutes, positiveTimerMinutes(option('--full-timeout-min', '240'), 240));
 const dry = args.includes('--dry');
 const OUT = option('--out', OUT_DEFAULT);
 const MODELS_FILE = option('--models', path.join(REPO, 'bench/v2/free-models/models.json'));
@@ -48,8 +52,12 @@ const save = () => {
   const content = JSON.stringify(state, null, 2) + '\n';
   const temporary = `${STATE_FILE}.tmp`;
   writeFileSync(temporary, content);
-  try { renameSync(temporary, STATE_FILE); }
-  catch { writeFileSync(STATE_FILE, content); }
+  let lastError;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try { renameSync(temporary, STATE_FILE); return; }
+    catch (error) { lastError = error; }
+  }
+  throw new Error(`state save failed: ${lastError?.message ?? 'rename failed'}; temporary file preserved at ${temporary}`);
 };
 const safeName = model => model.replace(/[^a-z0-9._-]+/gi, '-').replace(/-+/g, '-').slice(0, 110);
 const now = () => new Date().toISOString();
@@ -289,15 +297,17 @@ function markModelError(model, error, phase = 'screen') {
 }
 async function runModel(task) {
   let waiting = false;
+  let phase = task.phase;
   try {
     if (task.phase === 'screen') waiting = await screen(task.model);
     const entry = state.models[task.model];
     if (entry && (mode === 'all' || mode === 'full') && ['screen_passed', 'full_incomplete', 'fulling'].includes(entry.status)) {
+      phase = 'full';
       const fullPending = await full(task.model);
       waiting ||= fullPending;
     }
   } catch (error) {
-    markModelError(task.model, error, task.phase);
+    markModelError(task.model, error, phase);
     console.error(`[error] ${task.model}: ${error.message}`);
     waiting = true;
   }
@@ -340,6 +350,9 @@ for (;;) {
   report();
   pass++;
   if (dry) break;
+  if (maxPasses > 0 && pass >= maxPasses) break;
+  const dueNow = allModels.some(model => eligibleTask(model));
+  if (dueNow) continue;
   const nextAt = allModels
     .map(model => state.models[model]?.next_attempt_at)
     .filter(Boolean)
@@ -349,7 +362,6 @@ for (;;) {
   if (!pending && !nextAt) break;
   if (!nextAt) break;
   if (noWait) break;
-  if (maxPasses > 0 && pass >= maxPasses) break;
   const milliseconds = Math.max(1000, Math.min(waitMinutes * 60 * 1000, nextAt - Date.now()));
   console.log(`[wait] ${Math.ceil(milliseconds / 60000)} minutes; next retry ${new Date(nextAt).toISOString()} (pass ${pass})`);
   await sleep(milliseconds);
