@@ -1,0 +1,70 @@
+[
+  {
+    "id": "normal-retrieval-hanner",
+    "type": "retrieval",
+    "family": "geometry",
+    "source_task": "pilot-retrieval-geometry",
+    "prompt": "Search the math corpus for the sentence stating that linear Hanner bodies are closed under polarity. Quote it, cite the document and locator, and say that this is what the source claims rather than independent verification.",
+    "correct_final": {
+      "document": "math/preprints/The-symmetric-Mahler-conjecture-and-its-equality-cases-September-22-2026/build/sections/convex-preliminaries.tex",
+      "locator": "L87-L93",
+      "claim": "The polar of a linear Hanner body is again a linear Hanner body."
+    },
+    "notes": "Normal-use retrieval task; reference is the source sentence, not a JSON contract."
+  },
+  {
+    "id": "normal-retrieval-characteristic-two-date",
+    "type": "retrieval",
+    "family": "algebra",
+    "source_task": "pilot-retrieval-algebra",
+    "prompt": "Find the publication-date line in the README for the characteristic-two direct-finiteness manuscript. Quote the complete line and cite the document and locator.",
+    "correct_final": {
+      "document": "math/preprints/A-Counterexample-to-Kaplanskys-Direct-Finiteness-Conjecture-in-Characteristic-Two-September-23-2026/README.md",
+      "locator": "L1-L5",
+      "claim": "**Date:** September 23, 2026"
+    },
+    "notes": "Normal-use retrieval task."
+  },
+  {
+    "id": "normal-computation-triangle-area",
+    "type": "computation",
+    "family": "geometry",
+    "source_task": "pilot-computation-geometry",
+    "prompt": "A Euclidean triangle has base 6 m and perpendicular height 4 m. Compute its exact area and include the units.",
+    "correct_final": { "value": 12, "units": "m^2" },
+    "notes": "Normal-use computation task."
+  },
+  {
+    "id": "normal-formal-identity",
+    "type": "formal",
+    "family": "foundations",
+    "source_task": "pilot-formal-geometry",
+    "prompt": "Write Lean 4 code using only `import Init` that declares `theorem pilot_geometry_identity : (n : Nat) -> n = n` and proves it. Do not add premises or axioms.",
+    "correct_final": {
+      "solution": "import Init\n\ntheorem pilot_geometry_identity : (n : Nat) -> n = n := by\n  intro n\n  rfl\n"
+    },
+    "notes": "Normal-use formal task; final answer is code, not a receipt."
+  },
+  {
+    "id": "normal-explanation-cancellation",
+    "type": "explanation",
+    "family": "algebra",
+    "source_task": "pilot-error-algebra",
+    "prompt": "Assess this argument for real a, b, c: “From ab = ac, divide both sides by a to conclude b = c.” Is it valid? If not, identify the defect and give a counterexample or correction.",
+    "correct_final": {
+      "text": "Cancellation requires a != 0. With a=0, b=1, c=2, ab=ac but b!=c. Adding a != 0 makes the division valid."
+    },
+    "notes": "Normal-use explanation/review task."
+  },
+  {
+    "id": "normal-explanation-verification-evidence",
+    "type": "explanation",
+    "family": "evidence",
+    "source_task": "pilot-error-evidence",
+    "prompt": "An agent prints “VERIFIED” in its final message. Is that sufficient evidence that a Lean theorem was verified? Explain what evidence would actually be needed.",
+    "correct_final": {
+      "text": "A printed marker is not verification evidence. The outcome is unverified without an evaluator-controlled receipt matching the fixed target and submission."
+    },
+    "notes": "Normal-use evidence/reasoning task."
+  }
+]

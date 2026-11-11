@@ -272,6 +272,9 @@ const descriptions = {
 export default Plugin.define({
   id: "math-toolkit",
   async setup(ctx) {
+    // Evaluation hook: load the plugin but register no math tools. This keeps
+    // the rest of the OpenCode session identical for a normal-use A/B test.
+    if (process.env.MATH_TOOLKIT_DISABLE === "1") return;
     const roots = resolveRoots({
       directory: ctx.location?.directory,
       worktree: ctx.location?.project?.directory,
