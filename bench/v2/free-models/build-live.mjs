@@ -72,7 +72,8 @@ function liveQueue(key, source) {
   const counts = countBy(rows, 'status');
   const active = rows.filter(row => ['screening', 'fulling'].includes(row.status)).map(row => {
     const phase = row.status === 'fulling' ? 'full' : 'screen';
-    const attempt = latestAttempt(source.root, phase, row.model, Number(row.attempts) || 0);
+    const attemptSeed = phase === 'full' ? Number(row.full_attempts) || 0 : Number(row.attempts) || 0;
+    const attempt = latestAttempt(source.root, phase, row.model, attemptSeed);
     const episodes = attempt ? episodeFile(attempt.directory) : { episodes: [], mtime: null };
     const starts = attempt ? startFile(attempt.directory) : { starts: [], mtime: null };
     const expected = phase === 'full' ? 90 : 3;
