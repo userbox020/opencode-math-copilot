@@ -35,6 +35,7 @@
     "dashboard": "node bench/v2/free-models/build-dashboard.mjs",
     "dashboard:serve": "node bench/v2/free-models/serve-dashboard.mjs",
     "live": "node bench/v2/free-models/build-live.mjs",
+    "status:models": "node bench/v2/free-models/build-status-report.mjs",
     "check": "node scripts/check-syntax.mjs",
     "index": "node .opencode/plugins/math-toolkit/scripts/build-index.mjs",
     "index:lean": "node .opencode/plugins/math-toolkit/scripts/build-lean-index.mjs",

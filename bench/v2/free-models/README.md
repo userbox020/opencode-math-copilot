@@ -93,6 +93,15 @@ last activity, and flags runs with no file activity for more than 10 minutes.
 It is a snapshot too; regenerate and reload to update it. The page keeps the
 full queue counters and retry timeline visible when no run is active.
 
+For a complete per-model status export:
+
+```text
+npm run status:models
+```
+
+This writes `all-model-status.csv` and `all-model-status.md` under
+`C:\Users\MiPC\AppData\Local\Temp\opencode\`.
+
 For a live view, run:
 
 ```text
