@@ -24,6 +24,7 @@ const limit = Math.max(0, Number(option('--limit', '0')) || 0);
 const repeat = Math.max(1, Number(option('--repeat', '1')) || 1);
 const timeoutMs = Math.max(1000, Number(option('--timeout-ms', '600000')) || 600000);
 const only = option('--condition', null);
+const taskFilter = option('--task', null);
 const dryRun = hasFlag('--dry-run');
 const execute = hasFlag('--execute');
 const conditions = only ? [only] : CONDITIONS;
@@ -111,7 +112,9 @@ export function parseNormalEvents(stdout) {
 
 function taskList() {
   const tasks = JSON.parse(readFileSync(tasksFile, 'utf8'));
-  const selected = limit ? tasks.slice(0, limit) : tasks;
+  const filtered = taskFilter ? tasks.filter(task => task.id === taskFilter) : tasks;
+  if (taskFilter && !filtered.length) throw new Error(`Task not found: ${taskFilter}`);
+  const selected = limit ? filtered.slice(0, limit) : filtered;
   return selected.map(task => ({ ...task, normal_prompt: normalPrompt(task) }));
 }
 

@@ -54,7 +54,9 @@ const server = createServer((request, response) => {
     }
     const kind = name.startsWith('running') ? 'live' : name.startsWith('scores') ? 'scores' : name.startsWith('normal-use') ? 'normal' : 'dashboard';
     const error = regenerate(kind);
-    const file = path.join(ROOT, name);
+    const file = name.startsWith('normal-use')
+      ? path.join(ROOT, '../../v3/normal-use', name)
+      : path.join(ROOT, name);
     if (!existsSync(file)) {
       response.writeHead(503, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' });
       response.end(`Missing ${name}. Generator error: ${error ?? 'unknown'}`);

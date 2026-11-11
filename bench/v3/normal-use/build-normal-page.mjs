@@ -7,7 +7,7 @@ const OUT = 'C:/Users/MiPC/AppData/Local/Temp/opencode';
 const sources = [
   ['v1', 'DeepSeek full vs off', path.join(OUT, 'normal-use-v1/report.json')],
   ['v2', 'DeepSeek full / minimal / off', path.join(OUT, 'normal-use-v2-minimal/report.json')],
-  ['v3', 'GLM full / minimal / off', path.join(OUT, 'normal-use-v3-glm/report.json')],
+  ['v3', 'GLM full / minimal / off (disambiguated)', path.join(OUT, 'normal-use-v3b-glm/report.json')],
   ['v4', 'DeepSeek hard PDF/Lean tasks', path.join(OUT, 'normal-use-v4-hard/report.json')],
 ];
 const studies = [];

@@ -51,9 +51,10 @@ npm run normal:run -- --dry-run --limit 2
 
 ## Scope
 
-Latest result: [RESULTS.md](RESULTS.md) — full plugin, minimal plugin, and
-plugin-off all scored 6/6; both plugin modes were slower and more expensive than
-plugin-off, and minimal mode did not reduce overhead.
+Latest result: [RESULTS.md](RESULTS.md) — v1/v2/v3 all scored 6/6. The minimal
+toolset helped GLM but not DeepSeek, so the toolset effect is model-dependent.
+On the hard v4 task, full/minimal obtained Lean verification receipts while
+plugin-off did not; plugin-off failed that receipt requirement.
 
 This is a user-facing evaluation track. It complements, rather than replaces,
 the controlled A/B/F benchmark. Do not compare its scores directly with

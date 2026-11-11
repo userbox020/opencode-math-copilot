@@ -17,7 +17,7 @@
     "type": "retrieval",
     "family": "algebra",
     "source_task": "pilot-retrieval-algebra",
-    "prompt": "Find the publication-date line in the README for the characteristic-two direct-finiteness manuscript. Quote the complete line and cite the document and locator.",
+    "prompt": "Find the publication-date line in the README for the September 23, 2026 manuscript “A Counterexample to Kaplansky's Direct-Finiteness Conjecture in Characteristic Two.” Quote the complete line and cite the document and locator.",
     "correct_final": {
       "document": "math/preprints/A-Counterexample-to-Kaplanskys-Direct-Finiteness-Conjecture-in-Characteristic-Two-September-23-2026/README.md",
       "locator": "L1-L5",

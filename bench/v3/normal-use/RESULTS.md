@@ -90,6 +90,54 @@ Toolset size alone is not the lever; tool-selection policy, redundant calls, and
 task difficulty matter more. The difference from v1 (full plugin: 60s, 29 math
 calls) also shows high run-to-run variance with six tasks.
 
+## Hard-task follow-up (v4)
+
+Two tasks were added to test capabilities that built-in tools may not cover:
+
+1. a PDF-only page/quote task;
+2. a strict `math-lean-verify/v1` receipt task.
+
+| Condition | Correct | Mean time | Tokens | Cost | Tool calls | Math calls |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| plugin-on | **2/2** | **48s** | 32,522 | **$0.00622** | 8 | 8 |
+| plugin-on-minimal | **2/2** | 83s | 47,004 | $0.00996 | 14 | 7 |
+| plugin-off | **1/2** | 81s | 55,330 | $0.01150 | 7 | 0 |
+
+- The PDF task was answered correctly by all three conditions. Plugin-off used
+  grep/glob plus a subagent workaround, so it was not impossible without the
+  plugin.
+- The Lean receipt task was the differentiator: full and minimal returned
+  verified receipts; plugin-off explicitly reported that it could not obtain
+  one.
+- The full plugin was fastest and cheapest on this hard set. Minimal was
+  slower and more expensive, and plugin-off failed the receipt requirement.
+
+An independent Docker run confirmed the submitted proof:
+`completed / compiled / identified / verified`, no axioms, no `sorryAx`.
+
+This is the first evidence that the plugin adds a capability that plugin-off
+lacks, but it is based on two tasks and one model. It is not a general
+performance claim.
+
+## Cross-model check (v3b, GLM-5.3-Flash)
+
+The 6-task suite was rerun on GLM-5.3-Flash with the date prompt
+disambiguated to the September 23, 2026 manuscript.
+
+| Condition | Correct | Mean time | Tokens | Cost | Tool calls | Math calls |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| plugin-on | **6/6** | 20s | 44,943 | $0.01014 | 9 | 6 |
+| plugin-on-minimal | **6/6** | **14s** | **22,493** | **$0.00524** | 5 | 3 |
+| plugin-off | **6/6** | 15s | 49,510 | $0.00976 | 9 | 0 |
+
+For GLM, the minimal toolset **did** reduce time, tokens, and cost versus the
+full plugin, while plugin-off remained comparable on time and more expensive on
+tokens. This is the opposite ordering from DeepSeek, where minimal did not help.
+
+The result is model-dependent; toolset size has no stable effect across models.
+The original GLM run with the ambiguous “characteristic-two” prompt is archived
+and excluded from this clean comparison.
+
 ## Next steps
 
 1. Expand to more tasks, especially retrieval/Lean tasks where tools should help.
