@@ -138,6 +138,25 @@ The result is model-dependent; toolset size has no stable effect across models.
 The original GLM run with the ambiguous “characteristic-two” prompt is archived
 and excluded from this clean comparison.
 
+## Expanded hard suite (v5, DeepSeek)
+
+Seven tasks: one PDF page/citation task and six strict Lean receipt tasks.
+
+| Condition | Correct | Mean time | Tokens | Cost | Tool calls | Math calls |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| plugin-on | **7/7** | **54s** | 104,473 | **$0.01982** | 20 | 18 |
+| plugin-on-minimal | **7/7** | 69s | 80,512 | $0.01848 | 30 | 22 |
+| plugin-off | **1/7** | 135s | 331,463 | $0.06842 | 42 | 1 |
+
+- The PDF task was correct in all three conditions.
+- All six Lean receipt tasks passed with full and minimal plugin.
+- Plugin-off obtained only the PDF point; it failed every receipt task and spent
+  much more time and tokens trying shell/subagent workarounds.
+- Full plugin was faster than minimal on this suite; minimal used fewer tokens
+  but more calls.
+- This is the strongest capability signal so far, but it is seven tasks, one
+  model, one repeat.
+
 ## Next steps
 
 1. Expand to more tasks, especially retrieval/Lean tasks where tools should help.

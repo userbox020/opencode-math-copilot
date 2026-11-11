@@ -9,6 +9,8 @@ const sources = [
   ['v2', 'DeepSeek full / minimal / off', path.join(OUT, 'normal-use-v2-minimal/report.json')],
   ['v3', 'GLM full / minimal / off (disambiguated)', path.join(OUT, 'normal-use-v3b-glm/report.json')],
   ['v4', 'DeepSeek hard PDF/Lean tasks', path.join(OUT, 'normal-use-v4-hard/report.json')],
+  ['v5', 'DeepSeek hard suite (7 tasks)', path.join(OUT, 'normal-use-v5-hard-deepseek/report.json')],
+  ['v6', 'GLM hard suite (7 tasks)', path.join(OUT, 'normal-use-v6-hard-glm/report.json')],
 ];
 const studies = [];
 for (const [id, label, file] of sources) {

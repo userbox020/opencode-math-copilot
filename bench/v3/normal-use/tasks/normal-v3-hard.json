@@ -1,0 +1,98 @@
+[
+  {
+    "id": "hard-pdf-hanner-page",
+    "type": "retrieval",
+    "family": "geometry",
+    "prompt": "Using the released PDF for the symmetric Mahler conjecture manuscript rather than the TeX source, find Lemma 2.2 (“The Hanner volume product”). Report the PDF filename and page number, quote the sentence that closes the lemma, and say this is the manuscript’s claim rather than independent verification.",
+    "correct_final": {
+      "document": "math/preprints/The-symmetric-Mahler-conjecture-and-its-equality-cases-September-22-2026/paper.pdf",
+      "page": 6,
+      "claim": "The polar of a linear Hanner body is again a linear Hanner body."
+    },
+    "notes": "PDF-only page/citation task."
+  },
+  {
+    "id": "hard-lean-identity",
+    "type": "formal",
+    "family": "foundations",
+    "prompt": "Produce Lean 4 code for `theorem pilot_geometry_identity : (n : Nat) -> n = n` using only `import Init`, then obtain a strict `math-lean-verify/v1` receipt under the allowed axioms `propext`, `Quot.sound`, and `Classical.choice`. Report the theorem name, expected type, code, and receipt status.",
+    "correct_final": {
+      "theorem": "pilot_geometry_identity",
+      "expected_type": "(n : Nat) -> n = n",
+      "code": "import Init\n\ntheorem pilot_geometry_identity : (n : Nat) -> n = n := by\n  intro n\n  rfl\n",
+      "allowed_axioms": ["propext", "Quot.sound", "Classical.choice"],
+      "receipt_status": "verified"
+    },
+    "notes": "Lean receipt capability task."
+  },
+  {
+    "id": "hard-lean-add-zero",
+    "type": "formal",
+    "family": "algebra",
+    "prompt": "Produce Lean 4 code for `theorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n` using only `import Init`, then obtain a strict `math-lean-verify/v1` receipt under the allowed axioms `propext`, `Quot.sound`, and `Classical.choice`. Report the theorem name, expected type, code, and receipt status.",
+    "correct_final": {
+      "theorem": "pilot_algebra_add_zero",
+      "expected_type": "(n : Nat) -> n + 0 = n",
+      "code": "import Init\n\ntheorem pilot_algebra_add_zero : (n : Nat) -> n + 0 = n := by\n  intro n\n  rfl\n",
+      "allowed_axioms": ["propext", "Quot.sound", "Classical.choice"],
+      "receipt_status": "verified"
+    },
+    "notes": "Lean receipt capability task."
+  },
+  {
+    "id": "hard-lean-implications",
+    "type": "formal",
+    "family": "analysis",
+    "prompt": "Produce Lean 4 code for `theorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R` using only `import Init`, then obtain a strict `math-lean-verify/v1` receipt under the allowed axioms `propext`, `Quot.sound`, and `Classical.choice`. Report the theorem name, expected type, code, and receipt status.",
+    "correct_final": {
+      "theorem": "pilot_analysis_implications",
+      "expected_type": "(P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R",
+      "code": "import Init\n\ntheorem pilot_analysis_implications : (P Q R : Prop) -> (P -> Q) -> (Q -> R) -> P -> R := by\n  intro P Q R hPQ hQR hP\n  exact hQR (hPQ hP)\n",
+      "allowed_axioms": ["propext", "Quot.sound", "Classical.choice"],
+      "receipt_status": "verified"
+    },
+    "notes": "Lean receipt capability task."
+  },
+  {
+    "id": "hard-lean-sum",
+    "type": "formal",
+    "family": "number-theory",
+    "prompt": "Produce Lean 4 code for `theorem pilot_number_theory_sum : (2 : Nat) + 3 = 5` using only `import Init`, then obtain a strict `math-lean-verify/v1` receipt under the allowed axioms `propext`, `Quot.sound`, and `Classical.choice`. Report the theorem name, expected type, code, and receipt status.",
+    "correct_final": {
+      "theorem": "pilot_number_theory_sum",
+      "expected_type": "(2 : Nat) + 3 = 5",
+      "code": "import Init\n\ntheorem pilot_number_theory_sum : (2 : Nat) + 3 = 5 := by\n  rfl\n",
+      "allowed_axioms": ["propext", "Quot.sound", "Classical.choice"],
+      "receipt_status": "verified"
+    },
+    "notes": "Lean receipt capability task."
+  },
+  {
+    "id": "hard-lean-conjunction",
+    "type": "formal",
+    "family": "evidence",
+    "prompt": "Produce Lean 4 code for `theorem pilot_evidence_conjunction : (P Q : Prop) -> P ∧ Q -> Q ∧ P` using only `import Init`, then obtain a strict `math-lean-verify/v1` receipt under the allowed axioms `propext`, `Quot.sound`, and `Classical.choice`. Report the theorem name, expected type, code, and receipt status.",
+    "correct_final": {
+      "theorem": "pilot_evidence_conjunction",
+      "expected_type": "(P Q : Prop) -> P ∧ Q -> Q ∧ P",
+      "code": "import Init\n\ntheorem pilot_evidence_conjunction : (P Q : Prop) -> P ∧ Q -> Q ∧ P := by\n  intro P Q h\n  exact And.intro h.right h.left\n",
+      "allowed_axioms": ["propext", "Quot.sound", "Classical.choice"],
+      "receipt_status": "verified"
+    },
+    "notes": "Lean receipt capability task."
+  },
+  {
+    "id": "hard-lean-true",
+    "type": "formal",
+    "family": "foundations",
+    "prompt": "Produce Lean 4 code for `theorem pilot_foundations_true : True` using only `import Init`, then obtain a strict `math-lean-verify/v1` receipt under the allowed axioms `propext`, `Quot.sound`, and `Classical.choice`. Report the theorem name, expected type, code, and receipt status.",
+    "correct_final": {
+      "theorem": "pilot_foundations_true",
+      "expected_type": "True",
+      "code": "import Init\n\ntheorem pilot_foundations_true : True := by\n  exact True.intro\n",
+      "allowed_axioms": ["propext", "Quot.sound", "Classical.choice"],
+      "receipt_status": "verified"
+    },
+    "notes": "Lean receipt capability task."
+  }
+]
