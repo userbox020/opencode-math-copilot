@@ -186,7 +186,7 @@ The Comparator layer is in `docker/comparator.Dockerfile`. Comparator v4.34.0 is
 npm run bench -- --json --md
 ```
 
-The boolean `--json`/`--md` flags write `bench/results/latest.json` and `bench/results/latest.md`. The benchmark compares the same prompts with and without the plugin on a cheap model. Results are indicative, not a scientific benchmark; see `bench/README.md`.
+The boolean `--json`/`--md` flags write `bench/results/latest.json` and `bench/results/latest.md`. The historical comparison used keyword scoring, not validated mathematical accuracy. Its “without plugin” condition still loaded global plugins, so it was not plugin-isolated. The recorded 83/90 versus 62/90 is exploratory harness evidence, not an established mathematical benefit; see `bench/README.md` and `bench/RESULTS.md`.
 
 ## Distribution
 

@@ -48,7 +48,7 @@ For each `(task, profile, repeat, attempt)`:
 ## Budget and stop rules
 
 - Per episode: tokens (`input+output+reasoning`; cache excluded and documented), tool calls, wall-clock, USD.
-- Study: hard spend cap checked before each dispatch using observed plus reserved estimate.
+- Study: pre-dispatch spend gate using observed costs plus reserved estimates. Strict total-spend and concurrent enforcement have not been validated; this is not an established hard billing cap.
 - Stop: cap reached, repeated adapter/isolation failures, verifier unavailable, provider/auth failure, or audit failure. Record the stop reason; do not hide it.
 - No retry without an explicit attempt increment; failed attempts remain in the ledger.
 - Unknown cost cannot count as under budget.

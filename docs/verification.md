@@ -123,7 +123,7 @@ Core run: three models, 4 problems, 3 repeats.
 | GLM-5.3-Flash | 12/12, 39.08s | 8/12, 105.01s |
 | GPT-6-Luna | 12/12, 20.89s | 7/12, 38.98s |
 
-Full run: three models, 10 problems, 3 repeats. With plugin **83/90**; without **62/90**. Pooled Wilson 95% intervals: 92.2% (84.8–96.2%) vs 68.9% (58.7–77.5%); descriptive only, not a significance test.
+Full run: three models, 10 problems, 3 repeats. Recorded keyword scores: with plugin **83/90**; without **62/90**. These are not validated mathematical accuracy, and “without plugin” still loaded global plugins, so this was not a plugin-isolated comparison. Pooled Wilson 95% intervals: 92.2% (84.8–96.2%) vs 68.9% (58.7–77.5%); descriptive keyword-score summaries only, not a significance test or evidence of mathematical benefit.
 
 | Model | With plugin | Without plugin |
 | --- | ---: | ---: |

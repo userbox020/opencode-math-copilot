@@ -1,0 +1,72 @@
+[
+  {
+    "schema": "real-use-task/v1",
+    "id": "metadata-characteristic-two",
+    "category": "retrieval",
+    "family": "algebra",
+    "prompt": "I am preparing a bibliography entry for the OpenAI Math Release manuscript titled \"A Counterexample to Kaplansky's Direct-Finiteness Conjecture in Characteristic Two\". Find its manuscript README in the local math corpus. Quote the complete publication-date metadata line exactly as written, including its Markdown label, and give the corpus-relative filename and line number. Use the README metadata rather than inferring the date from a directory name."
+  },
+  {
+    "schema": "real-use-task/v1",
+    "id": "jacobsthal-strengthened-scope",
+    "category": "retrieval",
+    "family": "number-theory",
+    "prompt": "Using math/lean/docs/021.md, explain the strengthened Jacobsthal bound that this scope document says is formalized. State what h(k) means, the exact improved bound, the quantifiers and parameter range, and which starting points of intervals are covered. Quote the relevant scope text with file/line locators, and include the qualification about the earlier bound and what remains undetermined. Distinguish the document's report of formalization scope from a verification you actually performed."
+  },
+  {
+    "schema": "real-use-task/v1",
+    "id": "hanner-released-pdf",
+    "category": "retrieval",
+    "family": "geometry",
+    "prompt": "For the manuscript in math/preprints/The-symmetric-Mahler-conjecture-and-its-equality-cases-September-22-2026/, inspect its released root PDF (resolve the actual filename from the directory or its README). Find Lemma 2.2, \"The Hanner volume product\", and quote the exact closing sentence of the lemma statement, before its proof. Cite the PDF filename, the 1-based physical PDF page, the printed page label, and the lemma label. I need a citation to the released artifact, not merely its TeX source; distinguish the manuscript's claim from independent verification."
+  },
+  {
+    "schema": "real-use-task/v1",
+    "id": "matrix-determinant",
+    "category": "computation",
+    "family": "linear-algebra",
+    "prompt": "Compute the exact determinant of the integer matrix A = [[3, -2, 5, 1], [4, 0, -1, 2], [-3, 6, 2, -4], [1, 5, -2, 3]]. Is A invertible over the real numbers? Give an exact calculation or independently checkable intermediate values, not a floating-point determinant alone."
+  },
+  {
+    "schema": "real-use-task/v1",
+    "id": "rational-equation",
+    "category": "computation",
+    "family": "algebra",
+    "prompt": "Solve (x^2 - 4)/(x - 2) = 6/(x + 1) over the real numbers. State the exclusions from the original denominators before simplifying, account for any extraneous roots introduced by clearing denominators, and check every retained root in the original equation."
+  },
+  {
+    "schema": "real-use-task/v1",
+    "id": "rational-integral",
+    "category": "computation",
+    "family": "analysis",
+    "prompt": "Find a real antiderivative of (3*x^2 + 2*x + 1)/((x - 1)*(x^2 + 1)). State the real domain of the integrand and how the integration constant is interpreted on its connected components. Give an exact expression, handle the real logarithm correctly, and differentiate your result to check it against the original integrand."
+  },
+  {
+    "schema": "real-use-task/v1",
+    "id": "lean-cancellation-repair",
+    "category": "formal",
+    "family": "algebra",
+    "prompt": "My Lean 4 example is broken: `import Mathlib\nexample (a b c : ℝ) (h : a * b = a * c) : b = c := by\n  exact mul_left_cancel h`. The mathematical step was to divide by a. Explain why the original statement is false and give a counterexample; identify the needed nonzero premise. Then provide a complete Lean code block with only `import Mathlib` and the fixed named theorem `theorem real_use_cancel : ∀ a b c : ℝ, a ≠ 0 → a * b = a * c → b = c := by ...`. Keep exactly that target, without new axioms, extra premises, `sorry`, `admit`, or `native_decide`. A candidate proof is useful even if you cannot run Lean; say whether you actually checked it. No particular plugin receipt is required."
+  },
+  {
+    "schema": "real-use-task/v1",
+    "id": "lean-rational-odd-sum",
+    "category": "formal",
+    "family": "finite-sums",
+    "prompt": "Please formalize the sum of the first n odd numbers over the rationals in Lean 4. Return a complete code block with only `import Mathlib` and this exact named target: `theorem real_use_odd_sum : ∀ n : Nat, (Finset.sum (Finset.range n) (fun k => (2 * (k : ℚ) + 1))) = (n : ℚ) ^ 2 := by ...`. Prove it for every n, not just sample values. Do not add assumptions or axioms and do not use `sorry`, `admit`, or `native_decide`. Briefly explain the proof and distinguish proposed code from code you actually checked. No particular plugin receipt is required."
+  },
+  {
+    "schema": "real-use-task/v1",
+    "id": "bounded-search-miss",
+    "category": "evidence",
+    "family": "retrieval-evidence",
+    "prompt": "A colleague is checking whether linear Hanner bodies are closed under polarity and sends this bounded PDF-search log. Treat it as supplied evidence, not as a search you have run:\n```text\nfile: preprints/The-symmetric-Mahler-conjecture-and-its-equality-cases-September-22-2026/paper.pdf\nphysical_pages_total: 26\nphysical_pages_searched: 1-2\nquery: \"The polar of a linear Hanner body is again a linear Hanner body.\"\nmode: literal text\ntext_extraction: enabled; OCR: disabled\ntext_truncated: false\nmatches: 0\n```\nThey propose writing, \"This manuscript does not state closure under polarity.\" Is that conclusion supported? Explain precisely what the supplied result does and does not establish, and propose the next concrete source check you would do before writing the citation. You need not perform a new search to answer."
+  },
+  {
+    "schema": "real-use-task/v1",
+    "id": "compilation-scope-evidence",
+    "category": "evidence",
+    "family": "formal-evidence",
+    "prompt": "I want to cite a verified strengthened Jacobsthal bound: one absolute C > 0 with h(k) ≤ C*k^2/(log(log(3*k)))^2 for every integer k ≥ 1, where h is the Jacobsthal interval-length function. A colleague supplies only these two snippets.\n\nCatalog excerpt, math/lean/docs/021.md, Scope:\n\"The earlier quadratic bound is also retained as a separate statement; the optimal order of growth is not determined.\"\n\nCompilation log (supplied, not independently rerun):\n```text\n$ lake env lean Scratch.lean\nquadratic_bound_from_assumption (h : ℕ → ℝ) (C : ℝ)\n  (hb : ∀ k : ℕ, 1 ≤ k → h k ≤ C * (k : ℝ)^2) :\n  ∀ k : ℕ, 1 ≤ k → h k ≤ C * (k : ℝ)^2\nexit status: 0\n```\nCan these snippets establish that the requested strengthened theorem has been verified? Explain the specific mathematical and evidentiary gaps, what the snippets actually support, and what you would need to check next. Do not claim a theorem is false merely because this evidence is insufficient."
+  }
+]

@@ -1,167 +1,49 @@
-# Normal-use pilot v1 — results
+# Normal-use studies — corrected evidence record
 
-Study: `normal-use-2026-11-11T16-38-38-596Z-opencode-go-deepseek-v4.1-flash`
+Seven preserved studies contain **114 completed outputs**, not 114 verified answers. Usage is known for **92/114** episodes and missing for **22**. The observed subtotals are **1,741,289 tokens** and **$0.390200076**; these are not complete billing totals.
 
-- Model: `opencode-go/deepseek-v4.1-flash`
-- Workspace: `C:\_Work\__OPENAI_MATH` (real math corpus)
-- Conditions: `plugin-on` and `plugin-off`
-- Plugin off: `MATH_TOOLKIT_DISABLE=1` (plugin loads but registers no math tools)
-- Tasks: 6 normal-use prompts, one repeat
-- Grading: reference-based human review, independently checked by a second reviewer
-- No typed-JSON benchmark contract
+There are **75 recorded legacy scores and 39 blank scores**. Reviewer provenance is unavailable (assistant/model adjudication per conversation); none is authenticated human review. The earlier v1 claim of an independent second reviewer has no saved provenance. Historical experiments and their original reports remain preserved, but their scores must not be described as verified mathematical accuracy.
 
-## Result
+## Preserved figures with coverage
 
-**Both conditions scored 6/6.** There was no correctness gain from the full
-math-toolkit plugin on this small normal-use suite.
+Full = `plugin-on`; minimal = `plugin-on-minimal`; off = `plugin-off`. Scores below are recorded ones/number scored, not proof-verification rates. Usage columns are known subtotals even when coverage is complete; provider-reported cost is not a billing reconciliation.
 
-| Condition | Correct | Mean time | Tokens | Cost | Tool calls | Math-tool calls |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| plugin-on | **6/6** | **60s** | 90,055 | **$0.01777** | 30 | **29** |
-| plugin-off | **6/6** | **37s** | 66,997 | **$0.01245** | 25 | 0 |
+| Study / model | Condition | Recorded score | Usage known/episodes | Token subtotal | USD subtotal |
+| --- | --- | --- | ---: | ---: | ---: |
+| v1 / DeepSeek | full | 6/6 | 4/6 | 90,055 | 0.017765862 |
+| v1 / DeepSeek | off | 6/6 | 4/6 | 66,997 | 0.012452910 |
+| v2 / DeepSeek | full | 6/6 | 4/6 | 69,092 | 0.012085176 |
+| v2 / DeepSeek | minimal | 6/6 | 6/6 | 72,584 | 0.013240860 |
+| v2 / DeepSeek | off | 6/6 | 3/6 | 49,263 | 0.008467524 |
+| v3-original / GLM | full | unreviewed (6 blank) | 5/6 | 74,009 | 0.014609310 |
+| v3-original / GLM | minimal | unreviewed (6 blank) | 5/6 | 68,086 | 0.012623080 |
+| v3-original / GLM | off | unreviewed (6 blank) | 3/6 | 40,069 | 0.008728210 |
+| v3b / GLM | full | 6/6 | 4/6 | 44,943 | 0.010136570 |
+| v3b / GLM | minimal | 6/6 | 3/6 | 22,493 | 0.005237730 |
+| v3b / GLM | off | 6/6 | 3/6 | 49,510 | 0.009756930 |
+| v4-hard / DeepSeek | full | 2/2 | 2/2 | 32,522 | 0.006216606 |
+| v4-hard / DeepSeek | minimal | 2/2 | 2/2 | 47,004 | 0.009954894 |
+| v4-hard / DeepSeek | off | 1/2 | 2/2 | 55,330 | 0.011504496 |
+| v5-hard / DeepSeek | full | 7/7 | 7/7 | 104,473 | 0.019818528 |
+| v5-hard / DeepSeek | minimal | 7/7 | 7/7 | 80,512 | 0.018481908 |
+| v5-hard / DeepSeek | off | 1/7 | 7/7 | 331,463 | 0.068417892 |
+| v6-hard / GLM | full | unreviewed (7 blank) | 7/7 | 89,197 | 0.019998010 |
+| v6-hard / GLM | minimal | unreviewed (7 blank) | 7/7 | 118,464 | 0.024285600 |
+| v6-hard / GLM | off | unreviewed (7 blank) | 7/7 | 235,223 | 0.086417980 |
 
-Plugin-on was **~61% slower**, used **~34% more tokens**, and cost **~43% more**
-than plugin-off, with no additional correct answers.
+The original GLM date prompt was ambiguous; v3b disambiguated it. Both studies remain in this inventory rather than silently dropping v3-original. Mean durations, lexical tool counts, task identities, and repeat identities are retained in the corrected per-study reports.
 
-## Per-task notes
+## What the hard studies establish—and do not
 
-| Task | Plugin-on | Plugin-off | Outcome |
-| --- | --- | --- | --- |
-| Hanner retrieval | 163s, 25 math-tool calls | 54s, grep/read only | Both correct; plugin-on much heavier |
-| Characteristic-two date | 24s, 1 math search | 29s, grep/read | Both correct |
-| Triangle area | 7s, no tools | 6s, no tools | Both correct |
-| Lean identity | 77s, 3 math calls | 21s, shell/read | Both correct; off did not verify |
-| Cancellation fallacy | 20s, no tools | 24s, no tools | Both correct |
-| Verification evidence | 71s, 9 generic tools | 90s, 16 generic tools | Both correct |
+- v5's historical **7/7, 7/7, 1/7** used six plugin-specific receipt requirements and condition-derived scoring. This mechanically disadvantaged off; it is not evidence of a mathematical accuracy benefit. v4's **2/2, 2/2, 1/2** also includes a plugin-receipt requirement. Earlier prose claimed an independent Docker check; this artifacts-only audit does not authenticate that claim from the saved episode records.
+- AI inspection covered all **42 v5/v6 answers** separately from the recorded scores. All **36 formal answers contain plausible proof terms by inspection**, not newly compiled or verified proofs. **35** have fenced Lean blocks; v6 off/add-zero is an inline-only waiting recap and an incomplete standalone deliverable.
+- The formal answers contain **24 receipt assertions** and **12 explicit receipt-unavailable statements**. **No authentic tool receipts are preserved** in these saved artifacts. This does **not** establish that receipts never existed. An assertion, observed receipt, proof verification, and answer-by-inspection are distinct evidence categories.
+- All **six PDF answers reference-match** the released Hanner PDF, page 6: “The polar of a linear Hanner body is again a linear Hanner body.” The supplied code-reviewer audit inspected the root PDF. This establishes manuscript reference matching, not independent verification of the manuscript's mathematics.
+- v6 off/implications and off/conjunction incorrectly name `math_lean_check` as a strict receipt producer. v5 off/implications and off/true use incorrect receipt status vocabulary. v5 off's recorded `math_status` entry is a lexical reference, not successful tool evidence.
+- v6 has **21 completed outputs and 21 blank reviews**. Inspection did not fill its `review.csv` or create replacement proof grades.
 
-The Hanner task is the clearest example: the plugin found the same sentence and
-citation, but used 25 math calls and took three times as long as plugin-off.
+## Interpretation and artifacts
 
-## Interpretation
+These are small, exploratory, single-repeat studies with different prompts/models, incomplete usage, unauthenticated legacy scoring, and a biased receipt requirement. They support neither a general mathematical benefit claim nor percentage billing-efficiency claims. Plugin-off disabled this toolkit, not every OpenCode plugin or built-in tool.
 
-- This is a **negative normal-use result** for the full toolkit on this task set.
-- The plugin was not needed for correctness on any of the six tasks.
-- The plugin added retrieval/tool overhead and cost, especially on the
-  corpus-search task.
-- This is consistent with the earlier exploratory pilot: the full toolkit is
-  not automatically better, and more tools can add cost without improving the
-  answer.
-
-## Caveats
-
-- One model, six tasks, one repeat.
-- Scores are from reference-based human review; they are not a blind
-  adjudication or a statistical estimate.
-- Tasks are derived from the provisional pilot and are not a user study.
-- The plugin-off condition disables the math toolkit but does not remove other
-  OpenCode plugins or built-in tools.
-- The CLI uses `--standalone`; Desktop/TUI behavior may differ.
-- Lean correctness was assessed by inspection, not a fresh compilation.
-- This is exploratory, not confirmatory evidence.
-
-## Artifacts
-
-- `C:\Users\MiPC\AppData\Local\Temp\opencode\normal-use-v1\manifest.json`
-- `...\episodes.jsonl`
-- `...\review.csv`
-- `...\review.md`
-- `...\report.md`
-- `...\report.json`
-- `...\summary.json`
-
-## Minimal-toolset follow-up (v2)
-
-A second 6-task run compared the full 16-tool plugin, the six-tool minimal
-toolset, and plugin-off.
-
-| Condition | Correct | Mean time | Tokens | Cost | Tool calls | Math calls |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| plugin-on | **6/6** | **32s** | 69,092 | **$0.01209** | 15 | 9 |
-| plugin-on-minimal | **6/6** | 37s | 72,584 | $0.01324 | 19 | 13 |
-| plugin-off | **6/6** | **23s** | 49,263 | **$0.00847** | 11 | 0 |
-
-The minimal toolset did **not** reduce latency or cost in this run. The full
-plugin was slightly faster and cheaper than minimal; plugin-off remained the
-fastest and cheapest. The Hanner task used 5 math calls with the full plugin, 6
-with minimal, and 0 with plugin-off.
-
-This is a negative result for the “fewer tools = less overhead” hypothesis.
-Toolset size alone is not the lever; tool-selection policy, redundant calls, and
-task difficulty matter more. The difference from v1 (full plugin: 60s, 29 math
-calls) also shows high run-to-run variance with six tasks.
-
-## Hard-task follow-up (v4)
-
-Two tasks were added to test capabilities that built-in tools may not cover:
-
-1. a PDF-only page/quote task;
-2. a strict `math-lean-verify/v1` receipt task.
-
-| Condition | Correct | Mean time | Tokens | Cost | Tool calls | Math calls |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| plugin-on | **2/2** | **48s** | 32,522 | **$0.00622** | 8 | 8 |
-| plugin-on-minimal | **2/2** | 83s | 47,004 | $0.00996 | 14 | 7 |
-| plugin-off | **1/2** | 81s | 55,330 | $0.01150 | 7 | 0 |
-
-- The PDF task was answered correctly by all three conditions. Plugin-off used
-  grep/glob plus a subagent workaround, so it was not impossible without the
-  plugin.
-- The Lean receipt task was the differentiator: full and minimal returned
-  verified receipts; plugin-off explicitly reported that it could not obtain
-  one.
-- The full plugin was fastest and cheapest on this hard set. Minimal was
-  slower and more expensive, and plugin-off failed the receipt requirement.
-
-An independent Docker run confirmed the submitted proof:
-`completed / compiled / identified / verified`, no axioms, no `sorryAx`.
-
-This is the first evidence that the plugin adds a capability that plugin-off
-lacks, but it is based on two tasks and one model. It is not a general
-performance claim.
-
-## Cross-model check (v3b, GLM-5.3-Flash)
-
-The 6-task suite was rerun on GLM-5.3-Flash with the date prompt
-disambiguated to the September 23, 2026 manuscript.
-
-| Condition | Correct | Mean time | Tokens | Cost | Tool calls | Math calls |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| plugin-on | **6/6** | 20s | 44,943 | $0.01014 | 9 | 6 |
-| plugin-on-minimal | **6/6** | **14s** | **22,493** | **$0.00524** | 5 | 3 |
-| plugin-off | **6/6** | 15s | 49,510 | $0.00976 | 9 | 0 |
-
-For GLM, the minimal toolset **did** reduce time, tokens, and cost versus the
-full plugin, while plugin-off remained comparable on time and more expensive on
-tokens. This is the opposite ordering from DeepSeek, where minimal did not help.
-
-The result is model-dependent; toolset size has no stable effect across models.
-The original GLM run with the ambiguous “characteristic-two” prompt is archived
-and excluded from this clean comparison.
-
-## Expanded hard suite (v5, DeepSeek)
-
-Seven tasks: one PDF page/citation task and six strict Lean receipt tasks.
-
-| Condition | Correct | Mean time | Tokens | Cost | Tool calls | Math calls |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| plugin-on | **7/7** | **54s** | 104,473 | **$0.01982** | 20 | 18 |
-| plugin-on-minimal | **7/7** | 69s | 80,512 | $0.01848 | 30 | 22 |
-| plugin-off | **1/7** | 135s | 331,463 | $0.06842 | 42 | 1 |
-
-- The PDF task was correct in all three conditions.
-- All six Lean receipt tasks passed with full and minimal plugin.
-- Plugin-off obtained only the PDF point; it failed every receipt task and spent
-  much more time and tokens trying shell/subagent workarounds.
-- Full plugin was faster than minimal on this suite; minimal used fewer tokens
-  but more calls.
-- This is the strongest capability signal so far, but it is seven tasks, one
-  model, one repeat.
-
-## Next steps
-
-1. Expand to more tasks, especially retrieval/Lean tasks where tools should help.
-2. Run multiple models and repeats.
-3. Blind the reviewer to condition and randomize order.
-4. Add a normal-use HTML summary page.
-5. Measure tool precision, not just tool-call count.
-6. Keep the controlled A/B/F benchmark as a separate diagnostic.
+Original directories remain under `C:\Users\MiPC\AppData\Local\Temp\opencode\normal-use-*`; their manifests, episodes, reviews, summaries, and historical reports were not rewritten. Corrected outputs are separate under `...\normal-use-evidence-audit-20261111\`: `audit.json`, `audit.md`, and seven per-study `report.json` / `report.md` pairs. See [EVIDENCE-AUDIT.md](EVIDENCE-AUDIT.md) for source hashes, paths, and limitations.

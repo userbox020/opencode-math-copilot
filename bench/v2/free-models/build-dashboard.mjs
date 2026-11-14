@@ -153,6 +153,7 @@ const data = {
     negative_tasks: taskNegatives,
     episode_budget: { duration_ms: 600000, tool_calls: 40, tokens: 200000, usd_per_episode: 1, global_cap_usd: 25 },
     caveats: [
+      'The $25 configured study threshold is not a guaranteed cap. Strict spending-cap enforcement has not been validated.',
       'Protocol completion is not mathematical correctness.',
       'full_complete currently counts 90 rows; clean completion requires all 90 completed.',
       'Provider quota/auth/context failures are operational results, not model quality.',

@@ -74,10 +74,29 @@ Docker is the recommended path on Windows because the pinned AINTLIB path `2026-
 ```powershell
 docker build -f docker/lean.Dockerfile -t opencode-math-lean .
 docker volume create opencode-math-lean
-docker run --rm -v opencode-math-lean:/work opencode-math-lean verify-lean.sh
+docker run --rm -e SKIP_BUILD=1 -v opencode-math-lean:/work opencode-math-lean verify-lean.sh
 ```
 
 Set `MATH_TOOLKIT_LEAN_IMAGE`, `MATH_TOOLKIT_LEAN_VOLUME`, `MATH_TOOLKIT_COMPARATOR_IMAGE`, and `MATH_TOOLKIT_COMPARATOR_VOLUME` to override names.
+
+Run these commands from the plugin repository with Docker Desktop using Linux containers (or Docker Engine). Initialization downloads the corpus/cache and needs network, time, and disk space. `SKIP_BUILD=1` skips the default whole-library build; it still fetches the cache and runs a compilation smoke check. Substitute your configured image/volume names when using overrides.
+
+Then explicitly request `docker:true` in `math_lean_check`, `math_lean_verify`, or `math_lean_build`. The plugin never switches a native request to Docker automatically, retries it, initializes a missing Lean volume, or changes dependency pins. Alternatively run OpenCode and Lean inside WSL with the corpus on its Linux filesystem, not an NTFS-backed `/mnt/c` checkout; retain the pinned toolchain and fetch the cache with `lake exe cache get` from `math/lean`.
+
+Native Windows diagnostics append this recovery for missing Lake/Lean, the known timestamp-invalid dependency path, and missing dependency `.olean` cache files. These are setup/environment failures, not evidence that a theorem is false. Ordinary syntax/type errors and unknown user modules retain their Lean diagnostics without a Windows recovery label. Unrecognized environment failures can still require manual diagnosis. Native Windows support remains limited even with elan installed.
+
+- **Docker executable missing:** install Docker Desktop/Engine and add its native executable to PATH.
+- **Daemon unavailable:** start Docker with Linux containers, check `docker info`, then explicitly retry.
+- **Image missing:** use the image build command above.
+- **Lean volume missing:** create and initialize it with the volume commands above. An existing but empty volume also needs initialization; presence alone does not establish that its corpus/cache is ready.
+
+Recovery keeps exit codes and execution errors; failure log tails are bounded and common credential forms are redacted. Do not include secrets in Lean source or logs: arbitrary Lean output cannot be reliably sanitized. The strict verifier keeps its `math-lean-verify/v1` structure: a missing executable is `missing-tool`/`not-run`; a nonzero Lake exit can remain `completed`/`failed` with environment guidance in diagnostics. Neither is a verified proof. Compilation-only `math_lean_check` is not proof verification, and Docker execution is not an arbitrary-code containment guarantee.
+
+Portable mocked recovery regression tests (no Lean, Docker, or corpus required):
+
+```powershell
+node --test .opencode/plugins/math-toolkit/scripts/test-lean-recovery.mjs
+```
 
 ## Comparator
 
