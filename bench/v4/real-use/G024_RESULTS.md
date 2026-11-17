@@ -31,6 +31,42 @@ figures below are model-reviewed and checker-backed, not human-adjudicated.
 All four Lean submissions were accepted by the evaluator-owned checker under the
 frozen import/axiom policy.
 
+## Human review — applied
+
+An external human reviewer (recorded as `MrUserbox DSv4.1.1017`) filled all twenty
+rows of `verdicts.csv`; the typed reviews and report are `evaluation/reviews-human.json`
+and `evaluation/report-human.json`.
+
+| Measure | Human |
+|---|---:|
+| Reviewed | 20 |
+| Pass | 19 |
+| Fail | 0 |
+| Unscorable | 1 |
+| Pass rate among scored | 19/19 (1.00) |
+| Pairs | 9 both, 0 ON-only, 0 OFF-only, 1 ungraded |
+| reviewer_kinds | human 20, model 0 |
+
+Two things matter about this result:
+
+1. **The human independently reproduced the response-02 judgement.** The sheet
+   passes it, noting that "L9 'does assert exactly your statement' matches the
+   real 021.md line but goes beyond the single excerpted sentence" — the same
+   correction I argued for, now from a person.
+2. **The one difference from the model/checker result is response 01, and it is
+   about extraction, not mathematics.** The reviewer marked it unscorable because
+   the packet they saw contained two Lean blocks and the checker slot read
+   `not_checked`. In the final checker-enabled packet, target-aware selection
+   extracted the single block declaring `real_use_cancel`, and the evaluator
+   checker **accepted** it. So the proof was verifiable; the earlier packet simply
+   could not extract it. The human verdict is recorded unchanged rather than
+   retroactively flipped.
+
+Consequently the study has two honest readings of the same twenty answers:
+**20/20 pass** under checker-backed model review of the final packet, and
+**19 pass + 1 unscorable** under human review of the pre-checker packet, with the
+difference fully explained.
+
 ## How the score moved — every step is a tooling correction, not a re-run
 
 The run was never re-executed. The same twenty answers were graded four times as
