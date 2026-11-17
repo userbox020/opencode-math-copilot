@@ -1,11 +1,11 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { closeSync, openSync, readFileSync, writeSync } from 'node:fs';
+import { closeSync, lstatSync, openSync, readFileSync, realpathSync, writeSync } from 'node:fs';
 import { parseArgs, sha256 } from './lib.mjs';
 import { gradingSummary, main as reportMain } from './report.mjs';
 
 export function main(argv) {
-  const args = parseArgs(argv, ['--out', '--label', '--note', '--reviews']);
+  const args = parseArgs(argv, ['--out', '--label', '--note', '--reviews', '--report']);
   for (const key of ['--out', '--label', '--reviews']) {
     if (!args[key]?.trim()) throw new Error(`${key} required`);
   }
@@ -17,7 +17,15 @@ export function main(argv) {
   if (!Array.isArray(entries)) throw new Error('grading lineage must be an array');
   if (entries.some(entry => entry.label === args['--label'])) throw new Error('duplicate grading lineage label');
 
-  const blindPath = path.join(out, 'evaluation/blind.json'), reportPath = path.join(out, 'evaluation/report.json');
+  const blindPath = path.join(out, 'evaluation/blind.json');
+  const reportPath = args['--report'] ? path.resolve(args['--report']) : path.join(out, 'evaluation/report.json');
+  const inside = (root, file) => {
+    const relative = path.relative(root, file);
+    return relative && relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
+  };
+  if (!inside(out, reportPath)) throw new Error('report path must be inside --out');
+  if (!lstatSync(reportPath).isFile()) throw new Error('report must be a regular file');
+  if (!inside(realpathSync(out), realpathSync(reportPath))) throw new Error('report path must be inside --out');
   const blind = readFileSync(blindPath), reviews = readFileSync(reviewsPath), savedReport = readFileSync(reportPath);
   const result = reportMain(['--out', out, '--reviews', reviewsPath]);
   if (!savedReport.equals(Buffer.from(JSON.stringify(result, null, 2) + '\n'))) {
@@ -38,6 +46,8 @@ export function main(argv) {
     reviews_path: path.relative(out, reviewsPath).split(path.sep).join('/'),
     reviews_sha256: sha256(reviews), report_sha256: sha256(savedReport),
     ...gradingSummary(result), checker_statuses: Object.fromEntries(checkerStatuses),
+    reviewer_kinds: Object.fromEntries(['human', 'model'].map(kind =>
+      [kind, JSON.parse(reviews).filter(review => review.reviewer_kind === kind).length])),
   };
   // Retain every prior entry byte, including its formatting. Only the closing
   // array delimiter is replaced; existing entries are never reserialized.

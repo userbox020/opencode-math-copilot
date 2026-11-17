@@ -41,7 +41,7 @@
     "normal:report": "node bench/v3/normal-use/report-normal.mjs",
     "normal:page": "node bench/v3/normal-use/build-normal-page.mjs",
     "normal:test": "node --test bench/v3/normal-use/tests/normal.test.mjs",
-    "v4:test": "node --test bench/v4/real-use/tests/tasks.test.mjs bench/v4/real-use/tests/snapshot.test.mjs bench/v4/real-use/tests/runtime-tools.test.mjs bench/v4/real-use/tests/report.test.mjs bench/v4/real-use/tests/real-use.test.mjs bench/v4/real-use/tests/profiles.test.mjs bench/v4/real-use/tests/native-completion.test.mjs bench/v4/real-use/tests/launch.test.mjs bench/v4/real-use/tests/grade-adapter.test.mjs bench/v4/real-use/tests/execution.test.mjs bench/v4/real-use/tests/bridge.test.mjs bench/v4/real-use/tests/finalization-attribution.test.mjs",
+    "v4:test": "node --test bench/v4/real-use/tests/tasks.test.mjs bench/v4/real-use/tests/snapshot.test.mjs bench/v4/real-use/tests/runtime-tools.test.mjs bench/v4/real-use/tests/report.test.mjs bench/v4/real-use/tests/real-use.test.mjs bench/v4/real-use/tests/profiles.test.mjs bench/v4/real-use/tests/native-completion.test.mjs bench/v4/real-use/tests/launch.test.mjs bench/v4/real-use/tests/grade-adapter.test.mjs bench/v4/real-use/tests/execution.test.mjs bench/v4/real-use/tests/bridge.test.mjs bench/v4/real-use/tests/finalization-attribution.test.mjs bench/v4/real-use/tests/lineage.test.mjs bench/v4/real-use/tests/checker-smoke.test.mjs bench/v4/real-use/tests/mask-policy.test.mjs bench/v4/real-use/tests/excerpt-snapshots.test.mjs",
     "check": "node scripts/check-syntax.mjs",
     "index": "node .opencode/plugins/math-toolkit/scripts/build-index.mjs",
     "index:lean": "node .opencode/plugins/math-toolkit/scripts/build-lean-index.mjs",

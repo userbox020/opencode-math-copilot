@@ -67,6 +67,11 @@ Consequently the study has two honest readings of the same twenty answers:
 **19 pass + 1 unscorable** under human review of the pre-checker packet, with the
 difference fully explained.
 
+Both are recorded in `grading-lineage.json`: `post-improvement-tooling` (20 pass,
+10 both) and `human-review` (19 pass, 1 unscorable, 9 both, `reviewer_kinds:
+{human: 20}`). The ledger rejects duplicate labels and reports that do not match
+their reviews byte-for-byte.
+
 ## How the score moved — every step is a tooling correction, not a re-run
 
 The run was never re-executed. The same twenty answers were graded four times as

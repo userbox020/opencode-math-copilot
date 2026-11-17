@@ -444,7 +444,7 @@ test('lineage appends one hashed entry per pass, refuses duplicate labels and ne
   const before = files.map(file => readFileSync(file));
   const entry = lineageMain([...f.args, '--label', 'initial', '--note', 'First pass']);
   assert.deepEqual(Object.keys(entry), ['schema', 'label', 'note', 'recorded_at', 'blind_sha256',
-    'reviews_path', 'reviews_sha256', 'report_sha256', 'delivery', 'correctness', 'paired', 'checker_statuses']);
+    'reviews_path', 'reviews_sha256', 'report_sha256', 'delivery', 'correctness', 'paired', 'checker_statuses', 'reviewer_kinds']);
   assert.equal(entry.schema, 'real-use-grading-lineage/v1');
   assert.equal(entry.note, 'First pass');
   assert.equal(new Date(entry.recorded_at).toISOString(), entry.recorded_at);

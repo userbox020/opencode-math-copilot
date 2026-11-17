@@ -3,6 +3,14 @@
 **Status: design only. No ArXiv task has been run, and none should be until the
 controls in §4 pass.**
 
+**Implemented so far (offline, no dataset):** `mask-policy.mjs` provides the
+in-memory approved-excerpt policy (unsafe-path rejection, manifest hashing,
+approved-only read/search, sentinel absence), and `excerpt-snapshots.mjs` builds
+a snapshot from a real corpus source plus a reviewed span list, with hash
+verification, containment checks, span validation and closed errors. Together
+they cover the storage/tool enforcement layer and the six negative control
+classes at that layer (87 tests). Not yet done: the per-task reviewed span lists
+themselves, tool-handler wiring, checker binding and any ArXiv run.
 ## Why this is harder than the v4 ten-task study
 
 The inspected ArXivLean adapter accepts either `arxivlean_proof : P` or

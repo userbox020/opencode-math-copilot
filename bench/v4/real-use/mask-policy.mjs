@@ -19,6 +19,8 @@ function assertPath(logicalPath) {
   }
 }
 
+export { assertPath as assertLogicalPath };
+
 function hash(bytes) {
   return createHash('sha256').update(bytes).digest('hex');
 }
