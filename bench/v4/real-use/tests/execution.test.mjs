@@ -13,6 +13,7 @@ import { admitEpisode, assertCapabilityConsumed, consumeEpisodeCapability, consu
   GRADER_INTEGRATION_AMENDMENT, validateGraderIntegrationAmendment } from '../admission.mjs';
 import { executeFixtureSchedule, executeStudy, main } from '../execute.mjs';
 import { nativePromptBytes } from '../bridge.mjs';
+import { checkerRequestSurfaceHash } from '../grade.mjs';
 
 function directory(t) {
   const dir = fs.mkdtempSync(path.join(tmpdir(), 'real-use-execution-test-'));
@@ -272,47 +273,64 @@ function graderAmendmentDataFixture() {
   // Pinned operator-smoke artifacts are read only as data. No checker, Docker,
   // bridge, capability minting or model inference is performed by this fixture.
   const root = 'C:/Users/MiPC/AppData/Local/Temp/opencode', pin = GRADER_INTEGRATION_AMENDMENT;
-  return { sourceHashes: { [pin.source]: pin.from_sha256, [pin.adapter_source]: pin.adapter_sha256,
-    'unchanged-fixture-source': 'c'.repeat(64) }, currentGradeHash: pin.to_sha256, currentAdapterHash: pin.adapter_sha256,
+  return { sourceHashes: { [pin.source]: pin.origin_from_sha256, [pin.adapter_source]: pin.adapter_sha256,
+    'unchanged-fixture-source': 'c'.repeat(64) }, currentGradeHash: sha256(fs.readFileSync(new URL('../grade.mjs', import.meta.url))), currentAdapterHash: pin.adapter_sha256,
     artifacts: Object.fromEntries(Object.entries(pin.artifacts).map(([key, value]) => [key, fs.readFileSync(path.join(root, pin.root, value.path))])),
     buildBytes: fs.readFileSync(path.join(root, 'eval-checker-g004-789fe1d19ce243fda0851cb8601e7712/build-receipt.json')),
     followupBytes: fs.readFileSync(path.join(root, 'eval-checker-g004-followup-summary-lbMi2u/followup-summary.json')) };
 }
 
-test('exact grader lineage validates fresh pinned synthetic smoke data and changes only the grader expectation', async () => {
+test('current grader matches retained smoke provenance and validates against the pinned request surface', async () => {
   const input = graderAmendmentDataFixture(), before = { ...input.sourceHashes }, pin = GRADER_INTEGRATION_AMENDMENT;
-  assert.equal(pin.to_sha256, 'cd73166bcd0ec44a67e97569dc3b6da4ac3e1eac9b1f161ac5ed82fd85973722');
-  assert.equal(pin.to_sha256, sha256(fs.readFileSync(new URL('../grade.mjs', import.meta.url))));
-  assert.equal(pin.root, 'eval-checker-g024-grade-cli-Q7xuKv');
+  assert.equal(pin.smoke_produced_by_grade_sha256, 'b333f9e76dde024c86a45ebfc649d3794f3e814d0160da7487bb2a1fd7bb125c');
+  assert.equal(pin.smoke_produced_by_grade_sha256, input.currentGradeHash);
+  assert.equal(pin.request_surface_sha256, checkerRequestSurfaceHash());
+  assert.equal(pin.root, 'eval-checker-g024f-grade-cli-w7QbUw');
   await noExternalWork(async () => {
     const result = validateGraderIntegrationAmendment(input);
     assert.deepEqual(input.sourceHashes, before, 'historical controls/source map are not mutated');
-    assert.deepEqual(result.sourceHashes, { ...before, [pin.source]: pin.to_sha256 });
+    assert.deepEqual(result.sourceHashes, { ...before, [pin.source]: input.currentGradeHash });
     assert.equal(result.metadata.scope, 'operator synthetic CLI smoke not model outcome');
-    assert.equal(result.metadata.from_sha256, pin.from_sha256); assert.equal(result.metadata.to_sha256, pin.to_sha256);
+    assert.equal(result.metadata.origin_from_sha256, pin.origin_from_sha256);
+    assert.equal(result.metadata.current_grade_sha256, input.currentGradeHash);
+    assert.equal(result.metadata.smoke_produced_by_grade_sha256, pin.smoke_produced_by_grade_sha256);
+    assert.equal(result.metadata.request_surface_sha256, pin.request_surface_sha256);
     assert.equal(result.metadata.evidence_sha256.summary, pin.artifacts.summary.sha256);
     assert.ok(Object.isFrozen(result.metadata.evidence_sha256));
     assert.equal(isFinalizationReceipt(result), false);
     assert.throws(() => consumeEpisodeCapability(result, {}, {}), /invalid_or_consumed/);
+    const changedGradeHash = sha256('synthetic packet-only grader change');
+    assert.notEqual(changedGradeHash, pin.smoke_produced_by_grade_sha256);
+    const changed = validateGraderIntegrationAmendment({ ...input, currentGradeHash: changedGradeHash });
+    assert.equal(changed.metadata.current_grade_sha256, changedGradeHash);
+    assert.deepEqual(changed.sourceHashes, { ...before, [pin.source]: changedGradeHash });
   });
 });
 
-test('grader integration rejects the superseded to_sha256 despite otherwise valid fresh evidence', () => {
+test('grader integration rejects a changed request-surface function', async () => {
   const input = graderAmendmentDataFixture();
-  input.currentGradeHash = '5b7c9cf3290d52aeff06a6e4fe145e3c02566e9bade9cadb92384708f39d0446';
-  assert.throws(() => validateGraderIntegrationAmendment(input), { message: 'grader_integration_source_lineage_mismatch' });
+  // Mutate only an in-memory test module, not the loader or its production pins.
+  const url = new URL('../admission.mjs', import.meta.url), original = fs.readFileSync(url, 'utf8');
+  const changed = original.replace("import { checkerRequestSurfaceHash } from './grade.mjs';",
+    "const checkerRequestSurfaceHash = () => '0'.repeat(64);");
+  assert.notEqual(changed, original);
+  const source = changed.replace(/from '(\.[^']+)'/g, (_, specifier) => `from '${new URL(specifier, url).href}'`)
+    .replaceAll('import.meta.url', JSON.stringify(url.href));
+  const variant = await import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
+  assert.throws(() => variant.validateGraderIntegrationAmendment(input), { message: 'grader_integration_request_surface_mismatch' });
 });
 
 test('grader integration amendment rejects other transitions, paths, missing/tampered artifacts, adapter changes and wrong build/follow-up', () => {
   const pin = GRADER_INTEGRATION_AMENDMENT;
   for (const update of [
-    input => { input.currentGradeHash = '0'.repeat(64); },
+    input => { input.currentGradeHash = 'invalid-hash'; },
     input => { input.sourceHashes[pin.source] = '0'.repeat(64); },
     input => { input.sourceHashes['other/grade.mjs'] = input.sourceHashes[pin.source]; delete input.sourceHashes[pin.source]; },
     input => { input.currentAdapterHash = '0'.repeat(64); },
     input => { input.sourceHashes[pin.adapter_source] = '0'.repeat(64); },
     input => { input.buildBytes = Buffer.from('{}'); },
     input => { input.followupBytes = Buffer.from('{}'); },
+    input => { const build = JSON.parse(input.buildBytes); build.challenges['lean-cancellation-repair'].policy_sha256 = '0'.repeat(64); input.buildBytes = Buffer.from(JSON.stringify(build)); },
     ...Object.keys(pin.artifacts).flatMap(key => [
       input => { delete input.artifacts[key]; },
       input => { input.artifacts[key] = Buffer.concat([input.artifacts[key], Buffer.from(' ')]); },

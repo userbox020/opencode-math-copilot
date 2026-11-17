@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { main, checkerRequest, checkAnswer, exportBlind, validateReferenceSources } from '../grade.mjs';
+import { main, checkerRequest, checkerRequestSurfaceHash, checkAnswer, exportBlind, validateReferenceSources } from '../grade.mjs';
 import { canonical, makeManifest, sha256, writeManifest } from '../lib.mjs';
 import { POLICIES, PINS, LIMITS, PRIMITIVES, PROTOCOL, hash, resolveRequest } from '../checker/policies.mjs';
 
@@ -17,6 +17,48 @@ const task = realTasks.find(t => t.id === leanGold.task_id);
 const answer = '```lean\n' + leanGold.lean.positive_control + '\n```';
 const read = file => JSON.parse(fs.readFileSync(file, 'utf8'));
 const write = (file, value) => fs.writeFileSync(file, JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });
+
+async function gradeVariant(change) {
+  // In-memory mutation only: no source writes or alternate production authority.
+  const url = new URL('../grade.mjs', import.meta.url);
+  const original = fs.readFileSync(url, 'utf8'), changed = change(original);
+  assert.notEqual(changed, original, 'mutation must apply');
+  const source = changed.replace(/from '(\.[^']+)'/g, (_, specifier) => `from '${new URL(specifier, url).href}'`)
+    .replaceAll('import.meta.url', JSON.stringify(url.href));
+  return import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
+}
+
+test('request surface uses the real request builder and frozen cancellation policy', () => {
+  const request = checkerRequest('```lean\n#check Nat\n```', leanGold.lean);
+  assert.equal(request.policy_sha256, '4fcb2f16300d0ea4116ce6e0420fe5a0d30c45376b77d4b80bd8209f2a53e5e1');
+  assert.equal(checkerRequestSurfaceHash(), sha256(canonical(request)));
+  assert.equal(checkerRequestSurfaceHash(), '5eb116548bf5e5c6af45eba5a63a01e0484981f4a1bac172c1fe68a62d1755ac');
+});
+
+test('extraction, blind-ID and reference-validator source changes cannot change the request surface', async () => {
+  for (const change of [
+    source => source.replace('export function checkerRequest(answer, lean) {', 'export function checkerRequest(answer, lean) { return null;'),
+    source => source.replace("const baseId = sha256(task.id + '\\0' + answer);", "const baseId = 'unrelated-test-id';"),
+    source => source.replace('export function validateReferenceSources(gold, corpusRoot) {',
+      "export function validateReferenceSources(gold, corpusRoot) { throw new Error('unrelated-test-validator');"),
+  ]) {
+    const variant = await gradeVariant(change);
+    assert.equal(variant.checkerRequestSurfaceHash(), checkerRequestSurfaceHash());
+  }
+});
+
+test('request schema, field, hash and policy plumbing mutations change the request surface', async () => {
+  for (const [before, after] of [
+    ["schema: 'real-use-checker-request/v1'", "schema: 'real-use-checker-request/v2'"],
+    ['code_sha256: sha256(code)', "code_sha256: sha256(code + 'changed')"],
+    ['expected_type: lean.expected_type', "expected_type: 'False'"],
+    ['policy_sha256: sha256(policy)', "policy_sha256: sha256('changed')"],
+    ["schema: 'real-use-checker-request/v1', code,", "schema: 'real-use-checker-request/v1', extra: true, code,"],
+  ]) {
+    const variant = await gradeVariant(source => source.replace(before, after));
+    assert.notEqual(variant.checkerRequestSurfaceHash(), checkerRequestSurfaceHash());
+  }
+});
 
 const blindEpisodes = answers => answers.map((text, index) => ({
   episode_id: `fixture-${index}`, task_id: task.id, status: 'completed', text,

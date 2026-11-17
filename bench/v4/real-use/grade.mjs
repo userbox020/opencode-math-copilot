@@ -3,6 +3,7 @@ import { lstatSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from 
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { assertFreshOutput, canonical, loadEpisodes, parseArgs, readJSON, sha256, shuffled, validateGold } from './lib.mjs';
+import { POLICIES } from './checker/policies.mjs';
 
 function neutralInput(task, answer, gold) {
   // Allowlist projection: never spread an episode into a decision/checker input.
@@ -22,6 +23,10 @@ export function checkerRequest(answer, lean) {
   const selected = targeted.length ? targeted : matches;
   if (selected.length !== 1) return null;
   const code = selected[0][2].replace(/\r\n?/g, '\n');
+  return buildCheckerRequest(code, lean);
+}
+
+function buildCheckerRequest(code, lean) {
   const policy = {
     schema: 'real-use-checker-policy/v1', theorem: lean.theorem, expected_type: lean.expected_type,
     imports: [...lean.imports], allowed_axioms: [...lean.allowed_axioms],
@@ -29,6 +34,14 @@ export function checkerRequest(answer, lean) {
     isolation: 'independent A compile/export then B fixed-target comparison, closed-axiom audit and kernel replay; network disabled; no corpus mount; evaluator-fixed target',
   };
   return { schema: 'real-use-checker-request/v1', code, code_sha256: sha256(code), policy, policy_sha256: sha256(policy) };
+}
+
+// Pin only the shared request builder and frozen policy plumbing. Extraction,
+// blind IDs and reference validation must not affect this integration surface.
+export function checkerRequestSurfaceHash() {
+  const frozen = POLICIES.find(entry => entry.task_id === 'lean-cancellation-repair');
+  const request = buildCheckerRequest('#check Nat\n', { ...frozen.policy, positive_control: frozen.positive_control });
+  return sha256(canonical(request));
 }
 
 export async function checkAnswer(answer, lean, { checker, verifyReceipt } = {}) {

@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { assertFreshOutput, budgetStop, canonical, FRESH_PROFILES, profileForRole, profileRole, profileManifest, makeSchedule, promptBindings, promptFor, PROTOCOL_HASH, sha256, validatePublic } from './lib.mjs';
+import { checkerRequestSurfaceHash } from './grade.mjs';
 export { FRESH_PROFILES, profileManifest } from './lib.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -28,23 +29,24 @@ const approvals = new WeakMap(), capabilities = new WeakMap(), finalizations = n
 const fail = reason => { throw new Error(reason); };
 const same = (a, b) => canonical(a) === canonical(b);
 const freeze = value => { if (value && typeof value === 'object') { Object.values(value).forEach(freeze); Object.freeze(value); } return value; };
-// One-file lineage amendment for the extraction-only Lean-block change. The
-// historical controls and their pins remain unchanged; the fresh synthetic CLI
-// smoke below is the new binding, not a solver outcome. Parent reviews/freezes.
+// Request-contract amendment: historical controls and smoke provenance remain
+// pinned, but unrelated grader edits do not require another synthetic smoke.
+// The origin hash is documentation only; current grader bytes are run metadata.
 export const GRADER_INTEGRATION_AMENDMENT = freeze({
   schema: 'real-use-grader-integration-amendment/v1', scope: 'operator synthetic CLI smoke not model outcome',
   source: 'bench/v4/real-use/grade.mjs',
-  from_sha256: 'e36768e032aaf0a2358bf901b599b8a95b84305e8df3db882929bf02f4a875e1',
-  to_sha256: 'cd73166bcd0ec44a67e97569dc3b6da4ac3e1eac9b1f161ac5ed82fd85973722',
+  origin_from_sha256: 'e36768e032aaf0a2358bf901b599b8a95b84305e8df3db882929bf02f4a875e1',
+  request_surface_sha256: '5eb116548bf5e5c6af45eba5a63a01e0484981f4a1bac172c1fe68a62d1755ac',
+  smoke_produced_by_grade_sha256: 'b333f9e76dde024c86a45ebfc649d3794f3e814d0160da7487bb2a1fd7bb125c',
   adapter_source: 'bench/v4/real-use/checker-adapter.mjs',
   adapter_sha256: 'bdee73b268b96126a02d757256a8a1cb692f64b62499970388bd7eeb395b54cf',
   policy_sha256: '4fcb2f16300d0ea4116ce6e0420fe5a0d30c45376b77d4b80bd8209f2a53e5e1',
-  root: 'eval-checker-g024-grade-cli-Q7xuKv',
+  root: 'eval-checker-g024f-grade-cli-w7QbUw',
   artifacts: {
-    summary: { path: 'smoke-summary.json', sha256: 'b27b2718045428faedcd1fca6a0341cd5bf73cf976de56ca65d13b3d9831e89b' },
-    results: { path: 'captured-synthetic/evaluation/private/checker-results.json', sha256: '573c58d7fee11c7fe3a291976e7f7c7c18629858479a5d396a4ce5fb5c6ddc5e' },
+    summary: { path: 'smoke-summary.json', sha256: 'c320fc653573b991e44297d6ed62219927797efbabc4cb35a4a2a4366ab2fbf2' },
+    results: { path: 'captured-synthetic/evaluation/private/checker-results.json', sha256: '6b0e29ab6a69f158e756a56c3d1134cca4fd537337fd76810317737da7dff397' },
     requests: { path: 'captured-synthetic/evaluation/private/checker-requests.json', sha256: '1fb458c95a673944ffc1f41825fef5514abddece05353079ce7d27d2beb278eb' },
-    blind: { path: 'captured-synthetic/evaluation/blind.json', sha256: '1aaa285824b0e7a9a3924e3fefd4cbb9322bdc89ed869e4e28af98a731f78edd' },
+    blind: { path: 'captured-synthetic/evaluation/blind.json', sha256: '71ee1689976844b0f85e3739b3253e9bd471029374c8eb1a513fd85608550b56' },
   },
 });
 
@@ -57,18 +59,19 @@ export function validateGraderIntegrationAmendment({ sourceHashes, currentGradeH
     return JSON.parse(raw);
   };
   const build = decode(buildBytes, PINS.checker), followup = decode(followupBytes, PINS.followup);
-  if (!sourceHashes || sourceHashes[pin.source] !== pin.from_sha256 || currentGradeHash !== pin.to_sha256 ||
-      sourceHashes[pin.adapter_source] !== pin.adapter_sha256 || currentAdapterHash !== pin.adapter_sha256 ||
-      followup.current_source_sha256?.[pin.source] !== pin.from_sha256 ||
+  if (!sourceHashes || !digest(currentGradeHash) || !digest(sourceHashes[pin.source]) ||
+      sourceHashes[pin.source] !== followup.current_source_sha256?.[pin.source] ||
+       sourceHashes[pin.adapter_source] !== pin.adapter_sha256 || currentAdapterHash !== pin.adapter_sha256 ||
       followup.current_source_sha256?.[pin.adapter_source] !== pin.adapter_sha256 ||
-      build.source_hashes?.[pin.adapter_source] !== pin.adapter_sha256 || followup.build_receipt_sha256 !== PINS.checker) fail('grader_integration_source_lineage_mismatch');
+       build.source_hashes?.[pin.adapter_source] !== pin.adapter_sha256 || followup.build_receipt_sha256 !== PINS.checker) fail('grader_integration_source_lineage_mismatch');
+  if (checkerRequestSurfaceHash() !== pin.request_surface_sha256) fail('grader_integration_request_surface_mismatch');
   const decoded = Object.fromEntries(Object.entries(pin.artifacts).map(([key, value]) => [key, decode(artifacts?.[key], value.sha256)]));
   const { summary, results, requests, blind } = decoded;
   const root = path.join(TEMP, pin.root);
   if (summary.schema !== 'real-use-grade-cli-smoke/v1' ||
       summary.fixture !== 'operator gold positive; synthetic captured episode; NOT a model solve or study score' ||
       summary.cli_exit !== 0 || summary.checker_status !== 'accepted' || summary.no_provider_calls !== true ||
-      summary.grade_source_sha256 !== pin.to_sha256 || summary.adapter_sha256 !== pin.adapter_sha256 ||
+       summary.grade_source_sha256 !== pin.smoke_produced_by_grade_sha256 || summary.adapter_sha256 !== pin.adapter_sha256 ||
       summary.build_receipt_sha256 !== PINS.checker || summary.policy_sha256 !== pin.policy_sha256 || summary.cleanup !== 'confirmed_absent' ||
       path.resolve(summary.build_receipt) !== path.resolve(TEMP, CONTROL_FILES.checker) ||
       path.resolve(summary.private_result) !== path.resolve(root, pin.artifacts.results.path) ||
@@ -97,8 +100,10 @@ export function validateGraderIntegrationAmendment({ sourceHashes, currentGradeH
         outcome.exit_code !== 0 || outcome.signal !== null || outcome.failure !== null ||
         outcome.state?.Running !== false || outcome.state.ExitCode !== 0 || outcome.state.OOMKilled !== false) fail('grader_integration_cleanup_mismatch');
   }
-  return freeze({ sourceHashes: { ...sourceHashes, [pin.source]: pin.to_sha256 }, metadata: {
-    schema: pin.schema, scope: pin.scope, source: pin.source, from_sha256: pin.from_sha256, to_sha256: pin.to_sha256,
+  return freeze({ sourceHashes: { ...sourceHashes, [pin.source]: currentGradeHash }, metadata: {
+    schema: pin.schema, scope: pin.scope, source: pin.source, origin_from_sha256: pin.origin_from_sha256,
+    request_surface_sha256: pin.request_surface_sha256, smoke_produced_by_grade_sha256: pin.smoke_produced_by_grade_sha256,
+    current_grade_sha256: currentGradeHash,
     adapter_sha256: pin.adapter_sha256, policy_sha256: pin.policy_sha256,
     evidence_sha256: Object.fromEntries(Object.entries(pin.artifacts).map(([key, value]) => [key, value.sha256])),
     build_receipt_sha256: PINS.checker, followup_sha256: PINS.followup,
