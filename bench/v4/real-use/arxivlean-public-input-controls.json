@@ -1,0 +1,158 @@
+{
+  "schema": "arxivlean-public-input-controls/v1",
+  "task_file": "bench/v3/arxivlean/tasks/arxivlean-smoke5.json",
+  "tasks": [
+    {
+      "task_id": "arxivlean-01",
+      "manifest_sha256": "31cb5b6e48dcc1912cc1b96bd4376ff4f542a44c6b5d242ee8943b39087609bf",
+      "manifest_file_sha256": "054de1bc509fc0fd21239b5ef1f2e8f325e41753a8c12d4364ac85a12de16d33",
+      "conditions": {
+        "plugin-off": {
+          "pass": true,
+          "inventory": [
+            "list_sources",
+            "read_source",
+            "search_source"
+          ],
+          "failed": [],
+          "controls": 10
+        },
+        "plugin-on": {
+          "pass": true,
+          "inventory": [
+            "list_sources",
+            "math_manuscript",
+            "math_search",
+            "read_source",
+            "search_source"
+          ],
+          "failed": [],
+          "controls": 10
+        }
+      }
+    },
+    {
+      "task_id": "arxivlean-02",
+      "manifest_sha256": "99e85e2d3c8c8feefcb4f4d37cb37aee726ffe12fd6f6706a6d5e4aae2733970",
+      "manifest_file_sha256": "88daa5a76e02842967ec3c4205aaf16c4b1752a28e47c6fb337e1620dd8dd6de",
+      "conditions": {
+        "plugin-off": {
+          "pass": true,
+          "inventory": [
+            "list_sources",
+            "read_source",
+            "search_source"
+          ],
+          "failed": [],
+          "controls": 10
+        },
+        "plugin-on": {
+          "pass": true,
+          "inventory": [
+            "list_sources",
+            "math_manuscript",
+            "math_search",
+            "read_source",
+            "search_source"
+          ],
+          "failed": [],
+          "controls": 10
+        }
+      }
+    },
+    {
+      "task_id": "arxivlean-03",
+      "manifest_sha256": "0adb2c2f59d32cc87c23a3c8d8bcc8ad119422cc9275f786b20f374684e0feeb",
+      "manifest_file_sha256": "76d639d5d4b0f280dd15ebb944cb03f8069e4b8f30fb535592aa3957d50754bb",
+      "conditions": {
+        "plugin-off": {
+          "pass": true,
+          "inventory": [
+            "list_sources",
+            "read_source",
+            "search_source"
+          ],
+          "failed": [],
+          "controls": 10
+        },
+        "plugin-on": {
+          "pass": true,
+          "inventory": [
+            "list_sources",
+            "math_manuscript",
+            "math_search",
+            "read_source",
+            "search_source"
+          ],
+          "failed": [],
+          "controls": 10
+        }
+      }
+    },
+    {
+      "task_id": "arxivlean-04",
+      "manifest_sha256": "3a87f40560fdd865887e57e66f05489f8386276a6917d3655a45394a2331171a",
+      "manifest_file_sha256": "8bdfaf5217777c02779e7eafc4ce254a07cf81393060c39532eee16ecdbdfcf2",
+      "conditions": {
+        "plugin-off": {
+          "pass": true,
+          "inventory": [
+            "list_sources",
+            "read_source",
+            "search_source"
+          ],
+          "failed": [],
+          "controls": 10
+        },
+        "plugin-on": {
+          "pass": true,
+          "inventory": [
+            "list_sources",
+            "math_manuscript",
+            "math_search",
+            "read_source",
+            "search_source"
+          ],
+          "failed": [],
+          "controls": 10
+        }
+      }
+    },
+    {
+      "task_id": "arxivlean-05",
+      "manifest_sha256": "1b89cf0f191a758e8bf6f3097be192583a817ba0a2cb4bfe549eb83afc399c17",
+      "manifest_file_sha256": "256a4fe87be8f1c25c3e6f1102c4d4ede3c041cfa2d16bd0c2b900aa32449cff",
+      "conditions": {
+        "plugin-off": {
+          "pass": true,
+          "inventory": [
+            "list_sources",
+            "read_source",
+            "search_source"
+          ],
+          "failed": [],
+          "controls": 10
+        },
+        "plugin-on": {
+          "pass": true,
+          "inventory": [
+            "list_sources",
+            "math_manuscript",
+            "math_search",
+            "read_source",
+            "search_source"
+          ],
+          "failed": [],
+          "controls": 10
+        }
+      }
+    }
+  ],
+  "summary": {
+    "tasks": 5,
+    "all_pass": true,
+    "controls_per_condition": 10,
+    "admission": "not_admitted",
+    "reason": "public-input snapshots only; evaluator checker and task-bound positive controls pending"
+  }
+}

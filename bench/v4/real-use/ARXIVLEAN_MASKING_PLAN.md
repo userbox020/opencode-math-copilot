@@ -1,16 +1,20 @@
-# ArXivLean retrieval masking — decided design (not implemented)
+# ArXivLean retrieval masking — decided design
 
-**Status: design only. No ArXiv task has been run, and none should be until the
-controls in §4 pass.**
+**Status: storage/tool layer implemented and exercised; no ArXiv episode has been
+run. The five-task smoke remains blocked by the missing task-bound positive
+controls (the dataset's `answer` equals `formal_statement`).**
 
 **Implemented so far (offline, no dataset):** `mask-policy.mjs` provides the
 in-memory approved-excerpt policy (unsafe-path rejection, manifest hashing,
 approved-only read/search, sentinel absence), and `excerpt-snapshots.mjs` builds
 a snapshot from a real corpus source plus a reviewed span list, with hash
-verification, containment checks, span validation and closed errors. Together
-they cover the storage/tool enforcement layer and the six negative control
-classes at that layer (87 tests). Not yet done: the per-task reviewed span lists
-themselves, tool-handler wiring, checker binding and any ArXiv run.
+verification, containment checks, span validation and closed errors.
+`arxiv-snapshot.mjs` and `arxiv-snapshot-runtime.mjs` add the per-task
+public-input snapshot and handlers. All five selected tasks stage, build, serve
+and pass ten controls in both conditions; see `ARXIVLEAN_PREFLIGHT.md` and
+`arxivlean-public-input-controls.json`. The five formal statements also compile
+under the pinned Lean/Mathlib. Not done: a task-bound positive checker control,
+the additive checker executable/build, and any ArXiv run.
 ## Why this is harder than the v4 ten-task study
 
 The inspected ArXivLean adapter accepts either `arxivlean_proof : P` or

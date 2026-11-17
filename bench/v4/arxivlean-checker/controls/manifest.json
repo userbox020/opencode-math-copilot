@@ -1,0 +1,58 @@
+{
+  "schema": "arxivlean-controls/v1",
+  "task_file_sha256": "134516b1c25a46fa20943b3e5ae879133674b69682bd7f870b5da6871e920cb4",
+  "admission": "not_admitted",
+  "reason": "Missing task-bound positive proof or disproof in the frozen context for each of the five tasks.",
+  "entries": [
+    {
+      "task_id": "arxivlean-01",
+      "formal_statement_sha256": "e2164399ef4a88eb555877a9eb052ce245284716e3917926844c6d909ebcdc51",
+      "selected_directions": ["proof", "disproof"],
+      "controls": {
+        "positive": { "status": "pending_missing_gold_proof", "artifact": null },
+        "wrong_direction": { "expected": "rejected", "artifact": null },
+        "redefinition": { "expected": "rejected", "artifact": null }
+      }
+    },
+    {
+      "task_id": "arxivlean-02",
+      "formal_statement_sha256": "0eff8cb153501489fa96281fd0ee88f5ef164623ab4cf2a312b3d76138ebcb5f",
+      "selected_directions": ["proof", "disproof"],
+      "controls": {
+        "positive": { "status": "pending_missing_gold_proof", "artifact": null },
+        "wrong_direction": { "expected": "rejected", "artifact": null },
+        "redefinition": { "expected": "rejected", "artifact": null }
+      }
+    },
+    {
+      "task_id": "arxivlean-03",
+      "formal_statement_sha256": "02b309599298190e5cf3b88683243abcd02ad7a338e0740014f8aaab43150730",
+      "selected_directions": ["proof", "disproof"],
+      "controls": {
+        "positive": { "status": "pending_missing_gold_proof", "artifact": null },
+        "wrong_direction": { "expected": "rejected", "artifact": null },
+        "redefinition": { "expected": "rejected", "artifact": null }
+      }
+    },
+    {
+      "task_id": "arxivlean-04",
+      "formal_statement_sha256": "550fe9b9b2b4356d1a7ce5a281335b5f2d08397e59415e501d27bac1b884c571",
+      "selected_directions": ["proof", "disproof"],
+      "controls": {
+        "positive": { "status": "pending_missing_gold_proof", "artifact": null },
+        "wrong_direction": { "expected": "rejected", "artifact": null },
+        "redefinition": { "expected": "rejected", "artifact": null }
+      }
+    },
+    {
+      "task_id": "arxivlean-05",
+      "formal_statement_sha256": "a447944b984ceaadc20dae53ae05ea839084b35b418c1a84c62b24958bf6c745",
+      "selected_directions": ["proof", "disproof"],
+      "controls": {
+        "positive": { "status": "pending_missing_gold_proof", "artifact": null },
+        "wrong_direction": { "expected": "rejected", "artifact": null },
+        "redefinition": { "expected": "rejected", "artifact": null }
+      }
+    }
+  ]
+}
