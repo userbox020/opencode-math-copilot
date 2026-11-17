@@ -1,12 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { FRESH_PROFILES, loadEpisodes, profileForRole, profileManifest, RETIRED_PROFILES, sha256 } from '../lib.mjs';
 import { unblindReviews } from '../grade.mjs';
-import { loadFreshReportInputs, report } from '../report.mjs';
+import { gradingSummary, loadFreshReportInputs, main as reportMain, report } from '../report.mjs';
+import { main as lineageMain } from '../grading-lineage.mjs';
 
 const TEMP = 'C:\\Users\\MiPC\\AppData\\Local\\Temp\\opencode';
 const oldRoot = path.join(TEMP, 'real-use-study-g004-20261112');
@@ -37,6 +38,7 @@ test('legacy saved g004 report recomputes byte-for-byte without rewriting artifa
   const result = report(m, episodes, reviews, records);
   const saved = readFileSync(path.join(oldRoot, 'evaluation/report.json'), 'utf8');
   assert.equal(JSON.stringify(result, null, 2) + '\n', saved);
+  assert.equal(JSON.stringify(reportMain(['--out', oldRoot, '--reviews', path.join(oldRoot, 'evaluation/reviews.json')]), null, 2) + '\n', saved);
   assert.equal(result.schema, 'real-use-report/v1');
   assert.equal(result.overall.operational_failures, 1);
   assert.equal(result.overall.missingness.not_started, 18);
@@ -364,4 +366,140 @@ test('fresh report disk adapter rejects wrong setup identity, orphan setup files
   rmSync(path.join(out, 'setup/99.start.json'));
   write('execution-bindings.json', { schema: 'real-use-registered-execution/v1', registration_sha256: 'a'.repeat(64) });
   assert.throws(() => loadFreshReportInputs(out, m), /fresh report registration binding mismatch/);
+});
+
+function gradingFixture(t) {
+  const out = mkdtempSync(path.join(TEMP, 'grading-report-test-'));
+  t.after(() => rmSync(out, { recursive: true, force: true }));
+  mkdirSync(path.join(out, 'episodes'));
+  mkdirSync(path.join(out, 'evaluation/private'), { recursive: true });
+  const write = (relative, value) => writeFileSync(path.join(out, relative), JSON.stringify(value, null, 2) + '\n');
+  const schedule = ['plugin-on', 'plugin-off'].map((condition, index) => ({
+    episode_id: `fixture-${index}`, pair_id: 'fixture-pair', task_id: 'fixture-task', category: 'reasoning',
+    family: 'fixture', repeat: 0, condition,
+  }));
+  write('manifest.json', { run_id: 'report-test-only', schedule });
+  for (const item of schedule) write(`episodes/${item.episode_id}.json`, episode(item));
+  const records = schedule.map(item => ({ blind_id: item.episode_id, task: { id: item.task_id, category: item.category },
+    checker_required: false, checker: { status: 'not_applicable' } }));
+  const reviews = schedule.map(item => { const { episode_id, ...value } = review(item); return value; });
+  write('evaluation/blind.json', records);
+  write('evaluation/private/unblind.json', { schema: 'real-use-unblind/v1',
+    entries: schedule.map(item => ({ blind_id: item.episode_id, episode_id: item.episode_id })) });
+  write('evaluation/reviews.json', reviews);
+  const reviewsPath = path.join(out, 'evaluation/reviews.json'), reportPath = path.join(out, 'evaluation/report.json');
+  const args = ['--out', out, '--reviews', reviewsPath];
+  const result = reportMain(args);
+  write('evaluation/report.json', result);
+  return { out, args, reviewsPath, reportPath, records, reviews, result, write,
+    lineagePath: path.join(out, 'grading-lineage.json') };
+}
+
+test('repeatable sensitivity variants append summaries without changing primary fields or no-flag bytes', t => {
+  const f = gradingFixture(t), before = readFileSync(f.reportPath);
+  f.write('evaluation/reviews-one-fail.json', copy(f.reviews, values => { values[0].correctness = 'fail'; }));
+  f.write('evaluation/reviews-unscorable.json', copy(f.reviews, values => { values[1].correctness = 'unscorable'; }));
+  const variants = ['reviews-one-fail.json', 'reviews-unscorable.json'].map(name => path.join(f.out, 'evaluation', name));
+  const result = reportMain([...f.args, ...variants.flatMap(file => ['--sensitivity', file])]);
+  assert.equal(Object.keys(result).at(-1), 'sensitivity');
+  const { sensitivity, ...primary } = result;
+  assert.equal(JSON.stringify(primary, null, 2) + '\n', before.toString());
+  assert.equal(sensitivity.length, 2);
+  for (const [index, file] of variants.entries()) {
+    assert.deepEqual(sensitivity[index], { reviews_path: path.basename(file), reviews_sha256: sha256(readFileSync(file)),
+      ...gradingSummary(reportMain(['--out', f.out, '--reviews', file])) });
+    assert.deepEqual(sensitivity[index].delivery, gradingSummary(primary).delivery);
+  }
+  assert.deepEqual(sensitivity[0].correctness, { pass: 1, fail: 1, unscorable: 0 });
+  assert.equal(sensitivity[0].paired['OFF-only'], 1);
+  assert.deepEqual(sensitivity[1].correctness, { pass: 1, fail: 0, unscorable: 1 });
+  assert.equal(sensitivity[1].paired.ungraded, 1);
+  assert.equal(Object.hasOwn(reportMain(f.args), 'sensitivity'), false);
+  assert.equal(JSON.stringify(reportMain(f.args), null, 2) + '\n', before.toString());
+  assert.deepEqual(readFileSync(f.reportPath), before);
+  assert.deepEqual(json(f.reviewsPath), f.reviews);
+});
+
+test('sensitivity supports an unreviewed primary and rejects missing flag values', t => {
+  const f = gradingFixture(t);
+  const primary = reportMain(['--out', f.out]);
+  const { sensitivity, ...result } = reportMain(['--out', f.out, '--sensitivity', f.reviewsPath]);
+  assert.deepEqual(result, primary);
+  assert.equal(sensitivity[0].correctness.pass, 2);
+  assert.throws(() => reportMain([...f.args, '--sensitivity']), /missing value: --sensitivity/);
+  assert.throws(() => reportMain([...f.args, '--sensitivity', '--reviews', f.reviewsPath]), /missing value: --sensitivity/);
+});
+
+test('fresh grading summaries retain delivery and correctness semantics and paired counts', () => {
+  const m = manifest(), episodes = m.schedule.slice(0, 2).map(item => episode(item));
+  const result = report(m, episodes, [review(episodes[0]), review(episodes[1], { correctness: 'fail' })]);
+  assert.deepEqual(gradingSummary(result), { delivery: result.overall.delivery,
+    correctness: result.overall.correctness, paired: result.overall.paired_correctness.counts });
+  assert.equal(gradingSummary(report(manifest(compatProfile.profile_id), [])).paired, null);
+});
+
+test('lineage appends one hashed entry per pass, refuses duplicate labels and never mutates inputs', t => {
+  const f = gradingFixture(t);
+  const files = [path.join(f.out, 'evaluation/blind.json'), f.reviewsPath, f.reportPath];
+  const before = files.map(file => readFileSync(file));
+  const entry = lineageMain([...f.args, '--label', 'initial', '--note', 'First pass']);
+  assert.deepEqual(Object.keys(entry), ['schema', 'label', 'note', 'recorded_at', 'blind_sha256',
+    'reviews_path', 'reviews_sha256', 'report_sha256', 'delivery', 'correctness', 'paired', 'checker_statuses']);
+  assert.equal(entry.schema, 'real-use-grading-lineage/v1');
+  assert.equal(entry.note, 'First pass');
+  assert.equal(new Date(entry.recorded_at).toISOString(), entry.recorded_at);
+  assert.equal(entry.blind_sha256, sha256(before[0]));
+  assert.equal(entry.reviews_path, 'evaluation/reviews.json');
+  assert.equal(entry.reviews_sha256, sha256(before[1]));
+  assert.equal(entry.report_sha256, sha256(before[2]));
+  assert.deepEqual(entry.checker_statuses, { not_applicable: 2 });
+  assert.deepEqual(entry.correctness, { pass: 2, fail: 0, unscorable: 0 });
+  assert.deepEqual(json(f.lineagePath), [entry]);
+  const firstBytes = readFileSync(f.lineagePath);
+  assert.throws(() => lineageMain([...f.args, '--label', 'initial']), /duplicate grading lineage label/);
+  assert.deepEqual(readFileSync(f.lineagePath), firstBytes);
+  const second = lineageMain([...f.args, '--label', 'confirmed']);
+  assert.equal(second.note, null);
+  assert.deepEqual(json(f.lineagePath), [entry, second]);
+  assert.deepEqual(readFileSync(f.lineagePath).subarray(0, firstBytes.lastIndexOf(0x5d)), firstBytes.subarray(0, firstBytes.lastIndexOf(0x5d)));
+  files.forEach((file, index) => assert.deepEqual(readFileSync(file), before[index]));
+});
+
+test('lineage preserves prior entry bytes and formatting, including non-ASCII notes', t => {
+  const f = gradingFixture(t);
+  const original = '[ \n { "schema":"real-use-grading-lineage/v1", "label" : "old", "note":"π ] old" }\t\n]\n  ';
+  writeFileSync(f.lineagePath, original);
+  const entry = lineageMain([...f.args, '--label', 'new']);
+  const bytes = Buffer.from(original), prefix = bytes.subarray(0, bytes.lastIndexOf(0x5d));
+  assert.deepEqual(readFileSync(f.lineagePath).subarray(0, prefix.length), prefix);
+  assert.deepEqual(json(f.lineagePath), [...JSON.parse(original), entry]);
+});
+
+test('lineage refuses byte-mismatched reports and stale reviews without appending', t => {
+  const f = gradingFixture(t), before = readFileSync(f.reportPath);
+  writeFileSync(f.reportPath, JSON.stringify(f.result));
+  assert.throws(() => lineageMain([...f.args, '--label', 'wrong-bytes']), /report.json does not match/);
+  assert.equal(existsSync(f.lineagePath), false);
+  writeFileSync(f.reportPath, before);
+  lineageMain([...f.args, '--label', 'current']);
+  const prior = readFileSync(f.lineagePath);
+  f.write('evaluation/reviews.json', copy(f.reviews, values => { values[0].correctness = 'fail'; }));
+  assert.throws(() => lineageMain([...f.args, '--label', 'stale']), /report.json does not match/);
+  assert.deepEqual(readFileSync(f.lineagePath), prior);
+  assert.deepEqual(readFileSync(f.reportPath), before);
+  f.write('evaluation/report.json', reportMain(f.args));
+  const entry = lineageMain([...f.args, '--label', 'regraded']);
+  assert.deepEqual(entry.correctness, { pass: 1, fail: 1, unscorable: 0 });
+  assert.equal(json(f.lineagePath).length, 2);
+});
+
+test('lineage refuses a report stale against changed checker evidence and requires explicit reviews', t => {
+  const f = gradingFixture(t);
+  f.write('evaluation/reviews.json', f.reviews.map(value => ({ ...value, correctness: 'fail' })));
+  f.write('evaluation/report.json', reportMain(f.args));
+  f.write('evaluation/blind.json', f.records.map(value => ({ ...value, checker_required: true,
+    checker: { status: 'grader_unavailable' } })));
+  assert.throws(() => lineageMain([...f.args, '--label', 'stale-checker']), /report.json does not match/);
+  assert.equal(existsSync(f.lineagePath), false);
+  assert.throws(() => lineageMain(['--out', f.out, '--label', 'no-reviews']), /--reviews required/);
 });

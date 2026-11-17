@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { main, checkerRequest, checkAnswer } from '../grade.mjs';
+import { main, checkerRequest, checkAnswer, exportBlind, validateReferenceSources } from '../grade.mjs';
 import { canonical, makeManifest, sha256, writeManifest } from '../lib.mjs';
 import { POLICIES, PINS, LIMITS, PRIMITIVES, PROTOCOL, hash, resolveRequest } from '../checker/policies.mjs';
 
@@ -17,6 +17,181 @@ const task = realTasks.find(t => t.id === leanGold.task_id);
 const answer = '```lean\n' + leanGold.lean.positive_control + '\n```';
 const read = file => JSON.parse(fs.readFileSync(file, 'utf8'));
 const write = (file, value) => fs.writeFileSync(file, JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });
+
+const blindEpisodes = answers => answers.map((text, index) => ({
+  episode_id: `fixture-${index}`, task_id: task.id, status: 'completed', text,
+}));
+
+test('blind IDs are stable across runs and contain only the task/answer digest', async () => {
+  const episodes = blindEpisodes(['first answer', 'second answer']);
+  const first = await exportBlind([task], [leanGold], episodes);
+  const second = await exportBlind([task], [leanGold], episodes.map(episode => ({
+    ...episode, condition: 'private-condition', model: 'private-model', usage: { private: true },
+  })));
+  const ids = result => result.records.map(record => [record.answer, record.blind_id]).sort();
+  assert.deepEqual(ids(first), ids(second));
+  for (const record of first.records) {
+    assert.equal(record.blind_id, sha256(task.id + '\0' + record.answer));
+    assert.match(record.blind_id, /^[a-f0-9]{64}$/);
+  }
+});
+
+test('distinct answer bytes produce distinct blind IDs without trimming or normalising', async () => {
+  const result = await exportBlind([task], [leanGold], blindEpisodes(['λ', 'λ ', 'λ\n', 'λ\r\n']));
+  assert.equal(new Set(result.records.map(record => record.blind_id)).size, 4);
+});
+
+test('duplicate answers receive deterministic suffixes in packet order', async () => {
+  const episodes = blindEpisodes(['same', 'same', 'different', 'same']);
+  const base = sha256(task.id + '\0same');
+  for (const seed of ['first-run', 'second-run']) {
+    const result = await exportBlind([task], [leanGold], episodes, {}, seed);
+    assert.deepEqual(result.records.filter(record => record.answer === 'same').map(record => record.blind_id),
+      [base, `${base}-2`, `${base}-3`]);
+    assert.equal(new Set(result.records.map(record => record.blind_id)).size, 4);
+    assert.deepEqual(result.private_map.entries.map(entry => entry.blind_id), result.records.map(record => record.blind_id));
+  }
+});
+
+function referenceFixture() {
+  const corpusRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'grade-reference-test-'));
+  const text = 'Heading\r\n  Compilation\talone is not proof verification.  Full evidence is required. \r\nLast line.\r\n';
+  fs.writeFileSync(path.join(corpusRoot, 'reference.txt'), text, { flag: 'wx' });
+  const reference = { path: 'reference.txt', sha256: sha256(text), locator: 'L2',
+    quote: 'Compilation alone is not proof verification. Full evidence is required.' };
+  const gold = ref => [{ ...leanGold, reference_sources: [ref] }];
+  return { corpusRoot, reference, gold };
+}
+
+const referenceError = paths => error => {
+  assert.equal(error.code, 'reference_validation_failed');
+  assert.deepEqual(error.paths, paths);
+  assert.equal(error.message, `reference_validation_failed: ${JSON.stringify(paths)}`);
+  return true;
+};
+
+const unsafeReferenceError = (paths, escape = false) => error => {
+  assert.equal(error.code, 'unsafe_corpus_relative_reference');
+  assert.deepEqual(error.paths, paths);
+  assert.match(error.message, /unsafe corpus-relative/);
+  const detail = escape ? ' (reference escapes corpus root)' : '';
+  assert.equal(error.message, `unsafe corpus-relative reference path${detail}: ${JSON.stringify(paths)}`);
+  return true;
+};
+
+test('truncated single-line quote fails packet construction before adjudication', async () => {
+  const { corpusRoot, reference, gold } = referenceFixture();
+  const entries = gold({ ...reference, quote: 'Full evidence is required.' });
+  await assert.rejects(exportBlind([task], entries, blindEpisodes(['answer']), {
+    decide: () => assert.fail('must validate before adjudication'),
+  }, 'fixture', { corpusRoot }), referenceError(['reference.txt']));
+});
+
+test('full-line quotes pass with whitespace normalisation and case-insensitive single-line locators', async () => {
+  const { corpusRoot, reference, gold } = referenceFixture();
+  for (const locator of ['L2', 'l2', 'line 2', 'LiNe 2']) {
+    const result = await exportBlind([task], gold({ ...reference, locator,
+      quote: `Context:\n${reference.quote.replaceAll(' ', '\t  ')}\nMore context.` }),
+    blindEpisodes(['answer']), {}, 'fixture', { corpusRoot });
+    assert.deepEqual(result.reference_validation, { status: 'validated' });
+    assert.deepEqual(result.records[0].reference_validation, { status: 'validated' });
+  }
+});
+
+test('quotes absent from the file fail with a closed code and all offending paths', () => {
+  const { corpusRoot, reference, gold } = referenceFixture();
+  fs.writeFileSync(path.join(corpusRoot, 'other.txt'), 'Other source.', { flag: 'wx' });
+  const entries = gold({ ...reference, locator: 'section', quote: 'Absent quotation.' });
+  entries[0].reference_sources.push({ ...reference, path: 'other.txt', locator: 'section' });
+  assert.throws(() => validateReferenceSources(entries, corpusRoot), referenceError(['reference.txt', 'other.txt']));
+});
+
+test('traversal and absolute reference paths are rejected', () => {
+  const { corpusRoot, reference, gold } = referenceFixture();
+  for (const unsafe of ['../reference.txt', 'nested/../reference.txt', '..\\reference.txt',
+    '/reference.txt', 'C:\\reference.txt', 'C:reference.txt', 'C:/reference.txt',
+    'lean\\docs\\reference.md', '\\\\server\\share\\reference.txt', path.join(corpusRoot, 'reference.txt')]) {
+    assert.throws(() => validateReferenceSources(gold({ ...reference, path: unsafe }), corpusRoot), unsafeReferenceError([unsafe]));
+  }
+});
+
+test('non-regular and missing reference files are rejected', () => {
+  const { corpusRoot, reference, gold } = referenceFixture();
+  fs.mkdirSync(path.join(corpusRoot, 'directory'));
+  for (const invalid of ['directory', 'missing.txt']) {
+    assert.throws(() => validateReferenceSources(gold({ ...reference, path: invalid }), corpusRoot), unsafeReferenceError([invalid]));
+  }
+});
+
+test('junction or symlink escape retains the closed unsafe-path and escape messages', () => {
+  const { corpusRoot, reference, gold } = referenceFixture();
+  const outside = referenceFixture().corpusRoot;
+  fs.symlinkSync(outside, path.join(corpusRoot, 'escape'), process.platform === 'win32' ? 'junction' : 'dir');
+  assert.throws(() => validateReferenceSources(gold({ ...reference, path: 'escape/reference.txt' }), corpusRoot),
+    unsafeReferenceError(['escape/reference.txt'], true));
+});
+
+test('single-line locators outside the file fail closed', () => {
+  const { corpusRoot, reference, gold } = referenceFixture();
+  for (const locator of ['L0', 'L99', 'line 9007199254740992']) {
+    assert.throws(() => validateReferenceSources(gold({ ...reference, locator }), corpusRoot), referenceError(['reference.txt']));
+  }
+});
+
+test('multi-line locators use normalised substring matching rather than full-line matching', () => {
+  const { corpusRoot, reference, gold } = referenceFixture();
+  for (const locator of ['L2-L3', 'lines 2-3', 'line 2 to line 3']) {
+    assert.deepEqual(validateReferenceSources(gold({ ...reference, locator,
+      quote: 'Full evidence is required.\n\tLast line.' }), corpusRoot), { status: 'validated' });
+  }
+});
+
+test('missing corpus root records skipped_no_corpus for offline packets', async () => {
+  const { reference, gold } = referenceFixture();
+  const entries = gold({ ...reference, path: 'not-present.txt' });
+  assert.deepEqual(validateReferenceSources(entries), { status: 'skipped_no_corpus' });
+  const result = await exportBlind([task], entries, blindEpisodes(['answer']));
+  assert.deepEqual(result.reference_validation, { status: 'skipped_no_corpus' });
+  assert.deepEqual(result.records[0].reference_validation, { status: 'skipped_no_corpus' });
+});
+
+test('PDF and NUL-detected binary references skip quote matching and report only paths', () => {
+  const { corpusRoot, reference, gold } = referenceFixture();
+  for (const [file, bytes] of [
+    ['paper.pdf', Buffer.from('%PDF-1.7\n\0synthetic binary stream\n%%EOF')],
+    ['uppercase.PdF', Buffer.from('%PDF-1.7\nNo NUL byte required for PDF detection.')],
+    ['source.bin', Buffer.concat([Buffer.alloc(4095, 65), Buffer.from([0])])],
+  ]) {
+    fs.writeFileSync(path.join(corpusRoot, file), bytes, { flag: 'wx' });
+    assert.deepEqual(validateReferenceSources(gold({ ...reference, path: file, sha256: sha256(bytes),
+      locator: 'p. 3', quote: 'A quotation not present in the binary bytes.' }), corpusRoot),
+    { status: 'validated_with_skips', skipped_binary: [file] });
+  }
+});
+
+test('mixed text and PDF references preserve binary skip paths in packet validation', async () => {
+  const { corpusRoot, reference, gold } = referenceFixture();
+  const bytes = Buffer.from('%PDF-1.7\n\0synthetic binary stream\n%%EOF');
+  fs.writeFileSync(path.join(corpusRoot, 'paper.pdf'), bytes, { flag: 'wx' });
+  const entries = gold(reference);
+  entries[0].reference_sources.push({ ...reference, path: 'paper.pdf', sha256: sha256(bytes), locator: 'p. 3' });
+  const expected = { status: 'validated_with_skips', skipped_binary: ['paper.pdf'] };
+  const result = await exportBlind([task], entries, blindEpisodes(['answer']), {}, 'fixture', { corpusRoot });
+  assert.deepEqual(result.reference_validation, expected);
+  assert.deepEqual(result.records[0].reference_validation, expected);
+  entries[0].reference_sources[0].quote = 'Absent quotation.';
+  assert.throws(() => validateReferenceSources(entries, corpusRoot), referenceError(['reference.txt']));
+});
+
+test('binary detection does not bypass unsafe or missing paths or inspect beyond 4 KiB', () => {
+  const { corpusRoot, reference, gold } = referenceFixture();
+  for (const file of ['missing.pdf', '../paper.pdf', '/paper.pdf']) {
+    assert.throws(() => validateReferenceSources(gold({ ...reference, path: file }), corpusRoot), unsafeReferenceError([file]));
+  }
+  fs.writeFileSync(path.join(corpusRoot, 'late-nul.txt'), Buffer.concat([Buffer.alloc(4096, 65), Buffer.from([0])]));
+  assert.throws(() => validateReferenceSources(gold({ ...reference, path: 'late-nul.txt' }), corpusRoot),
+    referenceError(['late-nul.txt']));
+});
 
 test('single lean block retains its code, schema, hashes and frozen policy', () => {
   const request = checkerRequest(answer, leanGold.lean);
@@ -103,6 +278,7 @@ test('target selection allows declaration whitespace/newlines and preserves extr
 function fixture({ text = answer, startedOnly = true } = {}) {
   // Keep evidence in owned directories; do not recursively clean shared paths.
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'eval-checker-g004-grade-test-'));
+  const corpus = path.join(root, 'corpus'); fs.mkdirSync(corpus);
   const workspace = path.join(root, 'solver'); fs.mkdirSync(workspace);
   const out = path.join(root, 'captured');
   const manifest = makeManifest([task], { model: 'fixture/no-inference', workspace, run_id: 'synthetic_cli_fixture', seed: 'fixture' });
@@ -114,10 +290,28 @@ function fixture({ text = answer, startedOnly = true } = {}) {
   const gold = path.join(root, 'gold.json'); write(gold, [leanGold]);
   const receipt = path.join(root, 'checker-build.json'); write(receipt, { fixture_only: true });
   const work = path.join(root, 'private-checker-work');
-  const baseArgs = ['--out', out, '--gold', gold];
+  const baseArgs = ['--out', out, '--gold', gold, '--corpus-root', corpus];
   const checkerArgs = ['--checker-build-receipt', receipt, '--checker-work-dir', work, '--docker-executable', process.execPath];
-  return { root, workspace, out, manifest, item, gold, receipt, work, baseArgs, checkerArgs };
+  return { root, corpus, workspace, out, manifest, item, gold, receipt, work, baseArgs, checkerArgs };
 }
+
+test('CLI requires corpus root before output creation and validates when supplied', () => {
+  const f = fixture();
+  const source = 'Complete reference line.\n';
+  fs.writeFileSync(path.join(f.corpus, 'reference.txt'), source, { flag: 'wx' });
+  fs.writeFileSync(f.gold, JSON.stringify([{ ...leanGold, reference_sources: [
+    { path: 'reference.txt', sha256: sha256(source), locator: 'L1', quote: source.trim() },
+  ] }]));
+  const cli = args => spawnSync(process.execPath, [path.resolve(import.meta.dirname, '../grade.mjs'), ...args],
+    { encoding: 'utf8', env: process.platform === 'win32' ? { SystemRoot: process.env.SystemRoot } : {} });
+  const missing = cli(f.baseArgs.slice(0, -2));
+  assert.equal(missing.status, 1);
+  assert.match(missing.stderr, /--corpus-root required/);
+  assert.equal(fs.existsSync(path.join(f.out, 'evaluation')), false);
+  const validated = cli(f.baseArgs);
+  assert.equal(validated.status, 0, validated.stderr);
+  assert.deepEqual(read(path.join(f.out, 'evaluation/blind.json'))[0].reference_validation, { status: 'validated' });
+});
 
 function fixtureFactory({ malformed = false, forged = false } = {}) {
   const calls = [], options = [], ledger = new Map();
@@ -226,9 +420,8 @@ test('manifest/reference hashes and frozen gold policy preflight before the firs
     const f = fixture(); let called = false; const extra = [];
     if (mode === 'manifest') fs.writeFileSync(path.join(f.out, 'manifest.json'), JSON.stringify({ ...f.manifest, public_tasks_hash: '0'.repeat(64) }));
     if (mode === 'reference') {
-      const corpus = path.join(f.root, 'corpus'); fs.mkdirSync(corpus); fs.writeFileSync(path.join(corpus, 'reference.txt'), 'source');
+      fs.writeFileSync(path.join(f.corpus, 'reference.txt'), 'source');
       fs.writeFileSync(f.gold, JSON.stringify([{ ...leanGold, reference_sources: [{ path: 'reference.txt', sha256: '0'.repeat(64), locator: 'L1', quote: 'source' }] }]));
-      extra.push('--corpus-root', corpus);
     }
     if (mode === 'policy') fs.writeFileSync(f.gold, JSON.stringify([{ ...leanGold, lean: { ...leanGold.lean, expected_type: 'False' } }]));
     if (mode === 'oversized-code') fs.writeFileSync(path.join(f.out, 'episodes', f.item.episode_id + '.answer.txt'), '```lean\n' + 'x'.repeat(LIMITS.sourceBytes + 1) + '\n```');

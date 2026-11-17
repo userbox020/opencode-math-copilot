@@ -26,6 +26,9 @@ jobs:
       - run: python -m pip install sympy
       - run: npm run check
       - run: npm test
+      # Ubuntu intentionally skips the Windows Job Objects and actual-launch harness tests.
+      - run: npm run v4:test
+        if: runner.os == 'Windows'
       - name: Smoke-test package installation
         shell: bash
         run: |

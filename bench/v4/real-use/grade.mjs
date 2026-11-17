@@ -68,11 +68,12 @@ export async function evaluateAnswer(task, answer, gold, adapters = {}) {
   return result;
 }
 
-export async function exportBlind(tasks, gold, episodes, adapters = {}, seed = randomUUID()) {
+export async function exportBlind(tasks, gold, episodes, adapters = {}, seed = randomUUID(), { corpusRoot } = {}) {
   validateGold(gold, tasks);
+  const referenceValidation = validateReferenceSources(gold, corpusRoot);
   const taskById = new Map(tasks.map(task => [task.id, task]));
   const goldById = new Map(gold.map(entry => [entry.task_id, entry]));
-  const seen = new Set();
+  const seen = new Set(), blindCounts = new Map();
   const records = [], entries = [], checkerRequests = [], checkerResults = [];
   for (const episode of shuffled(episodes, seed)) {
     if (!taskById.has(episode.task_id) || !episode.episode_id || seen.has(episode.episode_id)) throw new Error('unknown/duplicate episode');
@@ -92,11 +93,15 @@ export async function exportBlind(tasks, gold, episodes, adapters = {}, seed = r
     if (entry.lean) {
       if (request) checkerRequests.push({ episode_id: episode.episode_id, request });
     }
-    const blind_id = randomUUID();
+    const baseId = sha256(task.id + '\0' + answer);
+    const occurrence = (blindCounts.get(baseId) ?? 0) + 1;
+    blindCounts.set(baseId, occurrence);
+    const blind_id = occurrence === 1 ? baseId : `${baseId}-${occurrence}`;
     records.push({
       schema: 'real-use-blind/v1', blind_id,
       task: { id: task.id, category: task.category, family: task.family, prompt: task.prompt },
       answer, rubric: structuredClone(entry.rubric), reference_sources: structuredClone(entry.reference_sources),
+      reference_validation: referenceValidation,
       checker: result.checker, candidate_status: result.status,
       checker_required: Boolean(entry.lean),
       checker_binding: request ? { code_sha256: request.code_sha256, policy_sha256: request.policy_sha256 } : null,
@@ -113,7 +118,8 @@ export async function exportBlind(tasks, gold, episodes, adapters = {}, seed = r
       checkerResults.push({ blind_id, episode_id: episode.episode_id, checker: result.checker, receipt });
     }
   }
-  return { records, private_map: { schema: 'real-use-unblind/v1', entries }, checker_requests: checkerRequests, checker_results: checkerResults };
+  return { records, reference_validation: referenceValidation,
+    private_map: { schema: 'real-use-unblind/v1', entries }, checker_requests: checkerRequests, checker_results: checkerResults };
 }
 
 // Records are evaluator-owned exports, never solver receipts or reviewer fields.
@@ -170,14 +176,66 @@ export function unblindReviews(reviews, records, privateMap) {
 }
 
 function referenceFile(root, relative) {
-  if (path.isAbsolute(relative) || path.win32.isAbsolute(relative) || relative.includes('\\') ||
+  if (typeof relative !== 'string' || !relative || relative.includes('\0') ||
+      path.isAbsolute(relative) || path.win32.isAbsolute(relative) || relative.includes('\\') ||
       relative.includes(':') || relative.split('/').includes('..')) throw new Error('unsafe corpus-relative reference path');
-  const file = realpathSync(path.resolve(root, relative));
+  const file = regularFile(path.resolve(root, relative), 'reference');
   const resolved = path.relative(root, file);
   if (!resolved || resolved === '..' || resolved.startsWith(`..${path.sep}`) || path.isAbsolute(resolved)) {
-    throw new Error('reference escapes corpus root');
+    throw Object.assign(new Error('reference escapes corpus root'), { code: 'reference_escapes_corpus_root' });
   }
   return file;
+}
+
+export function validateReferenceSources(gold, corpusRoot) {
+  if (corpusRoot == null) return { status: 'skipped_no_corpus' };
+  const failures = new Set(), skippedBinary = new Set();
+  let root;
+  try {
+    root = realpathSync(path.resolve(corpusRoot));
+    if (!lstatSync(root).isDirectory()) root = null;
+  } catch { root = null; }
+  const normalise = text => text.trim().replace(/\s+/g, ' ');
+  for (const entry of gold) for (const reference of entry.reference_sources) {
+    let bytes;
+    try {
+      if (!root) throw new Error('invalid corpus root');
+      bytes = readFileSync(referenceFile(root, reference.path));
+    } catch (cause) {
+      const paths = [reference.path];
+      const detail = cause.code === 'reference_escapes_corpus_root' ? ' (reference escapes corpus root)' : '';
+      const error = new Error(`unsafe corpus-relative reference path${detail}: ${JSON.stringify(paths)}`);
+      error.code = 'unsafe_corpus_relative_reference';
+      error.paths = paths;
+      throw error;
+    }
+    try {
+      if (path.extname(reference.path).toLowerCase() === '.pdf' || bytes.subarray(0, 4096).includes(0)) {
+        skippedBinary.add(reference.path);
+        continue;
+      }
+      const text = bytes.toString('utf8');
+      const quote = normalise(reference.quote);
+      const singleLine = /^(?:L(\d+)|line\s+(\d+))$/i.exec(reference.locator.trim());
+      if (!quote) throw new Error('empty quote');
+      if (singleLine) {
+        const number = Number(singleLine[1] ?? singleLine[2]);
+        const line = text.split(/\r\n|\n|\r/)[number - 1];
+        if (!Number.isSafeInteger(number) || number < 1 || line === undefined ||
+            !quote.includes(normalise(line))) throw new Error('incomplete line quote');
+      } else if (!normalise(text).includes(quote)) throw new Error('quote absent');
+    } catch { failures.add(reference.path); }
+  }
+  if (failures.size) {
+    const paths = [...failures];
+    const error = new Error(`reference_validation_failed: ${JSON.stringify(paths)}`);
+    error.code = 'reference_validation_failed';
+    error.paths = paths;
+    throw error;
+  }
+  return skippedBinary.size
+    ? { status: 'validated_with_skips', skipped_binary: [...skippedBinary] }
+    : { status: 'validated' };
 }
 
 function absoluteLocal(value, label) {
@@ -215,6 +273,7 @@ export async function main(argv, { adapterFactory } = {}) {
   const checkerCount = checkerFlags.filter(key => Object.hasOwn(args, key)).length;
   if (checkerCount && checkerCount !== checkerFlags.length) throw new Error('checker flags are all-or-none: --checker-build-receipt --checker-work-dir --docker-executable');
   if (!args['--out'] || !args['--gold']) throw new Error('--out and evaluator-only --gold required');
+  if (!args['--corpus-root']) throw new Error('--corpus-root required');
   const outPath = path.resolve(args['--out']);
   const outStat = lstatSync(outPath);
   if (!outStat.isDirectory() || outStat.isSymbolicLink()) throw new Error('unsafe captured-run directory');
@@ -224,11 +283,10 @@ export async function main(argv, { adapterFactory } = {}) {
   if (manifest.public_tasks_hash !== sha256(manifest.tasks)) throw new Error('public task hash mismatch');
   const goldFile = path.resolve(args['--gold']);
   const gold = validateGold(readJSON(goldFile), manifest.tasks);
-  const hasReferences = gold.some(entry => entry.reference_sources.length);
-  if (hasReferences && !args['--corpus-root']) throw new Error('--corpus-root required for corpus-relative references');
-  const corpusRoot = hasReferences ? realpathSync(path.resolve(args['--corpus-root'])) : null;
+  const corpusRoot = args['--corpus-root'];
+  validateReferenceSources(gold, corpusRoot);
   for (const entry of gold) for (const reference of entry.reference_sources) {
-    const bytes = readFileSync(referenceFile(corpusRoot, reference.path));
+    const bytes = readFileSync(referenceFile(realpathSync(path.resolve(corpusRoot)), reference.path));
     if (sha256(bytes) !== reference.sha256) throw new Error(`reference hash mismatch: ${entry.task_id}`);
   }
   const episodes = loadEpisodes(out, manifest).map(episode => ({
@@ -267,7 +325,7 @@ export async function main(argv, { adapterFactory } = {}) {
     mkdirSync(checkerWork, { mode: 0o700 });
     mkdirSync(path.join(checkerWork, 'eval-checker-g004-transport'), { mode: 0o700 });
   }
-  const result = await exportBlind(manifest.tasks, gold, episodes, adapters);
+  const result = await exportBlind(manifest.tasks, gold, episodes, adapters, undefined, { corpusRoot });
   writeFileSync(path.join(evaluationDir, 'blind.json'), JSON.stringify(result.records, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
   writeFileSync(path.join(evaluationDir, 'private', 'unblind.json'), JSON.stringify(result.private_map, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
   writeFileSync(path.join(evaluationDir, 'private', 'checker-requests.json'), JSON.stringify(result.checker_requests, null, 2) + '\n', { flag: 'wx', mode: 0o600 });

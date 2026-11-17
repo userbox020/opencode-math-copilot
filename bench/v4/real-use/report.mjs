@@ -355,8 +355,33 @@ export function loadFreshReportInputs(out, manifest) {
     context: { source_lineage: registration.source_lineage, checkpoint_references } };
 }
 
+// Shared compact projection for sensitivity variants and grading history.
+export function gradingSummary(result) {
+  const overall = result.overall;
+  if (Object.hasOwn(overall, 'delivery')) return {
+    delivery: overall.delivery, correctness: overall.correctness,
+    paired: overall.paired_correctness?.counts ?? null,
+  };
+  const members = overall.pairs.flatMap(pair => Object.values(pair.members));
+  return {
+    delivery: { scheduled: overall.scheduled_episodes,
+      attempted: overall.scheduled_episodes - overall.missingness.not_started,
+      completed: overall.missingness.completed, operational_failures: overall.operational_failures,
+      not_started: overall.missingness.not_started },
+    correctness: Object.fromEntries(['pass', 'fail', 'unscorable'].map(label =>
+      [label, members.filter(member => member.status === 'completed' && member.correctness === label).length])),
+    paired: overall.counts,
+  };
+}
+
 export function main(argv) {
-  const args = parseArgs(argv, ['--out', '--reviews']);
+  const sensitivity = [], primaryArgs = [];
+  for (let i = 0; i < argv.length; i++) {
+    if (argv[i] !== '--sensitivity') { primaryArgs.push(argv[i]); continue; }
+    if (!argv[i + 1] || argv[i + 1].startsWith('--')) throw new Error('missing value: --sensitivity');
+    sensitivity.push(argv[++i]);
+  }
+  const args = parseArgs(primaryArgs, ['--out', '--reviews']);
   if (!args['--out']) throw new Error('--out required');
   const out = path.resolve(args['--out']);
   const manifest = readJSON(path.join(out, 'manifest.json'));
@@ -367,7 +392,18 @@ export function main(argv) {
     readJSON(args['--reviews']), records,
     readJSON(path.join(out, 'evaluation/private/unblind.json')),
   ) : [];
-  return report(manifest, episodes, reviews, records, fresh?.context);
+  const result = report(manifest, episodes, reviews, records, fresh?.context);
+  if (sensitivity.length) {
+    const variantRecords = args['--reviews'] ? records : readJSON(path.join(out, 'evaluation/blind.json'));
+    const privateMap = readJSON(path.join(out, 'evaluation/private/unblind.json'));
+    result.sensitivity = sensitivity.map(file => {
+      const raw = readFileSync(file);
+      const variantReviews = unblindReviews(JSON.parse(raw), variantRecords, privateMap);
+      return { reviews_path: path.basename(file), reviews_sha256: sha256(raw),
+        ...gradingSummary(report(manifest, episodes, variantReviews, variantRecords, fresh?.context)) };
+    });
+  }
+  return result;
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
