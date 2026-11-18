@@ -1,0 +1,17 @@
+{
+  "schema": "math-bench-review/v1",
+  "benchmark": "imo-answerbench-v2",
+  "source_csv_sha256": "275877a9d988d85278fad3a5f8a41d7f83393a60bf259531ec0a5161e6b21cf9",
+  "entries": [
+    {
+      "id": "imo-bench-number_theory-005",
+      "answer": "$\\mathbb{Z}$",
+      "note": "Normalized answer of length >= 8 appears in the problem; review for possible answer leakage (not automatically rejected)."
+    },
+    {
+      "id": "imo-bench-number_theory-079",
+      "answer": "All positive integers",
+      "note": "Normalized answer of length >= 8 appears in the problem; review for possible answer leakage (not automatically rejected)."
+    }
+  ]
+}

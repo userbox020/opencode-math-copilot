@@ -1,0 +1,17 @@
+{
+  "schema": "math-bench-pack-review/v1",
+  "benchmark": "arxivmath",
+  "input_file": "arxivmath.rows.json",
+  "input_sha256": "c2e38ed7e0be498d9d48df4f0a4fd17360322251eb5bd95a3085a23bdff2b22e",
+  "track": "declared-closed-book",
+  "retrieval_assisted": false,
+  "task_count": 103,
+  "pilot_count": 20,
+  "grading_distribution": {
+    "exact": 45,
+    "symbolic": 58
+  },
+  "flagged": [],
+  "tasks_sha256": "2a5f4ead4e8e632eee1dff8a58005c2f50c8ca266a7b98919a646804d825e0f4",
+  "pilot_sha256": "6675df260d634934d651b130d4d19eb406c1ebc66f266b60aab576cba7202d1c"
+}

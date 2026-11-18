@@ -1,0 +1,749 @@
+[
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "bulgarian-ifym-2015-p7-d4-8th",
+    "prompt": "Show four integers $a, b, c, d$ each of which has an absolute value greater than $10000001$ such that $\\frac{1}{a} + \\frac{1}{b} + \\frac{1}{c} + \\frac{1}{d} = \\frac{1}{abcd}$.\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.bulgarian.problem_ifym_2015_p7_d4_8th:ProblemIFYM_2015_P7_4_8.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output the answer as a comma separated list inside of $\\boxed{...}$. For example $\\boxed{1, 2, 3}$."
+    },
+    "metadata": {
+      "source": "IFYM 2015 P7 Day 4",
+      "tags": [
+        "Algebra",
+        "Find Any",
+        "Is Translated",
+        "Is Original"
+      ],
+      "parameters": [
+        "n"
+      ],
+      "original_parameters": {
+        "n": 10000001
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/bulgarian/problem_ifym_2015_p7_d4_8th.py",
+      "source_sha256": "b59a193ec6ef8a4a713d4609a8e29211c2c1f1849d82f16004557d373319e9aa",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "bulgarian-pms-10-4",
+    "prompt": "We will call a graph $G$ a divisibility graph if a distinct natural number can be written in each of its vertices such that its edges correspond to all pairs $(u, v)$ for which either $\\frac{u}{v}$ or $\\frac{v}{u}$ is an integer. Exhibit a divisibility graph with exactly $15$ vertices and $43$ edges.\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.bulgarian.problem_pms_10_4:ProblemBulPMS20204P10_4.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output the answer as a pair of lists inside $\\boxed{...}$. The first list should contain the number assigned to each vertex. The second list should contain the edges, represented as pairs of 1-based indices, formatted as lists of length 2. Format the final output as $\\boxed{[vertices, edges]}$. For example, $\\boxed{[[1,2,3], [[1, 2], [1, 3]]]}$."
+    },
+    "metadata": {
+      "source": "Bulgarian Spring National Competition 2020 10th Grade P4",
+      "tags": [
+        "Combinatorics",
+        "Find Any",
+        "Is Original",
+        "Is Translated"
+      ],
+      "parameters": [
+        "N",
+        "e"
+      ],
+      "original_parameters": {
+        "N": 15,
+        "e": 43
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/bulgarian/problem_pms_10_4.py",
+      "source_sha256": "dfeb9c88f15a9fa39197201e8ef2456083580cddf416a192f110b0beca18adbf",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "bulgarian-pms-2008-8-3",
+    "prompt": "For every natural number $n > 1$, let $R_{n}$ denote the largest possible remainder from the division of an $n$-digit natural number by the sum of its digits. There are infinitely many natural numbers $n$ for which $R_{n} = 9 n - 2$. Exhibit $5$ such $n$, and the corresponding $n$-digit number for which this is satisfied.\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.bulgarian.problem_pms_2008_8_3:ProblemBulPMS2008P8_3.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output a list of tuples, containing the numbers $n$ and the corresponding $n$-digit number for which $R_{n} = 9 n - 2$. Output the sequences as a list of comma-separated tuples inside of \\boxed, e.g. \\boxed{(2, 19), (3, 123)}."
+    },
+    "metadata": {
+      "source": "Bulgarian Spring National Competition 2008 8th Grade P3",
+      "tags": [
+        "Number Theory",
+        "Find Infinitely Many",
+        "Is Simplified",
+        "Is Translated"
+      ],
+      "parameters": [
+        "N"
+      ],
+      "original_parameters": {
+        "N": 5
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/bulgarian/problem_pms_2008_8_3.py",
+      "source_sha256": "2b2eb72bee4b1bfcb51ffaff2247ea505054ef2ea1fbc7ae8058206dc653f246",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "bulgarian-pms-2022-10-p3",
+    "prompt": "The natural numbers $p, q$ are such that for every real number $x$\n\n$$\n(x+1)^{p}(x-3)^{q}=x^{n}+a_{1} x^{n-1}+a_{2} x^{n-2}+\\cdots+a_{n-1} x+a_{n},\n$$\n\nwhere $n=p+q$ and $a_{1}, \\ldots, a_{n}$ are real numbers. There are infinitely many pairs $(p, q)$ for which $a_{1}=a_{2}$. Exhibit $20$ such pairs.\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.bulgarian.problem_pms_2022_10_p3:ProblemBulPMS2022P10_3.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output the sequences as a list of comma-separated tuples inside of \\boxed, e.g. \\boxed{[(2, 19), (3, 123)]}."
+    },
+    "metadata": {
+      "source": "Bulgarian Spring National Competition 2022 10-12th Grade P3",
+      "tags": [
+        "Number Theory",
+        "Find Infinitely Many",
+        "Is Simplified",
+        "Is Translated"
+      ],
+      "parameters": [
+        "N"
+      ],
+      "original_parameters": {
+        "N": 20
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/bulgarian/problem_pms_2022_10_p3.py",
+      "source_sha256": "93c71279a32e041e664e60386b57e450bae462ee331b3c19476006ee2e600734",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "dutch-2019-2",
+    "prompt": "There are $n$ guests at a party. Any two guests are either friends or not friends. Every guest is friends with exactly 4 of the other guests. Whenever a guest is not friends with two other guests, those two other guests cannot be friends with each other either.\n\nFind $3$ configurations of friendships that satisfy these conditions. Each of the configurations should have a different value of $n$.\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.dutch.problem_2019_2:ProblemDutch20192.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output each configuration between \\verb|\\begin{array}{...}| and \\verb|\\end{array}|. All configurations should appear inside of a single $\\boxed{...}$. For example, $\\boxed{\\begin{array}{ccc}0 & 1 & 0 \\\\ 1 & 0 & 0 \\\\ 0 & 0 & 0\\end{array},\\begin{array}{cc}0 & 1 \\\\ 1 & 0\\end{array}}$.\nThe element in the $i$-th row and $j$-th column should be 1 if guest $i$ is friends with guest $j$, and 0 otherwise. Elements on the diagonal should be 0."
+    },
+    "metadata": {
+      "source": "Dutch Math Olympiad Finals 2019 P2",
+      "tags": [
+        "Is Original",
+        "Is Generalized",
+        "Combinatorics",
+        "Find All"
+      ],
+      "parameters": [
+        "k",
+        "n"
+      ],
+      "original_parameters": {
+        "k": 4,
+        "n": 3
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/dutch/problem_2019_2.py",
+      "source_sha256": "d4dc9e8cac46e3b41b1536431caf2df4f1cf73212a4dbfc6d8aebe1bf0fb6983",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "emc-2021-1",
+    "prompt": "Alice drew a regular $20$-gon in the plane. Bob then labelled each vertex of the $20$-gon with a real number, in such a way that the labels of consecutive vertices differ by at most $1$. Then, for every pair of non-consecutive vertices whose labels differ by at most $1$, Alice drew a diagonal connecting them. Let $d$ be the number of diagonals Alice drew. The least possible value that $d$ can obtain is $17$. Find a configuration of labels that achieves this.\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.emc.problem_2021_1:ProblemEMC20211.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output the answer as a comma separated list inside of $\\boxed{...}$. For example $\\boxed{1, 2, 3}$.\nThe $i$-th element of the list should be the label of the $i$-th vertex."
+    },
+    "metadata": {
+      "source": "EMC 2021 Seniors P1",
+      "tags": [
+        "Is Generalized",
+        "Geometry",
+        "Find Any"
+      ],
+      "parameters": [
+        "n"
+      ],
+      "original_parameters": {
+        "n": 20
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/emc/problem_2021_1.py",
+      "source_sha256": "a58648ba9310c17deb673f4137d48ae39e35730d6de1eebc5351f90910bceb8b",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "emc-2023-2",
+    "prompt": "Let $n = 10$ be an integer. There are $n$ points in the plane, no three of them collinear. Each day, Tom erases one of the points, until there are three points left. On the $i$-th, for $1 \\leqslant i \\leqslant n -3$, before erasing that day's point, Tom writes down the positive integer $v(i)$ such that the convex hull of the points at that moment has $v(i)$ vertices. Finally, he writes down $v(n-2)=3$. The greatest possible value of the expression\n\n$$|v(1) - v(2)| + |v(2) - v(3)| + ... + |v(n-3) - v(n-2)|$$\n\nis $2n-8$. Find a set of $n$ points for which this value is achieved.\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.emc.problem_2023_2:ProblemEMC20232.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output the sequences as comma-separated tuples inside of \\boxed, e.g. \\boxed{(1, 2), (1, 2, 3), (1, 1)}. Tom removes the $i$-the point in the list on the $i$-th day"
+    },
+    "metadata": {
+      "source": "EMC 2023 Juniors P2",
+      "tags": [
+        "Is Simplified",
+        "Geometry",
+        "Find Any"
+      ],
+      "parameters": [
+        "n"
+      ],
+      "original_parameters": {
+        "n": 10
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/emc/problem_2023_2.py",
+      "source_sha256": "25246ed114f140a4797120b7d7ed0e7ea02589bbc0e25e6c9abcf22893a05304",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "jbmo-shortlist-2008-c1",
+    "prompt": "On a $5 \\times 5$ board, $n$ white markers are positioned, each marker in a distinct $1 \\times 1$ square. A smart child got an assignment to recolor in black as many markers as possible, in the following manner: a white marker is taken from the board, it is colored in black, and then put back on the board on an empty square such that none of the neighboring squares contains a white marker (two squares are called neighboring if they share a common side).\nIf it is possible for the child to succeed in coloring all the markers black, we say that the initial positioning of the markers was good. Exhibit a good initial positioning with the maximum of $20$ white markers, and the sequences of moves to color them all black.\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.jbmo_shortlist.problem_2008_c1:ProblemJBMO2008C1.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: As your output, present a tuple of 2 lists. The first list should be a list of 1-indexed coordinates for where the white markers were initially placed. The second one should contain a sequence of quadruples in the form $(a,b,c,d)$, which represent a coloring of the marker at coordinates $(a,b)$, which is then placed at a valid position $(c,d)$. Output the answer as 2 comma-separated lists of comma-separated tuples in in $\\boxed{...}$. For example, for a $3\\times 3$ board: $\\boxed{([(1, 1), (1,2)], [(1,1,3,3), (1,2,1,1)])}$"
+    },
+    "metadata": {
+      "source": "2008 JBMO Shortlist C1",
+      "tags": [
+        "Combinatorics",
+        "Is Generalized",
+        "Find Max/Min"
+      ],
+      "parameters": [
+        "N"
+      ],
+      "original_parameters": {
+        "N": 5
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/jbmo_shortlist/problem_2008_c1.py",
+      "source_sha256": "0419eea482100558068b1fcbbcff0de09fa40da320b77adcd62ae15220a512b5",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "konhauser-2013-1",
+    "prompt": "Consider the points $A = (4, 0)$, $B = (0, 3)$ and $C=(0,0)$ in the plane. Find a pair of points $P$ and $Q$ on ABC that divide the perimeter of the triangle in half and such that PQ divides the area of the triangle in half.\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.konhauser.problem_2013_1:ProblemKonhauser20131.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output the answer as a comma separated list of lists inside of $\\boxed{...}$. For example $\\boxed{(1,1), (1,\\sqrt{2})}$."
+    },
+    "metadata": {
+      "source": "Konhauser Problemfest 2015 P1",
+      "tags": [
+        "Geometry",
+        "Is Original",
+        "Is Generalized",
+        "Find Any"
+      ],
+      "parameters": [
+        "a",
+        "b"
+      ],
+      "original_parameters": {
+        "a": 4,
+        "b": 3
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/konhauser/problem_2013_1.py",
+      "source_sha256": "408980e0d1a4e999932e9d1c099e69fe720fa5d13acecfb2588e807e5946da0c",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "konhauser-2014-7",
+    "prompt": "Find any pair of real numbers $x$ and $y$ that are solutions to the system of equations:\n\n$$\n\\begin{cases}\n3^x - 3^y = 2^y \\\\\n9^x - 6^y = 19^y\n\\end{cases}\n$$\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.konhauser.problem_2014_7:ProblemKonhauser20147.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output the answer as a comma separated list inside of $\\boxed{...}$. For example $\\boxed{1, 2, 3}$.\nYou can use valid LaTeX expressions to represent the numbers."
+    },
+    "metadata": {
+      "source": "Konhauser Problemfest 2015 P7",
+      "tags": [
+        "Is Simplified",
+        "Find All",
+        "Algebra",
+        "Is Original",
+        "Is Generalized"
+      ],
+      "parameters": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f"
+      ],
+      "original_parameters": {
+        "a": 3,
+        "b": 3,
+        "c": 2,
+        "d": 9,
+        "e": 6,
+        "f": 19
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/konhauser/problem_2014_7.py",
+      "source_sha256": "223cbf2add46d58cef12c5b312158c7f3a5a8bc151d38c0c87672986968754d3",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "konhauser-2015-2",
+    "prompt": "A student is given two values of a function, $f(3)$ and $f(7)$, and is asked to find $f(5)$. The function is to be an exponential function, but the student uses a linear function instead, and as a result his answer is exactly one away from the correct answer. The only mistake the student makes is using the wrong type of function. If $f(3)$ is $25$, what could $f(7)$ have been? Give two distinct possible real values.\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.konhauser.problem_2015_2:ProblemKonhauser20152.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output the answer as a comma separated list inside of $\\boxed{...}$. For example $\\boxed{1.12, 2.13, 3.14}$. You can use real values or valid LaTeX expressions to represent the numbers."
+    },
+    "metadata": {
+      "source": "Konhauser Problemfest 2015 P2",
+      "tags": [
+        "Algebra",
+        "Find All",
+        "Is Original",
+        "Is Generalized"
+      ],
+      "parameters": [
+        "k",
+        "n",
+        "m",
+        "l"
+      ],
+      "original_parameters": {
+        "k": 3,
+        "n": 7,
+        "m": 5,
+        "l": 25
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/konhauser/problem_2015_2.py",
+      "source_sha256": "147443f100cbc2828cceee994517ab19104f33eb275bcd1fc29dd06135fffff7",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "konhauser-2021-10",
+    "prompt": "Give 5 distinct 10-digit numbers $n$ such that the binomial coefficient $\\binom{2n}{n}$ is divisible by $2^{10}$ but not by $2^{11}$. Recall that $\\binom{2n}{n} = \\frac{2n!}{n!^2}$ and $n! = n(n-1)...3\\cdot 2 \\cdot 1$.\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.konhauser.problem_2021_10:ProblemKonhauser202110.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output the answer as a comma separated list inside of $\\boxed{...}$. For example $\\boxed{1, 2, 3}$."
+    },
+    "metadata": {
+      "source": "Konhauser Problemfest 2021 P10",
+      "tags": [
+        "Is Original",
+        "Algebra",
+        "Find Max/Min",
+        "Is Generalized"
+      ],
+      "parameters": [
+        "l",
+        "k",
+        "m"
+      ],
+      "original_parameters": {
+        "k": 10,
+        "l": 10,
+        "m": 5
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/konhauser/problem_2021_10.py",
+      "source_sha256": "6efb404a93d7995d1795f192cdf3d2a3e14521f444b349814b9f875ea12bac52",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "misc-vwo-2019-4",
+    "prompt": "There are $n = 25$ hoops in a circle. Rik numbers all hoops with a natural number between $1$ and $n$ such that each number occurs exactly once. After that, he makes a walk from hoop to hoop. He starts in hoop with number 1 and follows the following rule: If he arrives in hoop $k$, he moves to the hoop that is $k$ hoops away in the clockwise direction and skips the intermediate hoops. The walk ends when Rik arrives in a hoop he has already visited. The length of the walk is the number of hoops he has visited along the way.\n\nGive a numbering of the $25$ hoops such that the length of the walk is $25$.\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.misc.problem_vwo_2019_4:ProblemVWO20194.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output the answer as a comma separated list inside of $\\boxed{...}$. For example $\\boxed{1, 2, 3}$."
+    },
+    "metadata": {
+      "source": "Vlaamse Wiskunde Olympiade Finals 2019-2020",
+      "tags": [
+        "Is Simplified",
+        "Is Translated",
+        "Combinatorics",
+        "Find Any"
+      ],
+      "parameters": [
+        "n",
+        "k"
+      ],
+      "original_parameters": {
+        "n": 25,
+        "k": 25
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/misc/problem_vwo_2019_4.py",
+      "source_sha256": "7866e8dacd33356fdbd8e4373d750bbd68c2232cf5b307b83fd10a99271e4313",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "serbian-2013-mo-4",
+    "prompt": "For some even $n \\in \\mathbb{N}$, we want to divide the set ${1, 2, \\ldots, 3n}$ into $n$ disjoint triples of the form $\\{a,b,c\\}$ in which $b-a$ and $c-b$ are different numbers from the set $\\{n-1,n,n+1\\}$.\n\nFor $n = 16$, find one such division.\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.serbian.problem_2013_mo_4:ProblemSMO2013_4.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output a comma-separated list of triples inside of \\boxed. For example: \\boxed{(1,2,3), (4,5,6)}."
+    },
+    "metadata": {
+      "source": "Serbian MO 2013 Problem 4 (D2 P1)",
+      "tags": [
+        "Number Theory",
+        "Find All",
+        "Is Simplified",
+        "Is Translated"
+      ],
+      "parameters": [
+        "n"
+      ],
+      "original_parameters": {
+        "n": 16
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/serbian/problem_2013_mo_4.py",
+      "source_sha256": "c7bb59fe8ddccff7115da8e5f555a808687b39badad32599e8be088d6132cc16",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "serbian-2020-tst-4",
+    "prompt": "There are infinitely many pairs of positive rational numbers $(x, y)$ such that \n$$ \nx^y \\cdot y^x = y^y.\n$$ \nFind $8$ distinct such pairs.\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.serbian.problem_2020_tst_4:ProblemSerbianTst2020_4.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output a comma-separated list of pairs inside of \\boxed. For example: \\boxed{(\\frac{3}{8}, \\frac{3}{7}), (\\frac{3}{5}, \\frac{1}{4})}."
+    },
+    "metadata": {
+      "source": "Serbian Team Selection Contest 2020 Problem 4",
+      "tags": [
+        "Number Theory",
+        "Find Infinitely Many",
+        "Is Simplified",
+        "Is Translated"
+      ],
+      "parameters": [
+        "m"
+      ],
+      "original_parameters": {
+        "m": 8
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/serbian/problem_2020_tst_4.py",
+      "source_sha256": "700f840049a6deabb7fede7acc55fd4bf158e25993ca65c7a0fd75126a29ac23",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "serbian-2022-tst-3",
+    "prompt": "Let $n$ be an odd positive integer. On a circle there are $n$ identical tokens, of which some are black, and the rest white. For $k \\in \\{1, 2, \\ldots, n-1\\}$, we define the \"quality\" of the number $k$ as follows: if we move every token $k$ steps in the clockwise direction, the quality of $k$ is the number of positions where the color of the token did not change. \n\nWe can prove that for every $n$ there exists some $k \\in \\{1, 2, \\ldots, n-1\\}$ such that the quality of $k$ is at least $\\frac{n-1}{2}$.\n\nWe also know that there are infinitely many odd positive integers $n$ for which there exists a configuration of white and black tokens, such that no $k$ has quality bigger than $\\frac{n-1}{2}$.\nFind $6$ distinct such numbers $n$, and for each, find a configuration of white and black tokens that satisfies the above condition (no $k$ has quality above $\\frac{n-1}{2}$).\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.serbian.problem_2022_tst_3:ProblemSerbianTst2022_3.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output a comma-separated list of configurations. Each configuration is a list where the first element is $n$, and the following $n$ elements indicate the token coloring going clockwise (0 for black and 1 for white tokens). For example: \\boxed{(3, 0, 1, 0), (4, 1, 0, 1)} is a valid output."
+    },
+    "metadata": {
+      "source": "Serbian Team Selection Contest 2022 Problem 3",
+      "tags": [
+        "Number Theory",
+        "Find Infinitely Many",
+        "Is Simplified",
+        "Is Translated"
+      ],
+      "parameters": [
+        "m"
+      ],
+      "original_parameters": {
+        "m": 6
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/serbian/problem_2022_tst_3.py",
+      "source_sha256": "d312c4095061849d84ea35c72bd154876f1fcc8276cf307b4bd232908d5f25c2",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "swiss-2019-3",
+    "prompt": "Determine 10 periodic sequences $x_1, x_2, ...$ of positive real numbers such that for all positive integers $n$\n\n$$x_{n+2} = \\frac{1}{4} \\left(\\frac{1}{x_{n+1}} + x_n\\right).$$\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.swiss.problem_2019_3:ProblemSwiss20193.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output the answer as a comma separated list of lists inside of $\\boxed{...}$. Each list should contain the first period of the sequence that satisfies the property. For instance, \\boxed{(1,0.2,0.5),(3,4,5)} indicates the sequences 1,0.2,0.5,1,0.2,0.5,... and 3,4,5,3,4,5,..."
+    },
+    "metadata": {
+      "source": "Swiss Math Olympiad Finals 2019",
+      "tags": [
+        "Is Simplified",
+        "Algebra",
+        "Find All",
+        "Is Generalized"
+      ],
+      "parameters": [
+        "k",
+        "m"
+      ],
+      "original_parameters": {
+        "k": 4,
+        "m": 10
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/swiss/problem_2019_3.py",
+      "source_sha256": "839371f85c6040bc385cfb114594c39906c2ab7bcc45fb0b4d13b82e60aa10c2",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "swiss-2024-11-selection",
+    "prompt": "Let $m = 4, n = 4$. Nemo is given an $m \\times n$ grid of unit squares with one chip on every unit square initially. They can repeatedly carry out the following operation: first, they pick any three distinct collinear unit squares and then they move one chip from each of the outer two squares onto the middle square. They may only do this operation if the outer two squares are not empty, but the middle square is allowed to be empty. \n\nThe maximum number of moves that Nemo can make before they cannot continue anymore is 16. Determine the moves Nemo can make to last for 16 moves before they cannot continue anymore.\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.swiss.problem_2024_11_selection:ProblemSwissSelection202411.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output the answer as a comma separated list of lists of coordinates inside of $\\boxed{...}$. Each list contains 3 coordinates, indicating the x and y coordinates of the 3 squares that Nemo should pick. The rows are labeled from $0$ to $m-1$ and the columns are labeled from $0$ to $n-1$. For example, $\\boxed{((1,1),(1,2),(1,3)),((1,2),(3,4),(5,6))}$ indicates that Nemo should first perform a move with the squares $(1,1), (1,2), (1,3)$ and then with the squares $(1,2),(3,4),(5,6)$."
+    },
+    "metadata": {
+      "source": "Swiss Math Olympiad IMO Selection 2024",
+      "tags": [
+        "Is Simplified",
+        "Is Original",
+        "Find Max/Min",
+        "Combinatorics"
+      ],
+      "parameters": [
+        "m",
+        "n",
+        "max_moves"
+      ],
+      "original_parameters": {
+        "m": 4,
+        "n": 4,
+        "max_moves": 16
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/swiss/problem_2024_11_selection.py",
+      "source_sha256": "ad59979ba1e55820e0fd273ba6e7f995c52975b323f73cd2cc36076846461ea5",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "swiss-2024-12-selection",
+    "prompt": "Determine a function $f: \\mathbb{N} \\rightarrow \\mathbb{N}$ such that \n\n$$\\underbrace{f(f(\\cdots f}_{b f(a)}((a+1) \\cdots)) = (a+1)f(b)$$\n\nholds for all $a,b \\in \\mathbb{N}$.\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.swiss.problem_2024_12_selection:ProblemSwissSelection202412.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Write a valid LaTeX function as a function of the variable $n$ that does not contain $f(n)$, inside \\boxed. For instance, \\boxed{n^2} or \\boxed{e^n}."
+    },
+    "metadata": {
+      "source": "Swiss Math Olympiad IMO Selection 2024",
+      "tags": [
+        "Is Original",
+        "Find All",
+        "Algebra",
+        "Is Simplified"
+      ],
+      "parameters": [],
+      "original_parameters": {},
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/swiss/problem_2024_12_selection.py",
+      "source_sha256": "7b2760f38736d82319e54ab3879248dead090c7eea0308ba9f603dd571f3abc7",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "mathconstruct",
+    "id": "usamts-1998-1-4",
+    "prompt": "Arrange seven distinct points in the plane so that among any three of these seven points, the distance between two of the points is exactly 1.\nWrite the coordinates of all 7 points.\n\nGive a complete construction/proof as requested. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": null,
+    "grading": {
+      "type": "validator",
+      "validator": "math_construct.problems.usamts.problem_1998_1_4:Problem_USAMTS_1998_1_4.check",
+      "answer_format": "Last line: FINAL: <answer>. The answer payload should use the upstream format: Output the answer as a comma separated list of 7 coordinates inside of $\\boxed{...}$. For example $\\boxed{(1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7)}$."
+    },
+    "metadata": {
+      "source": "USAMTS 98/99 Round 4",
+      "tags": [
+        "Geometry",
+        "Find Any",
+        "Is Generalized"
+      ],
+      "parameters": [
+        "d"
+      ],
+      "original_parameters": {
+        "d": 1
+      },
+      "license": "MIT (code); source rights apply",
+      "note": "AST-only extraction from the current checkout; no solution or validator executed. Only the statement is placed in the prompt. Upstream checkers test constructions, not the full prose proof.",
+      "source_file": "src/math_construct/problems/usamts/problem_1998_1_4.py",
+      "source_sha256": "ddb6bb75b1daaad805a34bda0404e3f9aaa4b22d1b03352e1e0409443c6bf557",
+      "source_bundle_sha256": "148f4b33b59f4c35848871843727233882fc095d5be0f82b04f548de2e88aebf",
+      "needs_parameters": false,
+      "resolution_errors": [],
+      "pilot_eligible": true,
+      "pilot_exclusion": null
+    }
+  }
+]

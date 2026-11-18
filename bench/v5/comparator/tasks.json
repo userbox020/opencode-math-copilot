@@ -1,0 +1,151 @@
+{
+  "schema": "comparator-pack/v1",
+  "retrieval_assisted": true,
+  "selection": "Explicit statement/description length first; filename SHA-256 tie-break and fallback.",
+  "tasks": [
+    {
+      "id": "comparator-OstmannPrimes",
+      "benchmark": "comparator-challenges",
+      "challenge_path": "lean/ComparatorChallenges/OstmannPrimes.json",
+      "challenge_sha256": "aa21a341b912737aa3ad0c4c703f2b7aacffb67fa3eacef6d355489081f5f99b",
+      "formal_statement": "Reproduce the declarations OAI.Ostmann.main from ComparatorChallenges.OstmannPrimes.",
+      "prompt": "Provide a Lean proof of the challenge specified by ComparatorChallenges.OstmannPrimes: Reproduce the declarations OAI.Ostmann.main from ComparatorChallenges.OstmannPrimes. Use the challenge statements and the permitted axioms in its JSON config. This is retrieval-assisted reproduction of the local corpus, not fresh proof discovery. The proof body is intentionally not included here.",
+      "grading": {
+        "type": "comparator",
+        "task_id": "comparator-OstmannPrimes",
+        "challenge_sha256": "aa21a341b912737aa3ad0c4c703f2b7aacffb67fa3eacef6d355489081f5f99b"
+      },
+      "metadata": {
+        "source": "local corpus",
+        "retrieval_assisted": true,
+        "license": "verify"
+      }
+    },
+    {
+      "id": "comparator-PlanarPacking",
+      "benchmark": "comparator-challenges",
+      "challenge_path": "lean/ComparatorChallenges/PlanarPacking.json",
+      "challenge_sha256": "456ac86b5dd5a9abdf1f1bfcd156dcb05873aa8a72dd4ed25c5dd1aad3dbdb85",
+      "formal_statement": "Reproduce the declarations OAI.sharp_fourier_certificate from ComparatorChallenges.PlanarPacking.",
+      "prompt": "Provide a Lean proof of the challenge specified by ComparatorChallenges.PlanarPacking: Reproduce the declarations OAI.sharp_fourier_certificate from ComparatorChallenges.PlanarPacking. Use the challenge statements and the permitted axioms in its JSON config. This is retrieval-assisted reproduction of the local corpus, not fresh proof discovery. The proof body is intentionally not included here.",
+      "grading": {
+        "type": "comparator",
+        "task_id": "comparator-PlanarPacking",
+        "challenge_sha256": "456ac86b5dd5a9abdf1f1bfcd156dcb05873aa8a72dd4ed25c5dd1aad3dbdb85"
+      },
+      "metadata": {
+        "source": "local corpus",
+        "retrieval_assisted": true,
+        "license": "verify"
+      }
+    },
+    {
+      "id": "comparator-CompleteCrouzeix",
+      "benchmark": "comparator-challenges",
+      "challenge_path": "lean/ComparatorChallenges/CompleteCrouzeix.json",
+      "challenge_sha256": "92e60d2ef987691a5dc530360ea1508f70bae52ac10371983bb6865e3d5e54d4",
+      "formal_statement": "Reproduce the declarations OAI.CompleteCrouzeix.main from ComparatorChallenges.CompleteCrouzeix.",
+      "prompt": "Provide a Lean proof of the challenge specified by ComparatorChallenges.CompleteCrouzeix: Reproduce the declarations OAI.CompleteCrouzeix.main from ComparatorChallenges.CompleteCrouzeix. Use the challenge statements and the permitted axioms in its JSON config. This is retrieval-assisted reproduction of the local corpus, not fresh proof discovery. The proof body is intentionally not included here.",
+      "grading": {
+        "type": "comparator",
+        "task_id": "comparator-CompleteCrouzeix",
+        "challenge_sha256": "92e60d2ef987691a5dc530360ea1508f70bae52ac10371983bb6865e3d5e54d4"
+      },
+      "metadata": {
+        "source": "local corpus",
+        "retrieval_assisted": true,
+        "license": "verify"
+      }
+    },
+    {
+      "id": "comparator-MahlerConjecture",
+      "benchmark": "comparator-challenges",
+      "challenge_path": "lean/ComparatorChallenges/MahlerConjecture.json",
+      "challenge_sha256": "a4d2aa71d3a1cef92248826059480e897da54eaca3fcc9db6e6c060c8257d56d",
+      "formal_statement": "Reproduce the declarations OAI.SymmetricMahler.symmetric_mahler from ComparatorChallenges.MahlerConjecture.",
+      "prompt": "Provide a Lean proof of the challenge specified by ComparatorChallenges.MahlerConjecture: Reproduce the declarations OAI.SymmetricMahler.symmetric_mahler from ComparatorChallenges.MahlerConjecture. Use the challenge statements and the permitted axioms in its JSON config. This is retrieval-assisted reproduction of the local corpus, not fresh proof discovery. The proof body is intentionally not included here.",
+      "grading": {
+        "type": "comparator",
+        "task_id": "comparator-MahlerConjecture",
+        "challenge_sha256": "a4d2aa71d3a1cef92248826059480e897da54eaca3fcc9db6e6c060c8257d56d"
+      },
+      "metadata": {
+        "source": "local corpus",
+        "retrieval_assisted": true,
+        "license": "verify"
+      }
+    },
+    {
+      "id": "comparator-LipschitzHilbert",
+      "benchmark": "comparator-challenges",
+      "challenge_path": "lean/ComparatorChallenges/LipschitzHilbert.json",
+      "challenge_sha256": "8389f1da7b8a4710a51a4b34cffc5664b4a840669aaf0af6797efb94aacbfd6e",
+      "formal_statement": "Reproduce the declarations OAI.LipschitzHilbert.main, OAI.LipschitzHilbert.uniform_truncation from ComparatorChallenges.LipschitzHilbert.",
+      "prompt": "Provide a Lean proof of the challenge specified by ComparatorChallenges.LipschitzHilbert: Reproduce the declarations OAI.LipschitzHilbert.main, OAI.LipschitzHilbert.uniform_truncation from ComparatorChallenges.LipschitzHilbert. Use the challenge statements and the permitted axioms in its JSON config. This is retrieval-assisted reproduction of the local corpus, not fresh proof discovery. The proof body is intentionally not included here.",
+      "grading": {
+        "type": "comparator",
+        "task_id": "comparator-LipschitzHilbert",
+        "challenge_sha256": "8389f1da7b8a4710a51a4b34cffc5664b4a840669aaf0af6797efb94aacbfd6e"
+      },
+      "metadata": {
+        "source": "local corpus",
+        "retrieval_assisted": true,
+        "license": "verify"
+      }
+    },
+    {
+      "id": "comparator-MatrixFields",
+      "benchmark": "comparator-challenges",
+      "challenge_path": "lean/ComparatorChallenges/MatrixFields.json",
+      "challenge_sha256": "7325964ae6367f324fe586c6f6828604a4d94a65e8428d9a5bf586bc56a72991",
+      "formal_statement": "Reproduce the declarations OAI.MatrixAllFields.MatrixMultiplication.AllFieldMain.omega_lt_source_constant from ComparatorChallenges.MatrixFields.",
+      "prompt": "Provide a Lean proof of the challenge specified by ComparatorChallenges.MatrixFields: Reproduce the declarations OAI.MatrixAllFields.MatrixMultiplication.AllFieldMain.omega_lt_source_constant from ComparatorChallenges.MatrixFields. Use the challenge statements and the permitted axioms in its JSON config. This is retrieval-assisted reproduction of the local corpus, not fresh proof discovery. The proof body is intentionally not included here.",
+      "grading": {
+        "type": "comparator",
+        "task_id": "comparator-MatrixFields",
+        "challenge_sha256": "7325964ae6367f324fe586c6f6828604a4d94a65e8428d9a5bf586bc56a72991"
+      },
+      "metadata": {
+        "source": "local corpus",
+        "retrieval_assisted": true,
+        "license": "verify"
+      }
+    },
+    {
+      "id": "comparator-PerceptronFreeEnergy",
+      "benchmark": "comparator-challenges",
+      "challenge_path": "lean/ComparatorChallenges/PerceptronFreeEnergy.json",
+      "challenge_sha256": "286cdad5b2130590cc1ca0603d49436feaa01e00c0efc687c7354bd601f5b177",
+      "formal_statement": "Reproduce the declarations OAI.SphericalPerceptronFreeEnergy.main from ComparatorChallenges.PerceptronFreeEnergy.",
+      "prompt": "Provide a Lean proof of the challenge specified by ComparatorChallenges.PerceptronFreeEnergy: Reproduce the declarations OAI.SphericalPerceptronFreeEnergy.main from ComparatorChallenges.PerceptronFreeEnergy. Use the challenge statements and the permitted axioms in its JSON config. This is retrieval-assisted reproduction of the local corpus, not fresh proof discovery. The proof body is intentionally not included here.",
+      "grading": {
+        "type": "comparator",
+        "task_id": "comparator-PerceptronFreeEnergy",
+        "challenge_sha256": "286cdad5b2130590cc1ca0603d49436feaa01e00c0efc687c7354bd601f5b177"
+      },
+      "metadata": {
+        "source": "local corpus",
+        "retrieval_assisted": true,
+        "license": "verify"
+      }
+    },
+    {
+      "id": "comparator-MUBSix",
+      "benchmark": "comparator-challenges",
+      "challenge_path": "lean/ComparatorChallenges/MUBSix.json",
+      "challenge_sha256": "5a2ac42e814031c177ca1e99643d22cf2aa8e7d71652a884b30748041109bcb2",
+      "formal_statement": "Reproduce the declarations OAI.MUB6.fourier_and_family_bound from ComparatorChallenges.MUBSix.",
+      "prompt": "Provide a Lean proof of the challenge specified by ComparatorChallenges.MUBSix: Reproduce the declarations OAI.MUB6.fourier_and_family_bound from ComparatorChallenges.MUBSix. Use the challenge statements and the permitted axioms in its JSON config. This is retrieval-assisted reproduction of the local corpus, not fresh proof discovery. The proof body is intentionally not included here.",
+      "grading": {
+        "type": "comparator",
+        "task_id": "comparator-MUBSix",
+        "challenge_sha256": "5a2ac42e814031c177ca1e99643d22cf2aa8e7d71652a884b30748041109bcb2"
+      },
+      "metadata": {
+        "source": "local corpus",
+        "retrieval_assisted": true,
+        "license": "verify"
+      }
+    }
+  ]
+}

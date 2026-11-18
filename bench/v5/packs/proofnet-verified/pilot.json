@@ -1,0 +1,642 @@
+[
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-028",
+    "name": "Dummit_Foote_exercise_1_1_3",
+    "prompt": "Prove that the addition of residue classes $\\mathbb{Z}/n\\mathbb{Z}$ is associative.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Fintype Subgroup Set Polynomial Ideal\nopen scoped BigOperators\n\n\n\ntheorem Dummit_Foote_exercise_1_1_3 (n : ℕ) : \n  ∀ (x y z : ZMod n), (x + y) + z = x + (y + z) := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Fintype Subgroup Set Polynomial Ideal\nopen scoped BigOperators",
+      "helper": "",
+      "statement": "theorem Dummit_Foote_exercise_1_1_3 (n : ℕ) : \n  ∀ (x y z : ZMod n), (x + y) + z = x + (y + z) := by\n  sorry",
+      "theorem_name": "Dummit_Foote_exercise_1_1_3"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Dummit Foote",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-050",
+    "name": "Dummit_Foote_exercise_4_4_7",
+    "prompt": "If $H$ is the unique subgroup of a given order in a group $G$ prove $H$ is characteristic in $G$.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Fintype Subgroup Set Polynomial Ideal\nopen scoped BigOperators\n\n\n\ntheorem Dummit_Foote_exercise_4_4_7 {G : Type*} [Group G] {H : Subgroup G} [Fintype H]\n  (hH : ∀ (K : Subgroup G) (fK : Fintype K), card H = @card K fK → H = K) :\n  H.Characteristic := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Fintype Subgroup Set Polynomial Ideal\nopen scoped BigOperators",
+      "helper": "",
+      "statement": "theorem Dummit_Foote_exercise_4_4_7 {G : Type*} [Group G] {H : Subgroup G} [Fintype H]\n  (hH : ∀ (K : Subgroup G) (fK : Fintype K), card H = @card K fK → H = K) :\n  H.Characteristic := by\n  sorry",
+      "theorem_name": "Dummit_Foote_exercise_4_4_7"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Dummit Foote",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-211",
+    "name": "Dummit_Foote_exercise_1_1_2a",
+    "prompt": "Prove the the operation $\\star$ on $\\mathbb{Z}$ defined by $a\\star b=a-b$ is not commutative.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Fintype Subgroup Set Polynomial Ideal\nopen scoped BigOperators\n\n\n\ntheorem Dummit_Foote_exercise_1_1_2a : ∃ a b : ℤ, a - b ≠ b - a := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Fintype Subgroup Set Polynomial Ideal\nopen scoped BigOperators",
+      "helper": "",
+      "statement": "theorem Dummit_Foote_exercise_1_1_2a : ∃ a b : ℤ, a - b ≠ b - a := by\n  sorry",
+      "theorem_name": "Dummit_Foote_exercise_1_1_2a"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Dummit Foote",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-233",
+    "name": "Dummit_Foote_exercise_4_4_6b",
+    "prompt": "Prove that there exists a normal subgroup that is not characteristic.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Fintype Subgroup Set Polynomial Ideal\nopen scoped BigOperators\n\n\n\ntheorem Dummit_Foote_exercise_4_4_6b :\n  ∃ (G : Type*) (hG : Group G) (H : @Subgroup G hG), @Normal G hG H ∧ ¬ @Characteristic G hG H := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Fintype Subgroup Set Polynomial Ideal\nopen scoped BigOperators",
+      "helper": "",
+      "statement": "theorem Dummit_Foote_exercise_4_4_6b :\n  ∃ (G : Type*) (hG : Group G) (H : @Subgroup G hG), @Normal G hG H ∧ ¬ @Characteristic G hG H := by\n  sorry",
+      "theorem_name": "Dummit_Foote_exercise_4_4_6b"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Dummit Foote",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-254",
+    "name": "Dummit_Foote_exercise_11_1_13",
+    "prompt": "Prove that as vector spaces over $\\mathbb{Q}, \\mathbb{R}^n \\cong \\mathbb{R}$, for all $n \\in \\mathbb{Z}^{+}$.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Fintype Subgroup Set Polynomial Ideal\nopen scoped BigOperators\n\n\n\ntheorem Dummit_Foote_exercise_11_1_13 {n : ℕ+} :\n  Nonempty ((Fin n → ℝ) ≃ₗ[ℚ] ℝ) := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Fintype Subgroup Set Polynomial Ideal\nopen scoped BigOperators",
+      "helper": "",
+      "statement": "theorem Dummit_Foote_exercise_11_1_13 {n : ℕ+} :\n  Nonempty ((Fin n → ℝ) ≃ₗ[ℚ] ℝ) := by\n  sorry",
+      "theorem_name": "Dummit_Foote_exercise_11_1_13"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Dummit Foote",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-105",
+    "name": "Munkres_exercise_13_1",
+    "prompt": "Let $X$ be a topological space; let $A$ be a subset of $X$. Suppose that for each $x \\in A$ there is an open set $U$ containing $x$ such that $U \\subset A$. Show that $A$ is open in $X$.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Filter Set TopologicalSpace\nopen scoped Topology\n\n\n\ntheorem Munkres_exercise_13_1 (X : Type*) [TopologicalSpace X] (A : Set X)\n  (h1 : ∀ x ∈ A, ∃ U : Set X, x ∈ U ∧ IsOpen U ∧ U ⊆ A) :\n  IsOpen A := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Filter Set TopologicalSpace\nopen scoped Topology",
+      "helper": "",
+      "statement": "theorem Munkres_exercise_13_1 (X : Type*) [TopologicalSpace X] (A : Set X)\n  (h1 : ∀ x ∈ A, ∃ U : Set X, x ∈ U ∧ IsOpen U ∧ U ⊆ A) :\n  IsOpen A := by\n  sorry",
+      "theorem_name": "Munkres_exercise_13_1"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Munkres",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-120",
+    "name": "Munkres_exercise_23_9",
+    "prompt": "Let $A$ be a proper subset of $X$, and let $B$ be a proper subset of $Y$. If $X$ and $Y$ are connected, show that $(X \\times Y)-(A \\times B)$ is connected.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Filter Set TopologicalSpace\nopen scoped Topology\n\n\n\ntheorem Munkres_exercise_23_9 {X Y : Type*}\n  [TopologicalSpace X] [TopologicalSpace Y]\n  (A : Set X) (B : Set Y)\n  (hA : A ⊂ (Set.univ : Set X))\n  (hB : B ⊂ (Set.univ : Set Y))\n  (hX : IsConnected (Set.univ : Set X))\n  (hY : IsConnected (Set.univ : Set Y)) :\n  IsConnected ((Set.univ : Set (X × Y)) \\ (A ×ˢ B)) := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Filter Set TopologicalSpace\nopen scoped Topology",
+      "helper": "",
+      "statement": "theorem Munkres_exercise_23_9 {X Y : Type*}\n  [TopologicalSpace X] [TopologicalSpace Y]\n  (A : Set X) (B : Set Y)\n  (hA : A ⊂ (Set.univ : Set X))\n  (hB : B ⊂ (Set.univ : Set Y))\n  (hX : IsConnected (Set.univ : Set X))\n  (hY : IsConnected (Set.univ : Set Y)) :\n  IsConnected ((Set.univ : Set (X × Y)) \\ (A ×ˢ B)) := by\n  sorry",
+      "theorem_name": "Munkres_exercise_23_9"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Munkres",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-289",
+    "name": "Munkres_exercise_13_3b",
+    "prompt": "Show that the collection $$\\mathcal{T}_\\infty = \\{U | X - U \\text{ is infinite or empty or all of X}\\}$$ does not need to be a topology on the set $X$.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Filter Set TopologicalSpace\nopen scoped Topology\n\n\n\ntheorem Munkres_exercise_13_3b : ∃ X : Type,\n    let T_inf : Set (Set X) := {t | Set.Infinite tᶜ ∨ t = ∅ ∨ t = Set.univ}\n    ¬ (Set.univ ∈ T_inf ∧\n       (∀ s ⊆ T_inf, ⋃₀ s ∈ T_inf) ∧\n       (∀ t₁ ∈ T_inf, ∀ t₂ ∈ T_inf, t₁ ∩ t₂ ∈ T_inf)) := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Filter Set TopologicalSpace\nopen scoped Topology",
+      "helper": "",
+      "statement": "theorem Munkres_exercise_13_3b : ∃ X : Type,\n    let T_inf : Set (Set X) := {t | Set.Infinite tᶜ ∨ t = ∅ ∨ t = Set.univ}\n    ¬ (Set.univ ∈ T_inf ∧\n       (∀ s ⊆ T_inf, ⋃₀ s ∈ T_inf) ∧\n       (∀ t₁ ∈ T_inf, ∀ t₂ ∈ T_inf, t₁ ∩ t₂ ∈ T_inf)) := by\n  sorry",
+      "theorem_name": "Munkres_exercise_13_3b"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Munkres",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-303",
+    "name": "Munkres_exercise_23_6",
+    "prompt": "Let $A \\subset X$. Show that if $C$ is a connected subspace of $X$ that intersects both $A$ and $X-A$, then $C$ intersects $\\operatorname{Bd} A$.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Filter Set TopologicalSpace\nopen scoped Topology\n\n\n\ntheorem Munkres_exercise_23_6 {X : Type*}\n  [TopologicalSpace X] {A C : Set X} (hc : IsConnected C)\n  (hCA : C ∩ A ≠ ∅) (hCXA : C ∩ Aᶜ ≠ ∅) :\n  C ∩ (frontier A) ≠ ∅ := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Filter Set TopologicalSpace\nopen scoped Topology",
+      "helper": "",
+      "statement": "theorem Munkres_exercise_23_6 {X : Type*}\n  [TopologicalSpace X] {A C : Set X} (hc : IsConnected C)\n  (hCA : C ∩ A ≠ ∅) (hCXA : C ∩ Aᶜ ≠ ∅) :\n  C ∩ (frontier A) ≠ ∅ := by\n  sorry",
+      "theorem_name": "Munkres_exercise_23_6"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Munkres",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-318",
+    "name": "Munkres_exercise_43_2",
+    "prompt": "Let $(X, d_X)$ and $(Y, d_Y)$ be metric spaces; let $Y$ be complete. Let $A \\subset X$. Show that if $f \\colon A \\rightarrow Y$ is uniformly continuous, then $f$ can be uniquely extended to a continuous function $g \\colon \\bar{A} \\rightarrow Y$, and $g$ is uniformly continuous.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Filter Set TopologicalSpace\nopen scoped Topology\n\n\n\ntheorem Munkres_exercise_43_2 {X : Type*} [MetricSpace X]\n    {Y : Type*} [MetricSpace Y] [CompleteSpace Y] (A : Set X)\n    (f : X → Y) (hf : UniformContinuousOn f A) :\n    ∃ (g : closure A → Y),\n      UniformContinuous g ∧\n        (∀ x : A, g ⟨x, subset_closure x.property⟩ = f x) ∧\n        (∀ g' : closure A → Y, Continuous g' →\n          (∀ x : A, g' ⟨x, subset_closure x.property⟩ = f x) → g' = g) := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Filter Set TopologicalSpace\nopen scoped Topology",
+      "helper": "",
+      "statement": "theorem Munkres_exercise_43_2 {X : Type*} [MetricSpace X]\n    {Y : Type*} [MetricSpace Y] [CompleteSpace Y] (A : Set X)\n    (f : X → Y) (hf : UniformContinuousOn f A) :\n    ∃ (g : closure A → Y),\n      UniformContinuous g ∧\n        (∀ x : A, g ⟨x, subset_closure x.property⟩ = f x) ∧\n        (∀ g' : closure A → Y, Continuous g' →\n          (∀ x : A, g' ⟨x, subset_closure x.property⟩ = f x) → g' = g) := by\n  sorry",
+      "theorem_name": "Munkres_exercise_43_2"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Munkres",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-148",
+    "name": "Rudin_exercise_1_1a",
+    "prompt": "If $r$ is rational $(r \\neq 0)$ and $x$ is irrational, prove that $r+x$ is irrational.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Topology Filter Real Complex TopologicalSpace Finset\nopen scoped BigOperators\n\n\n\ntheorem Rudin_exercise_1_1a\n  (x : ℝ) (y : ℚ) (hy : y ≠ 0) :\n  ( Irrational x ) -> Irrational ( x + y ) := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Topology Filter Real Complex TopologicalSpace Finset\nopen scoped BigOperators",
+      "helper": "",
+      "statement": "theorem Rudin_exercise_1_1a\n  (x : ℝ) (y : ℚ) (hy : y ≠ 0) :\n  ( Irrational x ) -> Irrational ( x + y ) := by\n  sorry",
+      "theorem_name": "Rudin_exercise_1_1a"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Rudin",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-162",
+    "name": "Rudin_exercise_3_20",
+    "prompt": "Suppose $\\left\\{p_{n}\\right\\}$ is a Cauchy sequence in a metric space $X$, and some subsequence $\\left\\{p_{n l}\\right\\}$ converges to a point $p \\in X$. Prove that the full sequence $\\left\\{p_{n}\\right\\}$ converges to $p$.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Topology Filter Real Complex TopologicalSpace Finset\nopen scoped BigOperators\n\n\n\ntheorem Rudin_exercise_3_20 {X : Type*} [MetricSpace X]\n  (p : ℕ → X) (φ : ℕ → ℕ) (r : X)\n  (hp : CauchySeq p)\n  (hφ : StrictMono φ)\n  (hpl : Tendsto (p ∘ φ) atTop (𝓝 r)) :\n  Tendsto p atTop (𝓝 r) := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Topology Filter Real Complex TopologicalSpace Finset\nopen scoped BigOperators",
+      "helper": "",
+      "statement": "theorem Rudin_exercise_3_20 {X : Type*} [MetricSpace X]\n  (p : ℕ → X) (φ : ℕ → ℕ) (r : X)\n  (hp : CauchySeq p)\n  (hφ : StrictMono φ)\n  (hpl : Tendsto (p ∘ φ) atTop (𝓝 r)) :\n  Tendsto p atTop (𝓝 r) := by\n  sorry",
+      "theorem_name": "Rudin_exercise_3_20"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Rudin",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-332",
+    "name": "Rudin_exercise_1_1b",
+    "prompt": "If $r$ is rational $(r \\neq 0)$ and $x$ is irrational, prove that $rx$ is irrational.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Topology Filter Real Complex TopologicalSpace Finset\nopen scoped BigOperators\n\n\n\ntheorem Rudin_exercise_1_1b\n(x : ℝ)\n(y : ℚ)\n(h : y ≠ 0)\n: ( Irrational x ) -> Irrational ( x * y ) := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Topology Filter Real Complex TopologicalSpace Finset\nopen scoped BigOperators",
+      "helper": "",
+      "statement": "theorem Rudin_exercise_1_1b\n(x : ℝ)\n(y : ℚ)\n(h : y ≠ 0)\n: ( Irrational x ) -> Irrational ( x * y ) := by\n  sorry",
+      "theorem_name": "Rudin_exercise_1_1b"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Rudin",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-345",
+    "name": "Rudin_exercise_3_13",
+    "prompt": "Prove that the Cauchy product of two absolutely convergent series converges absolutely.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Topology Filter Real Complex TopologicalSpace Finset\nopen scoped BigOperators\n\n\n\ntheorem Rudin_exercise_3_13\n   (a b : ℕ → ℝ)\n   (ha : ∃ y, Tendsto (fun n => ∑ i ∈ range n, |a i|) atTop (𝓝 y))\n   (hb : ∃ y, Tendsto (fun n => ∑ i ∈ range n, |b i|) atTop (𝓝 y)) :\n   ∃ y,\n     Tendsto\n       (fun n =>\n         ∑ i ∈ range n,\n           |∑ j ∈ range (i + 1), a j * b (i - j)|)\n       atTop (𝓝 y) := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Topology Filter Real Complex TopologicalSpace Finset\nopen scoped BigOperators",
+      "helper": "",
+      "statement": "theorem Rudin_exercise_3_13\n   (a b : ℕ → ℝ)\n   (ha : ∃ y, Tendsto (fun n => ∑ i ∈ range n, |a i|) atTop (𝓝 y))\n   (hb : ∃ y, Tendsto (fun n => ∑ i ∈ range n, |b i|) atTop (𝓝 y)) :\n   ∃ y,\n     Tendsto\n       (fun n =>\n         ∑ i ∈ range n,\n           |∑ j ∈ range (i + 1), a j * b (i - j)|)\n       atTop (𝓝 y) := by\n  sorry",
+      "theorem_name": "Rudin_exercise_3_13"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Rudin",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-359",
+    "name": "Rudin_exercise_5_17",
+    "prompt": "Suppose $f$ is a real, three times differentiable function on $[-1,1]$, such that $f(-1)=0, \\quad f(0)=0, \\quad f(1)=1, \\quad f^{\\prime}(0)=0 .$ Prove that $f^{(3)}(x) \\geq 3$ for some $x \\in(-1,1)$.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Topology Filter Real Complex TopologicalSpace Finset Set\nopen scoped BigOperators\n\n\n\ntheorem Rudin_exercise_5_17\n  {f : ℝ → ℝ}\n  (hf' : DifferentiableOn ℝ f (Icc (-1) 1))\n  (hf'' : DifferentiableOn ℝ (deriv f) (Icc (-1) 1))\n  (hf''' : DifferentiableOn ℝ (deriv (deriv f)) (Icc (-1) 1))\n  (hf0 : f (-1) = 0)\n  (hf1 : f 0 = 0)\n  (hf2 : f 1 = 1)\n  (hf3 : deriv f 0 = 0) :\n  ∃ x, x ∈ Ioo (-1 : ℝ) 1 ∧ deriv (deriv (deriv f)) x ≥ 3 := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Topology Filter Real Complex TopologicalSpace Finset Set\nopen scoped BigOperators",
+      "helper": "",
+      "statement": "theorem Rudin_exercise_5_17\n  {f : ℝ → ℝ}\n  (hf' : DifferentiableOn ℝ f (Icc (-1) 1))\n  (hf'' : DifferentiableOn ℝ (deriv f) (Icc (-1) 1))\n  (hf''' : DifferentiableOn ℝ (deriv (deriv f)) (Icc (-1) 1))\n  (hf0 : f (-1) = 0)\n  (hf1 : f 0 = 0)\n  (hf2 : f 1 = 1)\n  (hf3 : deriv f 0 = 0) :\n  ∃ x, x ∈ Ioo (-1 : ℝ) 1 ∧ deriv (deriv (deriv f)) x ≥ 3 := by\n  sorry",
+      "theorem_name": "Rudin_exercise_5_17"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Rudin",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-071",
+    "name": "Herstein_exercise_2_1_21",
+    "prompt": "Show that a group of order 5 must be abelian.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Fintype Set Real Ideal Polynomial\nopen scoped BigOperators\n\n\n\ntheorem Herstein_exercise_2_1_21 (G : Type*) [Group G] [Fintype G]\n  (hG : card G = 5) :\n  ∀ a b : G, a*b = b*a := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Fintype Set Real Ideal Polynomial\nopen scoped BigOperators",
+      "helper": "",
+      "statement": "theorem Herstein_exercise_2_1_21 (G : Type*) [Group G] [Fintype G]\n  (hG : card G = 5) :\n  ∀ a b : G, a*b = b*a := by\n  sorry",
+      "theorem_name": "Herstein_exercise_2_1_21"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Herstein",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-083",
+    "name": "Herstein_exercise_2_11_22",
+    "prompt": "Show that any subgroup of order $p^{n-1}$ in a group $G$ of order $p^n$ is normal in $G$.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Fintype Set Real Ideal Polynomial\nopen scoped BigOperators\n\n\n\ntheorem Herstein_exercise_2_11_22 {p : ℕ} {n : ℕ} {G : Type*} [Fintype G]\n  [Group G] (hp : Nat.Prime p) (hG : card G = p ^ n) {K : Subgroup G}\n  [Fintype K] (hK : card K = p ^ (n-1)) :\n  K.Normal := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Fintype Set Real Ideal Polynomial\nopen scoped BigOperators",
+      "helper": "",
+      "statement": "theorem Herstein_exercise_2_11_22 {p : ℕ} {n : ℕ} {G : Type*} [Fintype G]\n  [Group G] (hp : Nat.Prime p) (hG : card G = p ^ n) {K : Subgroup G}\n  [Fintype K] (hK : card K = p ^ (n-1)) :\n  K.Normal := by\n  sorry",
+      "theorem_name": "Herstein_exercise_2_11_22"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Herstein",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-255",
+    "name": "Herstein_exercise_2_1_18",
+    "prompt": "If $G$ is a finite group of even order, show that there must be an element $a \\neq e$ such that $a=a^{-1}$.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Fintype Set Real Ideal Polynomial\nopen scoped BigOperators\n\n\n\ntheorem Herstein_exercise_2_1_18 {G : Type*} [Group G]\n  [Fintype G] (hG2 : Even (card G)) :\n  ∃ (a : G), a ≠ 1 ∧ a = a⁻¹ := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Fintype Set Real Ideal Polynomial\nopen scoped BigOperators",
+      "helper": "",
+      "statement": "theorem Herstein_exercise_2_1_18 {G : Type*} [Group G]\n  [Fintype G] (hG2 : Even (card G)) :\n  ∃ (a : G), a ≠ 1 ∧ a = a⁻¹ := by\n  sorry",
+      "theorem_name": "Herstein_exercise_2_1_18"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Herstein",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-267",
+    "name": "Herstein_exercise_2_11_7",
+    "prompt": "If $P \\triangleleft G$, $P$ a $p$-Sylow subgroup of $G$, prove that $\\varphi(P) = P$ for every automorphism $\\varphi$ of $G$.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Fintype Set Real Ideal Polynomial\nopen scoped BigOperators\n\n\n\ntheorem Herstein_exercise_2_11_7 {G : Type*} [Group G] {p : ℕ} (hp : Nat.Prime p)\n  {P : Sylow p G} (hP : P.Normal) :\n  Subgroup.Characteristic (P : Subgroup G) := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Fintype Set Real Ideal Polynomial\nopen scoped BigOperators",
+      "helper": "",
+      "statement": "theorem Herstein_exercise_2_11_7 {G : Type*} [Group G] {p : ℕ} (hp : Nat.Prime p)\n  {P : Sylow p G} (hP : P.Normal) :\n  Subgroup.Characteristic (P : Subgroup G) := by\n  sorry",
+      "theorem_name": "Herstein_exercise_2_11_7"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Herstein",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  },
+  {
+    "schema": "math-bench-lean-task/v1",
+    "benchmark": "proofnet-verified",
+    "id": "proofnet-278",
+    "name": "Herstein_exercise_5_6_14",
+    "prompt": "If $F$ is of characteristic $p \\neq 0$, show that all the roots of $x^m - x$, where $m = p^n$, are distinct.\n\nProve the following Lean theorem by replacing the `sorry`. Return a complete Lean file. Do not change the statement or definitions.\n\nimport Mathlib\n\nopen Fintype Set Real Ideal Polynomial\nopen scoped BigOperators\n\n\n\ntheorem Herstein_exercise_5_6_14 {p m n: ℕ} (hp : p ≠ 0) (hn : n > 0)\n  {F : Type*} [Field F] [CharP F p] (hm : m = p ^ n) :\n  (X ^ m - X : Polynomial F).Separable := by\n  sorry",
+    "formal": {
+      "header": "import Mathlib\n\nopen Fintype Set Real Ideal Polynomial\nopen scoped BigOperators",
+      "helper": "",
+      "statement": "theorem Herstein_exercise_5_6_14 {p m n: ℕ} (hp : p ≠ 0) (hn : n > 0)\n  {F : Type*} [Field F] [CharP F p] (hm : m = p ^ n) :\n  (X ^ m - X : Polynomial F).Separable := by\n  sorry",
+      "theorem_name": "Herstein_exercise_5_6_14"
+    },
+    "grading": {
+      "type": "lean",
+      "toolchain": "4.34.0",
+      "imports": [
+        "Mathlib"
+      ],
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    },
+    "metadata": {
+      "source": "https://github.com/marcusm117/ProofNet-Verified",
+      "license": "Apache-2.0",
+      "textbook": "Herstein",
+      "gold_proof": "evaluator-only-archive",
+      "version": "latest"
+    }
+  }
+]

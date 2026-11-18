@@ -1,0 +1,762 @@
+[
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-algebra-001",
+    "prompt": "For a given positive integer $N$, Henry writes the quotient of $ab$ divided by $N+1$ on the board for each integer pair $(a,b)$ where $1\\le a,b\\le N$. Find all $N$ such that the sum of the $N^2$ numbers Henry wrote on the board is $\\frac{N^3-N^2+2}{4}$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "3",
+    "grading": {
+      "type": "exact",
+      "answer": "3",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Algebra",
+      "subcategory": "Operation",
+      "source_text": "IMO Shortlist 2021"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-algebra-012",
+    "prompt": "For a real number $T$, it is said that no matter how five distinct positive real numbers $a, b, c, d, e$ are given, it is possible to choose four distinct numbers $e, f, g, h$ from them such that $$|ef-gh|\\le Tfh.$$ Find the minimum value of $T$ for which this is possible.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "$\\frac{1}{2}$",
+    "grading": {
+      "type": "symbolic",
+      "answer": "$\\frac{1}{2}$",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Algebra",
+      "subcategory": "Other",
+      "source_text": "IMO Shortlist 2017"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-algebra-023",
+    "prompt": "Find the minimum value of an integer $N$ that satisfies the following condition:\n\nGiven 2025 non-degenerate triangles, each triangle has one side colored green, one side colored purple, and one side colored orange. Let the lengths of the green sides be $g_1 \\ge g_2 \\ge \\cdots \\ge g_{2025}$, the lengths of the purple sides be $p_1 \\ge p_2 \\ge \\cdots \\ge p_{2025}$, and the lengths of the orange sides be $o_1 \\ge o_2 \\ge \\cdots \\ge o_{2025}$. Then, the number of $1 \\le a \\le 2025$ such that $g_a, p_a, o_a$ do not form the sides of a triangle is always less than or equal to $N$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "2024",
+    "grading": {
+      "type": "exact",
+      "answer": "2024",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Algebra",
+      "subcategory": "Sequence",
+      "source_text": "IMO Shortlist 2010"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-algebra-034",
+    "prompt": "Find all functions $P, Q: \\mathbb{R} \\rightarrow \\mathbb{R}$ such that for all real numbers $m, n$,\n$$P(m+Q(n))=nP(m) - m P(n) + Q(m).$$\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "$P(x)=(cx+c^{2})/(1+c), Q(x)=cx+c^{2}$, where $c\\ne -1$",
+    "grading": {
+      "type": "symbolic",
+      "answer": "$P(x)=(cx+c^{2})/(1+c), Q(x)=cx+c^{2}$, where $c\\ne -1$",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Algebra",
+      "subcategory": "Functional Equation",
+      "source_text": "IMO Shortlist 2001"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-algebra-045",
+    "prompt": "We say that a tuple $(u,v,w)$ of positive real numbers is 'entangled' if $(u+v+w)^3 = 32uvw$.  For entangled $(u,v,w)$, find the sum of the minimum and maximum possible value of\n$$\\frac{uvw(u+v+w)}{u^4+v^4+w^4}.$$\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "$\\frac{17458+2970\\sqrt{5}}{23769}$",
+    "grading": {
+      "type": "symbolic",
+      "answer": "$\\frac{17458+2970\\sqrt{5}}{23769}$",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Algebra",
+      "subcategory": "Inequality",
+      "source_text": "Vietnam 2004"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-algebra-056",
+    "prompt": "Find the smallest positive integer $k$ such that there exist two polynomials $f(x),g(x)$ with integer coefficients, both of degree at least 2025 and leading coefficients at least 1000, such that\n\\[\n    f(g(x)) - 3g(f(x)) = k\n\\]\nfor infinitely many real numbers $x$. \n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "1",
+    "grading": {
+      "type": "exact",
+      "answer": "1",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Algebra",
+      "subcategory": "Polynomial",
+      "source_text": "Korea 2018"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-algebra-067",
+    "prompt": "Find all triples $(n,x,y)$ where $n\\ge 2$ is a positive integer and $x,y$ are rational numbers such that\n\\[\n    (x - \\sqrt{2})^n = y - \\sqrt{2}.\n\\]\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "$(2, \\frac{1}{2}, \\frac{9}{4})$",
+    "grading": {
+      "type": "symbolic",
+      "answer": "$(2, \\frac{1}{2}, \\frac{9}{4})$",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Algebra",
+      "subcategory": "Equation",
+      "source_text": "Romania 2017"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-algebra-078",
+    "prompt": "Let $x_1, \\ldots, x_{2024}$ be positive real numbers such that $x_{i+1} \\ge 2x_i$ for $i = 1,\\ldots, 2023$. Find the maximal possible value of\n\\[\n    \\sum_{i=1}^{2023} \\frac{x_{i} - x_{i-1}}{x_{i+1} - x_i}\n\\]\nwhere $x_0 = 0$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "1012",
+    "grading": {
+      "type": "exact",
+      "answer": "1012",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Algebra",
+      "subcategory": "Inequality",
+      "source_text": "Romania 2016 (modified)"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-algebra-089",
+    "prompt": "Let $f(x) = \\pi\\sin x$. Find the number of solutions for the following equation.\n\\[\n    f^{2025}(x) = 0, \\quad 0 \\le x \\le \\pi.\n\\]\nHere, $f^{2025}$ means that $f$ is applied to itself 2025 times.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "$2^{2024}+1$",
+    "grading": {
+      "type": "symbolic",
+      "answer": "$2^{2024}+1$",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Algebra",
+      "subcategory": "Sequence",
+      "source_text": "Turkey 1998"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-algebra-100",
+    "prompt": "Find number of triples $(x,y,z)$ of real numbers satisfying\n\\[\nx^2 + y^2 + z^2 = xy^3 + yz^3 + zx^3 = 3.\n\\]\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "8",
+    "grading": {
+      "type": "exact",
+      "answer": "8",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Algebra",
+      "subcategory": "Inequality",
+      "source_text": "Variation of Vasc's inequality"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-combinatorics-001",
+    "prompt": "In a prestigious mathematics conference, there are $m \\ge 3$ brilliant mathematicians gathered from around the world. Every pair of mathematicians communicates in one of the $m$ official languages of the conference. Remarkably, for any three distinct official languages, there exist three mathematicians who converse with each other using these three languages. To ensure smooth communication, security guards are assigned to monitor each language to facilitate efficient conversations between attendees. However, due to budget constraints, the number of security guards should be equal to the number of mathematicians attending the conference. Despite the challenge, the organizers want to create a comfortable and accommodating environment for all participants. Denote by $m_1, \\ldots, m_k$ all the possible values of $m$ that satisfy these conditions and less than or equal to 50. Evaluate $m_1 + \\cdots + m_k$.\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "624",
+    "grading": {
+      "type": "exact",
+      "answer": "624",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Combinatorics",
+      "subcategory": "Graph Theory",
+      "source_text": "HKMO 2002"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-combinatorics-012",
+    "prompt": "A domino is a $2 \\times 1$ or $1 \\times  2$ tile.  A mysterious puzzle involves placing exactly $k^2$ dominoes on a $2k \\times  2k$ chessboard without overlapping. The placement must satisfy a peculiar condition: every $2 \\times  2$ square on the board contains at least two uncovered unit squares that lie in the same row or column. Additionally, there are some strange symbols engraved on the board that seem to have no connection to the puzzle.  Determine in how many ways the dominoes can be placed according to these rules.\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "$\\binom{2k}{k}^2$",
+    "grading": {
+      "type": "symbolic",
+      "answer": "$\\binom{2k}{k}^2$",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Combinatorics",
+      "subcategory": "Enumerative Combinatorics",
+      "source_text": "EGMO 2015"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-combinatorics-023",
+    "prompt": "At a university dinner, there are 2017 mathematicians who each order two distinct entrées, with no two mathematicians ordering the same pair of entrées. The price of each dish varies depending on the popularity of the dish. The cost of each entrée is equal to the number of mathematicians who ordered it, and the university pays for each mathematician's less expensive entrée (ties broken arbitrarily). Over all possible sets of orders, what is the maximum total amount the university could have paid?\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "127009",
+    "grading": {
+      "type": "exact",
+      "answer": "127009",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Combinatorics",
+      "subcategory": "Graph Theory",
+      "source_text": "USA TST 2017"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-combinatorics-034",
+    "prompt": "Let $a, b, c$ be positive integers. A three-dimensional grid is defined by the set of points\n\\[Q=\\{(x, y, z)\\in \\mathbb{Z}^3 : 0 \\le x \\le a, 0 \\le y \\le b , 0 \\le z \\le c \\}. \\]\n\nInitially, there are a total of $M$ identical pieces distributed among the points in $Q$. JJ plays a game by performing the following three types of operations repeatedly:\n(1) Remove $2$ pieces from a point $(x, y, z)$ and place one piece on the point $(x-1, y, z)$, provided $x>0$.\n(2) Remove $3$ pieces from a point $(x, y, z)$ and place one piece on the point $(x, y-1, z)$, provided $y>0$.\n(3) Remove $5$ pieces from a point $(x, y, z)$ and place one piece on the point $(x, y, z-1)$, provided $z>0$.\n\nFind the smallest positive integer $M$ such that, regardless of the initial distribution of the pieces, one can always perform a sequence of operations to place at least one piece on the point $(0,0,0)$.\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "$2^a 3^b 5^c$",
+    "grading": {
+      "type": "symbolic",
+      "answer": "$2^a 3^b 5^c$",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Combinatorics",
+      "subcategory": "Operations",
+      "source_text": "China TST 2022"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-combinatorics-045",
+    "prompt": "Two players $A$ and $B$ are playing a game by taking turns writing numbers from the set $\\{1, \\dots, N\\}$ on a blackboard, where $N$ is a positive integer. Player $A$ starts the game by writing the number $1$. If a player writes the number $n$, then the other player can write either $n+1$ or $2n$, provided the number does not exceed $N$. The player who writes the number $N$ wins. We say that $N$ is of type $A$ if player $A$ has a winning strategy, and of type $B$ if player $B$ has a winning strategy. The game board is made of a special type of wood imported from Brazil.\n\nFind the least $N > 400$ such that it is a type B number.\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "512",
+    "grading": {
+      "type": "exact",
+      "answer": "512",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Combinatorics",
+      "subcategory": "Game Theory",
+      "source_text": "IMO Shortlist 2004"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-combinatorics-056",
+    "prompt": "A teacher wants to divide a class of $d$ students into $k$ groups (some of which may be empty). Each student $i$ has a score $a_i$ between 0 and 1, inclusive, and the sum of the scores of all students is $59$. The teacher wants to partition the students into groups such that the sum of the scores in each group is at most 1. Find the smallest integer $k$ such that this is always possible, regardless of the number of students $d$ and their scores $a_1, \\ldots, a_d$.\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "117",
+    "grading": {
+      "type": "exact",
+      "answer": "117",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Combinatorics",
+      "subcategory": "Set Combinatorics",
+      "source_text": "IMO Shortlist 2013"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-combinatorics-067",
+    "prompt": "Suppose we have a $194 \\times 194$ board and we want to mark some cells on this board. Determine the smallest positive integer $k$ such that it is possible to mark $k$ cells on the board in a way that there exists a unique partition of the board into $1 \\times 2$ and $2 \\times 1$ dominoes, where none of the dominoes contains two marked cells.\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "194",
+    "grading": {
+      "type": "exact",
+      "answer": "194",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Combinatorics",
+      "subcategory": "Extremal Combinatorics",
+      "source_text": "IMO Shortlist 2016"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-combinatorics-078",
+    "prompt": "An integer $m \\geqslant 100$ is called colorful if, given infinitely many candies in each of $99$ flavors $F_{1}, F_{2}, \\ldots, F_{99}$, it is possible to place $m$ of them around a circle so that in any group of $100$ consecutive candies there is at least one candy of flavor $F_{i}$ for each $i=1, \\ldots, 99$.  Additionally, let $k$ be an integer such that $k > m$.\n\nProve that there are only finitely many positive integers which are not colorful. Find the largest among them.\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "9701",
+    "grading": {
+      "type": "exact",
+      "answer": "9701",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Combinatorics",
+      "subcategory": "Extremal Combinatorics",
+      "source_text": "IMO Shortlist 2021"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-combinatorics-089",
+    "prompt": "We colored the $10000$ unit squares of an $100 \\times 100$ square lattice such that in each $2\\times 2$ square, at least two of the four unit squares have the same color. What is the largest number of colors we could have used?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "5099",
+    "grading": {
+      "type": "exact",
+      "answer": "5099",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Combinatorics",
+      "subcategory": "Extremal Combinatorics",
+      "source_text": "Komal"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-combinatorics-100",
+    "prompt": "Grogg and Winnie are playing a game using a deck of $50$ cards numbered $1$ through $50$. They take turns with Grogg going first. On each turn a player chooses a card from the deck—this choice is made deliberately, not at random—and then adds it to one of two piles (both piles are empty at the start of the game). After all $50$ cards are in the two piles, the values of the cards in each pile are summed, and Winnie wins the positive difference of the sums of the two piles, in dollars. (For instance, if the first pile has cards summing to $510$ and the second pile has cards summing to $765$, then Winnie wins $ \\$255$.) Winnie wants to win as much as possible, and Grogg wants Winnie to win as little as possible. If they both play with perfect strategy, find (with proof) the amount that Winnie wins.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "75",
+    "grading": {
+      "type": "exact",
+      "answer": "75",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Combinatorics",
+      "subcategory": "Game Theory",
+      "source_text": "USAMTS 2022"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-geometry-001",
+    "prompt": "Let $h$ be the smallest height of a triangular pyramid, and let $d$ be the shortest distance between its opposite edges. Let $S$ be the set of values of $t$ such that the inequality $d > th$ is possible. Find the supremum of $S$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "$\\frac{3}{2}$",
+    "grading": {
+      "type": "symbolic",
+      "answer": "$\\frac{3}{2}$",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Geometry",
+      "subcategory": "3d_geometry",
+      "source_text": "Sharygin 2008"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-geometry-012",
+    "prompt": "Let XYZ be a fixed triangle in the plane. Let P be an arbitrary point in the plane. The circle with center P, passing through X, meets XY and XZ again at points X_y and X_z respectively. Points Y_x, Y_z, Z_x and Z_y are defined similarly. A point P is called special if the points X_y, X_z, Y_x, Y_z, Z_x, and Z_y are concyclic. For a given triangle XYZ, how many special points can there be?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "4",
+    "grading": {
+      "type": "exact",
+      "answer": "4",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Geometry",
+      "subcategory": "proof_based_geometry",
+      "source_text": "Sharygin 2014"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-geometry-023",
+    "prompt": "A truncated triangular pyramid is circumscribed around a sphere that touches its bases at points $P_1, P_2$. Let $h$ be the altitude of the pyramid, $r_1, r_2$ be the circumradii of its bases, and $C_1, C_2$ be the circumcenters of the bases. Compute $(r_1^2-C_1P_1^2)(r_2^2-C_2P_2^2)$ in terms of $r_1, r_2$ and $h$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "$r_1r_2 h^2$",
+    "grading": {
+      "type": "symbolic",
+      "answer": "$r_1r_2 h^2$",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Geometry",
+      "subcategory": "3d_geometry",
+      "source_text": "Sharygin 2021 (correspondence)"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-geometry-034",
+    "prompt": "Let $A$ be the area of parallelogram $PQRS$ and points $X,Y$ belong to $QR$ and $PS$, respectively, such that $QR = 3QX, 3PS = 4PY$. Let $I$ be the intersection of $PX$ and $QY$. Each straight line of $PX$ and $QY$ meets that of $RS$ at points $U$ and $V$, respectively. Determine the area of triangle $UIV$ in terms of $A$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "$\\frac{50}{39}A$",
+    "grading": {
+      "type": "symbolic",
+      "answer": "$\\frac{50}{39}A$",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Geometry",
+      "subcategory": "computation",
+      "source_text": "Hanoi Open Mathematical Olympiad 2014"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-geometry-045",
+    "prompt": "Find all possible values of integer $k > 3$ such that there is a convex $k$-gon in which each diagonal is the perpendicular bisector of at least one other diagonal.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "4",
+    "grading": {
+      "type": "exact",
+      "answer": "4",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Geometry",
+      "subcategory": "combinatorial_geometry",
+      "source_text": "Iran Geometry Olympiad 2018"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-geometry-056",
+    "prompt": "Let $ PQR $ bea triangle with side lengths $$a = \\sqrt{7-\\sqrt{15}}, \\quad b = \\sqrt{7+\\sqrt{15}}, \\quad c = \\sqrt{20}$$ and let $ M $ denote its orthocenter. Let $ \\alpha_P $ denote the circle with center $ P $ and radius $ PM $. Let $ \\alpha_Q $ and $ \\alpha_R $ be defined in a similar way. Let $Y$ be a moving point outside of the circumcircle of triangle $ PQR $, let circle $ \\Xi(Y) $ be defined in the following way (if possible): take the polars of point $ Y $ with respect to circles $ \\alpha_P $, $ \\alpha_Q $, and $ \\alpha_R $, and let $ \\Xi(Y) $ be the circumcircle of the triangle defined by these three lines.\n\nFind the length of the locus of points $ Y $ such that point $ Y $ lies on circle $ \\Xi(Y) $.\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "$\\frac{\\sqrt{510}}{3} \\pi$",
+    "grading": {
+      "type": "symbolic",
+      "answer": "$\\frac{\\sqrt{510}}{3} \\pi$",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Geometry",
+      "subcategory": "locus_geometry",
+      "source_text": "Komal"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-geometry-067",
+    "prompt": "Let $\\triangle{XYZ}$ be an isosceles triangle with $\\angle X=90^{\\circ}$. There exists a point $Q$ inside $\\triangle{XYZ}$ such that $\\angle QXY=\\angle QYZ=\\angle QZX$ and $XQ=14$. Find the area of $\\triangle{XYZ}$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "490",
+    "grading": {
+      "type": "exact",
+      "answer": "490",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Geometry",
+      "subcategory": "computation",
+      "source_text": "AIME 2023"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-geometry-078",
+    "prompt": "Let $XYZ$ be a triangle. How many points $Q$ on segment $YZ$ are there satisfying the following property: If $A$ and $B$ are the intersections of line $XQ$ with the common external tangent lines of the circumcircles of triangles $XQY$ and $XQZ$, then\\[\\left(\\frac{XQ}{AB}\\right)^2+\\frac{QY\\cdot QZ}{XY\\cdot XZ}=1\\] ?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "1 if triangle is isoceles, otherwise 2",
+    "grading": {
+      "type": "symbolic",
+      "answer": "1 if triangle is isoceles, otherwise 2",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Geometry",
+      "subcategory": "proof_based_geometry",
+      "source_text": "USA 2013"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-geometry-089",
+    "prompt": "Let $\\Omega$ be a circle, and $\\gamma_1$ and $\\gamma_2$ be two non-intersecting circles inside $\\Omega$ that are internally tangent to $\\Omega$ at $Y_1$ and $Y_2$, respectively. Let one of the common internal tangents of $\\gamma_1$ and $\\gamma_2$ touch $\\gamma_1$ and $\\gamma_2$ at $S_1$ and $S_2$, respectively, while intersecting $\\Omega$ at two points $C$ and $D$. Given that $2Y_1S_1=Y_2S_2$ and that $\\gamma_1$, $\\gamma_2$, and $\\Omega$ have radii $2$, $3$, and $12$, respectively, compute the length of $CD$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "$\\frac{96\\sqrt{10}}{13}$",
+    "grading": {
+      "type": "symbolic",
+      "answer": "$\\frac{96\\sqrt{10}}{13}$",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Geometry",
+      "subcategory": "computation",
+      "source_text": "HMMT 2020"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-geometry-100",
+    "prompt": "Triangle $XYZ$ is given with angles $\\angle XYZ = 60^o$ and $\\angle  YZX = 100^o$. On the sides $XY$ and $XZ$, the points $P$ and $Q$ are chosen, respectively, in such a way that $\\angle  QPZ = 2\\angle  PZY = 2\\angle  ZXY$. Find the angle $\\angle  YQP$ in terms of degree.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "10",
+    "grading": {
+      "type": "exact",
+      "answer": "10",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Geometry",
+      "subcategory": "computation",
+      "source_text": "Novosibirsk Geometry Olympiad 2023"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-number_theory-001",
+    "prompt": "Find all positive integers $m > 1$ such that there exists a permutation $(a_1, a_2, \\dots, a_n)$ of the all divisors of $m$ for which $a_1 + \\dots + a_i$ is a perfect square for all $1 \\leq i \\leq n$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "3",
+    "grading": {
+      "type": "exact",
+      "answer": "3",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Number theory",
+      "subcategory": "Perfect power",
+      "source_text": "IMO Shortlist 2021"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-number_theory-012",
+    "prompt": "Find all positive integers $n$ such that there exists a function $f:\\mathbb{N}\\rightarrow \\mathbb{N}$ from positive integers to positive integers satisfying $\\operatorname{gcd}(f(a)+a+b, f(a+b)+a)\\leq n$ for all positive integers $a,b$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "$n \\ge 2$",
+    "grading": {
+      "type": "symbolic",
+      "answer": "$n \\ge 2$",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Number theory",
+      "subcategory": "Functional Equation",
+      "source_text": "IMO Shortlist 2015"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-number_theory-023",
+    "prompt": "Find the smallest positive integer $m$ that satisfies the following condition:\n(Condition) There exist $m$ distinct positive integers $a_1, \\dots, a_m$ such that $(1-\\frac{1}{a_1})\\cdots (1-\\frac{1}{a_m}) = \\frac{42}{2010}$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "48",
+    "grading": {
+      "type": "exact",
+      "answer": "48",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Number theory",
+      "subcategory": "Diophantine Equation",
+      "source_text": "IMO Shortlist 2010"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-number_theory-034",
+    "prompt": "Find all integer values that appear exactly once as the value of $\\frac{g(n)}{n}$, where $g:\\mathbb{N}\\rightarrow\\mathbb{N}$ is a function defined by $g(m)=\\sum_{i=1}^m \\gcd(i,m)$.\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "All powers of 2",
+    "grading": {
+      "type": "exact",
+      "answer": "All powers of 2",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Number theory",
+      "subcategory": "Divisor",
+      "source_text": "IMO Shortlist 2004"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-number_theory-045",
+    "prompt": "A positive integer $n$ is called a cool integer if there exists a permutation $(x_1, \\dots, x_n)$ of $(1, \\dots, n)$ such that for any $i$, $x_1 + \\dots + x_i$ is not a perfect square. Find the 2025th smallest cool integer.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "2030",
+    "grading": {
+      "type": "exact",
+      "answer": "2030",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Number theory",
+      "subcategory": "Sequence",
+      "source_text": "Iran 2002"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-number_theory-056",
+    "prompt": "Let $P$ be a polynomial of degree $n>1$ such that all its non-zero coefficients are 1 or -1. Suppose that $P(k)$ is a multiple of $n$ for any positive integer $k$. Find the minimum possible number of non-zero coefficients in $P$.\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "2",
+    "grading": {
+      "type": "exact",
+      "answer": "2",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Number theory",
+      "subcategory": "Polynomial",
+      "source_text": "Estonia TST 2018"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-number_theory-067",
+    "prompt": "Find all primes $q$ such that\n\\[\n    \\sqrt[3]{\\frac{q^3 + 1}{q + 1}}\n\\]\nis a prime number different from $q$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "19",
+    "grading": {
+      "type": "exact",
+      "answer": "19",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Number theory",
+      "subcategory": "Diophantine Equation",
+      "source_text": "Belarus 2016"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-number_theory-078",
+    "prompt": "Find all nonnegative integers $n$ for which the following holds:\n\\begin{center}\n    $20^{n+1}$ is divisible by $n^3 + 4n^2 + 6n + 4$.\n\\end{center}\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "0,2,6",
+    "grading": {
+      "type": "symbolic",
+      "answer": "0,2,6",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Number theory",
+      "subcategory": "Divisibility",
+      "source_text": "Japan 2015"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-number_theory-089",
+    "prompt": "The incircle of a triangle with side lengths that are three consecutive integers is a unit circle. Find all possible values for the perimeter of the triangle.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "12",
+    "grading": {
+      "type": "exact",
+      "answer": "12",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Number theory",
+      "subcategory": "Diophantine Equation",
+      "source_text": "Russia 1998"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "imo-answerbench-v2",
+    "id": "imo-bench-number_theory-100",
+    "prompt": "Let $m$ and $n$ be positive integers, and let $p$ be a prime. Suppose that $\\log_p (m^2+n)$ and $\\log_p(m+n^2)$ are both positive integers greater than 1. Denote by $(m_1, n_1, p_1), \\ldots, (m_k, n_k, p_k)$ all possible triples $(m,n,p)$. Evaluate $\\sum_{i=1}^k (m_i + n_i + p_i)$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "20",
+    "grading": {
+      "type": "exact",
+      "answer": "20",
+      "note": "normalized exact/symbolic comparison; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "IMO-Bench / answerbench_v2.csv",
+      "license": "CC-BY-4.0 (data); Apache-2.0 (software)",
+      "category": "Number theory",
+      "subcategory": "Diophantine Equation",
+      "source_text": "St. Petersburg City MO (Russia) 2000"
+    }
+  }
+]

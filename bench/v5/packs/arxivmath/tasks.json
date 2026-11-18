@@ -1,0 +1,2371 @@
+[
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-001",
+    "prompt": "Let $k$ be a field, let $V$ be a $k$-vector space of dimension $d$, and let $G\\subseteq GL(V)$ be a finite group. Set $r:=\\dim_k (V^*)^G$ and assume $r\\ge 1$. Let $R:=k[V]^G$ be the invariant ring, and write its Hilbert quasi-polynomial (for $n\\gg 0$) in the form\n\\[\nH_R(n)=a_{d-1}(n)n^{d-1}+a_{d-2}(n)n^{d-2}+\\cdots+a_1(n)n+a_0(n),\n\\]\nwhere each $a_i(n)$ is a periodic function of $n$. Compute the sum of the indices $i\\in\\{0,1,\\dots,d-1\\}$ for which $a_i(n)$ is constant.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{r(2d-r-1)}{2}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{r(2d-r-1)}{2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.00811",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 1,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.00811",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-002",
+    "prompt": "An oriented graph is a directed graph with no pair of opposite arcs. For a digraph $D$, let $fvs(D)$ be the minimum size of a vertex set whose deletion makes $D$ acyclic, and let $\\Delta(D)$ be the maximum (total) degree, i.e., for each vertex $v$, $\\deg(v)=\\deg^+(v)+\\deg^-(v)$ and $\\Delta(D)=\\max_v \\deg(v)$. Define\n\\[\nc^*:=\\inf\\Bigl\\{c\\in\\mathbb R:\\ \\forall\\text{ oriented graphs }D\\text{ on }n\\text{ vertices with }\\Delta(D)\\le 4,\\ fvs(D)\\le c\\,n\\Bigr\\}.\n\\]\nWhat is the exact value of $c^*$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{3}{7}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{3}{7}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.01676",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 2,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.01676",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-003",
+    "prompt": "In the lattice of all quasivarieties of Sugihara algebras, consider those quasivarieties that have the amalgamation property. What is the exact number of such quasivarieties?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "5",
+    "grading": {
+      "type": "exact",
+      "answer": "5",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.04762",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 3,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.04762",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-004",
+    "prompt": "Let $(A,\\Theta)$ be a very general principally polarized complex abelian variety of dimension $6$. Let $\\theta:=c_1(\\Theta)\\in H^2(A,\\mathbb Z)$, and define the minimal curve cohomology class to be\n\\[\n\\gamma:=\\frac{\\theta^5}{5!}\\in H^{10}(A,\\mathbb Z),\n\\]\nwhich is the class Poincaré dual to the minimal (with respect to $\\Theta$) integral Hodge class of a 1-cycle. Determine the smallest positive integer $m$ such that the class $m\\gamma$ is represented by an algebraic $1$-cycle on $A$ (i.e. $m\\gamma$ lies in the image of the cycle class map $\\mathrm{CH}_1(A)\\to H^{10}(A,\\mathbb Z)$).\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "6",
+    "grading": {
+      "type": "exact",
+      "answer": "6",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.04902",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 4,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.04902",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-005",
+    "prompt": "Let $p>1$. Consider the following asynchronous $\\ell^p$-relaxation dynamics on a connected finite graph $G=(V,E)$ with $|V|=n$, where $V=I\\sqcup B$ with $I\\neq\\emptyset$ (interior) and $B\\neq\\emptyset$ (boundary). Fix an initial profile $f_0:V\\to[0,1]$ and keep boundary values fixed, i.e. $f_t(b)=f_0(b)$ for all $b\\in B$ and $t\\ge 0$. For each integer time $t\\ge 1$, pick $v_t\\in I$ uniformly at random and update only that vertex by setting $f_t(v_t)$ to be the (unique) minimizer of $x\\mapsto \\sum_{w\\sim v_t}|x-f_{t-1}(w)|^p$, while keeping $f_t(u)=f_{t-1}(u)$ for $u\\neq v_t$. Let $h:V\\to\\mathbb R$ be the (a.s. unique) limit of $f_t$ (the $p$-harmonic extension of $f_0|_B$), and for $\\varepsilon\\in(0,1/2]$ define the approximation time $\\tau_p(\\varepsilon):=\\min\\{t\\ge 0:\\|f_t-h\\|_\\infty\\le\\varepsilon\\}$. Define $\\beta_p$ to be the optimal (smallest possible) exponent such that there exist constants $C(p),c(p)>0$ with the following worst-case bound holding for all $n$, all such graphs with $n$ vertices, and all initial profiles $f_0$: for $p\\in[2,\\infty)$, $\\mathbb E[\\tau_p(\\varepsilon)]\\le C(p)\\,n^{\\beta_p}(\\log(n/\\varepsilon))^{c(p)}$, and for $p\\in(1,2)$, $\\mathbb E[\\tau_p(\\varepsilon)]\\le C(p)\\,n^{\\beta_p}\\varepsilon^{-c(p)}$. If $p < 3$, what is $\\beta_p$ as an explicit function of $p$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{2p}{p-1}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{2p}{p-1}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.05424",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 5,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.05424",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-006",
+    "prompt": "Let \\(\\overrightarrow{C_3}\\) denote the oriented 3-cycle (a directed cycle of length 3). An oriented graph \\(G\\) is a finite simple directed graph with no loops, no multiple arcs, and no pair of opposite arcs. For a vertex \\(v\\in V(G)\\), let \\(N_G(v)\\) be the number of (not necessarily induced) subgraphs of \\(G\\) that are isomorphic to \\(\\overrightarrow{C_3}\\) and contain \\(v\\). Call \\(G\\) \\(\\overrightarrow{C_3}\\)-irregular if for every two distinct vertices \\(u\\neq v\\) one has \\(N_G(u)\\neq N_G(v)\\). Call an oriented graph non-trivial if it has at least 2 vertices. Let \\(S\\subseteq\\mathbb{Z}_{>0}\\) be the set of all positive integers \\(m\\) for which there exists a non-trivial \\(\\overrightarrow{C_3}\\)-irregular oriented graph \\(G\\) with \\(|V(G)|=m\\). Determine the sum of all positive integers that are not in \\(S\\).\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "45",
+    "grading": {
+      "type": "exact",
+      "answer": "45",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.05487",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 6,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.05487",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-007",
+    "prompt": "Let $K$ be a field with $\\operatorname{char}(K)\\ne 2$, and let $A$ be an associative (not necessarily unital) $K$-algebra satisfying the polynomial identity $x^2=0$ for all $x\\in A$. Define the nilpotency index of $A$ to be the least positive integer $n$ such that for all $x_1,\\dots,x_n\\in A$ one has $x_1x_2\\cdots x_n=0$. What is the largest possible value of this nilpotency index (over all such algebras $A$)?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "3",
+    "grading": {
+      "type": "exact",
+      "answer": "3",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.06125",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 7,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.06125",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-008",
+    "prompt": "Let $X$ be a real normed linear space of (finite) dimension $d$. For nonempty subsets $A,B\\subseteq X$, define the set-to-set distance\n\\[\\operatorname{dist}(A,B):=\\inf\\{\\|a-b\\|:a\\in A,\\ b\\in B\\},\\]\nthe closed $r$-neighborhood\n\\[N_r(A):=\\{x\\in X:\\operatorname{dist}(\\{x\\},A)\\le r\\},\\]\nand for each $r>\\operatorname{dist}(A,B)$ define\n\\[F_r:=B\\cap N_r(A).\\]\nFor nonempty subsets $E,F\\subseteq X$, define the (possibly infinite) Hausdorff distance\n\\[d_H(E,F):=\\max\\Big\\{\\sup_{e\\in E}\\operatorname{dist}(\\{e\\},F),\\ \\sup_{f\\in F}\\operatorname{dist}(\\{f\\},E)\\Big\\}.\\]\nDetermine the largest integer $d$ such that for every $d$-dimensional normed space $X$ and all nonempty convex subsets $A,B\\subseteq X$, one has $d_H(F_r,F_s)<\\infty$ for all $r,s>\\operatorname{dist}(A,B)$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "2",
+    "grading": {
+      "type": "exact",
+      "answer": "2",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.06327",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 8,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.06327",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-009",
+    "prompt": "For integers $k\\ge 3$ and real $\\theta$, define $v(k,\\theta)$ to be the maximum possible number of vertices of a connected $k$-regular graph whose second largest eigenvalue (of its adjacency matrix) is at most $\\theta$. Compute the ordered triple $(v(4,\\sqrt2),\\,v(5,\\sqrt2),\\,v(5,\\sqrt5-1))$ and return it as a comma-separated list in \\boxed{}, e.g., \\boxed{(1,1,1)}.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "(14,16,16)",
+    "grading": {
+      "type": "symbolic",
+      "answer": "(14,16,16)",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.0968",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 9,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.0968",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-010",
+    "prompt": "Let $P_7$ denote the path graph on $7$ vertices and let $C_k$ denote the cycle graph on $k$ vertices. A graph $G$ is called $4$-vertex-critical if $\\chi(G)=4$ and for every proper induced subgraph $H$ of $G$ one has $\\chi(H)\\le 3$. A graph is said to be $\\{P_7,C_3\\}$-free if it has no induced subgraph isomorphic to $P_7$ or to $C_3$. Among graphs $G$ that are $4$-vertex-critical, $\\{P_7,C_3\\}$-free, and that contain an induced subgraph isomorphic to $C_7$, how many pairwise non-isomorphic such graphs exist?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "3",
+    "grading": {
+      "type": "exact",
+      "answer": "3",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.12349",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 10,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.12349",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-011",
+    "prompt": "Let $n\\ge 3$ be an integer. Choose a uniformly random ordering $(e_1,e_2,\\dots,e_{\\binom{n}{2}})$ of the edges of the complete graph $K_n$. For each $t\\in\\{1,2,\\dots,\\binom{n}{2}\\}$ let $G_t$ be the graph on vertex set $\\{1,\\dots,n\\}$ with edge set $\\{e_1,\\dots,e_t\\}$. Define the random time\n\\[\nT:=\\min\\bigl\\{t:\\text{the edge }e_1\\text{ belongs to a (simple) cycle in }G_t\\bigr\\}.\n\\]\nCompute $\\mathbb{E}[T]$ as an explicit function of $n$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "n",
+    "grading": {
+      "type": "exact",
+      "answer": "n",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.12852",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 11,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.12852",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-012",
+    "prompt": "Let $T=(V,E)$ be a finite tree with $|V|=n$. A (vertex) set $F\\subseteq V$ is called a fort if $F\\neq\\varnothing$ and every vertex $v\\in V\\setminus F$ has either $0$ or at least $2$ neighbors in $F$. A fort $F$ is minimal if it contains no proper subset that is also a fort. Let $m(T)$ denote the number of minimal forts of $T$. What universal lower bound (as a function of $n$) is guaranteed for $m(T)$ over all trees on $n$ vertices? The function is of the form $\\lceil f(n) \\rceil$. Determine f(n).\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{n}{3}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{n}{3}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.12874",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 12,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.12874",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-013",
+    "prompt": "Let $r\\in\\{4,5\\}$. Let $G$ be a finite loopless graph (parallel edges allowed). Call $G$ an $r$-graph if (i) $G$ is $r$-regular, and (ii) for every vertex subset $S\\subseteq V(G)$ of odd cardinality, the edge cut $\\delta(S)$ (the set of edges with exactly one endpoint in $S$) satisfies $|\\delta(S)|\\ge r$. Assume moreover that $G$ is projective planar (i.e. it has an embedding in the projective plane) and that the Petersen graph is not a minor of $G$ (in the usual sense of minors via vertex/edge deletions and edge contractions). Let $\\chi'(G)$ denote the edge-chromatic number of $G$. What is the value of $\\chi'(G)$ as a function of $r$? Return your answer as a tuple consisting of two elements $(\\chi'(G)\\,(r=4),\\,\\chi'(G)\\,(r=5))$. For instance, \\boxed{(1,1)}.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "(4,5)",
+    "grading": {
+      "type": "symbolic",
+      "answer": "(4,5)",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.14285",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 13,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.14285",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-014",
+    "prompt": "Consider the one-phase fractional Stefan problem on the whole line $\\mathbb R\\times(0,T)$\n\\[\n\\partial_t h+(-\\Delta)^s\\Phi(h)=0,\\qquad \\Phi(h)=(h-L)_+=\\max\\{h-L,0\\},\\qquad L>0,\\ s\\in(0,1),\n\\]\nwith step-function initial data\n\\[\nh_0(x):=\\begin{cases}L+P_1,&x\\le 0,\\\\0,&x>0,\\end{cases}\\qquad P_1>0.\n\\]\nAssume the (unique) bounded self-similar solution has the form $h(x,t)=H(x t^{-1/(2s)})$ and has a free boundary point $\\xi_0>0$ defined by $H(\\xi_0)=L$. Suppose there exists a critical exponent $s_*$ such that for $0<s<s_*$ one has $H\\in C^{1,\\alpha}(\\mathbb R)$ for some $\\alpha>0$, while for $s\\ge s_*$ the enthalpy profile fails to be Lipschitz at the free boundary (i.e. $H\\notin C^{0,1}(\\mathbb R)$ due to behavior at $\\xi_0$). Determine $s_*.$\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\tfrac{1}{2}",
+    "grading": {
+      "type": "exact",
+      "answer": "\\tfrac{1}{2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.17725",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 14,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.17725",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-015",
+    "prompt": "Let $r\\ge 3$ be an integer. Consider the univariate polynomial optimization problem\n\\[\n\\min_{x\\in\\mathbb R}\\; f(x):=1-x^2\\quad\\text{subject to}\\quad g(x):=(1-x^2)^3\\ge 0.\n\\]\nDefine the order-$r$ SOS (Putinar-type) relaxation value\n\\[\n\\rho_r:=\\sup\\Bigl\\{\\gamma\\in\\mathbb R:\\; f(x)-\\gamma=\\sigma_0(x)+\\sigma_1(x)\\,g(x),\\; \\sigma_0,\\sigma_1\\in\\Sigma[x],\\;\\deg(\\sigma_0)\\le 2r,\\;\\deg(\\sigma_1 g)\\le 2r\\Bigr\\},\n\\]\nwhere $\\Sigma[x]$ denotes the cone of sums of squares of real polynomials. What is the exact value of $\\rho_r$ as a function of $r$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "-\\frac{1}{r(r-2)}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "-\\frac{1}{r(r-2)}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.19141",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 15,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.19141",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-016",
+    "prompt": "Let \\(\\mu\\) be a signed Radon measure on \\(\\mathbb R^n\\). For \\(x\\in \\operatorname{supp}\\mu\\) and \\(r>0\\), define the normalized rescaling\n\\[\n\\mu_{x,r}:=\\frac{1}{|\\mu|(B_r(x))}(T_{x,r})_\\#\\mu,\\qquad T_{x,r}(y):=\\frac{y-x}{r},\n\\]\nwhere \\(|\\mu|\\) is the total variation measure. Say that \\(\\mu\\) has a unique blow-up at \\(x\\) if there exists a nonzero Radon measure \\(\\mu_x\\) with \\(|\\mu_x|(B_1(0))=1\\) such that for every sequence \\(r_j\\downarrow 0\\) there exist a subsequence (not relabeled) and a constant \\(c\\neq 0\\) with \\(\\mu_{x,r_j}\\rightharpoonup^* c\\mu_x\\) (weak-* as Radon measures). For a Radon measure \\(\\nu\\), define its translation-invariance subspace\n\\[\n\\operatorname{Inv}(\\nu):=\\{v\\in\\mathbb R^n:\\ (\\tau_v)_\\#\\nu=\\nu\\},\\qquad \\tau_v(z):=z+v.\n\\]\nFor a fixed integer \\(k\\in\\{0,1,\\dots,n\\}\\), define\n\\[\nE_k:=\\bigl\\{x\\in\\mathbb R^n:\\ \\mu\\text{ has a unique blow-up at }x\\text{ with representative }\\mu_x\\neq 0\\text{ and }\\dim(\\operatorname{Inv}(\\mu_x))=k\\bigr\\}.\n\\]\nDetermine the integer \\(m\\) such that \\(E_k\\) is \\(m\\)-rectifiable.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "k",
+    "grading": {
+      "type": "exact",
+      "answer": "k",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.20498",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 16,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.20498",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-017",
+    "prompt": "Let $G$ be a bipartite graph on $2n$ vertices ($n\\ge 2$) that has at least one perfect matching. For a perfect matching $M$ of $G$, call a subset $S\\subseteq M$ a forcing set for $M$ if $M$ is the unique perfect matching of $G$ that contains $S$. Define the forcing number of $M$ by $f(M):=\\min\\{|S|:S\\subseteq M\\text{ is a forcing set for }M\\}$. Define the minimum and maximum forcing numbers of $G$ by\n\\[\n f(G):=\\min\\{f(M):M\\text{ a perfect matching of }G\\},\\qquad F(G):=\\max\\{f(M):M\\text{ a perfect matching of }G\\}.\n\\]\nAssume $F(G)=n-2$. As $G$ ranges over all such bipartite graphs on $2n$ vertices with $F(G)=n-2$, let the set of all possible values of $f(G)$ (expressed as a subset of $\\mathbb Z$ in terms of $n$) be $S(n)$. The sum of all elements in $S(n)$ is $s(n)$. Determine the tuple $(s(5), s(15), s(30), s(69))$. Return your answer as a tuple in \\boxed{}, e.g., \\boxed{(1,1,1,1)}\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "(5,70,315,1717)",
+    "grading": {
+      "type": "symbolic",
+      "answer": "(5,70,315,1717)",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.22761",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 17,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.22761",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-001",
+    "prompt": "Let $G$ be a finite, simple, **connected** graph on $13$ vertices such that $G$ has no induced subgraph isomorphic to $4K_1$ (equivalently, $\\alpha(G)<4$). In the standard game of cops and robber played on $G$, let $c(G)$ denote the cop number (the minimum number of cops that guarantees capture of the robber). What is the maximum possible value of $c(G)$ over all such graphs $G$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "2",
+    "grading": {
+      "type": "exact",
+      "answer": "2",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.00917",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 1,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.00917",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-002",
+    "prompt": "Let $X$ be a compact complex surface (i.e. a compact complex manifold of complex dimension $2$). For $n\\ge 2$, let $\\langle a_1,\\dots,a_n\\rangle$ denote an $n$-fold Massey product in real cohomology $H^*(X;\\mathbb R)$, where each $a_i\\in H^1(X;\\mathbb R)$. Determine the largest integer $N$ such that an $N$-fold Massey product of degree-one classes on some compact complex surface can be nonzero (equivalently: all such $n$-fold Massey products vanish for every $n>N$).\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "3",
+    "grading": {
+      "type": "exact",
+      "answer": "3",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.01958",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 2,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.01958",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-003",
+    "prompt": "Let $(X,\\omega)$ be a compact Kähler surface (complex dimension $2$), and let $g_\\omega$ be the associated Riemannian metric. Let $S(\\omega):X\\to\\mathbb R$ denote the Chern scalar curvature of $\\omega$ (so that $\\operatorname{scal}(g_\\omega)=2S(\\omega)$), and assume $S(\\omega)(x)>0$ for all $x\\in X$. Define\n\\[\n\\sys_2(\\omega):=\\inf\\{\\operatorname{Mass}_{g_\\omega}(Z):\\ Z\\text{ is an integral }2\\text{-cycle with }[Z]\\neq 0\\in H_2(X;\\mathbb Z)\\}.\n\\]\nLet $m:=\\min_{x\\in X} S(\\omega)(x)$. Determine the smallest universal constant $C\\in\\mathbb R$ such that for every such $(X,\\omega)$ one has $m\\,\\sys_2(\\omega)\\le C$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "12\\pi",
+    "grading": {
+      "type": "exact",
+      "answer": "12\\pi",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.02901",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 3,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.02901",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-004",
+    "prompt": "Let $k\\ge2$ be an integer and let $C:=[0,k]^3\\subset\\mathbb R^3$. Let $P\\in C\\cap\\mathbb Z^3$ be a lattice point, and let $T\\subset C$ be a lattice triangle, i.e. $T=\\operatorname{conv}(A,B,C)$ for some affinely independent $A,B,C\\in C\\cap\\mathbb Z^3$, such that $P\\notin T$. Define the Euclidean point-to-set distance $\\operatorname{dist}(P,T):=\\inf\\{\\|P-x\\|_2:x\\in T\\}$. Consider the quantity\n\\[\n\\delta(k):=\\min\\{\\operatorname{dist}(P,T):\\;P\\in C\\cap\\mathbb Z^3,\\;T\\text{ is a lattice triangle in }C,\\;P\\notin T\\}.\n\\]\nWhat is the exact value of $\\delta(k)$ as a function of $k$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{1}{\\sqrt{3k^4-4k^3+4k^2-2k+1}}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{1}{\\sqrt{3k^4-4k^3+4k^2-2k+1}}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.03183",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 4,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.03183",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-005",
+    "prompt": "Let $p$ and $q$ be twin primes with $q=p+2$. For a prime $r$ and integer $n\\ge1$, let $\\nu_r(n!)$ denote the exponent of $r$ in the prime factorization of $n!$, i.e. the largest integer $k$ such that $r^k\\mid n!$. Define\n\\[\n n_0:=\\min\\bigl\\{n\\in\\mathbb Z_{>0}:\\ \\forall m\\in\\mathbb Z_{\\ge n},\\ q^{\\nu_q(m!)}<p^{\\nu_p(m!)}\\bigr\\}.\n\\]\nWhat is $n_0$ as an explicit function of $p$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{p^2+p}{2}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{p^2+p}{2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.03414",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 5,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.03414",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-006",
+    "prompt": "Let $S^5\\subset\\mathbb R^6$ be the unit $5$-sphere. A totally umbilical hypersurface of $S^5$ is a geodesic hypersphere, realized as the intersection $S^5\\cap\\{x_6=c\\}$ for some constant $c\\in(-1,1)$; this hypersurface is isometric to a round $4$-sphere of Euclidean radius $a:=\\sqrt{1-c^2}\\in(0,1)$, denoted $S^4(a)\\hookrightarrow S^5$. Assume the hypersurface is non-minimal (equivalently $c\\neq 0$). Using stereographic (conformal) coordinates $x\\in\\mathbb R^4$ on $S^4(a)$, consider the conformal factor $\\lambda(x)=(1+|x|^2)^{-1}$. Determine the value of $a$ for which there exists a biharmonic conformal immersion of this hypersurface into $S^5$ with conformal factor $\\lambda$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{\\sqrt{3}}{2}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{\\sqrt{3}}{2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.03462",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 6,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.03462",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-007",
+    "prompt": "Fix integers \\(s\\ge 2\\) and \\(r\\) with \\(s\\le r\\le 2s-2\\). Let \\(A_r:=\\{0,1,\\dots,r\\}\\) and for any digit sequence \\((\\alpha_n)_{n\\ge1}\\in A_r^{\\mathbb N}\\) define\n\\[\n\\pi((\\alpha_n)):=\\sum_{n=1}^\\infty \\frac{\\alpha_n}{s^n}\\in\\left[0,\\frac{r}{s-1}\\right].\n\\]\nLet \\(U_{s,r}\\subseteq\\left[0,\\frac{r}{s-1}\\right]\\) be the set of all \\(x\\) for which there exists exactly one sequence \\((\\alpha_n)\\in A_r^{\\mathbb N}\\) with \\(x=\\pi((\\alpha_n))\\). What is the Hausdorff–Besicovitch dimension \\(\\dim_H(U_{s,r})\\) as an explicit function of \\(s\\) and \\(r\\)?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{\\ln(2s-r-1)}{\\ln s}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{\\ln(2s-r-1)}{\\ln s}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.03949",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 7,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.03949",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-008",
+    "prompt": "Let $G$ be a finite graph. A tree decomposition of $G$ is a pair $(T,(B_t)_{t\\in V(T)})$ where $T$ is a tree and each $B_t\\subseteq V(G)$ (a “bag”) such that (0) $\\bigcup_{t\\in V(T)} B_t = V(G)$, (i) for every edge $uv\\in E(G)$ there exists $t\\in V(T)$ with $\\{u,v\\}\\subseteq B_t$, and (ii) for every vertex $v\\in V(G)$, the set $\\{t\\in V(T): v\\in B_t\\}$ induces a connected subtree of $T$. The width is $\\max_{t\\in V(T)}(|B_t|-1)$, and $tw(G)$ is the minimum width over all tree decompositions of $G$. The spread of a vertex $v$ in a tree decomposition is $s(v):=|\\{t\\in V(T): v\\in B_t\\}|$, and $d(v)$ is its degree in $G$.\n\nConsider the property $\\mathcal P(c)$: “There exists a constant $c'>0$ such that every graph $G$ has a tree decomposition of width at most $c\\,tw(G)$ in which every vertex $v$ satisfies $s(v)\\le c'(d(v)+1)$.”\n\nWhat is the largest real number $\\alpha$ such that for every $c<\\alpha$, the property $\\mathcal P(c)$ is impossible (i.e., fails for some graph $G$)?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "2",
+    "grading": {
+      "type": "exact",
+      "answer": "2",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.0404",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 8,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.0404",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-009",
+    "prompt": "A \\emph{bowtie} is a graph consisting of two triangles sharing exactly one common vertex. Let \\(T_{n,2}=K_{\\lceil n/2\\rceil,\\lfloor n/2\\rfloor}\\) be the balanced complete bipartite graph on \\(n\\) vertices. For integers \\(n\\) and \\(q\\), define \\(K_{\\lceil n/2\\rceil,\\lfloor n/2\\rfloor}^q\\) to be the graph obtained from \\(T_{n,2}\\) by adding \\(q\\) pairwise vertex-disjoint edges inside the part of size \\(\\lceil n/2\\rceil\\). Let \\(\\lambda(G)\\) denote the spectral radius of a graph \\(G\\). Assuming \\(n\\) is sufficiently large and \\(2\\le q\\le \\delta\\sqrt n\\) for some absolute constant \\(\\delta>0\\), what is the smallest number of (not necessarily induced) bowties that must be contained in any \\(n\\)-vertex graph \\(G\\) satisfying \\(\\lambda(G)\\ge \\lambda\\bigl(K_{\\lceil n/2\\rceil,\\lfloor n/2\\rfloor}^q\\bigr)\\)?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\binom{q}{2}\\left\\lfloor\\frac{n}{2}\\right\\rfloor",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\binom{q}{2}\\left\\lfloor\\frac{n}{2}\\right\\rfloor",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.04671",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 9,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.04671",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-010",
+    "prompt": "Consider the following Builder–Painter game on an initially empty graph with a countably infinite vertex set. In each round, Builder selects an unrevealed edge and reveals it; immediately, Painter colors that edge either red or blue. Builder wins as soon as the revealed colored graph contains either a red copy of the claw $K_{1,3}$ or a blue copy of the cycle $C_{\\ell}$. Let $\\tilde r(K_{1,3},C_{\\ell})$ denote the minimum number of edges Builder must reveal to force a win under optimal play. What is $\\sum_{\\ell=15}^{30}\\tilde r(K_{1,3},C_{\\ell})$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "560",
+    "grading": {
+      "type": "exact",
+      "answer": "560",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.05452",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 10,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.05452",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-011",
+    "prompt": "An $n$-omino is a finite union of $n$ unit squares in $\\mathbb Z^2$ that is connected by edge-adjacency. For such a polyomino $P$, a hole is a bounded connected component of $\\mathbb R^2\\setminus P$. Define $h_n$ to be the maximum possible number of holes of an $n$-omino with the property that the boundary (as a polygonal curve along grid edges) of each hole is disjoint from the boundary of every other hole and disjoint from the outer boundary of $P$. Compute\n\\[\n\\lim_{n\\to\\infty}\\frac{h_n}{n}.\n\\]\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{1}{3}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{1}{3}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.0684",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 11,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.0684",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-012",
+    "prompt": "Let $K_{33}$ be the complete graph on $33$ vertices. A (good) drawing of a graph in the plane consists of distinct points for vertices and simple arcs for edges such that (i) no edge passes through a nonincident vertex, (ii) any two edges intersect at finitely many points, each intersection is either a common endpoint or a proper crossing, and (iii) no three edges cross at a single point. Such a drawing is **3-symmetric** if there exists a rotation $\\rho$ of the plane by angle $2\\pi/3$ about some point $O$ such that applying $\\rho$ to the drawing maps it onto itself (so $\\rho$ permutes vertices and edges), and no vertex lies at $O$. A 3-symmetric drawing is **pseudolinear** if each edge can be extended to a pseudoline so that the set of these pseudolines forms a pseudoline arrangement (each pseudoline is a simple curve homeomorphic to $\\mathbb R$, and any two pseudolines intersect exactly once). Define $\\operatorname{sym}\\text{-}\\widetilde{\\operatorname{cr}}_3(K_{33})$ to be the minimum possible number of edge crossings among all 3-symmetric pseudolinear drawings of $K_{33}$. What is the exact value of $\\operatorname{sym}\\text{-}\\widetilde{\\operatorname{cr}}_3(K_{33})$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "14634",
+    "grading": {
+      "type": "exact",
+      "answer": "14634",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.09689",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 12,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.09689",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-013",
+    "prompt": "Let $(X,d)$ be a finite metric space, let $\\varnothing\\neq A\\subsetneq X$, and let $f:A\\to\\mathbb{R}$ be Lipschitz. For $\\varnothing\\neq B\\subseteq X$, write\n\\[\n\\operatorname{Lip}(u;B):=\\sup_{\\substack{x,y\\in B\\\\x\\neq y}}\\frac{|u(x)-u(y)|}{d(x,y)}.\n\\]\nCall an extension $u:X\\to\\mathbb{R}$ with $u|_A=f$ a minimal Lipschitz extension if $\\operatorname{Lip}(u;X)=\\operatorname{Lip}(f;A)$. Call such a minimal Lipschitz extension $u$ an absolutely minimal Lipschitz extension (relative to $2^{X\\setminus A}$) if there does not exist a nonempty subset $B\\subseteq X\\setminus A$ and another minimal Lipschitz extension $v:X\\to\\mathbb{R}$ of $f$ with $v=u$ on $X\\setminus B$ such that $\\operatorname{Lip}(v;B)<\\operatorname{Lip}(u;B)$. Determine the smallest integer $n$ for which there exist $(X,d)$ with $|X|=n$, a nonempty $A\\subsetneq X$, and Lipschitz $f:A\\to\\mathbb{R}$ such that no absolutely minimal Lipschitz extension of $f$ to $X$ (relative to $2^{X\\setminus A}$) exists.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "5",
+    "grading": {
+      "type": "exact",
+      "answer": "5",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.0984",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 13,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.0984",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-014",
+    "prompt": "Let $q$ be a prime power and let $\\mathrm{PG}(n,q)$ be $n$-dimensional projective space over $\\mathbb F_q$. Let $M$ be the $\\{0,1\\}$ incidence matrix whose rows are indexed by the lines of $\\mathrm{PG}(n,q)$ and whose columns are indexed by the points of $\\mathrm{PG}(n,q)$, with $M_{\\ell,P}=1$ iff $P\\in\\ell$. Let $\\mathbb F_p$ be the prime-order subfield of $\\mathbb F_q$ and define the linear code $\\mathcal C_1(n,q)^\\perp:=\\ker_{\\mathbb F_p}(M)\\subseteq \\mathbb F_p^{\\#\\text{points}}$. Define its minimum (nonzero) Hamming weight by\n\\[\n d(n,q):=\\min\\{\\mathrm{wt}(c): c\\in\\mathcal C_1(n,q)^\\perp,\\ c\\neq 0\\}.\n\\]\nAssume $n>2$. What is the exact expression for $d(n,q)$ in terms of $d(2,q)$, $q$, and $n$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "q^{n-2}d(2,q)",
+    "grading": {
+      "type": "symbolic",
+      "answer": "q^{n-2}d(2,q)",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.12451",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 14,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.12451",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-015",
+    "prompt": "Let $n=2^k$ for some integer $k\\ge 0$, and let $S_n$ be the symmetric group on $\\{1,\\dots,n\\}$. Call a family $\\mathcal F\\subseteq S_n$ **even-cycle-intersecting** if for every pair of **distinct** permutations $\\sigma,\\pi\\in\\mathcal F$, the permutation $\\sigma\\pi^{-1}$ has at least one cycle of even length in its disjoint cycle decomposition. What is the maximum possible value of $|\\mathcal F|$ (as an explicit function of $n$)?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "2^{n-1}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "2^{n-1}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.12613",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 15,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.12613",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-016",
+    "prompt": "Let $Q_n$ be the $n$-dimensional hypercube graph and let $C_k$ be the cycle of length $k$. Define $f(Q_n,C_k,q)$ to be the minimum number of colors needed to edge-color $Q_n$ such that every (not necessarily induced) subgraph isomorphic to $C_k$ uses at least $q$ distinct edge-colors. Assume $k\\ge 6$ is even and $3\\le q\\le k/2+1$. Suppose that as $n\\to\\infty$ one has the asymptotic upper bound $f(Q_n,C_k,q)=o\\bigl(n^{\\alpha(k,q)}\\bigr)$ for a specific exponent $\\alpha(k,q)$. What is $\\alpha(k,q)$ as a function of $k$ and $q$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{\\frac{k}{2}-1}{k-q+1}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{\\frac{k}{2}-1}{k-q+1}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.15451",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 16,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.15451",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-017",
+    "prompt": "For a finite simple undirected graph $G$, define the maximum average degree by\n\\[\\operatorname{mad}(G):=\\max_{\\varnothing\\neq H\\subseteq G}\\frac{2|E(H)|}{|V(H)|}.\\]\nLet $f:V(G)\\to\\mathbb N$ and let an $f$-list assignment be a function $L$ with $|L(v)|\\ge f(v)$ for all $v\\in V(G)$. A coloring $\\varphi:V(G)\\to\\bigcup_v L(v)$ is a proper conflict-free $L$-coloring if (i) $\\varphi(v)\\in L(v)$ for all $v$, (ii) $\\varphi$ is proper, and (iii) for every non-isolated vertex $v$, there exists a color that appears exactly once in the multiset $\\{\\varphi(u):u\\in N_G(v)\\}$. Say that $G$ is proper conflict-free $(\\mathrm{degree}+2)$-choosable if for every $L$ with $|L(v)|\\ge d_G(v)+2$ for all $v\\in V(G)$, there exists a proper conflict-free $L$-coloring.\n\nDetermine the rational constant $c$ such that every connected graph $G\\neq C_5$ with $\\operatorname{mad}(G)<c$ is proper conflict-free $(\\mathrm{degree}+2)$-choosable.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{18}{7}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{18}{7}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.15611",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 17,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.15611",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-018",
+    "prompt": "Let $(X_n)_{n\\ge 1}$ be an i.i.d. sequence of Bernoulli($p$) coin tosses, with $\\mathbb P(X_n=1)=p$ and $\\mathbb P(X_n=0)=1-p$, where $0<p<1$. For a finite binary string $w\\in\\{0,1\\}^m$, define the (first) waiting time\n\\[\nT_w:=\\min\\{n\\ge m:(X_{n-m+1},\\dots,X_n)=w\\}.\n\\]\nDefine first-order stochastic dominance by $A\\preceq_{\\mathrm{st}}B$ iff $\\mathbb P(A>t)\\le \\mathbb P(B>t)$ for all real $t$. Suppose that the family $\\{T_w:w\\in\\{0,1\\}^m,\\ m\\ge 1\\}$ is totally comparable under $\\preceq_{\\mathrm{st}}$, i.e. for every pair of finite binary strings $u,v$ one has either $T_u\\preceq_{\\mathrm{st}}T_v$ or $T_v\\preceq_{\\mathrm{st}}T_u$. Determine the value of $p$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\tfrac{1}{2}",
+    "grading": {
+      "type": "exact",
+      "answer": "\\tfrac{1}{2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.1658",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 18,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.1658",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-019",
+    "prompt": "Let $q$ be a prime power. Let $\\mathrm{PG}(2,q)$ denote the projective plane over $\\mathbb F_q$, whose points are the $1$-dimensional subspaces of $\\mathbb F_q^3$ and whose lines are the $2$-dimensional subspaces of $\\mathbb F_q^3$. A subset $A$ of points is called an \\emph{arc} if no three distinct points of $A$ lie on a common line. Define the \\emph{arc chromatic number} $\\chi_{\\mathrm{arc}}(\\mathrm{PG}(2,q))$ to be the minimum integer $k$ such that the point set of $\\mathrm{PG}(2,q)$ can be partitioned into $k$ pairwise disjoint arcs. What is $\\chi_{\\mathrm{arc}}(\\mathrm{PG}(2,q))$ in terms of $q$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "q+1",
+    "grading": {
+      "type": "exact",
+      "answer": "q+1",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.19043",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 19,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.19043",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-020",
+    "prompt": "A 3-uniform hypergraph (3-graph) is **linear** if any two distinct edges intersect in at most one vertex. Define the 3-uniform **linear path of length 5**, denoted $P_5$, to be a 3-graph with edges $e_1,e_2,e_3,e_4,e_5$ such that $|e_i\\cap e_{i+1}|=1$ for $i=1,2,3,4$, and $e_i\\cap e_j=\\varnothing$ whenever $|i-j|\\ge 2$. For $n\\in\\mathbb N$, let $\\mathrm{ex}_L(n,P_5)$ be the maximum possible number of edges in a linear 3-graph on $n$ vertices containing no (not necessarily induced) copy of $P_5$. Determine $\\mathrm{ex}_L(n,P_5)$ in terms of $n$ under the condition that $11\\mid n$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{15}{11}n",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{15}{11}n",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.19068",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 20,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.19068",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-021",
+    "prompt": "Let $P_n$ be the path graph on vertex set $\\{1,2,\\dots,n\\}$ with edges $\\{i,i+1\\}$ for $1\\le i\\le n-1$. Define the $2$-token graph $T_2(P_n)$ to be the graph whose vertices are the $2$-element subsets of $\\{1,2,\\dots,n\\}$, where two vertices $A,B$ are adjacent iff $|A\\triangle B|=2$ and the two elements of $A\\triangle B$ form an edge of $P_n$ (equivalently, one token is moved along one edge while the other stays fixed). Let $\\gamma(G)$ denote the domination number of a graph $G$. Compute\n\\[\n\\lim_{n\\to\\infty}\\frac{\\gamma\\bigl(T_2(P_n)\\bigr)}{n^2}.\n\\]\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{1}{10}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{1}{10}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.20216",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 21,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.20216",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-022",
+    "prompt": "For each $n\\ge 1$, let $\\sigma_1,\\sigma_2$ be independent uniformly random permutations in $\\mathfrak S_n$. For a permutation $\\pi\\in\\mathfrak S_n$, define its inversion set by $\\operatorname{Inv}(\\pi):=\\{(i,j):1\\le i<j\\le n,\\ \\pi(i)>\\pi(j)\\}$. Define the (right) weak Bruhat order $\\preceq_W$ on $\\mathfrak S_n$ by\n\\[\n\\sigma\\preceq_W\\tau\\iff \\operatorname{Inv}(\\sigma^{-1})\\subseteq \\operatorname{Inv}(\\tau^{-1}).\n\\]\nLet\n\\[\nL:=\\lim_{n\\to\\infty}\\frac{\\log\\mathbb P(\\sigma_1\\preceq_W\\sigma_2)}{n\\log n},\n\\]\nassuming the limit exists. What is the value of $L$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "-\\frac{1}{2}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "-\\frac{1}{2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.21158",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 22,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.21158",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-023",
+    "prompt": "Let \\(A\\subset\\mathbb N\\) be a set of \\(10\\) distinct **positive** integers. Define\n\\[\nA+A:=\\{a+b: a,b\\in A\\},\\qquad AA:=\\{ab: a,b\\in A\\}.\n\\]\nLet\n\\[\nM:=\\min_{A\\subset\\mathbb N,\\ |A|=10}\\max\\bigl(|A+A|,|AA|\\bigr).\n\\]\nWhat is the value of \\(M\\)?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "30",
+    "grading": {
+      "type": "exact",
+      "answer": "30",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.21828",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 23,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.21828",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-001",
+    "prompt": "Let $\\mathcal{F}$ be the family of all infinite subsets $S \\subseteq \\mathbb{Z}$ such that for all $n, m \\in S$ (not necessarily distinct), the set $\\{n-m, n+m\\} \\cap S$ contains exactly one element. It can be shown that there exists a positive integer $d$ such that every $S \\in \\mathcal{F}$ is of the form $r(\\mathbb{Z} \\setminus d\\mathbb{Z}) = \\{rk : k \\in \\mathbb{Z}, d \\nmid k\\}$ for some positive integer $r$. What is the value of $d$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "3",
+    "grading": {
+      "type": "exact",
+      "answer": "3",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.00631",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 1,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.00631",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-002",
+    "prompt": "Consider the two-dimensional inhomogeneous Euler equations in a finite channel. For monotonic shear flows with non-constant background density, the existence of traveling wave solutions depends tightly on the Sobolev regularity of the velocity and density fields. There exist critical Sobolev exponents $s_v$ for velocity and $s_\\rho$ for density such that for any arbitrarily small $\\tau>0$, nontrivial traveling waves can be constructed with velocity and density in $H^{s_v-\\tau}$ and $H^{s_\\rho-\\tau}$ respectively, whereas if the distorted Rayleigh operator has no eigenvalues or embedded eigenvalues, no such traveling waves exist in $H^{s_v+\\tau}$ for velocity and $H^{s_\\rho+\\tau}$ for density. What is the sum of critical Sobolev exponents $s_v + s_\\rho$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "4",
+    "grading": {
+      "type": "exact",
+      "answer": "4",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.00824",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 2,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.00824",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-003",
+    "prompt": "A penny graph is a graph whose vertices can be represented by non-overlapping unit circles in the Euclidean plane, with edges connecting vertices whose corresponding circles touch. What is the minimum possible number of vertices in a 3-regular penny graph?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "16",
+    "grading": {
+      "type": "exact",
+      "answer": "16",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.01287",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 3,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.01287",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-004",
+    "prompt": "Let $k$ be a field and let $R = k[x,y,z]$ be the polynomial ring in three variables. An ideal $I \\subseteq R$ is called normal if $I^n$ is integrally closed for all $n \\geq 1$. What is the maximum integer $N$ such that every integrally closed monomial ideal of height 3 in $R$ with at most $N$ minimal monomial generators is guaranteed to be normal?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "7",
+    "grading": {
+      "type": "exact",
+      "answer": "7",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.01782",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 4,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.01782",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-005",
+    "prompt": "Let $\\mathcal{P}$ denote the set of all permutons (probability measures on $[0,1]^2$ with uniform marginals), equipped with the rectangular distance $d_{\\square}$. What is the Chebyshev radius of $\\mathcal{P}$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{1}{4}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{1}{4}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.02889",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 5,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.02889",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-006",
+    "prompt": "Let $k$ be an algebraically closed field of characteristic $2$. Consider the commuting variety of the Lie algebra $\\mathfrak{sp}_{2n}$ over $k$, defined as $\\mathcal{C}_2(\\mathfrak{sp}_{2n})=\\{ (x,y) \\in \\mathfrak{sp}_{2n} \\times \\mathfrak{sp}_{2n} \\mid [x,y]=0\\}$. What is the dimension of the algebraic variety $\\mathcal{C}_2(\\mathfrak{sp}_{2n})$? Express your answer as a polynomial in $n$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "2n^2+3n",
+    "grading": {
+      "type": "symbolic",
+      "answer": "2n^2+3n",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.02935",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 6,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.02935",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-007",
+    "prompt": "Let $H$ be an apex-forest with at least three vertices and let $n = |V(H)|$. What is the optimal upper bound on the layered pathwidth of a graph $G$ that excludes $H$ as a minor, expressed as a function of $n$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "n-2",
+    "grading": {
+      "type": "exact",
+      "answer": "n-2",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.03833",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 7,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.03833",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-008",
+    "prompt": "For a finite lattice $L$ with $n$ elements, define its congruence density as $\\text{cd}(L) = |\\text{Con}(L)|/2^{n-1}$, where $|\\text{Con}(L)|$ is the number of congruences of $L$. What is the maximum possible value of $\\text{cd}(L)$ among all finite lattices $L$ that do not have an equal number of join-irreducible and meet-irreducible elements?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{3}{32}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{3}{32}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.04321",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 8,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.04321",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-009",
+    "prompt": "Consider the committee selection problem in the canonical impartial culture model with a sufficiently large fixed number of voters $n$ as the number of candidates $m \to \\infty$. In this model, each voter independently reports a uniformly random preference order over the candidates. For a fixed committee size $k$, a set $S$ of $k$ candidates is defined to be $\\alpha$-dominating if, for every candidate $a \\notin S$, there exists a single committee member $b \\in S$ such that at least an $\\alpha$-fraction of voters prefer $b$ to $a$. What is the sharp threshold $\\alpha_{\\mathrm{dom}}^\\star$ (as a function of $k$) such that an $\\alpha$-dominating set of size $k$ exists with probability approaching 1 (as $m \\to \\infty$) when $\\alpha < \\alpha_{\\mathrm{dom}}^\\star$, and exists with probability approaching 0 when $\\alpha > \\alpha_{\\mathrm{dom}}^\\star$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{1}{2} - \\frac{1}{2k}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{1}{2} - \\frac{1}{2k}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.04815",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 9,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.04815",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-010",
+    "prompt": "For $t > 0$, let $\\{\\mathcal{H}^{(t)}_n\\}_{n \\in \\mathbb{N}}$ be the KPZ line ensemble with parameter $t$, consisting of random continuous curves $\\mathcal{H}^{(t)}_n : \\mathbb{R} \\to \\mathbb{R}$ and satisfying the homogeneous $\\mathbf{H}$-Brownian Gibbs property with interaction potential $\\mathbf{H}(x) = e^x$. What is the exact value of the expectation $\\mathbb{E}[\\exp(\\mathcal{H}^{(t)}_{n + 1}(x) - \\mathcal{H}^{(t)}_n(x))]$ for any $n \\in \\mathbb{N}$, $t > 0$, and $x \\in \\mathbb{R}$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{n}{t}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{n}{t}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.06876",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 10,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.06876",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-011",
+    "prompt": "Let $N(X)$ be the number of degree 2 number fields such that the smallest degree 2 irreducible polynomial with integer coefficients defining the field has size at most $X$. Here, the size of a polynomial is defined as the greatest absolute value of its coefficients. What is the precise asymptotic expression for $N(X)$ as $X \\to \\infty$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{27}{\\pi^2} X^2",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{27}{\\pi^2} X^2",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.06943",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 11,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.06943",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-012",
+    "prompt": "Let $G/H$ be a simply connected homogeneous space of maximal rank, where $G$ is a compact, connected, simple Lie group, and let $T \\subset H$ be a maximal torus with $n = \\dim T$. The $T$-action on $G/H$ makes it a GKM manifold. We say the $T$-action is $j$-independent if any $i \\leq j$ pairwise distinct isotropy weights at a fixed point are linearly independent. Define the maximal independence of $G/H$ as the largest integer $j$ such that the $T$-action is $j$-independent. In general, let $S$ be the set of all possible values that the maximal independence of $G/H$ can take. Compute $\\sum_{x \\in S} x$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "n+5",
+    "grading": {
+      "type": "exact",
+      "answer": "n+5",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.07734",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 12,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.07734",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-013",
+    "prompt": "Let $U_1,\\ldots,U_d$ be independent random vectors uniformly distributed on the unit sphere $\\mathbb S^{d-1}\\subseteq\\mathbb R^d$. Consider the random polyhedral cone \\[ \\mathcal W_{d,d}:= \\{\\lambda_1 U_1+ \\ldots + \\lambda_d U_d: \\lambda_1\\geq 0, \\ldots, \\lambda_d \\geq 0\\}. \\] Let $\\alpha_d$ denote the normalized solid angle of $\\mathcal W_{d,d}$ (such that the solid angle of the entire sphere $\\mathbb{S}^{d-1}$ is $1$). What is the variance $\\mathop{\\mathrm{Var}}[\\alpha_d]$ as a function of $d$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "2^{-d}(d+1)^{-1}-4^{-d}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "2^{-d}(d+1)^{-1}-4^{-d}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.08581",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 13,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.08581",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-014",
+    "prompt": "Let $X$ be a Banach space. For $d \\in (0,2]$ and $a>0$, define the modulus of uniform property $(S)$ for $X$ as\n$$ U_X(d;a) = \\inf \\left\\{ \\sup_{\\|z\\|\\le a} (\\|x+z\\|-\\|y+z\\|) : x,y\\in X, \\|x\\|=\\|y\\|=1, \\|x-y\\|\\ge d \\right\\}. $$\nWhat is the exact expression for $U_{L_1(\\mu)}(d;a)$ as a function of $d$ and $a$, where $\\mu$ is an atomless measure? Express the minimum of two values $x$ and $y$ as $\\min(x, y)$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\min(\\frac{4a}{2+d}, 1) \\cdot d",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\min(\\frac{4a}{2+d}, 1) \\cdot d",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.09106",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 14,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.09106",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-015",
+    "prompt": "A graph $G$ is called $F$-saturated if $G$ does not contain $F$ as a subgraph but adding any missing edge to $G$ creates a copy of $F$. Let $\\rho(G)$ denote the spectral radius of the adjacency matrix of $G$. For any integers $t \\ge 2$ and $n \\ge 4t$, what is the exact minimum possible value of $\\rho(G)$ over all $n$-vertex $tP_4$-saturated graphs $G$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{1+\\sqrt{17}}{2}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{1+\\sqrt{17}}{2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.09549",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 15,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.09549",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-016",
+    "prompt": "Let $G$ be a simple graph. Its line graph $L(G)$ has vertices representing edges of $G$, with two adjacent if they share an endpoint in $G$. The $k$-th iterated line graph is $L^k(G) = L(L^{k-1}(G))$ with $L^0(G)=G$. A connected graph is called prolific if it is not a path, cycle, or a claw ($K_{1,3}$). Let $\\mathcal G$ be the set of all prolific graphs. For any $G \\in \\mathcal G$, there exists a constant rational number $dgc(G)$ and an integer $k_0$ such that for all $k \\ge k_0$, the maximum degree of $L^k(G)$ is $\\Delta(L^k(G)) = dgc(G) \\cdot 2^{k-4} + 2$. What is the third smallest value in the set $\\{dgc(G) \\mid G \\in \\mathcal G\\}$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "5.5",
+    "grading": {
+      "type": "exact",
+      "answer": "5.5",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.09585",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 16,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.09585",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-017",
+    "prompt": "Let $(B_t)_{t \\in [0,1]}$ be a standard planar Brownian motion (with $\\mathbb{E}[\\|B_t\\|^2] = 2t$) starting at the origin. Define the star hull of the path to be the smallest star-shaped set (with respect to the origin) that contains the trace of the path $B([0,1])$. What is the expected area of this star hull?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{3\\pi}{8}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{3\\pi}{8}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.10974",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 17,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.10974",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-018",
+    "prompt": "What is the exact value of the Ramsey number $R(K_5, K_{5-e})$, where $K_5$ is the complete graph on $5$ vertices and $K_{5-e}$ is the graph obtained by removing a single edge from $K_5$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "30",
+    "grading": {
+      "type": "exact",
+      "answer": "30",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.11459",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 18,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.11459",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-019",
+    "prompt": "Let $M \\subset \\mathbb{R}^n$ be a compact submanifold without boundary of class $C^{1,\\alpha}$ with $0 < \\alpha < 1$. Let $\\delta_M(p) = \\inf_{q \\in M} \\|p - q\\|$ denote the distance function to $M$. It is known that there exists a constant $C>0$ and a sharp exponent $\\beta$ depending only on $\\alpha$ such that for all $p \\in \\mathbb{R}^n \\setminus M$ close enough to $M$, the generalized gradient $\\nabla \\delta_M(p)$ satisfies the bound\n$$1 - \\| \\nabla \\delta_M(p) \\|^2 \\leq C \\, \\delta_M(p)^\\beta$$\nWhat is the sharp exponent $\\beta$ as a function of $\\alpha$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{2\\alpha}{1-\\alpha}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{2\\alpha}{1-\\alpha}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.12999",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 19,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.12999",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-020",
+    "prompt": "What is the minimal integer $m$ such that there does not exist a set of $m$ distinct polynomials in $\\mathbb{F}_2[x]$ with the property that the sum of any two distinct polynomials in the set is of the form $x^k(x+1)^\\ell$ for some non-negative integers $k$ and $\\ell$, not both zero?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "5",
+    "grading": {
+      "type": "exact",
+      "answer": "5",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.13111",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 20,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.13111",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-021",
+    "prompt": "Let $A(r,R)=\\{z \\in \\mathbb{C} : r < |z| < R\\}$ be a circular annulus with $0 < r < R$. The Cauchy transform on $A(r,R)$ is defined for $f \\in L^2(A(r,R))$ by \n\\[ (C_{A(r,R)}f)(z)=\\frac1\\pi\\int_{A(r,R)}\\frac{f(w)}{z-w}\\,dA(w) \\]\nwhere $dA$ is the standard area measure. Let $\\mu_1^{ND}(r,R)$ denote the first eigenvalue of the (negative) Laplacian on $A(r,R)$ with Neumann boundary conditions on the inner boundary ($|z|=r$) and Dirichlet boundary conditions on the outer boundary ($|z|=R$). What is the exact $L^2 \\to L^2$ operator norm $\\|C_{A(r,R)}\\|_{L^2\\to L^2}$ expressed as a function of $x=\\mu_1^{ND}(r,R)$? Express your answer in function of $x$, not $\\mu_1^{ND}(r,R)$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{2}{\\sqrt{x}}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{2}{\\sqrt{x}}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.13734",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 21,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.13734",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-022",
+    "prompt": "Consider the mean-field noisy Kuramoto-Daido model, which is governed by a McKean-Vlasov equation on the circle with the bimodal interaction $W(\\theta)=\\cos\\theta+m\\cos 2\\theta$, where $m\\ge 0$ is a parameter and $K$ is the interaction strength. Assume the noise level is normalized such that for the standard noisy Kuramoto model ($m=0$), the phase transition threshold is $K_c=1$. What is the exact value of the phase transition threshold $K_c$ as a function of $m$ in the regime where $m \\ge 2$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "m^{-1}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "m^{-1}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.14954",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 22,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.14954",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-023",
+    "prompt": "Given a graph $G$ and a positive integer $t$, a correspondence $t$-cover $\\mathbf{M}$ assigns to each vertex $v\\in V(G)$ a set of $t$ allowable colors $\\{1_v,\\ldots,t_v\\}$ and to each edge $vw\\in E(G)$ a matching between $\\{1_v,\\ldots,t_v\\}$ and $\\{1_w,\\ldots,t_w\\}$. An $\\mathbf{M}$-coloring $\\varphi$ picks for each vertex $v$ a color $\\varphi(v) \\in \\{1_v,\\ldots,t_v\\}$ such that for each edge $vw\\in E(G)$ the colors $\\varphi(v)$ and $\\varphi(w)$ are not matched to each other in $\\mathbf{M}$. Two $\\mathbf{M}$-colorings $\\varphi_1, \\varphi_2$ of $G$ are disjoint if $\\varphi_1(v) \\neq \\varphi_2(v)$ for all $v\\in V(G)$. What is the minimum positive integer $t$ such that for every $K_5$-minor-free graph $G$ and every correspondence $t$-cover $\\mathbf{M}$ of $G$, there are guaranteed to exist 3 pairwise disjoint $\\mathbf{M}$-colorings?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "6",
+    "grading": {
+      "type": "exact",
+      "answer": "6",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.16692",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 23,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.16692",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-024",
+    "prompt": "For an integer $n \\ge 2$ and a neural code $\\mathcal{C}\\subseteq\\mathbb{F}_2^n$, let $J_{\\mathcal{C}}$ be its neural ideal. Polarizing the canonical form generators of $J_{\\mathcal{C}}$ yields a squarefree monomial ideal $\\mathcal{P}(J_{\\mathcal{C}})\\subset k[x_1,\\dots,x_n,y_1,\\dots,y_n]$ called the polarized neural ideal. Over all possible neural codes $\\mathcal{C} \\subseteq \\mathbb{F}_2^n$, what is the maximum possible value of the projective dimension $\\operatorname{pd}(\\mathcal{P}(J_{\\mathcal{C}}))$ as a function of $n$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "2n-3",
+    "grading": {
+      "type": "exact",
+      "answer": "2n-3",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.16993",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 24,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.16993",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-025",
+    "prompt": "Let $c_8(G)$ denote the number of $8$-cliques in a graph $G$, and let $\\alpha(G)$ denote the independence number of $G$. Evaluate the limit:\n$$ \\lim_{n \\to \\infty} \\min \\left\\{ \\frac{c_8(G)}{\\binom{n}{8}} : |V(G)| = n, \\alpha(G) < 3 \\right\\} $$\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{491411}{268435456}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{491411}{268435456}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.17412",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 25,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.17412",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-026",
+    "prompt": "Let $S$ be a sporadic simple group, $x \\in \\operatorname{Aut}(S)$ an automorphism of order strictly greater than $2$, and $r$ a prime divisor of $|S|$ coprime to $|x|$. Let $N(S,x,r)$ denote the minimum number of conjugates of $x$ required to generate a subgroup whose order is divisible by $r$. It has been proven that $N(S,x,r) \\le 3$ for all such triples $(S,x,r)$ except for exactly one exceptional choice of $S$, conjugacy class of $x$, and $r$, for which $N(S,x,r) = 4$. What is the value of the prime $r$ in this exceptional case?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "11",
+    "grading": {
+      "type": "exact",
+      "answer": "11",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.18027",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 26,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.18027",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-027",
+    "prompt": "Let $\\Omega \\subset \\mathbb{R}^2$ be a bounded open set, and let $w$ be a positive continuous function on $\\overline{\\Omega}$ such that $\\Delta \\log w$ is equal to a constant $C$ on $\\Omega$. The weighted logarithmic potential operator on $L^2(\\Omega)$ is defined as\n$$ \\mathcal{L}_{w} u(x) = \\int_{\\Omega} \\log\\left(\\frac{w(x)w(y)}{|x-y|}\\right) u(y) \\, dy $$\nIf $0$ is an eigenvalue of $\\mathcal{L}_{w}$, what is the necessary value of the constant $C$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{2\\pi}{|\\Omega|}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{2\\pi}{|\\Omega|}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.18138",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 27,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.18138",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-028",
+    "prompt": "Consider the budget-constrained random graph process on $n$ vertices, where edges are offered one by one through the standard random graph process. For each offered edge, an irrevocable decision must be made whether to purchase it or not. The objective is to construct a graph that contains a copy of $K_4$ within a given time $t$ (meaning at most $t$ edges are offered) while purchasing a total budget of at most $b$ edges. Assume $t \\ge b$ and $t = \\Omega(n^{4/3})$. There exists a threshold function $f(n,t)$ such that a budget $b=\\omega(f(n,t))$ suffices to asymptotically almost surely succeed, and if $b=o(f(n,t))$ then no strategy can asymptotically almost surely produce a graph containing a copy of $K_4$. It can be shown that $f(n,t)$ is the maximum of two terms of the form $n^x / t^y$, where $x$ and $y$ are positive integers. Compute the sum of these two terms in function of $n$ and $t$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{n^8}{t^5} + \\frac{n^2}{t}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{n^8}{t^5} + \\frac{n^2}{t}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.18325",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 28,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.18325",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-029",
+    "prompt": "Consider the set of all valid RNA secondary structures of length $n$ under the uniform probability model. Let the random variables $H_n$ and $B_n$ denote the number of hairpins and the number of basepairs in a structure, respectively. As $n \\to \\infty$, the joint distribution of the central-scaled random variables $(H_n, B_n)$ converges to a bivariate normal distribution. What is the exact correlation coefficient of this asymptotic bivariate normal distribution?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{\\sqrt{5 \\sqrt{5} - 11}}{2}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{\\sqrt{5 \\sqrt{5} - 11}}{2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.19255",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 29,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.19255",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-030",
+    "prompt": "Let $(L_n^{(k)})_{n\\geq 2-k}$ be the $k$-Lucas number sequence defined by the recurrence relation $L_n^{(k)} = L_{n-1}^{(k)} + \\cdots + L_{n-k}^{(k)}$ for all $n \\ge 2$, with initial terms $L_0^{(k)} = 2$ and $L_1^{(k)} = 1$ for all $k \\ge 2$, and $L_{2-k}^{(k)} = \\cdots = L_{-1}^{(k)} = 0$ for $k \\ge 3$. Let $S$ be the set of all solutions $(n,k,p)$ to the Diophantine equation $L_n^{(k)} = (2^{p}+1)/3$, where $30 \\ge k \\ge 2$, $n \\ge 2-k$, and $p$ is an odd prime. Compute $\\sum_{(n,k,p) \\in S} n + k + p$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "638",
+    "grading": {
+      "type": "exact",
+      "answer": "638",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.20387",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 30,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.20387",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-031",
+    "prompt": "Let $n, k$ be positive integers, and let $r \\ge 2$ be an integer. Let $\\mathcal{T}$ be a collection of $k$ trees, each with maximum degree at most $r$, and each containing a specified set of vertices labeled by $[n]$. For each tree $T \\in \\mathcal{T}$, removing a single edge yields a bipartition of the labels $[n]$ (by grouping the labels according to the two resulting connected components). A choice of one single-edge cut for each of the $k$ trees yields $k$ bipartitions of $[n]$. Two disjoint sets $A, B \\subset [n]$ are said to be separated by these cuts if, for each of the $k$ bipartitions, $A$ and $B$ are contained in different parts. Let $M(\\mathcal{T})$ be the maximum of $\\min\\{|A|,|B|\\}$ over all possible choices of $k$ single-edge cuts (one for each tree) and all valid separated sets $A, B$. Let $f(r,k,n)$ be the minimum of $M(\\mathcal{T})$ over all valid collections $\\mathcal{T}$ of $k$ trees with maximum degree at most $r$. The limit $f(r,k) = \\lim_{n \\to \\infty} \\frac{f(r,k,n)}{n}$ is known to exist. What is $f(r,2)$ as a function of $r$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{1}{2r}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{1}{2r}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.23096",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 31,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.23096",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-032",
+    "prompt": "Let a finite set $S \\subset \\mathbb{R}$ be called a Sidon set if all sums $x+y$ with $x,y \\in S$ and $x \\le y$ are distinct, and a weak Sidon set if all sums $x+y$ with $x,y \\in S$ and $x < y$ are distinct. For a finite set $A \\subset \\mathbb{R}$, let $h(A)$ denote the maximum cardinality of a Sidon subset of $A$, and define $$ g(n) := \\min\\{\\, h(A) : A \\subset \\mathbb{R},\\ |A| = n,\\ A \\text{ is a weak Sidon set} \\,\\}. $$ What is the exact value of $$ \\lim_{n\\to\\infty} \\frac{g(n)}{n} ? $$\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{1}{2}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{1}{2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.23282",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 32,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.23282",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-001",
+    "prompt": "A Fubini ranking of length $n$ is an $n$-tuple $x \\in \\{1, 2, \\dots, n\\}^n$ representing the ranks of $n$ competitors in a race allowing ties. Since all Fubini rankings are parking functions, each produces a well-defined parking outcome, which is a permutation $\\pi \\in S_n$ representing the final parking order of the cars. Let $\\pi \\in S_n$ be a fixed parking outcome having exactly $k$ ascending runs (maximal contiguous increasing subsequences). In terms of $n$ and $k$, what is the exact number of Fubini rankings of length $n$ that result in the parking outcome $\\pi$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "2^{n-k}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "2^{n-k}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.00693",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 1,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.00693",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-002",
+    "prompt": "Consider the mixing time of the averaging process on a large random $d$-regular graph with $d \\ge 3$. There exists a critical finite degree $d_c$ such that for $d \\le d_c$, the averaging process has an $L^2$-cutoff and mixes as fast as the corresponding random walk on the same graph, whereas for $d > d_c$, its $L^2$-mixing is governed by a different, slower mechanism. What is the exact value of the critical degree $d_c$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "10",
+    "grading": {
+      "type": "exact",
+      "answer": "10",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.00705",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 2,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.00705",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-003",
+    "prompt": "Consider the nonlinear Choquard equation\n\\[ - \\Delta u + \\varepsilon u = \\big(I_\\alpha \\ast F(u)\\big)F'(u), \\quad u \\in H^1(\\mathbb R^N), \\]\nwhere $N \\geq 3$ is an integer, $I_\\alpha$ is the Riesz potential of order $\\alpha \\in (\\max\\{0, N-4\\}, N)$, $\\varepsilon > 0$ is a frequency parameter, and $F(u) = |u|^{\\frac{N+\\alpha}{N}} + \\int_0^u g(s)ds$ for a function $g \\in C([0,\\infty), [0,\\infty))$ with subcritical growth satisfying $\\frac{N+\\alpha}{N}\\int_0^s g(t)dt \\leq g(s)s$ for all $s > 0$. Suppose that $g(s) \\sim s^{q-1}$ as $s \\to 0$ for some $q \\in \\left(\\frac{N+\\alpha}{N}, \\frac{N+\\alpha}{N-2}\\right)$. The existence of positive ground states exhibits a sharp threshold phenomenon dependent on $q$: there is a critical exponent $q^*$ such that if $q < q^*$, the equation admits a positive ground state for all $\\varepsilon > 0$; whereas if $q \\geq q^*$, there exists an $\\varepsilon_q > 0$ such that the equation has no positive ground state for $\\varepsilon \\in (0, \\varepsilon_q)$ but admits a positive ground state for $\\varepsilon > \\varepsilon_q$. What is the critical exponent $q^*$ in terms of $N$ and $\\alpha$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{N+\\alpha+4}{N}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{N+\\alpha+4}{N}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.01078",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 3,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.01078",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-004",
+    "prompt": "Consider minimal compact complex surfaces $S$ with $p_g(S) = K_S^2 = 1$. The surfaces that admit a genus $2$ pencil form an irreducible subvariety in their moduli space. For a general surface in this subvariety, exactly how many genus $2$ pencils does it admit?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "12",
+    "grading": {
+      "type": "exact",
+      "answer": "12",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.03132",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 4,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.03132",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-005",
+    "prompt": "Consider the problem of rigidity and flexibility for the differential inclusion associated with the steady states of the pressureless Euler equations in the plane. The system transitions between regimes, being flexible for sequences equibounded in $L^{p-\\epsilon}$ and rigid for sequences equibounded in $L^{p+\\epsilon}$ for $\\epsilon > 0$. What is the exact value of the critical Lebesgue exponent $p$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "4",
+    "grading": {
+      "type": "exact",
+      "answer": "4",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.03153",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 5,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.03153",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-006",
+    "prompt": "Consider a hat guessing game on a graph $G=(V,E)$ where an adversary assigns a color from a set of $q$ colors to each vertex such that the assignment is a proper vertex coloring. Each vertex $v \\in V$ observes the colors of its neighbors $N(v)$, but not its own color. Based on these observations, all vertices simultaneously guess their own colors. The proper coloring hat guessing number of $G$ is defined as the largest integer $q$ for which there exists a deterministic guessing strategy (a function for each vertex mapping the colors of its neighbors to a guess) such that for every proper coloring of $G$ using colors from the $q$-element set, at least one vertex guesses its color correctly. What is the proper coloring hat guessing number of the complete graph $K_n$ on $n$ vertices?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "2n-1",
+    "grading": {
+      "type": "exact",
+      "answer": "2n-1",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.04909",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 6,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.04909",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-007",
+    "prompt": "Let $f:\\mathbb{P}^1\\rightarrow\\mathbb{P}^1$ be a quadratic rational map defined over the rational field $\\mathbb{Q}$ with a nonabelian automorphism group. What is the maximum possible number of $\\mathbb{Q}$-rational preperiodic points of $f$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "6",
+    "grading": {
+      "type": "exact",
+      "answer": "6",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.06203",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 7,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.06203",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-008",
+    "prompt": "Consider Popov's algorithm for solving unconstrained pseudo-monotone variational inequalities with an operator that is Lipschitz continuous with constant $L$. What is the tight upper bound on the constant stepsize that guarantees convergence?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{1}{\\sqrt{3}L}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{1}{\\sqrt{3}L}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.06442",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 8,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.06442",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-009",
+    "prompt": "Let a general position set in a graph $G$ be a set of vertices such that no three vertices lie on a common geodesic. Define the general position polynomial of $G$ as $\\psi(G, x) = \\sum_{i} a_i x^i$, where $a_i$ is the number of general position sets of size $i$. Let $K_{r,\\dots,r}$ denote the balanced complete multipartite graph with $p$ parts, each of size $r$. There exists a maximum positive integer $k$ such that for all part sizes $r \\le k$, the polynomial $\\psi(K_{r,\\dots,r}, x)$ is log-concave and unimodal for any number of parts $p \\ge 2$. What is the value of $k$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "4",
+    "grading": {
+      "type": "exact",
+      "answer": "4",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.0693",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 9,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.0693",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-010",
+    "prompt": "Let $n \\ge 2$ be an integer. Let $D_n = \\{-n+1, -n+2, \\dots, n-1\\}$. Let $\\mathbb{D}$ be the open unit disk in $\\mathbb{C}$. Let $M_n$ be the set of $c \\in \\mathbb{C} \\setminus \\overline{\\mathbb{D}}$ such that there exists a sequence $(d_k)_{k \\ge 1}$ of elements in $D_n$ satisfying $1 + \\sum_{k=1}^\\infty d_k c^{-k} = 0$. Let $X_n = \\{c \\in \\mathbb{C} \\setminus \\overline{\\mathbb{D}} : |c - 1| < \\sqrt{2n} \\text{ and } |c + 1| < \\sqrt{2n}\\}$. What is the smallest integer $n \\ge 2$ such that $M_n \\setminus \\mathbb{R} \\subset X_n$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "20",
+    "grading": {
+      "type": "exact",
+      "answer": "20",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.07397",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 10,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.07397",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-011",
+    "prompt": "Let $I_n$ be the set of involutions (elements of order exactly 2) in the symmetric group $S_n$. Suppose $x$ is chosen uniformly at random from $I_n$, and $y$ is chosen uniformly at random from $S_n$, independently. What is the limit as $n \\to \\infty$ of the probability that the subgroup generated by $x$ and $y$ is the entire group $S_n$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{3}{4}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{3}{4}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.08129",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 11,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.08129",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-012",
+    "prompt": "Let $\\mathcal{C}$ be a small stable $\\infty$-category with a bounded $t$-structure, such that for an integer $n\\geq 1$ the realization functor induces isomorphisms on $\\operatorname{Ext}^{\\leq n}$ between the objects of the heart $\\mathcal{C}^{\\heartsuit}.$ What is the minimum integer $j$, as a function of $n$, for which the induced map on algebraic $K$-theory groups $K_j(\\mathcal{C}^{\\heartsuit})\\to K_j(\\mathcal{C})$ is guaranteed to be an isomorphism?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "-n-1",
+    "grading": {
+      "type": "exact",
+      "answer": "-n-1",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.08653",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 12,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.08653",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-013",
+    "prompt": "Let $n, k$ be integers with $7 \\le k \\le n-7$. Let $\\mathcal{B}_{k,n,p}$ be a random collection of $k$-subsets of $\\{1, 2, \\dots, n\\}$ where each possible $k$-subset is included independently with probability $p$. Let $\\mathcal{E}$ be the event that $\\mathcal{B}_{k,n,p}$ forms the set of bases of a matroid. Suppose $p = 1-\\frac{c_n}{\\sqrt{k(n-k)\\binom nk}}$, where $(c_n)_{n=1}^\\infty$ is a sequence of non-negative real numbers such that $\\lim_{n\\to\\infty} c_n = c$ for some real constant $c \\ge 0$. As $n \\to \\infty$ with $k$ fixed, what is the exact value of the limit of the conditional probability $\\lim_{n\\to\\infty}\\Pr[\\mathcal{E} \\mid |\\mathcal{B}_{k,n,p}| \\ge 2]$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "e^{-c^2}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "e^{-c^2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.10293",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 13,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.10293",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-014",
+    "prompt": "Let $h(t,x)$ be the solution to the (1+1)-dimensional Kardar-Parisi-Zhang (KPZ) equation with flat initial profile. Let $Z(t,x)$ be the solution to the corresponding stochastic heat equation with flat initial condition. Define $\\kappa = \\big(\\mathbb{E}[Z(t,0)^{-1}]\\big)^2$. Evaluate the limit \n$$ \\lim_{|x|\\to\\infty} \\frac{\\mathrm{Cov}[h(t,x),h(t,0)]}{|x|^{-2}\\exp\\left(-\\frac{x^2}{4t}\\right)} $$\nexpressed in terms of $\\kappa$ and $t$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{2\\kappa}{\\sqrt{\\pi}}t^{3/2}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{2\\kappa}{\\sqrt{\\pi}}t^{3/2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.14174",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 14,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.14174",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-015",
+    "prompt": "Evaluate the following definite integral:\n$$ \\int_{0}^{1}\\frac{\\arctan\\left(\\sqrt{\\frac{2+x^2}{4+x^2}}\\right)}{(1+x^{2})\\sqrt{2+x^{2}}}\\,dx $$\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{\\pi^2}{30}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{\\pi^2}{30}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.16953",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 15,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.16953",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-016",
+    "prompt": "In combinatorial game theory, what is the sum of positive integers that cannot be realized as the cardinality of a finite partisan misère quotient?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "3",
+    "grading": {
+      "type": "exact",
+      "answer": "3",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.18244",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 16,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.18244",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-017",
+    "prompt": "The induced Ramsey number $r_{\\mathrm{ind}}(G,H)$ is defined as the minimum order of a graph $F$ such that any 2-coloring of its edges with red and blue leads to either a red induced copy of $G$ or a blue induced copy of $H$. Let $K_{1,2}$ be the star graph on 3 vertices (a central vertex connected to 2 leaves). Let $F_n$ be the fan graph consisting of one central vertex adjacent to $2n$ other vertices, where these $2n$ vertices induce exactly $n$ disjoint edges. What is the exact value of the induced Ramsey number $r_{\\mathrm{ind}}(K_{1,2}, F_n)$ as a function of $n$ for $n \\ge 2$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "3n+4",
+    "grading": {
+      "type": "exact",
+      "answer": "3n+4",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.19638",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 17,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.19638",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-018",
+    "prompt": "Let $C$ be an $[n, k]$ linear code chosen uniformly at random over a finite field $\\mathbb{F}_q$ of size $q$ (i.e., chosen uniformly from the Grassmannian of $k$-dimensional subspaces of $\\mathbb{F}_q^n$). Suppose $q, n, k \\to \\infty$ such that $k/n \\to 0$ and $\\frac{1}{q}\\binom{n}{k} \\to \\lambda$ for some constant $\\lambda \\in (0,\\infty)$. What is the limiting probability that $C$ is a maximum distance separable (MDS) code?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "e^{-\\lambda}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "e^{-\\lambda}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.20983",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 18,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.20983",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-019",
+    "prompt": "Consider the one-dimensional generalized Benjamin-Bona-Mahony equation\n\\[(1-\\partial_x^2)u_t+(u+u^p)_x=0\\]\nposed on the real line $\\mathbb{R}$ or the torus $\\mathbb{T}$ for an integer $p \\ge 2$. There exists a sharp Sobolev regularity threshold $s_c(p)$ such that the equation is unconditionally locally well-posed in $C([0,T];H^s)$ for all $s \\ge s_c(p)$ (without imposing any auxiliary spaces), while for $s < s_c(p)$ the flow map, if well-defined and continuous near the origin from $H^s$ to $C([0,T];H^s)$, cannot be of class $C^p$ at the origin. What is $s_c(p)$ as a function of $p$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{p-2}{2p}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{p-2}{2p}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.2106",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 19,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.2106",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-020",
+    "prompt": "Let $T:[0,1]\\to \\mathbb{R}$ be the Takagi function, defined by $T(x) = \\sum_{n=0}^\\infty \\frac{1}{2^n} \\min_{m \\in \\mathbb{Z}} |2^n x - m|$. Consider the discrete dynamical system generated by iterating $T$. For Lebesgue almost every point $x\\in [0,1]$, what is the value of $\\lim_{n \\to \\infty} T^n(x)$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{2}{3}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{2}{3}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.22221",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 20,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.22221",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-021",
+    "prompt": "Let $M$ be an aspherical integral homology 3-sphere, and let $\\tilde{M}$ be a regular finite-sheeted cover of $M$. Assuming that the first Betti number $b_1(\\tilde{M})$ is strictly positive, what is the sharp lower bound on $b_1(\\tilde{M})$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "4",
+    "grading": {
+      "type": "exact",
+      "answer": "4",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.22543",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 21,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.22543",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-022",
+    "prompt": "Consider the Cauchy combination test (CCT) applied to $K$ $p$-values. Assume a canonical one-factor equicorrelated Gaussian copula model, where the common correlation $\\rho_K > 0$ weakens as $K \\to \\infty$. The raw CCT is asymptotically exact at a fixed nominal level $\\alpha \\in (0, 1/2)$ if and only if $\\rho_K (\\log K)^c \\to 0$. What is the exact value of the exponent $c$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "3",
+    "grading": {
+      "type": "exact",
+      "answer": "3",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.22668",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 22,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.22668",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-023",
+    "prompt": "Let $S_n$ denote the symmetric group on $n$ elements, and let $\\operatorname{Irr}(S_n)$ be the set of its irreducible complex characters. Let $A_n, B_n, C_n$ be sequences of conjugacy classes in $S_n$. Suppose that as $n \\to \\infty$, the number of fixed points (cycles of length 1) in both $A_n$ and $B_n$ is $\\lfloor H\\sqrt{n} \\rfloor$ for a fixed constant $H > 0$, and that there is a sufficiently large constant $P > 0$ depending on $H$ such that the minimum length of all other cycles in $A_n, B_n$, and $C_n$ is at least $P\\sqrt{n}\\log n$. Assume further that the product of the signs of the conjugacy classes $A_n, B_n$, and $C_n$ is 1. What is the limit as $n \\to \\infty$ of the character sum appearing in the Frobenius formula, given by $\\sum_{\\chi \\in \\operatorname{Irr}(S_n)} \\frac{\\chi(A_n)\\chi(B_n)\\chi(C_n)}{\\chi(1)}$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "2e^{-H^2}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "2e^{-H^2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.22679",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 23,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.22679",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-024",
+    "prompt": "Let $C$ be the classical middle-third Cantor set. Determine the sum of all elements in the set $\\left\\{\\frac{1}{n!}: n\\in\\mathbb{Z}_{\\ge 1}\\right\\}\\cap C$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{121}{120}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{121}{120}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.24614",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 24,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.24614",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-025",
+    "prompt": "Let $G$ be a simple, finite, undirected graph. A $k$-assignment $L$ assigns a list $L(v)$ of $k$ available colors to each vertex $v \\in V(G)$. An $L$-packing of $G$ is a sequence $\\phi = (\\phi_1, \\dots, \\phi_k)$ of $k$ mappings such that each $\\phi_i$ is a proper coloring of $G$ with $\\phi_i(v) \\in L(v)$, and for each vertex $v \\in V(G)$, $\\{\\phi_1(v), \\dots, \\phi_k(v)\\} = L(v)$. The graph $G$ is list $k$-packable if for any $k$-assignment $L$ of $G$, there exists an $L$-packing of $G$. The list packing number $\\chi_l^{\\star}(G)$ of $G$ is the minimum integer $k$ such that $G$ is list $k$-packable. Let $t(d)$ be the maximum list packing number of simple, finite, undirected graphs of tree-width at most $d$. What is the exact value of $t(3)$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "5",
+    "grading": {
+      "type": "exact",
+      "answer": "5",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.26187",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 25,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.26187",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-026",
+    "prompt": "Let $T$ be a finite tree with maximum vertex degree $D \\geq 2$ and exactly $\\ell$ leaves. Considering the leaf set as the boundary, let $\\lambda_2$ be the first non-zero Steklov eigenvalue of $T$. What is the sharp upper bound on $\\lambda_2$ as a function of $D$ and $\\ell$, which is attained if and only if $T$ is a star graph?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{D}{\\ell}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{D}{\\ell}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.26251",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 26,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.26251",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-027",
+    "prompt": "In the context of Bayesian learning theory for neural networks, the Local Learning Coefficient (LLC) quantifies the effective model complexity. Consider a single linear layer with a weight matrix $W$ having an output dimension of $m$, trained with squared loss against a realizable teacher, and a non-degenerate input distribution. The input data to this layer is pre-processed by a normalization scheme. It is known that RMSNorm, which projects data onto a sphere, preserves the LLC of $W$ entirely because the sphere has non-zero curvature. In contrast, LayerNorm involves a mean-centering step that confines the data to a flat linear hyperplane through the origin. By what exact amount is the LLC of the subsequent weight matrix $W$ reduced due to the geometric constraint imposed by LayerNorm's mean-centering step compared to RMSNorm?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{m}{2}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{m}{2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.27432",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 27,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.27432",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-028",
+    "prompt": "Let $V$ be a smooth quasi-projective complex surface with non-negative logarithmic Kodaira dimension and compactification $(X,D)$. Set $\\overline P_1(V):=h^0(X,K_X+D)$ and $\\overline q(V):=h^0(X,\\Omega^1_X(\\log D))$. If $V$ does not have maximal Albanese dimension, there is a known sharp lower bound for $\\overline P_1(V)$ in terms of $q = \\overline q(V)$ of the form $\\overline P_1(V) \\ge f(q)$, where $f$ is a linear polynomial. What is the polynomial $f(q)$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{1}{6}(q-5)",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{1}{6}(q-5)",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.27596",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 28,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.27596",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-029",
+    "prompt": "Let $\\mathcal{X}$ be a set of $(h-1)$-dimensional subspaces of the projective geometry $\\mathrm{PG}(kh-1,q)$ such that every hyperplane contains at most $t$ elements of $\\mathcal{X}$. Assume that the size of $\\mathcal{X}$ attains the upper bound $|\\mathcal{X}| = (t-k+2)q^h + t$. For the case where $k=4$ and $q>2$, it is proven that such a set can only exist if $t$ takes a specific value. What is this value of $t$ as a function of $q$ and $h$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "q^h+1",
+    "grading": {
+      "type": "symbolic",
+      "answer": "q^h+1",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.27689",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 29,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.27689",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-030",
+    "prompt": "Consider the optimal placement of $k$ ordered points on the unit interval $[0,1]$ to minimize the energy for the bounded pair potential $K_q(d) = e^{-d^q}$ where $q>0$ and $d$ is the distance between points. For $q>1$, let $q_k$ be the critical exponent beyond which interior points are no longer optimal. For any odd $k = 2m+1$, the critical exponent takes an exact universal value. What is this exact value $q_{2m+1}$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{\\log(1/(-\\log((1+e^{-1})/2)))}{\\log 2}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{\\log(1/(-\\log((1+e^{-1})/2)))}{\\log 2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.28179",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 30,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.28179",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-031",
+    "prompt": "Consider the hierarchy of rational solutions of the massive Thirring model constructed via double-Wronskian determinants, where the $N$-th member describes a nonlinear superposition of $N$ algebraic solitons with identical masses and corresponds to an embedded eigenvalue of algebraic multiplicity $N$. Assuming that the leading-order polynomials have exactly $N$ real roots, as a function of $N$, what is the number of poles this $N$-th rational solution admits in the upper half-plane of $x$ for large $|t|$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{N(N-1)}{2}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{N(N-1)}{2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.28544",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 31,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.28544",
+      "retrieval_assisted": false
+    }
+  }
+]

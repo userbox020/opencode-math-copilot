@@ -1,0 +1,16 @@
+{
+  "schema": "math-bench-repairs/v1",
+  "source_csv_sha256": "275877a9d988d85278fad3a5f8a41d7f83393a60bf259531ec0a5161e6b21cf9",
+  "entries": [
+    {
+      "id": "imo-bench-algebra-036",
+      "line_range": [
+        150,
+        154
+      ],
+      "action": "Insert one missing closing quote immediately after \\] and before the newline, in memory only. Parse the following physical newline as a record continuation for this row only.",
+      "original_excerpt": "imo-bench-algebra-036,\"Find all functions $Y: \\mathbb{R} \\backslash\\{0\\} \\rightarrow \\mathbb{R}$ such that for any non-zero real numbers $a, b$ with $ab \\neq -1$, the following equation holds:\n\\[\na Y\\left(a+\\frac{1}{b}\\right)+b Y(b)+\\frac{a}{b}=b Y\\left(b+\\frac{1}{a}\\right)+a Y(a)+\\frac{b}{a}\n\\]\n,\"$Y(x)=A+\\frac{B}{x}-x$\",Algebra,Functional Equation,Iran 2002",
+      "repaired_excerpt": "imo-bench-algebra-036,\"Find all functions $Y: \\mathbb{R} \\backslash\\{0\\} \\rightarrow \\mathbb{R}$ such that for any non-zero real numbers $a, b$ with $ab \\neq -1$, the following equation holds:\n\\[\na Y\\left(a+\\frac{1}{b}\\right)+b Y(b)+\\frac{a}{b}=b Y\\left(b+\\frac{1}{a}\\right)+a Y(a)+\\frac{b}{a}\n\\]\"\n,\"$Y(x)=A+\\frac{B}{x}-x$\",Algebra,Functional Equation,Iran 2002"
+    }
+  ]
+}

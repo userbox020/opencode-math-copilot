@@ -1,0 +1,462 @@
+[
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-001",
+    "prompt": "Let $\\mathcal{F}$ be the family of all infinite subsets $S \\subseteq \\mathbb{Z}$ such that for all $n, m \\in S$ (not necessarily distinct), the set $\\{n-m, n+m\\} \\cap S$ contains exactly one element. It can be shown that there exists a positive integer $d$ such that every $S \\in \\mathcal{F}$ is of the form $r(\\mathbb{Z} \\setminus d\\mathbb{Z}) = \\{rk : k \\in \\mathbb{Z}, d \\nmid k\\}$ for some positive integer $r$. What is the value of $d$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "3",
+    "grading": {
+      "type": "exact",
+      "answer": "3",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.00631",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 1,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.00631",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-009",
+    "prompt": "Consider the committee selection problem in the canonical impartial culture model with a sufficiently large fixed number of voters $n$ as the number of candidates $m \to \\infty$. In this model, each voter independently reports a uniformly random preference order over the candidates. For a fixed committee size $k$, a set $S$ of $k$ candidates is defined to be $\\alpha$-dominating if, for every candidate $a \\notin S$, there exists a single committee member $b \\in S$ such that at least an $\\alpha$-fraction of voters prefer $b$ to $a$. What is the sharp threshold $\\alpha_{\\mathrm{dom}}^\\star$ (as a function of $k$) such that an $\\alpha$-dominating set of size $k$ exists with probability approaching 1 (as $m \\to \\infty$) when $\\alpha < \\alpha_{\\mathrm{dom}}^\\star$, and exists with probability approaching 0 when $\\alpha > \\alpha_{\\mathrm{dom}}^\\star$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{1}{2} - \\frac{1}{2k}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{1}{2} - \\frac{1}{2k}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.04815",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 9,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.04815",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-017",
+    "prompt": "Let $(B_t)_{t \\in [0,1]}$ be a standard planar Brownian motion (with $\\mathbb{E}[\\|B_t\\|^2] = 2t$) starting at the origin. Define the star hull of the path to be the smallest star-shaped set (with respect to the origin) that contains the trace of the path $B([0,1])$. What is the expected area of this star hull?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{3\\pi}{8}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{3\\pi}{8}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.10974",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 17,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.10974",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-024",
+    "prompt": "For an integer $n \\ge 2$ and a neural code $\\mathcal{C}\\subseteq\\mathbb{F}_2^n$, let $J_{\\mathcal{C}}$ be its neural ideal. Polarizing the canonical form generators of $J_{\\mathcal{C}}$ yields a squarefree monomial ideal $\\mathcal{P}(J_{\\mathcal{C}})\\subset k[x_1,\\dots,x_n,y_1,\\dots,y_n]$ called the polarized neural ideal. Over all possible neural codes $\\mathcal{C} \\subseteq \\mathbb{F}_2^n$, what is the maximum possible value of the projective dimension $\\operatorname{pd}(\\mathcal{P}(J_{\\mathcal{C}}))$ as a function of $n$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "2n-3",
+    "grading": {
+      "type": "exact",
+      "answer": "2n-3",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.16993",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 24,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.16993",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-february-032",
+    "prompt": "Let a finite set $S \\subset \\mathbb{R}$ be called a Sidon set if all sums $x+y$ with $x,y \\in S$ and $x \\le y$ are distinct, and a weak Sidon set if all sums $x+y$ with $x,y \\in S$ and $x < y$ are distinct. For a finite set $A \\subset \\mathbb{R}$, let $h(A)$ denote the maximum cardinality of a Sidon subset of $A$, and define $$ g(n) := \\min\\{\\, h(A) : A \\subset \\mathbb{R},\\ |A| = n,\\ A \\text{ is a weak Sidon set} \\,\\}. $$ What is the exact value of $$ \\lim_{n\\to\\infty} \\frac{g(n)}{n} ? $$\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{1}{2}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{1}{2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2602.23282",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/february",
+      "problem_number": 32,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2602.23282",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-001",
+    "prompt": "A Fubini ranking of length $n$ is an $n$-tuple $x \\in \\{1, 2, \\dots, n\\}^n$ representing the ranks of $n$ competitors in a race allowing ties. Since all Fubini rankings are parking functions, each produces a well-defined parking outcome, which is a permutation $\\pi \\in S_n$ representing the final parking order of the cars. Let $\\pi \\in S_n$ be a fixed parking outcome having exactly $k$ ascending runs (maximal contiguous increasing subsequences). In terms of $n$ and $k$, what is the exact number of Fubini rankings of length $n$ that result in the parking outcome $\\pi$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "2^{n-k}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "2^{n-k}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.00693",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 1,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.00693",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-009",
+    "prompt": "Let a general position set in a graph $G$ be a set of vertices such that no three vertices lie on a common geodesic. Define the general position polynomial of $G$ as $\\psi(G, x) = \\sum_{i} a_i x^i$, where $a_i$ is the number of general position sets of size $i$. Let $K_{r,\\dots,r}$ denote the balanced complete multipartite graph with $p$ parts, each of size $r$. There exists a maximum positive integer $k$ such that for all part sizes $r \\le k$, the polynomial $\\psi(K_{r,\\dots,r}, x)$ is log-concave and unimodal for any number of parts $p \\ge 2$. What is the value of $k$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "4",
+    "grading": {
+      "type": "exact",
+      "answer": "4",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.0693",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 9,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.0693",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-016",
+    "prompt": "In combinatorial game theory, what is the sum of positive integers that cannot be realized as the cardinality of a finite partisan misère quotient?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "3",
+    "grading": {
+      "type": "exact",
+      "answer": "3",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.18244",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 16,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.18244",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-024",
+    "prompt": "Let $C$ be the classical middle-third Cantor set. Determine the sum of all elements in the set $\\left\\{\\frac{1}{n!}: n\\in\\mathbb{Z}_{\\ge 1}\\right\\}\\cap C$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{121}{120}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{121}{120}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.24614",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 24,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.24614",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-march-031",
+    "prompt": "Consider the hierarchy of rational solutions of the massive Thirring model constructed via double-Wronskian determinants, where the $N$-th member describes a nonlinear superposition of $N$ algebraic solitons with identical masses and corresponds to an embedded eigenvalue of algebraic multiplicity $N$. Assuming that the leading-order polynomials have exactly $N$ real roots, as a function of $N$, what is the number of poles this $N$-th rational solution admits in the upper half-plane of $x$ for large $|t|$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{N(N-1)}{2}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{N(N-1)}{2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2603.28544",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/march",
+      "problem_number": 31,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2603.28544",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-001",
+    "prompt": "Let $G$ be a finite, simple, **connected** graph on $13$ vertices such that $G$ has no induced subgraph isomorphic to $4K_1$ (equivalently, $\\alpha(G)<4$). In the standard game of cops and robber played on $G$, let $c(G)$ denote the cop number (the minimum number of cops that guarantees capture of the robber). What is the maximum possible value of $c(G)$ over all such graphs $G$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "2",
+    "grading": {
+      "type": "exact",
+      "answer": "2",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.00917",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 1,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.00917",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-007",
+    "prompt": "Fix integers \\(s\\ge 2\\) and \\(r\\) with \\(s\\le r\\le 2s-2\\). Let \\(A_r:=\\{0,1,\\dots,r\\}\\) and for any digit sequence \\((\\alpha_n)_{n\\ge1}\\in A_r^{\\mathbb N}\\) define\n\\[\n\\pi((\\alpha_n)):=\\sum_{n=1}^\\infty \\frac{\\alpha_n}{s^n}\\in\\left[0,\\frac{r}{s-1}\\right].\n\\]\nLet \\(U_{s,r}\\subseteq\\left[0,\\frac{r}{s-1}\\right]\\) be the set of all \\(x\\) for which there exists exactly one sequence \\((\\alpha_n)\\in A_r^{\\mathbb N}\\) with \\(x=\\pi((\\alpha_n))\\). What is the Hausdorff–Besicovitch dimension \\(\\dim_H(U_{s,r})\\) as an explicit function of \\(s\\) and \\(r\\)?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{\\ln(2s-r-1)}{\\ln s}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{\\ln(2s-r-1)}{\\ln s}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.03949",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 7,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.03949",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-012",
+    "prompt": "Let $K_{33}$ be the complete graph on $33$ vertices. A (good) drawing of a graph in the plane consists of distinct points for vertices and simple arcs for edges such that (i) no edge passes through a nonincident vertex, (ii) any two edges intersect at finitely many points, each intersection is either a common endpoint or a proper crossing, and (iii) no three edges cross at a single point. Such a drawing is **3-symmetric** if there exists a rotation $\\rho$ of the plane by angle $2\\pi/3$ about some point $O$ such that applying $\\rho$ to the drawing maps it onto itself (so $\\rho$ permutes vertices and edges), and no vertex lies at $O$. A 3-symmetric drawing is **pseudolinear** if each edge can be extended to a pseudoline so that the set of these pseudolines forms a pseudoline arrangement (each pseudoline is a simple curve homeomorphic to $\\mathbb R$, and any two pseudolines intersect exactly once). Define $\\operatorname{sym}\\text{-}\\widetilde{\\operatorname{cr}}_3(K_{33})$ to be the minimum possible number of edge crossings among all 3-symmetric pseudolinear drawings of $K_{33}$. What is the exact value of $\\operatorname{sym}\\text{-}\\widetilde{\\operatorname{cr}}_3(K_{33})$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "14634",
+    "grading": {
+      "type": "exact",
+      "answer": "14634",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.09689",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 12,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.09689",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-018",
+    "prompt": "Let $(X_n)_{n\\ge 1}$ be an i.i.d. sequence of Bernoulli($p$) coin tosses, with $\\mathbb P(X_n=1)=p$ and $\\mathbb P(X_n=0)=1-p$, where $0<p<1$. For a finite binary string $w\\in\\{0,1\\}^m$, define the (first) waiting time\n\\[\nT_w:=\\min\\{n\\ge m:(X_{n-m+1},\\dots,X_n)=w\\}.\n\\]\nDefine first-order stochastic dominance by $A\\preceq_{\\mathrm{st}}B$ iff $\\mathbb P(A>t)\\le \\mathbb P(B>t)$ for all real $t$. Suppose that the family $\\{T_w:w\\in\\{0,1\\}^m,\\ m\\ge 1\\}$ is totally comparable under $\\preceq_{\\mathrm{st}}$, i.e. for every pair of finite binary strings $u,v$ one has either $T_u\\preceq_{\\mathrm{st}}T_v$ or $T_v\\preceq_{\\mathrm{st}}T_u$. Determine the value of $p$.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\tfrac{1}{2}",
+    "grading": {
+      "type": "exact",
+      "answer": "\\tfrac{1}{2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.1658",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 18,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.1658",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-january-023",
+    "prompt": "Let \\(A\\subset\\mathbb N\\) be a set of \\(10\\) distinct **positive** integers. Define\n\\[\nA+A:=\\{a+b: a,b\\in A\\},\\qquad AA:=\\{ab: a,b\\in A\\}.\n\\]\nLet\n\\[\nM:=\\min_{A\\subset\\mathbb N,\\ |A|=10}\\max\\bigl(|A+A|,|AA|\\bigr).\n\\]\nWhat is the value of \\(M\\)?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "30",
+    "grading": {
+      "type": "exact",
+      "answer": "30",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2601.21828",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/january",
+      "problem_number": 23,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2601.21828",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-001",
+    "prompt": "Let $k$ be a field, let $V$ be a $k$-vector space of dimension $d$, and let $G\\subseteq GL(V)$ be a finite group. Set $r:=\\dim_k (V^*)^G$ and assume $r\\ge 1$. Let $R:=k[V]^G$ be the invariant ring, and write its Hilbert quasi-polynomial (for $n\\gg 0$) in the form\n\\[\nH_R(n)=a_{d-1}(n)n^{d-1}+a_{d-2}(n)n^{d-2}+\\cdots+a_1(n)n+a_0(n),\n\\]\nwhere each $a_i(n)$ is a periodic function of $n$. Compute the sum of the indices $i\\in\\{0,1,\\dots,d-1\\}$ for which $a_i(n)$ is constant.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{r(2d-r-1)}{2}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{r(2d-r-1)}{2}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.00811",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 1,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.00811",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-005",
+    "prompt": "Let $p>1$. Consider the following asynchronous $\\ell^p$-relaxation dynamics on a connected finite graph $G=(V,E)$ with $|V|=n$, where $V=I\\sqcup B$ with $I\\neq\\emptyset$ (interior) and $B\\neq\\emptyset$ (boundary). Fix an initial profile $f_0:V\\to[0,1]$ and keep boundary values fixed, i.e. $f_t(b)=f_0(b)$ for all $b\\in B$ and $t\\ge 0$. For each integer time $t\\ge 1$, pick $v_t\\in I$ uniformly at random and update only that vertex by setting $f_t(v_t)$ to be the (unique) minimizer of $x\\mapsto \\sum_{w\\sim v_t}|x-f_{t-1}(w)|^p$, while keeping $f_t(u)=f_{t-1}(u)$ for $u\\neq v_t$. Let $h:V\\to\\mathbb R$ be the (a.s. unique) limit of $f_t$ (the $p$-harmonic extension of $f_0|_B$), and for $\\varepsilon\\in(0,1/2]$ define the approximation time $\\tau_p(\\varepsilon):=\\min\\{t\\ge 0:\\|f_t-h\\|_\\infty\\le\\varepsilon\\}$. Define $\\beta_p$ to be the optimal (smallest possible) exponent such that there exist constants $C(p),c(p)>0$ with the following worst-case bound holding for all $n$, all such graphs with $n$ vertices, and all initial profiles $f_0$: for $p\\in[2,\\infty)$, $\\mathbb E[\\tau_p(\\varepsilon)]\\le C(p)\\,n^{\\beta_p}(\\log(n/\\varepsilon))^{c(p)}$, and for $p\\in(1,2)$, $\\mathbb E[\\tau_p(\\varepsilon)]\\le C(p)\\,n^{\\beta_p}\\varepsilon^{-c(p)}$. If $p < 3$, what is $\\beta_p$ as an explicit function of $p$?\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "\\frac{2p}{p-1}",
+    "grading": {
+      "type": "symbolic",
+      "answer": "\\frac{2p}{p-1}",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.05424",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 5,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.05424",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-009",
+    "prompt": "For integers $k\\ge 3$ and real $\\theta$, define $v(k,\\theta)$ to be the maximum possible number of vertices of a connected $k$-regular graph whose second largest eigenvalue (of its adjacency matrix) is at most $\\theta$. Compute the ordered triple $(v(4,\\sqrt2),\\,v(5,\\sqrt2),\\,v(5,\\sqrt5-1))$ and return it as a comma-separated list in \\boxed{}, e.g., \\boxed{(1,1,1)}.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "(14,16,16)",
+    "grading": {
+      "type": "symbolic",
+      "answer": "(14,16,16)",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.0968",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 9,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.0968",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-013",
+    "prompt": "Let $r\\in\\{4,5\\}$. Let $G$ be a finite loopless graph (parallel edges allowed). Call $G$ an $r$-graph if (i) $G$ is $r$-regular, and (ii) for every vertex subset $S\\subseteq V(G)$ of odd cardinality, the edge cut $\\delta(S)$ (the set of edges with exactly one endpoint in $S$) satisfies $|\\delta(S)|\\ge r$. Assume moreover that $G$ is projective planar (i.e. it has an embedding in the projective plane) and that the Petersen graph is not a minor of $G$ (in the usual sense of minors via vertex/edge deletions and edge contractions). Let $\\chi'(G)$ denote the edge-chromatic number of $G$. What is the value of $\\chi'(G)$ as a function of $r$? Return your answer as a tuple consisting of two elements $(\\chi'(G)\\,(r=4),\\,\\chi'(G)\\,(r=5))$. For instance, \\boxed{(1,1)}.\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "(4,5)",
+    "grading": {
+      "type": "symbolic",
+      "answer": "(4,5)",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.14285",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 13,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.14285",
+      "retrieval_assisted": false
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "arxivmath",
+    "id": "arxivmath-december-017",
+    "prompt": "Let $G$ be a bipartite graph on $2n$ vertices ($n\\ge 2$) that has at least one perfect matching. For a perfect matching $M$ of $G$, call a subset $S\\subseteq M$ a forcing set for $M$ if $M$ is the unique perfect matching of $G$ that contains $S$. Define the forcing number of $M$ by $f(M):=\\min\\{|S|:S\\subseteq M\\text{ is a forcing set for }M\\}$. Define the minimum and maximum forcing numbers of $G$ by\n\\[\n f(G):=\\min\\{f(M):M\\text{ a perfect matching of }G\\},\\qquad F(G):=\\max\\{f(M):M\\text{ a perfect matching of }G\\}.\n\\]\nAssume $F(G)=n-2$. As $G$ ranges over all such bipartite graphs on $2n$ vertices with $F(G)=n-2$, let the set of all possible values of $f(G)$ (expressed as a subset of $\\mathbb Z$ in terms of $n$) be $S(n)$. The sum of all elements in $S(n)$ is $s(n)$. Determine the tuple $(s(5), s(15), s(30), s(69))$. Return your answer as a tuple in \\boxed{}, e.g., \\boxed{(1,1,1,1)}\n\n\nSolve the problem. Put the final answer on its own last line in the form: FINAL: <answer>.",
+    "answer": "(5,70,315,1717)",
+    "grading": {
+      "type": "symbolic",
+      "answer": "(5,70,315,1717)",
+      "note": "normalized exact/symbolic; unparseable if not confidently comparable"
+    },
+    "metadata": {
+      "source": "2512.22761",
+      "license": "unspecified in supplied snapshot",
+      "contest": "arxiv/december",
+      "problem_number": 17,
+      "problem_type": [
+        "unspecified"
+      ],
+      "arxiv_id": "2512.22761",
+      "retrieval_assisted": false
+    }
+  }
+]

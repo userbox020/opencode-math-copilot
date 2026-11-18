@@ -1,0 +1,1868 @@
+{
+  "schema": "math-bench-lean-controls/v1",
+  "benchmark": "proofnet-verified",
+  "verified": false,
+  "inputs": {
+    "jsonl": {
+      "path": "data/proofnet-verified-latest.jsonl",
+      "sha256": "70d39c458963909cc63a391f984a88a15698d4c99fc9f14f8af84359622c1adc"
+    },
+    "toolchain": {
+      "path": "lean-toolchain",
+      "sha256": "744874093261c1854638246b978f088eae15414b0f636ac08481a088a7aaa867"
+    },
+    "zip": {
+      "path": "data/archive/proofnet-verified_gt-4.28.zip",
+      "sha256": "e1cf0e5eb34ca13067efb61365a1b8c534e140eb02518e5a7801dac1fce79445"
+    }
+  },
+  "gold_archive_toolchain": "4.28",
+  "task_toolchain": "4.34.0",
+  "workspace_checker_toolchain": "4.34.1",
+  "checker_bound": false,
+  "zip_entry_count": 367,
+  "normalizations": [
+    {
+      "id": "proofnet-035",
+      "field": "formal_stmt",
+      "action": "Replaced embedded complete proof body with sorry; declaration/type unchanged."
+    }
+  ],
+  "entries": {
+    "proofnet-001": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-1.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-002": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-2.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-003": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-3.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-004": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-4.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-005": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-5.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-006": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-6.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-007": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-7.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-008": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-8.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-009": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-9.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-010": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-10.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-011": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-11.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-012": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-12.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-013": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-13.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-014": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-14.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-015": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-15.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-016": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-16.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-017": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-17.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-018": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-18.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-019": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-19.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-020": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-20.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-021": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-21.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-022": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-22.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-023": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-23.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-024": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-24.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-025": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-25.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-026": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-26.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-027": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-27.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-028": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-28.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-029": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-29.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-030": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-30.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-031": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-31.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-032": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-32.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-033": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-33.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-034": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-34.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-035": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-35.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-036": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-36.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-037": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-37.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-038": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-38.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-039": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-39.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-040": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-40.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-041": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-41.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-042": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-42.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-043": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-43.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-044": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-44.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-045": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-45.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-046": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-46.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-047": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-47.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-048": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-48.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-049": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-49.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-050": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-50.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-051": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-51.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-052": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-52.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-053": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-53.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-054": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-54.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-055": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-55.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-056": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-56.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-057": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-57.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-058": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-58.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-059": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-59.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-060": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-60.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-061": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-61.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-062": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-62.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-063": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-63.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-064": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-64.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-065": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-65.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-066": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-66.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-067": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-67.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-068": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-68.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-069": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-69.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-070": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-70.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-071": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-71.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-072": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-72.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-073": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-73.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-074": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-74.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-075": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-75.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-076": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-76.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-077": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-77.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-078": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-78.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-079": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-79.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-080": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-80.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-081": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-81.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-082": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-82.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-083": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-83.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-084": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-84.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-085": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-85.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-086": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-86.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-087": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-87.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-088": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-88.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-089": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-89.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-090": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-90.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-091": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-91.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-092": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-92.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-093": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-93.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-094": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-94.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-095": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-95.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-096": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-96.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-097": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-97.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-098": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-98.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-099": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-99.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-100": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-100.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-101": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-101.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-102": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-102.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-103": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-103.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-104": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-104.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-105": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-105.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-106": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-106.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-107": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-107.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-108": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-108.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-109": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-109.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-110": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-110.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-111": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-111.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-112": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-112.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-113": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-113.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-114": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-114.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-115": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-115.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-116": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-116.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-117": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-117.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-118": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-118.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-119": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-119.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-120": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-120.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-121": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-121.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-122": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-122.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-123": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-123.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-124": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-124.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-125": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-125.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-126": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-126.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-127": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-127.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-128": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-128.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-129": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-129.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-130": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-130.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-131": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-131.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-132": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-132.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-133": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-133.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-134": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-134.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-135": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-135.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-136": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-136.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-137": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-137.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-138": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-138.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-139": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-139.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-140": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-140.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-141": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-141.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-142": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-142.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-143": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-143.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-144": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-144.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-145": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-145.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-146": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-146.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-147": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-147.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-148": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-148.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-149": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-149.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-150": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-150.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-151": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-151.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-152": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-152.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-153": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-153.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-154": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-154.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-155": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-155.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-156": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-156.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-157": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-157.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-158": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-158.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-159": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-159.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-160": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-160.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-161": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-161.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-162": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-162.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-163": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-163.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-164": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-164.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-165": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-165.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-166": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-166.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-167": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-167.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-168": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-168.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-169": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-169.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-170": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-170.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-171": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-171.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-172": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-172.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-173": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-173.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-174": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-174.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-175": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-175.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-176": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-176.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-177": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-177.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-178": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-178.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-179": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-179.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-180": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-180.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-181": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-181.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-182": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-182.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-183": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-183.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-184": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-184.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-185": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-185.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-186": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-186.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-187": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-187.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-188": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-188.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-189": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-189.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-190": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-190.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-191": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-191.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-192": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-192.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-193": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-193.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-194": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-194.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-195": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-195.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-196": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-196.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-197": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-197.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-198": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-198.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-199": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-199.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-200": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-200.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-201": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-201.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-202": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-202.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-203": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-203.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-204": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-204.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-205": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-205.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-206": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-206.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-207": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-207.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-208": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-208.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-209": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-209.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-210": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-210.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-211": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-211.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-212": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-212.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-213": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-213.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-214": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-214.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-215": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-215.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-216": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-216.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-217": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-217.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-218": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-218.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-219": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-219.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-220": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-220.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-221": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-221.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-222": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-222.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-223": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-223.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-224": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-224.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-225": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-225.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-226": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-226.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-227": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-227.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-228": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-228.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-229": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-229.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-230": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-230.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-231": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-231.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-232": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-232.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-233": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-233.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-234": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-234.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-235": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-235.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-236": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-236.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-237": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-237.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-238": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-238.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-239": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-239.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-240": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-240.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-241": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-241.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-242": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-242.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-243": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-243.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-244": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-244.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-245": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-245.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-246": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-246.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-247": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-247.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-248": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-248.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-249": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-249.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-250": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-250.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-251": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-251.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-252": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-252.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-253": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-253.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-254": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-254.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-255": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-255.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-256": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-256.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-257": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-257.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-258": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-258.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-259": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-259.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-260": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-260.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-261": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-261.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-262": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-262.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-263": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-263.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-264": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-264.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-265": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-265.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-266": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-266.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-267": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-267.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-268": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-268.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-269": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-269.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-270": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-270.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-271": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-271.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-272": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-272.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-273": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-273.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-274": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-274.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-275": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-275.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-276": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-276.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-277": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-277.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-278": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-278.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-279": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-279.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-280": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-280.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-281": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-281.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-282": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-282.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-283": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-283.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-284": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-284.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-285": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-285.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-286": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-286.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-287": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-287.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-288": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-288.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-289": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-289.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-290": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-290.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-291": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-291.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-292": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-292.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-293": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-293.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-294": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-294.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-295": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-295.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-296": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-296.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-297": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-297.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-298": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-298.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-299": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-299.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-300": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-300.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-301": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-301.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-302": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-302.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-303": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-303.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-304": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-304.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-305": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-305.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-306": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-306.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-307": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-307.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-308": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-308.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-309": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-309.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-310": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-310.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-311": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-311.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-312": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-312.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-313": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-313.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-314": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-314.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-315": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-315.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-316": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-316.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-317": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-317.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-318": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-318.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-319": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-319.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-320": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-320.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-321": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-321.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-322": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-322.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-323": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-323.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-324": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-324.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-325": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-325.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-326": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-326.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-327": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-327.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-328": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-328.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-329": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-329.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-330": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-330.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-331": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-331.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-332": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-332.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-333": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-333.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-334": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-334.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-335": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-335.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-336": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-336.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-337": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-337.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-338": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-338.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-339": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-339.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-340": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-340.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-341": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-341.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-342": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-342.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-343": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-343.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-344": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-344.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-345": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-345.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-346": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-346.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-347": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-347.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-348": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-348.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-349": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-349.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-350": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-350.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-351": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-351.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-352": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-352.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-353": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-353.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-354": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-354.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-355": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-355.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-356": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-356.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-357": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-357.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-358": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-358.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-359": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-359.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-360": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-360.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-361": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-361.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-362": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-362.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-363": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-363.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-364": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-364.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-365": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-365.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-366": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-366.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    },
+    "proofnet-367": {
+      "gold_proof_zip_entry": "proofnet_verified_gt/proofnet-367.lean",
+      "gold_proof_sha256": null,
+      "verified": false
+    }
+  }
+}

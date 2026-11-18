@@ -1,0 +1,7 @@
+{
+  "schema": "math-bench-baselines/v1",
+  "benchmark": "mathconstruct",
+  "model": "opencode-go/deepseek-v4.1-flash",
+  "external": [],
+  "note": "No published score for this exact model/version was found; use the paired plugin-off arm."
+}
