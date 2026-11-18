@@ -58,14 +58,42 @@ they are correct answers in equivalent symbolic forms (`-1/21` vs
 trigonometric `\frac{1}{2\sin(\pi/26)}`). The SymPy fallback resolves all eight
 supplied equivalence examples. The model was **not re-run**; only grading changed.
 
+### Tool use and timeouts (same captures, offline analysis)
+
+| Condition | Episodes with math-tool use | Tool call sites |
+|---|---:|---|
+| plugin-on | **11 / 40** | `math_compute` 20, `math_lean_check` 10 |
+| plugin-off | 0 / 40 | none observed |
+
+- 29/40 ON episodes used no math tool. The condition comparison is therefore
+  mostly a **no-tool comparison**, not a full-toolkit test.
+- Timeouts: ON 4 (`aime-2026-30`, `hmmt-feb-2026-33`, `smt-2025-30`,
+  `smt-2025-53`); OFF 6 (`aime-2026-11`, `hmmt-feb-2026-19`,
+  `hmmt-feb-2026-33`, `smt-2025-30`, `smt-2025-41`, `smt-2025-53`).
+  Common: `hmmt-feb-2026-33`, `smt-2025-30`, `smt-2025-53`.
+- Completion pairs: **33 both, 3 ON-only** (`aime-2026-11`,
+  `hmmt-feb-2026-19`, `smt-2025-41`), **1 OFF-only** (`aime-2026-30`),
+  **3 neither**. Matched-slot ON−OFF completion: **+2 (5.0%)**.
+- Correctness pairs: 33 both, 0 discordant; paired difference **0.00%**;
+  task-clustered bootstrap 95% **[0.00%, 0.00%]** over 33 tasks (descriptive,
+  not confirmatory).
+- **Three of the four ON timeouts had tool use** (`aime-2026-30` and
+  `hmmt-feb-2026-33` `math_lean_check`; `smt-2025-30` `math_compute`);
+  `smt-2025-53` had none. This is correlation, not proof that tool calls caused
+  the timeouts, but it is the opposite of a timeout-reduction signal.
+- Tool counts are static call sites (direct events plus nested `execute` input),
+  not verified successful execution. Missing raw logs mean unknown, not no use.
+
 ### What the pilot supports
 
 - On jointly completed tasks, both conditions answered every one correctly:
   **no condition-only correctness win**.
-- The only difference is **completion**: ON finished 36/40, OFF 34/40; the two
-  extra ON completions are paired against OFF timeouts and therefore ungraded.
-- A 40-task, one-repeat, one-model pilot cannot establish a completion benefit.
-  It is a feasibility and grading-sensitivity result, not efficacy evidence.
+- The ON arm used a math tool on only 11/40 episodes; most of the comparison is
+  model-only. The two extra ON completions are paired against OFF timeouts and
+  therefore ungraded; they are not correctness wins.
+- A 40-task, one-repeat, one-model pilot cannot establish a completion benefit,
+  and the tool-use/timeout correlation cautions against claiming one. It is a
+  feasibility and grading-sensitivity result, not efficacy evidence.
 - The corrected grader is clearly better than the bounded one for symbolic
   answers; the conservative result is retained rather than overwritten.
 
