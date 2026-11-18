@@ -2,8 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { parseFinalAnswer } from '../parse-answer.mjs';
-import { gradeAnswer, pluginEnvironment, runStudy, main } from '../run-validator.mjs';
+import { exactJSON, gradeAnswer, pluginEnvironment, runStudy, main } from '../run-validator.mjs';
 import { assertFreshOutput, sha256 } from '../../../external/schema.mjs';
+
+const longAnswer = String.raw`FINAL: $\boxed{10000003, -10000002, 100000050000007, 10000010000003800000650000043}$`;
+const longValues = [10000003, -10000002, 100000050000007, 10000010000003800000650000043n];
+const longJSON = '[10000003,-10000002,100000050000007,10000010000003800000650000043]';
 
 const cases = [
   ['FINAL list', 'Proof\nFINAL: [1,2,3]', [1, 2, 3]],
@@ -29,6 +33,13 @@ const cases = [
   ['string wrappers preserved', String.raw`FINAL: "$\\boxed{literal}$"`, String.raw`$\boxed{literal}$`],
   ['empty FINAL followed by JSON fence', 'FINAL:\n```json\n[1]\n```', [1]],
   ['last FINAL', 'FINAL: [1]\nCorrection\nFINAL: [2]', [2]],
+  ['flat boxed list', String.raw`FINAL: \boxed{1, 2, 3}`, [1, 2, 3]],
+  ['long exact boxed list', longAnswer, longValues],
+  ['flat decimals and strings', String.raw`FINAL: \boxed{1.25, -.5, 2e-3, x, 1/2}`, [1.25, -0.5, 0.002, 'x', '1/2']],
+  ['nested scalar commas stay intact', 'FINAL: 1, f(2,3), g[4,5], h{6,7}', [1, 'f(2,3)', 'g[4,5]', 'h{6,7}']],
+  ['integer precision boundaries', 'FINAL: 9007199254740991, 9007199254740992, -9007199254740992',
+    [9007199254740991, 9007199254740992n, -9007199254740992n]],
+  ['quoted commas stay intact', 'FINAL: 1, "a,b"', [1, '"a,b"']],
 ];
 for (const [name, text, value] of cases) {
   test(`parse: ${name}`, () => {
@@ -46,7 +57,14 @@ for (const [name, text] of [
   ['text cannot concatenate numbers', String.raw`FINAL: [1\text{2}]`],
   ['malformed', 'FINAL: [1,]'],
   ['tuple', String.raw`FINAL: $\boxed{(1,2)}$`],
-  ['comma list', String.raw`FINAL: $\boxed{1,2,3}$`],
+  ['comma prose', 'FINAL: Take three vertices, then join them.'],
+  ['empty scalar', 'FINAL: 1,,2'],
+  ['trailing comma', 'FINAL: 1,2,'],
+  ['unbalanced scalar', 'FINAL: 1, f(2,3'],
+  ['nested collections are not flat scalars', 'FINAL: 1, [2,3]'],
+  ['malformed JSON not salvaged', 'FINAL: [1,2], 3'],
+  ['nonfinite decimal list', 'FINAL: 1, 1e999'],
+  ['fences remain JSON only', '```json\n1,2,3\n```'],
   ['fraction expression', 'FINAL: [1/2]'],
   ['unsafe integer', 'FINAL: [9007199254740993]'],
   ['nonfinite', 'FINAL: [1e999]'],
@@ -64,6 +82,13 @@ for (const [name, text] of [
     assert.equal(typeof parsed.reason, 'string');
   });
 }
+
+test('exactJSON preserves integer digits, nesting, property order, and JSON scalars', () => {
+  assert.equal(exactJSON(longValues), longJSON);
+  assert.equal(exactJSON({ answer: longValues, nested: { negative: -9007199254740992n },
+    label: 'a"b', decimal: 1.25, ok: true, empty: null }),
+  `{"answer":${longJSON},"nested":{"negative":-9007199254740992},"label":"a\\"b","decimal":1.25,"ok":true,"empty":null}`);
+});
 
 const repo = path.resolve('/virtual-repo');
 const outside = path.resolve('/virtual-results');
@@ -210,6 +235,26 @@ test('empty answer format leaves the task prompt unchanged', () => {
     },
   });
   assert.equal(result.episodes[0].prompt_sha256, sha256(task.prompt));
+});
+
+test('bridge stdin contains exact unquoted integers while episode logs use decimal strings', () => {
+  let calls = 0;
+  const result = study({}, {
+    runner: () => capture(longAnswer),
+    bridgeRunner: (_executable, _args, options) => {
+      calls++;
+      assert.equal(options.input, `{"task_id":"fixture","answer":${longJSON}}`);
+      assert.ok(!options.input.includes('"10000010000003800000650000043"'));
+      return { status: 0, stdout: JSON.stringify(receipt()) };
+    },
+  });
+  assert.equal(calls, 1);
+  assert.equal(result.episodes[0].validation_status, 'accepted');
+  const expected = [10000003, -10000002, 100000050000007, '10000010000003800000650000043'];
+  assert.deepEqual(result.episodes[0].parsed_value, expected);
+  const logged = JSON.parse(result.io.files.get(path.join(outside, 'fresh', 'episodes', 't1-r1.json')));
+  assert.deepEqual(logged.parsed_value, expected);
+  assert.deepEqual(logged.parse.value, expected);
 });
 
 for (const status of ['accepted', 'rejected', 'unavailable']) {

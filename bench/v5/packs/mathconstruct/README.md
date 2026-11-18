@@ -157,15 +157,28 @@ wrappers are stripped, along with leading `\displaystyle` and array-delimiter
 `\left`/`\right` sizing outside JSON strings.
 Nested arrays, objects, numbers, and strings retain their JSON structure.
 An explicit malformed `FINAL:` is not replaced with an earlier example.
-Format metadata is not used as an answer source. Tuples, bare comma lists,
-symbolic expressions, malformed JSON, unsafe integer values, and non-finite
-numbers are not repaired or guessed.
+Format metadata is not used as an answer source. An explicit `FINAL:` also accepts
+a flat comma-separated scalar list, such as `$\boxed{1, 2, 3}$` → `[1,2,3]`.
+Only top-level commas split items; commas inside quotes, brackets, braces, or
+parentheses do not. Integer tokens are exact: safe integers use Number and larger
+integers use BigInt. Decimal tokens use finite Number values; other scalar tokens
+remain trimmed strings, not evaluated expressions. Unquoted multiword prose,
+empty items, nested collections in a flat list, and malformed delimiters are
+unparseable. JSON arrays/objects, fences, and trailing JSON retain their previous
+behavior, including rejection of unsafe JSON integer values.
+
+The runner's `exactJSON` writer recursively sends BigInt values to bridge stdin
+as **unquoted decimal JSON numbers**, without precision loss. For example:
+`[10000003,-10000002,100000050000007,10000010000003800000650000043]`.
+The unchanged bridge receives a serialization-safe envelope; the runner replaces
+its stdin with this exact JSON. Episode `parse.value` and `parsed_value` instead
+store BigInt values as decimal **strings**, keeping logs valid JSON.
 
 **Free-form constructions can be unparseable; never count unparseable as
 incorrect.** The stored prompts are unchanged, but the runner now supplies their
-required answer formats. Non-JSON constructions remain unsupported. Exact fraction strings
-can pass through to the bridge; LaTeX fractions and arbitrary-size JSON integers
-cannot be safely interpreted by this parser.
+required answer formats. Constructions outside JSON and flat scalar lists remain
+unsupported. Fraction strings can pass through to the bridge but are not evaluated;
+arbitrary-size integers inside JSON arrays/objects remain unsupported by this parser.
 
 Outputs include a pre-dispatch `plan.json`, final `manifest.json`, and
 `episodes/*.json` with raw capture, effective prompt hash, final text, usage, duration,
@@ -192,7 +205,7 @@ node --check bench/v5/packs/mathconstruct/parse-answer.mjs
 node --check bench/v5/packs/mathconstruct/run-validator.mjs
 ```
 
-**62 passed, 0 failed, 0 skipped**; both syntax checks passed. Default tests use
+**77 passed, 0 failed, 0 skipped**; both syntax checks passed. Default tests use
 in-memory filesystems and injected model/bridge processes: no Python or model
 is required, and no real benchmark episode is dispatched.
 

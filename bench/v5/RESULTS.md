@@ -202,9 +202,13 @@ only the problem text, while the pack stores the required upstream answer
 format in `grading.answer_format` (for example, `FINAL: \boxed{[vertices,
 edges]}`). Both answers were prose and correctly classified `unparseable`. The
 two episodes are preserved as **format-invalid** and are not pooled with any
-corrected run. The runner now appends `grading.answer_format` to the prompt and
-the parser accepts `\boxed{...}` JSON; a corrected 20-task pilot is the next
-run.
+corrected run. The runner now appends `grading.answer_format` to the prompt, the parser accepts
+JSON and flat comma-separated `\boxed{...}` lists with exact big integers, and a
+one-task smoke parsed and the validator **accepted** it (`CORRECT`). A corrected
+20-task pilot is running. The pilot formats are heterogeneous (flat lists,
+tuples, pair-of-lists, LaTeX arrays, symbolic functions); tuple/LaTeX-array
+tasks may remain `unparseable` and are reported separately, never as wrong
+constructions.
 
 ## Caveats
 

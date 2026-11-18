@@ -10,6 +10,25 @@ import { parseFinalAnswer } from './parse-answer.mjs';
 
 export { pluginEnvironment };
 
+export function exactJSON(value) {
+  if (typeof value === 'bigint') return value.toString();
+  if (Array.isArray(value)) return `[${value.map(exactJSON).join(',')}]`;
+  if (value !== null && typeof value === 'object') {
+    return `{${Object.entries(value).map(([key, item]) => `${JSON.stringify(key)}:${exactJSON(item)}`).join(',')}}`;
+  }
+  if (value === null || ['string', 'number', 'boolean'].includes(typeof value)) return JSON.stringify(value);
+  throw new TypeError('Unsupported JSON value');
+}
+
+function logSafe(value) {
+  if (typeof value === 'bigint') return value.toString();
+  if (Array.isArray(value)) return value.map(logSafe);
+  if (value !== null && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, logSafe(item)]));
+  }
+  return value;
+}
+
 function effectivePrompt(task) {
   const answerFormat = task.grading.answer_format;
   return task.prompt + (typeof answerFormat === 'string' && answerFormat.length
@@ -41,10 +60,14 @@ export function gradeAnswer(task, text, { validator = validate, python, bridgeRu
   if (parsed.status !== 'parsed') return { status: 'unparseable', parsed, receipt: null };
   let receipt;
   try {
-    receipt = validator({ task_id: task.id, answer: parsed.value }, {
+    const request = { task_id: task.id, answer: parsed.value };
+    const input = exactJSON(request);
+    // The unchanged bridge JSON-stringifies its request before calling run.
+    // Give it a safe envelope, then replace stdin with the exact numeric JSON.
+    receipt = validator(logSafe(request), {
       python,
       run: (executable, args, options) => bridgeRunner(executable, args, {
-        ...options, timeout: 10000, windowsHide: true,
+        ...options, input, timeout: 10000, windowsHide: true,
       }),
     });
     if (!receipt || receipt.schema !== 'mathconstruct-validator/v1' || receipt.task_id !== task.id ||
@@ -123,7 +146,7 @@ export function runStudy(options, dependencies = {}) {
       exit_code: result.status ?? null, signal: result.signal ?? null,
       error_code: result.error?.code ?? null, error: result.error?.message ?? null,
       text: captured.text, usage: captured.usage, usage_records: captured.usage_records,
-      parse: validation.parsed, parsed_value: validation.parsed.value,
+      parse: logSafe(validation.parsed), parsed_value: logSafe(validation.parsed.value),
       validation_status: validation.status, validator_receipt: validation.receipt,
       raw_file: `${plan.schedule[index].episode_id}.raw.json`, stderr: String(result.stderr ?? ''),
     };

@@ -53,9 +53,50 @@ function unwrap(source) {
 
 const failure = reason => ({ status: 'unparseable', value: null, reason });
 
-function parsePayload(source) {
+function flatScalars(text) {
+  const tokens = [], stack = [];
+  let start = 0, quoted = false;
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    if (quoted && char === '\\') { i++; continue; }
+    if (char === '"') { quoted = !quoted; continue; }
+    if (quoted) continue;
+    if ('[{('.includes(char)) stack.push(char);
+    else if (']})'.includes(char)) {
+      if (stack.pop() !== ({ ']': '[', '}': '{', ')': '(' })[char]) {
+        throw new Error('Unbalanced list');
+      }
+    } else if (char === ',' && !stack.length) {
+      tokens.push(text.slice(start, i).trim());
+      start = i + 1;
+    }
+  }
+  if (quoted || stack.length || !tokens.length) throw new Error('Not a flat list');
+  tokens.push(text.slice(start).trim());
+  return tokens.map(token => {
+    // Unquoted multiword prose is not a scalar construction. Nested collections
+    // must use JSON; symbolic scalar tokens are retained, never evaluated.
+    if (!token || /^[\[{(]/.test(token) || (/\s/.test(token) && !token.startsWith('"'))) {
+      throw new Error('Expected a scalar');
+    }
+    if (/^[+-]?\d+$/.test(token)) {
+      const integer = BigInt(token);
+      return integer >= BigInt(Number.MIN_SAFE_INTEGER) && integer <= BigInt(Number.MAX_SAFE_INTEGER)
+        ? Number(integer) : integer;
+    }
+    if (/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(token)) {
+      const number = Number(token);
+      if (!Number.isFinite(number)) throw new Error('Non-finite scalar');
+      return number;
+    }
+    return token;
+  });
+}
+
+function parsePayload(source, { allowFlat = false } = {}) {
+  const cleaned = unwrap(source);
   try {
-    const value = JSON.parse(unwrap(source), (_key, item) => {
+    const value = JSON.parse(cleaned, (_key, item) => {
       // JSON.parse can silently round large integers. Refuse rather than
       // validate a mathematically different answer.
       if (typeof item === 'number' &&
@@ -67,13 +108,19 @@ function parsePayload(source) {
     if (value === null || typeof value === 'boolean') return failure('Expected a JSON construction, not null/boolean');
     return { status: 'parsed', value, reason: null };
   } catch {
-    return failure('Payload is not supported, lossless JSON');
+    // A malformed JSON collection must not be salvaged as a list of strings.
+    if (allowFlat && !/^[\[{]/.test(cleaned)) {
+      try {
+        return { status: 'parsed', value: flatScalars(cleaned), reason: null };
+      } catch { /* Unsupported list or prose remains unparseable. */ }
+    }
+    return failure('Payload is not supported JSON or a flat scalar list');
   }
 }
 
 export function parseFinalAnswer(text, { answerFormat } = {}) {
   // Format metadata may contain worked examples. It is never an answer source
-  // and does not authorize coercing a non-JSON structure.
+  // and does not authorize guessing a construction.
   void answerFormat;
   if (typeof text !== 'string' || !text.trim()) return failure('No answer text');
   const lines = text.trim().split(/\r?\n/);
@@ -83,7 +130,7 @@ export function parseFinalAnswer(text, { answerFormat } = {}) {
       const payload = final[1] || lines.slice(i + 1).join('\n');
       const fenced = /^```(?:json)?\s*\r?\n([\s\S]*?)\r?\n```\s*$/i.exec(payload);
       // An explicit malformed FINAL takes precedence over earlier examples.
-      return parsePayload(fenced ? fenced[1] : payload);
+      return parsePayload(fenced ? fenced[1] : payload, { allowFlat: !fenced });
     }
   }
   const fences = [...text.matchAll(/^[ \t]*```(?:json)?[ \t]*\r?\n([\s\S]*?)^[ \t]*```[ \t]*\r?$/gim)];
