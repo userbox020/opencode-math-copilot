@@ -262,7 +262,9 @@ test('symbolic normalization accepts bounded syntax and identical canonical stri
 test('symbolic differences are unparseable, not guessed inequivalent', () => {
   const symbolic = task({ answer: 'x+x', grading: { type: 'symbolic' } });
   for (const text of ['2*x', 'x+1', '\\sin{x}', 'x++', '(x', 'probably correct', 'x'.repeat(513)]) {
-    assert.equal(gradeEpisode(completed(text), symbolic).status, 'unparseable', text);
+    assert.equal(gradeEpisode(completed(text), symbolic, {
+      symbolic: () => ({ status: 'unparseable', reason: 'Hermetic fallback; real parser covered separately' }),
+    }).status, 'unparseable', text);
   }
 });
 
@@ -379,6 +381,31 @@ test('report CLI writer emits JSON and Markdown without altering runs or grades'
 test('external baseline validation never interprets or pools score units', () => {
   assert.equal(validateBaselines([{ benchmark: 'b', model: 'm', score: 83, source: 's' }])[0].score, 83);
   assert.throws(() => validateBaselines([{ benchmark: 'b', model: 'm', score: 83, source: 's', correct: 83 }]), /closed keys/);
+});
+
+test('baseline array and pack forms produce identical separate external rows', () => {
+  const { io, dependencies, summaries } = pairedFixture();
+  const entries = [{ benchmark: 'fixture', model: 'external/model', score: '80%', source: 'published' }];
+  const pack = { schema: 'baseline-pack/v1', benchmark: 'fixture', model: 'external/model', external: entries, note: 'Not paired' };
+  assert.deepEqual(validateBaselines(pack), validateBaselines(entries));
+  const without = buildReport(summaries);
+  for (const [index, baseline] of [entries, pack, { ...pack, external: [] }].entries()) {
+    const file = location(`baseline-${index}.json`);
+    io.writeFileSync(file, JSON.stringify(baseline));
+    const report = writeReport({
+      grades: [location('grades-plugin-on/grades.json'), location('grades-plugin-off/grades.json')],
+      baseline: file, out: location(`baseline-report-${index}`),
+    }, dependencies);
+    const expected = index === 2 ? [] : validateBaselines(entries);
+    assert.deepEqual(report.external_baseline, expected);
+    assert.deepEqual(report.benchmarks[0].external_baseline, expected);
+    assert.deepEqual(report.benchmarks[0].paired, without.benchmarks[0].paired);
+    assert.deepEqual(report.benchmarks[0].conditions, without.benchmarks[0].conditions);
+  }
+  assert.deepEqual(buildReport([], { ...pack, external: [] }).benchmarks, []);
+  for (const invalid of [{ ...pack, external: null }, { ...pack, external: {} }, { note: 'missing external' }]) {
+    assert.throws(() => validateBaselines(invalid), /external array/);
+  }
 });
 
 test('CLI parser rejects unknown/duplicate flags and permits repeated grade files', () => {

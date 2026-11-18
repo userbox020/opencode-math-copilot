@@ -1,5 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import {
   REPO, claimOutput, isMain, parseOptions, readTasks, sha256, taskKey, writeJSON,
 } from './schema.mjs';
@@ -83,7 +85,27 @@ function lastInteger(value) {
   return matches.length ? BigInt(matches.at(-1)[0]) : null;
 }
 
-export function gradeEpisode(episode, task) {
+export function symbolicEquivalent(expected, extracted, { runner = spawnSync, python = 'python' } = {}) {
+  const unparseable = reason => ({ status: 'unparseable', reason });
+  try {
+    const result = runner(python, ['-B', fileURLToPath(new URL('./symbolic_equiv.py', import.meta.url))], {
+      input: JSON.stringify({ expected, extracted }), encoding: 'utf8',
+      timeout: 5000, killSignal: 'SIGKILL', maxBuffer: 64 * 1024, shell: false, windowsHide: true,
+    });
+    if (result.error?.code === 'ETIMEDOUT') return unparseable('Symbolic Python comparison timed out after 5 seconds');
+    if (result.error) return unparseable(`Symbolic Python unavailable or failed: ${result.error.code ?? result.error.message}`);
+    if (result.status !== 0 || result.signal) return unparseable('Symbolic Python failed; Python/SymPy may be unavailable');
+    const comparison = JSON.parse(result.stdout);
+    if (!['equivalent', 'different', 'unparseable'].includes(comparison?.status) || typeof comparison.reason !== 'string') {
+      return unparseable('Invalid symbolic Python result');
+    }
+    return comparison;
+  } catch (error) {
+    return unparseable(`Symbolic Python comparison unavailable: ${error.message}`);
+  }
+}
+
+export function gradeEpisode(episode, task, { symbolic = symbolicEquivalent } = {}) {
   const verdict = (status, reason, extracted = null) => ({ status, reason, extracted, grading_rules: GRADING_RULES });
   if (!episode || episode.status !== 'completed' || episode.exit_code !== 0 ||
       episode.error || episode.error_code || episode.signal || !String(episode.text ?? '').trim()) {
@@ -106,14 +128,14 @@ export function gradeEpisode(episode, task) {
   }
   if (task.grading.type === 'symbolic') {
     const actual = normalizeSymbolic(extracted), expected = normalizeSymbolic(gold);
-    if (!actual || !expected) return verdict('unparseable', 'Outside bounded symbolic grammar', extracted);
-    if (actual === expected) return verdict('correct', 'Identical bounded canonical strings', extracted);
+    if (actual && expected && actual === expected) return verdict('correct', 'Identical bounded canonical strings', extracted);
     // Different expressions may still be equivalent. Only distinct plain numeric
     // literals are confidently unequal without algebra or sampling.
-    if (/^[+-]?\d+$/.test(actual) && /^[+-]?\d+$/.test(expected)) {
+    if (actual && expected && /^[+-]?\d+$/.test(actual) && /^[+-]?\d+$/.test(expected)) {
       return verdict(BigInt(actual) === BigInt(expected) ? 'correct' : 'incorrect', 'Integer literal comparison', extracted);
     }
-    return verdict('unparseable', 'Nonidentical symbolic forms; equivalence not established', extracted);
+    const comparison = symbolic(gold, extracted);
+    return verdict(({ equivalent: 'correct', different: 'incorrect' })[comparison.status] ?? 'unparseable', comparison.reason, extracted);
   }
   return verdict('unparseable', 'Unknown grading type', extracted);
 }

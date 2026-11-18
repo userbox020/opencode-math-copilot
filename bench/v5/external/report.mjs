@@ -16,7 +16,11 @@ export const CAVEATS = Object.freeze([
 ]);
 
 export function validateBaselines(baselines) {
-  if (!Array.isArray(baselines)) throw new Error('baseline must be an array');
+  if (baselines && !Array.isArray(baselines) && typeof baselines === 'object') {
+    closedKeys(baselines, ['schema', 'benchmark', 'model', 'external', 'note'], 'baseline pack');
+    baselines = baselines.external;
+  }
+  if (!Array.isArray(baselines)) throw new Error('baseline must be an array or a pack with an external array');
   for (const row of baselines) {
     closedKeys(row, ['benchmark', 'model', 'score', 'source', 'notes'], 'baseline');
     if (!['benchmark', 'model', 'source'].every(key => nonempty(row[key])) ||

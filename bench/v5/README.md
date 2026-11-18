@@ -15,7 +15,7 @@ are separate from the completed v4 real-use studies and do not replace them.
 | ProofNet-Verified pack | `bench/v5/packs/proofnet-verified/` | Lean proving (367 tasks, Lean 4.34.0) | 367 tasks; 20-task pilot; 367 unverified controls; checker not yet bound |
 | ArXivMath pack | `bench/v5/packs/arxivmath/` | Paper-derived exact answers (closed-book) | 103 tasks; 20-task pilot |
 | Comparator pack | `bench/v5/comparator/` | Retrieval-assisted reproduction with Comparator | 8 tasks; real run blocked (Comparator/landrun/lean4export absent) |
-| Tool conformance | `bench/v5/tool-tests/` | SymPy, diagnostics, retrieval, checker coverage | 156 tests in `v5:test`, 23 skipped |
+| Tool conformance | `bench/v5/tool-tests/` | SymPy, diagnostics, retrieval, checker coverage | 188 tests in `v5:test`, 23 skipped |
 
 ## Clean benchmark workspace
 
