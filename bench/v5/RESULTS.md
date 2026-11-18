@@ -160,6 +160,29 @@ too hard for this model/budget at 300 s; the plugin neither helps nor harms on
 the 20 completed tasks. A future IMO run needs a larger timeout or a
 completion-aware protocol before it can test the plugin.
 
+## Cross-benchmark: tool use × outcome
+
+| Benchmark | Condition | Math tool used | Episodes | Correct | Incorrect | Unparseable | Missing |
+|---|---|---:|---:|---:|---:|---:|---:|
+| MathArena | ON | yes | 11 | 8 | 0 | 0 | 3 |
+| MathArena | ON | no | 29 | 28 | 0 | 0 | 1 |
+| MathArena | OFF | no | 40 | 34 | 0 | 0 | 6 |
+| IMO | ON | yes | 10 | 2 | 1 | 1 | 6 |
+| IMO | ON | no | 30 | 9 | 4 | 3 | 14 |
+| IMO | OFF | no | 40 | 11 | 5 | 4 | 20 |
+
+- Tool-using episodes are disproportionately **timeouts**: MathArena 3/11
+  tool-using vs 1/29 no-tool; IMO 6/10 vs 14/30.
+- Correct rate among tool-using vs no-tool episodes: MathArena 8/11 (72.7%)
+  vs 28/29 (96.6%); IMO 2/10 (20%) vs 9/30 (30%). Tool use did not produce a
+  higher correct rate in either benchmark.
+- This is **confounded by task selection**: the model may choose tools on
+  harder or longer tasks. It is not proof that tool calls caused the timeouts.
+  But under a 300 s budget, tool overhead is a plausible risk, and the data
+  provide no timeout-reduction signal.
+- The ON arm used tools on a minority of tasks (11/40 and 10/40), so both
+  benchmarks are mostly no-tool comparisons.
+
 ## Other tracks
 
 | Track | State |
