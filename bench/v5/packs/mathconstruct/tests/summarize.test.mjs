@@ -62,7 +62,7 @@ function fixture() {
     const selected = tasks.filter(task => condition === 'plugin-on' || task.id !== 'only-on');
     const schedule = selected.map((task, i) => ({
       episode_id: `t${i + 1}-r1`, benchmark: 'mathconstruct', task_id: task.id, repeat: 1,
-      prompt_sha256: hash(task.prompt),
+      prompt_sha256: hash(task.prompt + '\n\nRequired answer format:\n' + task.grading.answer_format),
     }));
     schedules[condition] = schedule;
     const manifest = {
@@ -131,6 +131,14 @@ test('separate classifications, completion, capture failures, parseability, and 
   assert.equal(row('absent').answer_parseable, null);
   assert.equal(row('absent').duration_ms, null);
   assert.equal(row('absent').attempted, false);
+});
+
+test('rejects a bare-prompt hash when answer_format is present', () => {
+  const f = fixture();
+  f.mutate(path.join(f.options.runs[0], 'manifest.json'), manifest => {
+    manifest.schedule[0].prompt_sha256 = hash('Construct both');
+  });
+  assert.throws(() => summarize(f.options, f.dependencies), /invalid schedule identity/);
 });
 
 test('pairs require accepted/rejected on both sides; absent and unparseable are never wins', () => {

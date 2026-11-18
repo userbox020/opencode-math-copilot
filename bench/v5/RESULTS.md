@@ -189,26 +189,39 @@ completion-aware protocol before it can test the plugin.
 |---|---|
 | Clean two-task smoke | 2/2 both; ON used `math_compute`; OFF used no tools |
 | IMO-AnswerBench v2 | 400 tasks, 40-task pilot complete; see above |
-| MathConstruct | 121 tasks, 20-task pilot running with validator receipts; bridge controls 2 positive / 2 negative |
+| MathConstruct | 20-task pilot complete; 4 accepted both, 12/13 unparseable, 4/3 timeouts; format-limited |
 | ProofNet-Verified | 367 Lean 4.34.0 tasks, 20-task pilot, 367 unverified controls; checker not bound |
-| ArXivMath | 103 closed-book tasks, 20-task pilot queued after MathConstruct |
+| ArXivMath | 20-task pilot running |
 | Comparator | 8 tasks; real run blocked (Comparator/landrun/lean4export absent) |
-| Tool tests | `v5:test` 245 tests, 222 pass, 0 fail, 23 skipped; syntax 160 files |
+| Tool tests | `v5:test` 281 tests, 258 pass, 0 fail, 23 skipped; syntax 162 files |
 
-## MathConstruct format correction
+## MathConstruct validator pilot
 
-The first MathConstruct pilot was stopped after two episodes. The runner sent
-only the problem text, while the pack stores the required upstream answer
-format in `grading.answer_format` (for example, `FINAL: \boxed{[vertices,
-edges]}`). Both answers were prose and correctly classified `unparseable`. The
-two episodes are preserved as **format-invalid** and are not pooled with any
-corrected run. The runner now appends `grading.answer_format` to the prompt, the parser accepts
-JSON and flat comma-separated `\boxed{...}` lists with exact big integers, and a
-one-task smoke parsed and the validator **accepted** it (`CORRECT`). A corrected
-20-task pilot is running. The pilot formats are heterogeneous (flat lists,
-tuples, pair-of-lists, LaTeX arrays, symbolic functions); tuple/LaTeX-array
-tasks may remain `unparseable` and are reported separately, never as wrong
-constructions.
+The first MathConstruct attempt was stopped after two episodes: the runner sent
+only the problem text, the pack stores the required answer format in
+`grading.answer_format`, and both answers were prose and correctly
+`unparseable`. Those two episodes are preserved as **format-invalid** and are
+not pooled. The runner now appends the format, the parser accepts JSON and flat
+comma-separated `\boxed{...}` lists with exact big integers, and a one-task smoke
+parsed and the validator **accepted** it (`CORRECT`).
+
+Corrected 20-task pilot, both arms:
+
+| Condition | Scheduled | Attempted | Completed | Accepted | Rejected | Unparseable | Missing (timeout) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| plugin-on | 20 | 20 | 16 | 4 | 0 | 12 | 4 |
+| plugin-off | 20 | 20 | 17 | 4 | 0 | 13 | 3 |
+
+Paired: **4 both accepted, 0 ON-only, 0 OFF-only, 0 neither, 16 ungraded**.
+The same four tasks were accepted in both arms: `bulgarian-ifym-2015-p7-d4-8th`,
+`bulgarian-pms-10-4`, `emc-2021-1`, `konhauser-2021-10`.
+
+The 12/13 `unparseable` are a **format-coverage** result, not wrong
+constructions: tuple/LaTeX-array/symbolic formats are outside the current
+parser, and some tasks timed out. Validator coverage is 4/20 per arm; this is a
+feasibility result, not an accuracy estimate. Tool use (ON): `math_compute` 5,
+`math_lean_check` 5, `math_lean_build` 2, `math_search` 3, `math_grep` 1,
+`math_pdf_corpus_search` 1, `math_doctor` 1 call sites; OFF 0.
 
 ## Caveats
 

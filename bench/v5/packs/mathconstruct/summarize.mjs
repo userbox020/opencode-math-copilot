@@ -18,6 +18,9 @@ const category = rows => ({
   slots: rows.map(({ task_id, repeat }) => ({ task_id, repeat })),
 });
 
+const effectivePrompt = task => task.prompt + (typeof task.grading?.answer_format === 'string' && task.grading.answer_format.length
+  ? `\n\nRequired answer format:\n${task.grading.answer_format}` : '');
+
 // Read only tool event inputs, never answer text, prompts, reasoning, or outputs.
 // This intentionally shares the extraction idea, not imports, with analyze.mjs.
 export function parseToolEvents(raw) {
@@ -74,7 +77,7 @@ function loadRun(run, tasks, hash, io) {
   const ids = new Set(), slots = new Set();
   const rows = manifest.schedule.map(scheduled => {
     const task = tasks.get(scheduled.task_id);
-    if (!task || scheduled.benchmark !== 'mathconstruct' || scheduled.prompt_sha256 !== sha256(task.prompt) ||
+    if (!task || scheduled.benchmark !== 'mathconstruct' || scheduled.prompt_sha256 !== sha256(effectivePrompt(task)) ||
         !/^t\d+-r\d+$/.test(scheduled.episode_id) || ids.has(scheduled.episode_id) || slots.has(key(scheduled)) ||
         !Number.isSafeInteger(scheduled.repeat) || scheduled.repeat < 1) throw new Error('invalid schedule identity');
     ids.add(scheduled.episode_id);
