@@ -103,17 +103,74 @@ CLI-reported, not reconciled billing. ON: known subtotal **$0.085251078** for
 11/40 episodes; OFF: **$0** known for 0/40. Coverage is incomplete, so these are
 not comparable totals or provider invoices.
 
+## IMO-AnswerBench v2 — 40-task pilot
+
+Tasks: 10 each from Algebra, Combinatorics, Geometry, Number theory (the
+deterministic 40-task pilot). Same model/conditions/300 s protocol as MathArena.
+All 80 episodes were attempted and captured.
+
+### Strict deterministic grader
+
+| Condition | Scheduled | Completed | Correct | Incorrect | Unparseable | Missing (timeout) | Correct/completed | Correct/scheduled |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| plugin-on | 40 | 20 | 11 | 5 | 4 | 20 | 55.0% | **27.5%** |
+| plugin-off | 40 | 20 | 11 | 5 | 4 | 20 | 55.0% | **27.5%** |
+
+Paired: **10 both, 0 ON-only, 0 OFF-only, 4 neither, 26 ungraded**;
+graded-pair difference **0.00%**; task-clustered bootstrap 95% **[0.00%, 0.00%]**
+over 14 tasks (descriptive). Completion: 18 both, 2 ON-only, 2 OFF-only,
+18 neither; matched-slot completion difference **0**.
+
+### Audited unparseable sensitivity
+
+All four `unparseable` answers in **each** arm are correct in equivalent forms:
+
+| Task | Gold | Answer |
+|---|---|---|
+| `imo-bench-algebra-067` | `(2, 1/2, 9/4)` | `(n,x,y)=(2,1/2,9/4)` |
+| `imo-bench-geometry-034` | `50A/39` | `50A/39` (free symbol `A` rejected) |
+| `imo-bench-geometry-089` | `96\sqrt{10}/13` | `\dfrac{96\sqrt{10}}{13}` |
+| `imo-bench-number_theory-078` | `0,2,6` | `n\in\{0,2,6\}` |
+
+If those are counted, both arms become **15 correct / 20 completed** (75.0%)
+and **15/40 scheduled (37.5%)**; paired becomes **14 both, 0 condition-only,
+4 neither, 22 ungraded**. The ON/OFF difference remains **0**; the strict
+result is retained as the primary, the audit as a grader-sensitivity check.
+
+### Timeouts, completion, and tool use
+
+- Timeouts: **20 ON and 20 OFF**; overlap 18. ON-only timeouts:
+  `combinatorics-045`, `number_theory-023`; OFF-only:
+  `algebra-056`, `number_theory-001`. These are exact 2-for-2 swaps, so the
+  matched-slot completion difference is zero.
+- The 300 s budget is the binding constraint: half of each arm timed out.
+- Tool use: **ON 10/40 episodes** — `math_compute` 16 call sites,
+  `math_grep` 9, `math_lean_check` 4, `math_pdf_index_search` 2,
+  `math_search` 3, `math_status` 1. OFF used **0** math tools (2 `question`,
+  2 `skill` calls). Tools were used on a minority of tasks and produced neither
+  a correctness nor a completion difference.
+- Cost: CLI-reported, incomplete. ON **$0.07986582** known for 10/40;
+  OFF **$0.01594791** known for 1/40. Not comparable totals.
+
+### IMO interpretation
+
+A perfect null on this sample: identical correctness and completion, no
+condition-only win, and 50% timeouts in both arms. The benchmark is too slow or
+too hard for this model/budget at 300 s; the plugin neither helps nor harms on
+the 20 completed tasks. A future IMO run needs a larger timeout or a
+completion-aware protocol before it can test the plugin.
+
 ## Other tracks
 
 | Track | State |
 |---|---|
 | Clean two-task smoke | 2/2 both; ON used `math_compute`; OFF used no tools |
-| IMO-AnswerBench v2 | 400 tasks, 40-task pilot; capture running |
-| MathConstruct | 121 tasks, 20-task pilot; validator bridge: 2 positives accepted, 2 negatives rejected; no model run |
+| IMO-AnswerBench v2 | 400 tasks, 40-task pilot complete; see above |
+| MathConstruct | 121 tasks, 20-task pilot running with validator receipts; bridge controls 2 positive / 2 negative |
 | ProofNet-Verified | 367 Lean 4.34.0 tasks, 20-task pilot, 367 unverified controls; checker not bound |
-| ArXivMath | 103 closed-book tasks, 20-task pilot; no model run |
+| ArXivMath | 103 closed-book tasks, 20-task pilot queued after MathConstruct |
 | Comparator | 8 tasks; real run blocked (Comparator/landrun/lean4export absent) |
-| Tool tests | `v5:test` 188 tests, 165 pass, 0 fail, 23 skipped; syntax 155 files |
+| Tool tests | `v5:test` 245 tests, 222 pass, 0 fail, 23 skipped; syntax 160 files |
 
 ## Caveats
 
