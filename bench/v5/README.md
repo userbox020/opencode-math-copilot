@@ -9,13 +9,14 @@ are separate from the completed v4 real-use studies and do not replace them.
 | Track | Path | What it measures | Status |
 |---|---|---|---|
 | External runner | `bench/v5/external/` | Paired ON/OFF execution, deterministic grading, reporting | 28 tests passing |
+| Analysis | `bench/v5/external/analyze.mjs` | Tool attribution, paired correctness/completion, bootstrap, timeout overlap | 7 tests passing |
 | MathArena 2026 pack | `bench/v5/packs/matharena-2026/` | AIME/HMMT/BRUMO/SMT exact answers | 146 tasks; 40-task pilot |
 | IMO-AnswerBench v2 pack | `bench/v5/packs/imo-answerbench-v2/` | 400 short-answer olympiad problems | 400 tasks; 40-task pilot |
-| MathConstruct pack | `bench/v5/packs/mathconstruct/` | Construction problems with executable validators | 121 tasks; 20-task pilot; validators not run (missing Python deps) |
+| MathConstruct pack | `bench/v5/packs/mathconstruct/` | Construction problems with executable validators | 121 tasks; 20-task pilot; validator bridge + capture/parse runner (50 tests); 2 positives accepted, 2 negatives rejected |
 | ProofNet-Verified pack | `bench/v5/packs/proofnet-verified/` | Lean proving (367 tasks, Lean 4.34.0) | 367 tasks; 20-task pilot; 367 unverified controls; checker not yet bound |
 | ArXivMath pack | `bench/v5/packs/arxivmath/` | Paper-derived exact answers (closed-book) | 103 tasks; 20-task pilot |
 | Comparator pack | `bench/v5/comparator/` | Retrieval-assisted reproduction with Comparator | 8 tasks; real run blocked (Comparator/landrun/lean4export absent) |
-| Tool conformance | `bench/v5/tool-tests/` | SymPy, diagnostics, retrieval, checker coverage | 188 tests in `v5:test`, 23 skipped |
+| Tool conformance | `bench/v5/tool-tests/` | SymPy, diagnostics, retrieval, checker coverage | 245 tests in `v5:test`, 222 pass, 23 skipped |
 
 ## Clean benchmark workspace
 
