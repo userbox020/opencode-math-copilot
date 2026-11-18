@@ -1,20 +1,54 @@
+// Find a matching wrapper brace without treating JSON string contents as TeX.
+function closingBrace(text, start) {
+  let depth = 0, quoted = false;
+  for (let i = start; i < text.length; i++) {
+    const char = text[i];
+    if (quoted && char === '\\') { i++; continue; }
+    if (char === '"') { quoted = !quoted; continue; }
+    if (quoted) continue;
+    if (char === '{') depth++;
+    if (char === '}' && --depth === 0) return i;
+  }
+  return -1;
+}
+
+// Remove only array delimiter sizing, outside JSON strings.
+function stripSizing(text) {
+  let result = '', quoted = false;
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    if (quoted && char === '\\') {
+      result += text.slice(i, i + 2); i++; continue;
+    }
+    if (char === '"') quoted = !quoted;
+    if (!quoted && char === '\\') {
+      const sizing = /^(?:\\left(?=\s*\[)|\\right(?=\s*\]))/.exec(text.slice(i));
+      if (sizing) { i += sizing[0].length - 1; continue; }
+    }
+    result += char;
+  }
+  return result;
+}
+
 // Strip only whole-payload wrappers. Never rewrite tuples, fractions, sets,
 // expressions, or string contents into a different mathematical construction.
 function unwrap(source) {
   let text = source.trim(), previous;
   do {
     previous = text;
+    text = text.replace(/^\\displaystyle(?![a-zA-Z])\s*/, '');
     for (const [open, close] of [
       ['$$', '$$'], ['$', '$'], ['\\[', '\\]'], ['\\(', '\\)'],
-      ['\\boxed{', '}'], ['\\fbox{', '}'],
+      ['\\boxed{', '}'], ['\\fbox{', '}'], ['\\text{', '}'],
     ]) {
       if (text.startsWith(open) && text.endsWith(close) && text.length >= open.length + close.length) {
+        if (close === '}' && closingBrace(text, open.length - 1) !== text.length - 1) continue;
         text = text.slice(open.length, -close.length).trim();
         break;
       }
     }
   } while (text !== previous);
-  return text;
+  return stripSizing(text);
 }
 
 const failure = reason => ({ status: 'unparseable', value: null, reason });

@@ -21,6 +21,11 @@ const cases = [
   ['display boxed', String.raw`FINAL: \[\boxed{[[1],[2]]}\]`, [[1], [2]]],
   ['double dollar', String.raw`FINAL: $$\boxed{3}$$`, 3],
   ['inline wrapper', String.raw`FINAL: \("1/3"\)`, '1/3'],
+  ['boxed graph', String.raw`FINAL: \boxed{[[1,2,3], [[1,2],[1,3]]]}`, [[1, 2, 3], [[1, 2], [1, 3]]]],
+  ['display style and sizing', String.raw`FINAL: $\displaystyle \boxed{\left[1,\left[2\right]\right]}$`, [1, [2]]],
+  ['text wrapper', String.raw`FINAL: \(\text{\boxed{[1,2]}}\)`, [1, 2]],
+  ['boxed object with quoted braces', String.raw`FINAL: \boxed{{"a":[1],"label":"} { \" end"}}`, { a: [1], label: '} { " end' }],
+  ['sizing string preserved', String.raw`FINAL: \boxed{["\\left[", "\\right]"]}`, [String.raw`\left[`, String.raw`\right]`]],
   ['string wrappers preserved', String.raw`FINAL: "$\\boxed{literal}$"`, String.raw`$\boxed{literal}$`],
   ['empty FINAL followed by JSON fence', 'FINAL:\n```json\n[1]\n```', [1]],
   ['last FINAL', 'FINAL: [1]\nCorrection\nFINAL: [2]', [2]],
@@ -33,6 +38,12 @@ for (const [name, text, value] of cases) {
 }
 for (const [name, text] of [
   ['prose', 'The desired graph exists.'],
+  ['prose construction', 'FINAL: Take three vertices and join vertex 1 to vertices 2 and 3.'],
+  ['boxed prose', String.raw`FINAL: \boxed{\text{Take a star graph}}`],
+  ['unbalanced box', String.raw`FINAL: \boxed{[[1],[2]]`],
+  ['extra closing brace', String.raw`FINAL: \boxed{[1]}}`],
+  ['multiple boxes', String.raw`FINAL: \boxed{[1]}\boxed{[2]}`],
+  ['text cannot concatenate numbers', String.raw`FINAL: [1\text{2}]`],
   ['malformed', 'FINAL: [1,]'],
   ['tuple', String.raw`FINAL: $\boxed{(1,2)}$`],
   ['comma list', String.raw`FINAL: $\boxed{1,2,3}$`],
@@ -62,7 +73,9 @@ const fixture = (id = 'fixture') => ({
   schema: 'math-bench-task/v1', benchmark: 'mathconstruct', id,
   prompt: 'Construct an example.\nFINAL: <answer>',
   answer: 'SECRET_REFERENCE_ANSWER',
-  grading: { type: 'validator', validator: 'SECRET_VALIDATOR', answer_format: 'SECRET_FORMAT_EXAMPLE' },
+  grading: { type: 'validator', validator: 'SECRET_VALIDATOR',
+    answer_format: String.raw`Last line: FINAL: <answer>. Format the final output as $\boxed{[vertices, edges]}$. For example, $\boxed{[[1,2,3], [[1, 2], [1, 3]]]}$.` },
+  validation: { expected: 'SECRET_VALIDATION' },
   metadata: { parameters: ['n'], original_parameters: { n: 3 }, hidden: 'SECRET_METADATA' },
 });
 const receipt = (status = 'accepted', tag = 'CORRECT', taskId = 'fixture') => ({
@@ -135,8 +148,9 @@ test('condition mapping clears inherited switches case-insensitively without mut
   assert.throws(() => pluginEnvironment('other', inherited), /condition/);
 });
 
-test('both conditions use identical exact prompt and never leak evaluator fields', () => {
+test('both conditions append the required format exactly once and never leak evaluator fields', () => {
   const calls = [];
+  const expectedPrompt = `${fixture().prompt}\n\nRequired answer format:\n${fixture().grading.answer_format}`;
   for (const condition of ['plugin-on', 'plugin-off']) {
     const result = study({ condition }, {
       runner(executable, args, options) {
@@ -154,7 +168,10 @@ test('both conditions use identical exact prompt and never leak evaluator fields
       },
     });
     const episode = result.episodes[0];
-    assert.equal(episode.prompt_sha256, sha256(fixture().prompt));
+    assert.equal(episode.prompt_sha256, sha256(expectedPrompt));
+    assert.equal(result.manifest.schedule[0].prompt_sha256, sha256(expectedPrompt));
+    const plan = JSON.parse(result.io.files.get(path.join(outside, 'fresh', 'plan.json')));
+    assert.equal(plan.schedule[0].prompt_sha256, sha256(expectedPrompt));
     assert.equal(episode.exploratory, true);
     assert.equal(episode.status, 'completed');
     assert.equal(episode.validation_status, 'accepted');
@@ -168,9 +185,11 @@ test('both conditions use identical exact prompt and never leak evaluator fields
       assert.ok(result.io.files.has(path.join(outside, 'fresh', file)));
     }
   }
-  assert.deepEqual(calls[0].args, ['run', '--model', 'provider/model', '--format', 'json', '--standalone', '--', fixture().prompt]);
+  assert.deepEqual(calls[0].args, ['run', '--model', 'provider/model', '--format', 'json', '--standalone', '--', expectedPrompt]);
   assert.deepEqual(calls[0].args, calls[1].args);
   for (const call of calls) {
+    assert.equal(call.args.at(-1).split(fixture().grading.answer_format).length - 1, 1);
+    assert.equal(call.args.at(-1).split('Required answer format:\n').length - 1, 1);
     assert.equal(call.options.cwd, workspace);
     assert.equal(call.options.timeout, 300000);
     assert.equal(call.options.shell, false);
@@ -178,6 +197,19 @@ test('both conditions use identical exact prompt and never leak evaluator fields
   }
   assert.equal(calls[0].options.env.MATH_TOOLKIT_DISABLE, undefined);
   assert.equal(calls[1].options.env.MATH_TOOLKIT_DISABLE, '1');
+});
+
+test('empty answer format leaves the task prompt unchanged', () => {
+  const task = fixture();
+  task.grading.answer_format = '';
+  const result = study({}, {
+    io: memoryIO([task]),
+    runner: (_executable, args) => {
+      assert.equal(args.at(-1), task.prompt);
+      return capture('FINAL: [1]');
+    },
+  });
+  assert.equal(result.episodes[0].prompt_sha256, sha256(task.prompt));
 });
 
 for (const status of ['accepted', 'rejected', 'unavailable']) {

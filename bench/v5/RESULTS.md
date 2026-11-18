@@ -195,6 +195,17 @@ completion-aware protocol before it can test the plugin.
 | Comparator | 8 tasks; real run blocked (Comparator/landrun/lean4export absent) |
 | Tool tests | `v5:test` 245 tests, 222 pass, 0 fail, 23 skipped; syntax 160 files |
 
+## MathConstruct format correction
+
+The first MathConstruct pilot was stopped after two episodes. The runner sent
+only the problem text, while the pack stores the required upstream answer
+format in `grading.answer_format` (for example, `FINAL: \boxed{[vertices,
+edges]}`). Both answers were prose and correctly classified `unparseable`. The
+two episodes are preserved as **format-invalid** and are not pooled with any
+corrected run. The runner now appends `grading.answer_format` to the prompt and
+the parser accepts `\boxed{...}` JSON; a corrected 20-task pilot is the next
+run.
+
 ## Caveats
 
 - Exploratory, one model/seed/repeat; no confirmatory claim.

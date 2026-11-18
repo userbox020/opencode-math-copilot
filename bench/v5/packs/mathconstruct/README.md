@@ -43,11 +43,12 @@ or run validators during extraction. Unsupported statement derivations remain
 templates with `needs_parameters: true`, explanatory errors, and pilot exclusion.
 Original values are never filled from a generated variant or a results log.
 
-The prompt is only the resolved statement plus the requested `FINAL:` suffix.
-Source URLs, original solutions, formatting examples, and validator bodies are
-not appended. Upstream answer-format instructions remain in `grading`, outside
-the prompt; callers should not blindly append them as task text because some
-contain worked examples. Published statement examples are retained in the full
+The stored `task.prompt` is only the resolved statement plus the requested
+`FINAL:` suffix. Upstream answer-format instructions remain in
+`grading.answer_format`; the validator runner appends them at dispatch, including
+their formatting examples. Sending a pack prompt without its required format is
+**format-invalid**. Source URLs, original solutions, and validator bodies are not
+appended. Published statement examples are retained in the full
 pack but conservatively excluded from the pilot. Literal original answers are
 checked for overlap without executing solution-generating expressions; such
 overlaps are also pilot-ineligible. This is a provenance/leakage safeguard, not
@@ -109,11 +110,17 @@ with the available Python 3.11 because it does not import the benchmark.
 ## Capture → JSON parse → validator runner
 
 `run-validator.mjs` is an opt-in **exploratory, not confirmatory** model runner.
-It submits only the exact `task.prompt`, identically in both conditions; answers,
-parameters, validator references, and format examples are not appended. Plugin-off
+It submits `task.prompt` plus, when `grading.answer_format` is a nonempty string,
+exactly `\n\nRequired answer format:\n${answer_format}`, identically in both
+conditions. Answers, validation data, parameters, and validator references are
+not appended; the answer-format instructions and their examples are. Plugin-off
 sets `MATH_TOOLKIT_DISABLE=1`; plugin-on clears inherited disable/toolset switches
 case-insensitively. This is the external runner's condition mechanism, not a
 guarantee that all other plugins or retrieval paths are absent.
+
+The existing two episodes from the first pilot omitted these required format
+instructions. They are **format-invalid and must not be pooled** with corrected
+runs. They have not been rerun or modified by this fix.
 
 CLI:
 
@@ -137,7 +144,7 @@ node bench/v5/packs/mathconstruct/run-validator.mjs --tasks bench/v5/packs/mathc
 ```
 
 The model transport is `opencode run --model ... --format json --standalone --
-<exact-prompt>` without a shell. The existing `validator/bridge.mjs` calls
+<effective-prompt>` without a shell. The existing `validator/bridge.mjs` calls
 `validator/validate.py` after capture, with a 10-second process timeout. Python
 defaults to `python` unless `MATHCONSTRUCT_PYTHON` is set. No dependencies are
 installed automatically. Validators execute trusted local Python, not a sandbox.
@@ -145,7 +152,9 @@ installed automatically. Validators execute trusted local Python, not a sandbox.
 `parseFinalAnswer(text, {answerFormat})` returns `{status, value, reason}`.
 It accepts JSON from the last explicit `FINAL:` line, the last JSON/unlabelled
 code fence, or a complete trailing array/object. Whole `$...$`, `$$...$$`,
-`\(...\)`, `\[...\]`, `\boxed{...}`, and `\fbox{...}` wrappers are stripped.
+`\(...\)`, `\[...\]`, balanced `\boxed{...}`, `\fbox{...}`, and `\text{...}`
+wrappers are stripped, along with leading `\displaystyle` and array-delimiter
+`\left`/`\right` sizing outside JSON strings.
 Nested arrays, objects, numbers, and strings retain their JSON structure.
 An explicit malformed `FINAL:` is not replaced with an earlier example.
 Format metadata is not used as an answer source. Tuples, bare comma lists,
@@ -153,13 +162,13 @@ symbolic expressions, malformed JSON, unsafe integer values, and non-finite
 numbers are not repaired or guessed.
 
 **Free-form constructions can be unparseable; never count unparseable as
-incorrect.** In particular, the existing prompts request `FINAL: <answer>`,
-not necessarily JSON, and are intentionally unchanged. Exact fraction strings
+incorrect.** The stored prompts are unchanged, but the runner now supplies their
+required answer formats. Non-JSON constructions remain unsupported. Exact fraction strings
 can pass through to the bridge; LaTeX fractions and arbitrary-size JSON integers
 cannot be safely interpreted by this parser.
 
 Outputs include a pre-dispatch `plan.json`, final `manifest.json`, and
-`episodes/*.json` with raw capture, prompt hash, final text, usage, duration,
+`episodes/*.json` with raw capture, effective prompt hash, final text, usage, duration,
 capture status, parsed value, and typed validator receipt. Validation counts
 remain separate:
 
@@ -175,7 +184,7 @@ There are no automatic retries, resumes, or fallback models. These counts
 measure construction-checker outcomes, not proof quality or mathematical accuracy
 improvement from the plugin.
 
-### Runner verification (2026-11-17)
+### Runner verification (2026-11-18)
 
 ```powershell
 node --test bench/v5/packs/mathconstruct/tests/validator-runner.test.mjs
@@ -183,7 +192,7 @@ node --check bench/v5/packs/mathconstruct/parse-answer.mjs
 node --check bench/v5/packs/mathconstruct/run-validator.mjs
 ```
 
-**50 passed, 0 failed, 0 skipped**; both syntax checks passed. Default tests use
+**62 passed, 0 failed, 0 skipped**; both syntax checks passed. Default tests use
 in-memory filesystems and injected model/bridge processes: no Python or model
 is required, and no real benchmark episode is dispatched.
 

@@ -10,6 +10,12 @@ import { parseFinalAnswer } from './parse-answer.mjs';
 
 export { pluginEnvironment };
 
+function effectivePrompt(task) {
+  const answerFormat = task.grading.answer_format;
+  return task.prompt + (typeof answerFormat === 'string' && answerFormat.length
+    ? `\n\nRequired answer format:\n${answerFormat}` : '');
+}
+
 function readValidatorTasks(file, io) {
   const bytes = io.readFileSync(file);
   const tasks = JSON.parse(bytes.toString('utf8'));
@@ -81,10 +87,10 @@ export function runStudy(options, dependencies = {}) {
     timeout_ms: timeoutMs, validator_timeout_ms: 10000,
     started_at: new Date(started).toISOString(),
     plugin_env: { MATH_TOOLKIT_DISABLE: env.MATH_TOOLKIT_DISABLE ?? null, MATH_TOOLKIT_TOOLSET: env.MATH_TOOLKIT_TOOLSET ?? null },
-    protocol: { retries: 0, fallback: false, resume: false, prompt: 'exact task.prompt', transport: 'single argv after --' },
+    protocol: { retries: 0, fallback: false, resume: false, prompt: 'task.prompt plus nonempty grading.answer_format', transport: 'single argv after --' },
     schedule: tasks.map((task, index) => ({
       episode_id: `t${index + 1}-r1`, benchmark: task.benchmark, task_id: task.id, repeat: 1,
-      prompt_sha256: sha256(task.prompt),
+      prompt_sha256: sha256(effectivePrompt(task)),
     })),
   };
   writeJSON(io, path.join(out, 'plan.json'), plan);
@@ -93,7 +99,7 @@ export function runStudy(options, dependencies = {}) {
     const begin = now();
     let result;
     try {
-      result = runner(executable, ['run', '--model', model, '--format', 'json', '--standalone', '--', task.prompt], {
+      result = runner(executable, ['run', '--model', model, '--format', 'json', '--standalone', '--', effectivePrompt(task)], {
         cwd: workspace, env: { ...env }, shell: false, windowsHide: true,
         encoding: 'utf8', timeout: timeoutMs, maxBuffer: 64 * 1024 * 1024,
       });
