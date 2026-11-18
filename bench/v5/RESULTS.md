@@ -1,9 +1,9 @@
 # v5 external math benchmarks — results
 
-**Status: MathArena 40-task pilot complete; IMO-AnswerBench capture running;
-formal and comparator tracks are pack-only or blocked. Exploratory, not
-confirmatory.** One model, one repeat, one seed, deterministic graders. No
-causal or general mathematical-accuracy claim follows.
+**Status: MathArena, IMO, MathConstruct and ArXivMath pilots complete; ProofNet
+and Comparator are pack-only or blocked. Exploratory, not confirmatory.** One
+model, one repeat, one seed, deterministic graders. No causal or general
+mathematical-accuracy claim follows.
 
 ## Clean benchmark workspace
 
@@ -183,6 +183,35 @@ completion-aware protocol before it can test the plugin.
 - The ON arm used tools on a minority of tasks (11/40 and 10/40), so both
   benchmarks are mostly no-tool comparisons.
 
+## ArXivMath — 20-task closed-book pilot
+
+Tasks: 20 (five per competition), closed-book; no source papers supplied. Same
+model/conditions/300 s protocol.
+
+| Condition | Scheduled | Completed | Correct | Incorrect | Unparseable | Missing (timeout) | Correct/completed | Correct/scheduled |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| plugin-on | 20 | 3 | 2 | 0 | 1 | 17 | 66.7% | **10.0%** |
+| plugin-off | 20 | 3 | 2 | 0 | 1 | 17 | 66.7% | **10.0%** |
+
+Paired: **2 both, 0 ON-only, 0 OFF-only, 0 neither, 18 ungraded**;
+graded-pair difference **0.00%**; bootstrap 95% **[0.00%, 0.00%]** over 2 tasks.
+Completion: 2 both (`february-001`, `march-001`), 1 ON-only (`december-001`),
+1 OFF-only (`march-031`), 16 neither; matched-slot completion **0**.
+
+Tool use: **ON 17/20 episodes** — `math_search` 43, `math_grep` 38,
+`math_compute` 27, `math_pdf_index_search` 23, `math_pdf_corpus_search` 9,
+`math_lean_check` 7, `math_manuscript` 3, `math_status` 4, plus
+`math_pdf_search`/`math_lean_search`/`math_doctor`. OFF: 0 math tools
+(1 `question`). The ON arm used retrieval/PDF tools heavily, yet 17/20 episodes
+timed out in both arms; the 300 s budget is the binding constraint.
+
+- This is consistent with tool overhead consuming the budget, but task
+  difficulty and selection are confounded; it is not causal.
+- ON cost **$0.167888244** known for 17/20; OFF **$0.004735764** known for 1/20;
+  coverage differs, so these are not comparable totals.
+- Correct tasks: `february-001`, `march-001` in both arms. The unparseable
+  completion swaps are `december-001` (ON) and `march-031` (OFF).
+
 ## Other tracks
 
 | Track | State |
@@ -191,7 +220,7 @@ completion-aware protocol before it can test the plugin.
 | IMO-AnswerBench v2 | 400 tasks, 40-task pilot complete; see above |
 | MathConstruct | 20-task pilot complete; 4 accepted both, 12/13 unparseable, 4/3 timeouts; format-limited |
 | ProofNet-Verified | 367 Lean 4.34.0 tasks, 20-task pilot, 367 unverified controls; checker not bound |
-| ArXivMath | 20-task pilot running |
+| ArXivMath | 20-task pilot complete; 2 correct both, 17 timeouts each; 10% pass scheduled |
 | Comparator | 8 tasks; real run blocked (Comparator/landrun/lean4export absent) |
 | Tool tests | `v5:test` 281 tests, 258 pass, 0 fail, 23 skipped; syntax 162 files |
 
