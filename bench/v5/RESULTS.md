@@ -1,9 +1,10 @@
 # v5 external math benchmarks — results
 
 **Status: MathArena, IMO, MathConstruct and ArXivMath pilots complete;
-tool-necessity retrieval pilot running. ProofNet and Comparator are pack-only or
-blocked. Exploratory, not confirmatory.** One model, one repeat, one seed,
-deterministic graders. No causal or general mathematical-accuracy claim follows.
+tool-necessity retrieval pilot complete (10/10 ON-only). ProofNet and Comparator
+are pack-only or blocked. Exploratory, not confirmatory.** One model, one repeat,
+one seed, deterministic graders. No causal or general mathematical-accuracy
+claim follows.
 
 ## Clean benchmark workspace
 
@@ -218,26 +219,30 @@ timed out in both arms; the 300 s budget is the binding constraint.
 - Correct tasks: `february-001`, `march-001` in both arms. The unparseable
   completion swaps are `december-001` (ON) and `march-031` (OFF).
 
-## Tool-necessity retrieval — first ON-only win
+## Tool-necessity retrieval — decisive positive result
 
 This is the first benchmark where the answer is not derivable from the model's
 knowledge: a specific sentence in an obscure manuscript, with quote/locator
-gold.
+gold. 20 tasks are built; the 10-task pilot was run in both conditions.
 
-One-task smoke (v2 workspace):
+| Condition | Scheduled | Completed | Correct | Incorrect | Missing | Pass/scheduled |
+|---|---:|---:|---:|---:|---:|---:|
+| plugin-on | 10 | 10 | 10 | 0 | 0 | **100%** |
+| plugin-off | 10 | 10 | 0 | 10 | 0 | **0%** |
 
-| Condition | Tools | Result |
-|---|---|---|
-| plugin-on | `math_search`, `math_grep`, `math_manuscript`, `math_pdf_search` | exact quote retrieved; **correct** |
-| plugin-off | none | quote absent; **incorrect** |
+Paired: **10 ON-only, 0 both, 0 OFF-only, 0 neither, 0 ungraded**. The ON share
+among discordant pairs is 100%; exact 95% binomial interval **69.15%–100%**.
+There were no timeouts; 300 s was sufficient.
 
-The ON arm used five retrieval calls, including a path-scoped `math_grep`; the
-quote grader found the whitespace-normalized quote. The OFF arm had no retrieval
-tools and failed. This is the first ON-only win in the v5 suite.
+Tool use: **ON 10/10 episodes** — `math_grep` 68 call sites,
+`math_manuscript` 21, `math_search` 10, `math_status` 5, `math_lean_check` 2,
+`math_pdf_text` 1. OFF used **0** math tools (6 `skill` calls). The one-task
+smoke was consistent: ON correct, OFF incorrect.
 
-A 10-task pilot is running. Do not generalize from one task until it completes;
-the quote grader normalizes whitespace, and locator correctness is a separate
-audit, not a correctness condition.
+This is the first strong ON-only win in the v5 suite. It is a **retrieval-utility**
+result, not a general math-reasoning result: 10 tasks, one model, one repeat,
+local-corpus tasks, whitespace-normalized quote grading, and locator correctness
+audited separately. It is retrieval-assisted reproduction by construction.
 
 ## Other tracks
 
@@ -246,7 +251,7 @@ audit, not a correctness condition.
 | Clean two-task smoke | 2/2 both; ON used `math_compute`; OFF used no tools |
 | IMO-AnswerBench v2 | 400 tasks, 40-task pilot complete; see above |
 | MathConstruct | 20-task pilot complete; 4 accepted both, 12/13 unparseable, 4/3 timeouts; format-limited |
-| Tool-necessity retrieval | 20 tasks; 10-task pilot running; 1/1 smoke ON-only |
+| Tool-necessity retrieval | 20 tasks; 10-task pilot complete; 10 ON-only, 0 both; 100% vs 0% |
 | ProofNet-Verified | 367 Lean 4.34.0 tasks, 20-task pilot, 367 unverified controls; checker not bound |
 | ArXivMath | 20-task pilot complete; 2 correct both, 17 timeouts each; 10% pass scheduled |
 | Comparator | 8 tasks; real run blocked (Comparator/landrun/lean4export absent) |

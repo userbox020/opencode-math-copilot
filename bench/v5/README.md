@@ -13,7 +13,7 @@ are separate from the completed v4 real-use studies and do not replace them.
 | MathArena 2026 pack | `bench/v5/packs/matharena-2026/` | AIME/HMMT/BRUMO/SMT exact answers | 146 tasks; 40-task pilot |
 | IMO-AnswerBench v2 pack | `bench/v5/packs/imo-answerbench-v2/` | 400 short-answer olympiad problems | 400 tasks; 40-task pilot |
 | MathConstruct pack | `bench/v5/packs/mathconstruct/` | Construction problems with executable validators | 121 tasks; 20-task pilot; validator bridge + capture/parse runner (50 tests); 2 positives accepted, 2 negatives rejected |
-| Tool-necessity retrieval pack | `bench/v5/packs/tool-necessity/` | Verbatim quote retrieval from 20 manuscripts; tool-necessary | 20 tasks; 10-task pilot running; 1/1 smoke ON-only |
+| Tool-necessity retrieval pack | `bench/v5/packs/tool-necessity/` | Verbatim quote retrieval from 20 manuscripts; tool-necessary | 20 tasks; 10-task pilot complete; 10 ON-only, 0 both; 100% vs 0% |
 | ProofNet-Verified pack | `bench/v5/packs/proofnet-verified/` | Lean proving (367 tasks, Lean 4.34.0) | 367 tasks; 20-task pilot; 367 unverified controls; checker not yet bound |
 | ArXivMath pack | `bench/v5/packs/arxivmath/` | Paper-derived exact answers (closed-book) | 103 tasks; 20-task pilot |
 | Comparator pack | `bench/v5/comparator/` | Retrieval-assisted reproduction with Comparator | 8 tasks; real run blocked (Comparator/landrun/lean4export absent) |
