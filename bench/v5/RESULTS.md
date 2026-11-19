@@ -1,9 +1,9 @@
 # v5 external math benchmarks — results
 
 **Status: MathArena, IMO, MathConstruct and ArXivMath pilots complete;
-tool-necessity 10/10 vs no-tools, generic-tool baseline running. ProofNet and
-Comparator are pack-only or blocked. Exploratory, not confirmatory.** One model,
-one repeat, one seed, deterministic graders. No causal or general
+tool-necessity 10/10 vs no-tools but 6/10 vs 9/10 with generic tools. ProofNet
+and Comparator are pack-only or blocked. Exploratory, not confirmatory.** One
+model, one repeat, one seed, deterministic graders. No causal or general
 mathematical-accuracy claim follows.
 
 ## Clean benchmark workspace
@@ -219,7 +219,7 @@ timed out in both arms; the 300 s budget is the binding constraint.
 - Correct tasks: `february-001`, `march-001` in both arms. The unparseable
   completion swaps are `december-001` (ON) and `march-031` (OFF).
 
-## Tool-necessity retrieval — tools vs no tools
+## Tool-necessity retrieval — no plugin-specific win
 
 This is the first benchmark where the answer is not derivable from the model's
 knowledge: a specific sentence in an obscure manuscript, with quote/locator
@@ -239,21 +239,35 @@ Tool use: **ON 10/10 episodes** — `math_grep` 68 call sites,
 `math_pdf_text` 1. OFF used **0** math tools (6 `skill` calls). The one-task
 smoke was consistent: ON correct, OFF incorrect.
 
-This is the first strong ON-only win in the v5 suite **against a no-tools
-baseline**. It is a retrieval-utility result, not a general math-reasoning
-result: 10 tasks, one model, one repeat, local-corpus tasks,
-whitespace-normalized quote grading, and locator correctness audited separately.
-It is retrieval-assisted reproduction by construction.
+This was a strong ON-only win **against a no-tools baseline**; the generic
+control below removes the plugin-specific interpretation. It is a
+retrieval-utility comparison, not a general math-reasoning result: 10 tasks, one
+model, one repeat, local-corpus tasks, whitespace-normalized quote grading, and
+locator correctness audited separately.
 
-### Generic-tool control
+### Generic-tool control (decisive)
 
-The 10/10 vs 0/10 above compares **tools vs no tools**. A generic baseline
-workspace gives both arms `read`, `grep`, `glob`, `list` and `find`; ON adds the
-math toolkit. In the one-task control, **OFF also returned the exact quote**
-using `grep`/`glob`/`read`, so the quote is retrievable with ordinary file
-tools. The 10-task generic pilot is running. If OFF also scores 10/10, the
-plugin's advantage is convenience, metadata, or ranking — not retrieval
-capability — and the 10/10 must not be presented as plugin-specific.
+Both arms get `read`, `grep`, `glob`, `list`, `find`; ON adds the math toolkit.
+
+| Condition | Correct | Incorrect | Pass/scheduled |
+|---|---:|---:|---:|
+| plugin-on | 6 | 4 | **60%** |
+| plugin-off | 9 | 1 | **90%** |
+
+Paired: **6 both, 0 ON-only, 3 OFF-only, 1 neither, 0 ungraded**
+(OFF-only: `tool-text-01`, `tool-text-09`, `tool-text-10`; neither:
+`tool-text-08`). ON−OFF correctness is **−30.00%**; task-clustered bootstrap 95%
+**[−60.00%, 0.00%]**; discordant-pair ON share 0% (exact 95% binomial
+0%–70.76%). Tool use: ON 10/10 math use plus 14 `glob`, 23 `grep`, 16 `read`;
+OFF 45 `glob`, 55 `grep`, 54 `read`.
+
+The 10/10 vs 0/10 above was **tools vs no tools**. Against ordinary file tools,
+the plugin does not add text-retrieval value and is 30 pp worse. The ON arm's
+extra manuscript/search calls did not improve exact-quote retrieval;
+`math_manuscript` returns bounded excerpts, and the model may rely on them
+instead of reading the source. This is a **negative** result for
+plugin-specific text retrieval. One model, one repeat, 10 tasks; the interval
+includes zero, but the point estimate is negative and there is no ON-only win.
 
 ## Other tracks
 
@@ -262,7 +276,7 @@ capability — and the 10/10 must not be presented as plugin-specific.
 | Clean two-task smoke | 2/2 both; ON used `math_compute`; OFF used no tools |
 | IMO-AnswerBench v2 | 400 tasks, 40-task pilot complete; see above |
 | MathConstruct | 20-task pilot complete; 4 accepted both, 12/13 unparseable, 4/3 timeouts; format-limited |
-| Tool-necessity retrieval | 20 tasks; 10/10 vs no-tools; generic-tool baseline running |
+| Tool-necessity retrieval | 20 tasks; 10/10 vs no-tools; **6/10 vs 9/10 generic**; negative |
 | ProofNet-Verified | 367 Lean 4.34.0 tasks, 20-task pilot, 367 unverified controls; checker not bound |
 | ArXivMath | 20-task pilot complete; 2 correct both, 17 timeouts each; 10% pass scheduled |
 | Comparator | 8 tasks; real run blocked (Comparator/landrun/lean4export absent) |
@@ -295,6 +309,17 @@ parser, and some tasks timed out. Validator coverage is 4/20 per arm; this is a
 feasibility result, not an accuracy estimate. Tool use (ON): `math_compute` 5,
 `math_lean_check` 5, `math_lean_build` 2, `math_search` 3, `math_grep` 1,
 `math_pdf_corpus_search` 1, `math_doctor` 1 call sites; OFF 0.
+
+## Bottom line
+
+- Contest/reasoning pilots: zero condition-only wins.
+- Text retrieval: 10/10 vs no tools, but **6/10 vs 9/10 with generic
+  grep/read**; the plugin is worse on the fair baseline and has no ON-only win.
+- No measured plugin-specific improvement so far.
+- Untested unique capabilities: PDF extraction (generic read cannot extract PDF
+  text), Lean verification (generic tools cannot check proofs), and Comparator.
+  Test those next against generic baselines; stop adding redundant text-retrieval
+  tools and stop claiming general math gains.
 
 ## Caveats
 
