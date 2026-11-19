@@ -14,6 +14,9 @@ are separate from the completed v4 real-use studies and do not replace them.
 | IMO-AnswerBench v2 pack | `bench/v5/packs/imo-answerbench-v2/` | 400 short-answer olympiad problems | 400 tasks; 40-task pilot |
 | MathConstruct pack | `bench/v5/packs/mathconstruct/` | Construction problems with executable validators | 121 tasks; 20-task pilot; validator bridge + capture/parse runner (50 tests); 2 positives accepted, 2 negatives rejected |
 | Tool-necessity retrieval pack | `bench/v5/packs/tool-necessity/` | Verbatim quote retrieval from 20 manuscripts; tool-necessary | 20 tasks; 10/10 vs no-tools; **6/10 vs 9/10 generic** |
+| PDF tool-necessity pack | `bench/v5/packs/pdf-necessity/` | Page-specific quotes from released PDFs; generic read cannot extract PDF text | 10 tasks; 5-task pilot running; 9 tests |
+| Lean verification pack | `bench/v5/packs/lean-necessity/` | 5 valid + 5 invalid proofs; independent Docker Lean gold | building; 5-task pilot pending |
+| Narrowed-plugin ablation | `bench/v5/packs/tool-necessity/narrow/` | Remove redundant `math_search`/`math_manuscript`/`math_grep`; rerun text-retrieval smoke | building |
 | ProofNet-Verified pack | `bench/v5/packs/proofnet-verified/` | Lean proving (367 tasks, Lean 4.34.0) | 367 tasks; 20-task pilot; 367 unverified controls; checker not yet bound |
 | ArXivMath pack | `bench/v5/packs/arxivmath/` | Paper-derived exact answers (closed-book) | 103 tasks; 20-task pilot |
 | Comparator pack | `bench/v5/comparator/` | Retrieval-assisted reproduction with Comparator | 8 tasks; real run blocked (Comparator/landrun/lean4export absent) |

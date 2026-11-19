@@ -1,0 +1,6 @@
+{
+  "schema": "math-bench-baselines/v1",
+  "benchmark": "lean-necessity",
+  "external": [],
+  "note": "No external baseline or model run is included."
+}

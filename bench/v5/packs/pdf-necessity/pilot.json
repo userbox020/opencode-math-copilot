@@ -1,0 +1,112 @@
+[
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "pdf-necessity",
+    "id": "pdf-text-01",
+    "prompt": "In the released PDF \"Spectral scalar curvature and uniform Urysohn width\", on physical page 3, quote verbatim the sentence explaining the two extra constructions needed beyond the starting partition theorem. Give the exact quote, the PDF path, and the page. Use the PDF text extraction tool if available; do not ask the user.",
+    "answer": "The\nadditional work is to create a quadratic reserve from an unrestricted logarithmic drift and to adapt\nthe local stretching argument to a signed drift.",
+    "grading": {
+      "type": "quote",
+      "answer": "The\nadditional work is to create a quadratic reserve from an unrestricted logarithmic drift and to adapt\nthe local stretching argument to a signed drift.",
+      "note": "Quote the exact extracted sentence and identify the released PDF path and 1-based physical page. Answer preserves PDF extraction whitespace; metadata.line is a page, not a text line."
+    },
+    "metadata": {
+      "source": "openai/math released PDFs (CONTENTS.md)",
+      "license": "Apache-2.0",
+      "kind": "pdf",
+      "manuscript_path": "preprints/Spectral-scalar-curvature-and-uniform-Urysohn-width-October-5-2026/main.pdf",
+      "line": 3,
+      "manuscript_title": "Spectral scalar curvature and uniform Urysohn width",
+      "section": "physical page 3",
+      "quote_sha256": "71b1ead14541d7c9c7d74e137cd6639af266f904d8e61f9e1176061c4b350735"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "pdf-necessity",
+    "id": "pdf-text-02",
+    "prompt": "In the released PDF \"Spectral scalar curvature and Urysohn width in dimension three\", on physical page 3, quote verbatim the sentence explaining why ordinary interior regularity remains applicable where a cut boundary is touched. Give the exact quote, the PDF path, and the page. Use the PDF text extraction tool if available; do not ask the user.",
+    "answer": "A local area-nonincreasing retraction at a cut\nboundary permits full-neighborhood comparisons, so ordinary interior regularity applies even at\nboundary contacts.",
+    "grading": {
+      "type": "quote",
+      "answer": "A local area-nonincreasing retraction at a cut\nboundary permits full-neighborhood comparisons, so ordinary interior regularity applies even at\nboundary contacts.",
+      "note": "Quote the exact extracted sentence and identify the released PDF path and 1-based physical page. Answer preserves PDF extraction whitespace; metadata.line is a page, not a text line."
+    },
+    "metadata": {
+      "source": "openai/math released PDFs (CONTENTS.md)",
+      "license": "Apache-2.0",
+      "kind": "pdf",
+      "manuscript_path": "preprints/Spectral-scalar-curvature-and-Urysohn-width-in-dimension-three-October-5-2026/spectral-urysohn-three-manifolds.pdf",
+      "line": 3,
+      "manuscript_title": "Spectral scalar curvature and Urysohn width in dimension three",
+      "section": "physical page 3",
+      "quote_sha256": "85a34c9e639e8a11a51777ad368f61b8e01c0002f83423451242ea8e9af79c93"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "pdf-necessity",
+    "id": "pdf-text-03",
+    "prompt": "In the released PDF \"A Codimension-One Bound for the Singular Set of a Stationary Integral Varifold\", on physical page 3, quote verbatim the sentence explaining the two failures that the moment conclusions must prevent when removing a reference graph. Give the exact quote, the PDF path, and the page. Use the PDF text extraction tool if available; do not ask the user.",
+    "answer": "Both moment conclusions are needed: subtracting\na reference graph must neither remove the entire limit nor leave an arbitrary translation in it.",
+    "grading": {
+      "type": "quote",
+      "answer": "Both moment conclusions are needed: subtracting\na reference graph must neither remove the entire limit nor leave an arbitrary translation in it.",
+      "note": "Quote the exact extracted sentence and identify the released PDF path and 1-based physical page. Answer preserves PDF extraction whitespace; metadata.line is a page, not a text line."
+    },
+    "metadata": {
+      "source": "openai/math released PDFs (CONTENTS.md)",
+      "license": "Apache-2.0",
+      "kind": "pdf",
+      "manuscript_path": "preprints/A-Codimension-One-Bound-for-the-Singular-Set-of-a-Stationary-Integral-Varifold-October-5-2026/varifold-singular-dimension.pdf",
+      "line": 3,
+      "manuscript_title": "A Codimension-One Bound for the Singular Set of a Stationary Integral Varifold",
+      "section": "physical page 3",
+      "quote_sha256": "50d1b60995354e96ab6cbd3127b2c4b307e18a30955252206f9dd5804ca85ab7"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "pdf-necessity",
+    "id": "pdf-text-04",
+    "prompt": "In the released PDF \"Hamiltonian Fixed Points Below the Stable Morse Number in Dimension Twenty-Two\", on physical page 3, quote verbatim the sentence explaining how comparing primary multiplicities degree by degree changes the generator savings. Give the exact quote, the PDF path, and the page. Use the PDF text extraction tool if available; do not ask the user.",
+    "answer": "Taking the maximum of the two primary multiplicities in each degree then gives\ndifferent savings in the number of generators.",
+    "grading": {
+      "type": "quote",
+      "answer": "Taking the maximum of the two primary multiplicities in each degree then gives\ndifferent savings in the number of generators.",
+      "note": "Quote the exact extracted sentence and identify the released PDF path and 1-based physical page. Answer preserves PDF extraction whitespace; metadata.line is a page, not a text line."
+    },
+    "metadata": {
+      "source": "openai/math released PDFs (CONTENTS.md)",
+      "license": "Apache-2.0",
+      "kind": "pdf",
+      "manuscript_path": "preprints/Hamiltonian-Fixed-Points-Below-the-Stable-Morse-Number-in-Dimension-Twenty-Two-October-5-2026/hamiltonian-fixed-points-below-stable-morse-number.pdf",
+      "line": 3,
+      "manuscript_title": "Hamiltonian Fixed Points Below the Stable Morse Number in Dimension Twenty-Two",
+      "section": "physical page 3",
+      "quote_sha256": "75163e3e8a35410a93e922fd6c9b38ded8ccbd12c87b6a645c1c15bfe43e0bcd"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "pdf-necessity",
+    "id": "pdf-text-05",
+    "prompt": "In the released PDF \"Sharpness of the Cyclic Integral Floer Bound Below the Stable Morse Number\", on physical page 3, quote verbatim the sentence explaining where the source and target sit in the cyclic grading and what happens to the reverse differential. Give the exact quote, the PDF path, and the page. Use the PDF text extraction tool if available; do not ask the user.",
+    "answer": "In\nthe cyclic grading the source and target lie in the two opposite parities, with the reverse differential\nzero.",
+    "grading": {
+      "type": "quote",
+      "answer": "In\nthe cyclic grading the source and target lie in the two opposite parities, with the reverse differential\nzero.",
+      "note": "Quote the exact extracted sentence and identify the released PDF path and 1-based physical page. Answer preserves PDF extraction whitespace; metadata.line is a page, not a text line."
+    },
+    "metadata": {
+      "source": "openai/math released PDFs (CONTENTS.md)",
+      "license": "Apache-2.0",
+      "kind": "pdf",
+      "manuscript_path": "preprints/Sharpness-of-the-Cyclic-Integral-Floer-Bound-Below-the-Stable-Morse-Number-October-5-2026/sharp-cyclic-integral-floer-bound-below-stable-morse-number.pdf",
+      "line": 3,
+      "manuscript_title": "Sharpness of the Cyclic Integral Floer Bound Below the Stable Morse Number",
+      "section": "physical page 3",
+      "quote_sha256": "18c2c4bcd16865e1cd6ccf4b3b067836c74a4dbf6473ceead0c72dfb08fb9e5f"
+    }
+  }
+]

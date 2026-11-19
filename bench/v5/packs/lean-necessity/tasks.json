@@ -1,0 +1,182 @@
+[
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "lean-necessity",
+    "id": "lean-valid-01",
+    "prompt": "Evaluate the supplied Lean file, not whether the stated theorem has some other proof.\n\nImports: Mathlib.\n\nAllowed axioms (transitive dependencies): propext, Quot.sound, Classical.choice.\n\nTheorem declaration to evaluate: Submission.claim.\n\nStated theorem (interpreted in a fresh Mathlib environment, before the supplied file):\n\n```lean\n(1 : Nat) + 1 = 2\n```\n\nFull Lean file:\n\n```lean\nimport Mathlib\n\nnamespace Submission\ntheorem claim : (1 : Nat) + 1 = 2 := by\n  norm_num\nend Submission\n```\n\nIs this a valid proof of the stated theorem under Mathlib and the allowed axioms? Answer exactly VALID or INVALID on the final line.",
+    "answer": "VALID",
+    "grading": {
+      "type": "exact",
+      "answer": "VALID",
+      "note": "The file compiles, the declaration proves the independently stated target, and its transitive axioms are all allowed."
+    },
+    "metadata": {
+      "source": "Original synthetic Lean fixtures for lean-necessity.",
+      "license": "CC0-1.0",
+      "kind": "lean",
+      "review_note": "Evaluate the specified declaration against the separately stated target and transitive axiom allowlist."
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "lean-necessity",
+    "id": "lean-valid-02",
+    "prompt": "Evaluate the supplied Lean file, not whether the stated theorem has some other proof.\n\nImports: Mathlib.\n\nAllowed axioms (transitive dependencies): propext, Quot.sound, Classical.choice.\n\nTheorem declaration to evaluate: Submission.claim.\n\nStated theorem (interpreted in a fresh Mathlib environment, before the supplied file):\n\n```lean\n∀ n : Nat, n + 0 = n\n```\n\nFull Lean file:\n\n```lean\nimport Mathlib\n\nnamespace Submission\ntheorem claim : ∀ n : Nat, n + 0 = n := by\n  intro n\n  simp\nend Submission\n```\n\nIs this a valid proof of the stated theorem under Mathlib and the allowed axioms? Answer exactly VALID or INVALID on the final line.",
+    "answer": "VALID",
+    "grading": {
+      "type": "exact",
+      "answer": "VALID",
+      "note": "The file compiles, the declaration proves the independently stated target, and its transitive axioms are all allowed."
+    },
+    "metadata": {
+      "source": "Original synthetic Lean fixtures for lean-necessity.",
+      "license": "CC0-1.0",
+      "kind": "lean",
+      "review_note": "Evaluate the specified declaration against the separately stated target and transitive axiom allowlist."
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "lean-necessity",
+    "id": "lean-valid-03",
+    "prompt": "Evaluate the supplied Lean file, not whether the stated theorem has some other proof.\n\nImports: Mathlib.\n\nAllowed axioms (transitive dependencies): propext, Quot.sound, Classical.choice.\n\nTheorem declaration to evaluate: Submission.claim.\n\nStated theorem (interpreted in a fresh Mathlib environment, before the supplied file):\n\n```lean\n∀ xs : List Nat, xs.reverse.reverse = xs\n```\n\nFull Lean file:\n\n```lean\nimport Mathlib\n\nnamespace Submission\ntheorem claim : ∀ xs : List Nat, xs.reverse.reverse = xs := by\n  intro xs\n  simp\nend Submission\n```\n\nIs this a valid proof of the stated theorem under Mathlib and the allowed axioms? Answer exactly VALID or INVALID on the final line.",
+    "answer": "VALID",
+    "grading": {
+      "type": "exact",
+      "answer": "VALID",
+      "note": "The file compiles, the declaration proves the independently stated target, and its transitive axioms are all allowed."
+    },
+    "metadata": {
+      "source": "Original synthetic Lean fixtures for lean-necessity.",
+      "license": "CC0-1.0",
+      "kind": "lean",
+      "review_note": "Evaluate the specified declaration against the separately stated target and transitive axiom allowlist."
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "lean-necessity",
+    "id": "lean-valid-04",
+    "prompt": "Evaluate the supplied Lean file, not whether the stated theorem has some other proof.\n\nImports: Mathlib.\n\nAllowed axioms (transitive dependencies): propext, Quot.sound, Classical.choice.\n\nTheorem declaration to evaluate: Submission.claim.\n\nStated theorem (interpreted in a fresh Mathlib environment, before the supplied file):\n\n```lean\n∀ s : Set Nat, s ∩ s = s\n```\n\nFull Lean file:\n\n```lean\nimport Mathlib\n\nnamespace Submission\ntheorem claim : ∀ s : Set Nat, s ∩ s = s := by\n  intro s\n  ext x\n  simp\nend Submission\n```\n\nIs this a valid proof of the stated theorem under Mathlib and the allowed axioms? Answer exactly VALID or INVALID on the final line.",
+    "answer": "VALID",
+    "grading": {
+      "type": "exact",
+      "answer": "VALID",
+      "note": "The file compiles, the declaration proves the independently stated target, and its transitive axioms are all allowed."
+    },
+    "metadata": {
+      "source": "Original synthetic Lean fixtures for lean-necessity.",
+      "license": "CC0-1.0",
+      "kind": "lean",
+      "review_note": "Evaluate the specified declaration against the separately stated target and transitive axiom allowlist."
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "lean-necessity",
+    "id": "lean-valid-05",
+    "prompt": "Evaluate the supplied Lean file, not whether the stated theorem has some other proof.\n\nImports: Mathlib.\n\nAllowed axioms (transitive dependencies): propext, Quot.sound, Classical.choice.\n\nTheorem declaration to evaluate: Submission.claim.\n\nStated theorem (interpreted in a fresh Mathlib environment, before the supplied file):\n\n```lean\n∀ P Q : Prop, P ∧ Q → Q ∧ P\n```\n\nFull Lean file:\n\n```lean\nimport Mathlib\n\nnamespace Submission\ntheorem claim : ∀ P Q : Prop, P ∧ Q → Q ∧ P := by\n  intro P Q h\n  exact ⟨h.2, h.1⟩\nend Submission\n```\n\nIs this a valid proof of the stated theorem under Mathlib and the allowed axioms? Answer exactly VALID or INVALID on the final line.",
+    "answer": "VALID",
+    "grading": {
+      "type": "exact",
+      "answer": "VALID",
+      "note": "The file compiles, the declaration proves the independently stated target, and its transitive axioms are all allowed."
+    },
+    "metadata": {
+      "source": "Original synthetic Lean fixtures for lean-necessity.",
+      "license": "CC0-1.0",
+      "kind": "lean",
+      "review_note": "Evaluate the specified declaration against the separately stated target and transitive axiom allowlist."
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "lean-necessity",
+    "id": "lean-invalid-01",
+    "prompt": "Evaluate the supplied Lean file, not whether the stated theorem has some other proof.\n\nImports: Mathlib.\n\nAllowed axioms (transitive dependencies): propext, Quot.sound, Classical.choice.\n\nTheorem declaration to evaluate: Submission.claim.\n\nStated theorem (interpreted in a fresh Mathlib environment, before the supplied file):\n\n```lean\n∀ n : Nat, n + 0 = n\n```\n\nFull Lean file:\n\n```lean\nimport Mathlib\n\nnamespace Submission\nlemma addition_identity : ∀ n : Nat, n + 0 = n := by\n  sorry\n\ntheorem claim : ∀ n : Nat, n + 0 = n := addition_identity\nend Submission\n```\n\nIs this a valid proof of the stated theorem under Mathlib and the allowed axioms? Answer exactly VALID or INVALID on the final line.",
+    "answer": "INVALID",
+    "grading": {
+      "type": "exact",
+      "answer": "INVALID",
+      "note": "The helper addition_identity uses sorry; Submission.claim transitively depends on the forbidden axiom sorryAx despite compiling and matching the target."
+    },
+    "metadata": {
+      "source": "Original synthetic Lean fixtures for lean-necessity.",
+      "license": "CC0-1.0",
+      "kind": "lean",
+      "review_note": "Evaluate the specified declaration against the separately stated target and transitive axiom allowlist."
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "lean-necessity",
+    "id": "lean-invalid-02",
+    "prompt": "Evaluate the supplied Lean file, not whether the stated theorem has some other proof.\n\nImports: Mathlib.\n\nAllowed axioms (transitive dependencies): propext, Quot.sound, Classical.choice.\n\nTheorem declaration to evaluate: Submission.claim.\n\nStated theorem (interpreted in a fresh Mathlib environment, before the supplied file):\n\n```lean\n∀ n : Nat, n + 0 = n\n```\n\nFull Lean file:\n\n```lean\nimport Mathlib\n\nnamespace Submission\naxiom addition_identity : ∀ n : Nat, n + 0 = n\n\ntheorem claim : ∀ n : Nat, n + 0 = n := addition_identity\nend Submission\n```\n\nIs this a valid proof of the stated theorem under Mathlib and the allowed axioms? Answer exactly VALID or INVALID on the final line.",
+    "answer": "INVALID",
+    "grading": {
+      "type": "exact",
+      "answer": "INVALID",
+      "note": "Submission.claim depends on the explicitly declared Submission.addition_identity axiom, which is outside the allowlist."
+    },
+    "metadata": {
+      "source": "Original synthetic Lean fixtures for lean-necessity.",
+      "license": "CC0-1.0",
+      "kind": "lean",
+      "review_note": "Evaluate the specified declaration against the separately stated target and transitive axiom allowlist."
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "lean-necessity",
+    "id": "lean-invalid-03",
+    "prompt": "Evaluate the supplied Lean file, not whether the stated theorem has some other proof.\n\nImports: Mathlib.\n\nAllowed axioms (transitive dependencies): propext, Quot.sound, Classical.choice.\n\nTheorem declaration to evaluate: Submission.claim.\n\nStated theorem (interpreted in a fresh Mathlib environment, before the supplied file):\n\n```lean\n∀ n : Nat, n + 1 > n\n```\n\nFull Lean file:\n\n```lean\nimport Mathlib\n\nnamespace Submission\ntheorem claim : ∃ n : Nat, n + 1 > n := by\n  exact ⟨0, by decide⟩\nend Submission\n```\n\nIs this a valid proof of the stated theorem under Mathlib and the allowed axioms? Answer exactly VALID or INVALID on the final line.",
+    "answer": "INVALID",
+    "grading": {
+      "type": "exact",
+      "answer": "INVALID",
+      "note": "The declaration proves only an existential statement, not the requested universal statement; the independently typed target witness fails."
+    },
+    "metadata": {
+      "source": "Original synthetic Lean fixtures for lean-necessity.",
+      "license": "CC0-1.0",
+      "kind": "lean",
+      "review_note": "Evaluate the specified declaration against the separately stated target and transitive axiom allowlist."
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "lean-necessity",
+    "id": "lean-invalid-04",
+    "prompt": "Evaluate the supplied Lean file, not whether the stated theorem has some other proof.\n\nImports: Mathlib.\n\nAllowed axioms (transitive dependencies): propext, Quot.sound, Classical.choice.\n\nTheorem declaration to evaluate: Submission.claim.\n\nStated theorem (interpreted in a fresh Mathlib environment, before the supplied file):\n\n```lean\n_root_.Monotone (fun n : Nat => 10 - n)\n```\n\nFull Lean file:\n\n```lean\nimport Mathlib\n\nnamespace Submission\ndef Monotone (f : Nat → Nat) : Prop := ∀ n, f n = f n\n\ntheorem claim : Monotone (fun n : Nat => 10 - n) := by\n  intro n\n  rfl\nend Submission\n```\n\nIs this a valid proof of the stated theorem under Mathlib and the allowed axioms? Answer exactly VALID or INVALID on the final line.",
+    "answer": "INVALID",
+    "grading": {
+      "type": "exact",
+      "answer": "INVALID",
+      "note": "Submission.Monotone shadows Mathlib Monotone with a reflexive identity; the declaration does not prove the independently stated _root_.Monotone target."
+    },
+    "metadata": {
+      "source": "Original synthetic Lean fixtures for lean-necessity.",
+      "license": "CC0-1.0",
+      "kind": "lean",
+      "review_note": "Evaluate the specified declaration against the separately stated target and transitive axiom allowlist."
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "lean-necessity",
+    "id": "lean-invalid-05",
+    "prompt": "Evaluate the supplied Lean file, not whether the stated theorem has some other proof.\n\nImports: Mathlib.\n\nAllowed axioms (transitive dependencies): propext, Quot.sound, Classical.choice.\n\nTheorem declaration to evaluate: Submission.claim.\n\nStated theorem (interpreted in a fresh Mathlib environment, before the supplied file):\n\n```lean\n∀ n : Nat, n + 1 ≤ n\n```\n\nFull Lean file:\n\n```lean\nimport Mathlib\n\nnamespace Submission\ntheorem claim : ∀ n : Nat, n + 1 ≤ n := by\n  intro n\n  omega\nend Submission\n```\n\nIs this a valid proof of the stated theorem under Mathlib and the allowed axioms? Answer exactly VALID or INVALID on the final line.",
+    "answer": "INVALID",
+    "grading": {
+      "type": "exact",
+      "answer": "INVALID",
+      "note": "The reversed inequality is impossible for natural numbers; omega fails in the submitted declaration, so the file does not compile."
+    },
+    "metadata": {
+      "source": "Original synthetic Lean fixtures for lean-necessity.",
+      "license": "CC0-1.0",
+      "kind": "lean",
+      "review_note": "Evaluate the specified declaration against the separately stated target and transitive axiom allowlist."
+    }
+  }
+]
