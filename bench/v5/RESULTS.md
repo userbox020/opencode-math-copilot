@@ -1,10 +1,10 @@
 # v5 external math benchmarks — results
 
 **Status: MathArena, IMO, MathConstruct and ArXivMath pilots complete;
-tool-necessity 10/10 vs no-tools but 6/10 vs 9/10 with generic tools. ProofNet
-and Comparator are pack-only or blocked. Exploratory, not confirmatory.** One
-model, one repeat, one seed, deterministic graders. No causal or general
-mathematical-accuracy claim follows.
+tool-necessity 10/10 vs no-tools but 6/10 vs 9/10 with generic tools; PDF 4/5 vs
+5/5 with generic read. ProofNet and Comparator are pack-only or blocked.
+Exploratory, not confirmatory.** One model, one repeat, one seed, deterministic
+graders. No causal or general mathematical-accuracy claim follows.
 
 ## Clean benchmark workspace
 
@@ -269,6 +269,26 @@ instead of reading the source. This is a **negative** result for
 plugin-specific text retrieval. One model, one repeat, 10 tasks; the interval
 includes zero, but the point estimate is negative and there is no ON-only win.
 
+## PDF tool-necessity — generic read also succeeds
+
+Five page-specific quote tasks from released PDFs; both arms get generic
+`read`/`grep`/`glob`; ON adds the math toolkit.
+
+| Condition | Scheduled | Completed | Correct | Missing | Pass/scheduled |
+|---|---:|---:|---:|---:|---:|
+| plugin-on | 5 | 4 | 4 | 1 | **80%** |
+| plugin-off | 5 | 5 | 5 | 0 | **100%** |
+
+Paired: **4 both, 0 ON-only, 0 OFF-only, 0 neither, 1 ungraded** (ON timeout on
+`pdf-text-05`). Graded-pair difference 0%. Tool use: ON 5/5 math use
+(`math_pdf_text` 5, `math_pdf_search` 5, `math_pdf_index_search` 13,
+`math_pdf_corpus_search` 5, plus `read` 41/`grep` 17/`glob` 28); OFF 0 math
+(`read` 71, `grep` 61, `glob` 45).
+
+The generic `read` tool extracted the PDF text; OFF solved all five tasks. The
+plugin’s PDF tool added no correctness and one timeout. There is no ON-only win;
+PDF extraction is not a plugin-specific capability against this baseline.
+
 ## Other tracks
 
 | Track | State |
@@ -315,11 +335,11 @@ feasibility result, not an accuracy estimate. Tool use (ON): `math_compute` 5,
 - Contest/reasoning pilots: zero condition-only wins.
 - Text retrieval: 10/10 vs no tools, but **6/10 vs 9/10 with generic
   grep/read**; the plugin is worse on the fair baseline and has no ON-only win.
+- PDF: **ON 4/5, OFF 5/5**; generic `read` extracts PDF text, so PDF is not a
+  plugin-specific capability either. One ON timeout.
 - No measured plugin-specific improvement so far.
-- Untested unique capabilities: PDF extraction (generic read cannot extract PDF
-  text), Lean verification (generic tools cannot check proofs), and Comparator.
-  Test those next against generic baselines; stop adding redundant text-retrieval
-  tools and stop claiming general math gains.
+- Only Lean verification and Comparator remain as potentially unique
+  capabilities; both need a fair generic baseline and independent gold.
 
 ## Caveats
 
