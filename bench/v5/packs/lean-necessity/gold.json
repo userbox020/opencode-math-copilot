@@ -1,0 +1,359 @@
+{
+  "schema": "lean-necessity-gold/v1",
+  "status": "verified",
+  "method": "Direct Docker lake env lean with pre-elaborated target witness and #print axioms; no plugin verifier.",
+  "environment": {
+    "image": "opencode-math-lean",
+    "image_id": "sha256:d65d1b70ed3503fb4f0b1caf72474ed05eb54fe7a7560e59488341d3f83f65ed",
+    "volume": "opencode-math-lean",
+    "lean_version": "Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)",
+    "corpus_commit": "4eaee87548250b2682affda7d05d947c05554bae",
+    "mathlib_commit": "d13f23b723b8a846827a245b89c10fc7d3f11612",
+    "lake_manifest_sha256": "cf6105a25d9dca2f166b241d9191bd12c7e13305890dc9c4d0952351cccc0794",
+    "network": "none",
+    "volume_readonly": true,
+    "check_mount_readonly": true,
+    "timeout_ms": 120000
+  },
+  "allowed_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "tasks_sha256": "0cec4cea2267177f0a9cb136da11f73b5e6e118931c5cbdd362048ad12a3231a",
+  "check_count": 10,
+  "checks": [
+    {
+      "id": "lean-valid-01",
+      "imports": [
+        "Mathlib"
+      ],
+      "theorem": "Submission.claim",
+      "expected_type": "(1 : Nat) + 1 = 2",
+      "code": "import Mathlib\n\nnamespace Submission\ntheorem claim : (1 : Nat) + 1 = 2 := by\n  norm_num\nend Submission\n",
+      "code_sha256": "fc359ca3c3f5c1d4423b2b24b7aaaef412d082aa7d48e0ef6bbd1f849415df88",
+      "check_source_sha256": "34c225af7bdcb500dacaf5d5a6dbae9535aa221cb6ba8283f745121d11105337",
+      "execution": {
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "stdout": "'Submission.claim' depends on axioms: [propext]\n'GoldWitness' depends on axioms: [propext]\n",
+        "stderr": "warning: belyi: repository '/work/math/lean/.lake/packages/belyi' has local changes\nwarning: formal-schemes: repository '/work/math/lean/.lake/packages/formal-schemes' has local changes\nwarning: elliptic-curves: repository '/work/math/lean/.lake/packages/elliptic-curves' has local changes\nwarning: tempered-fundamental-groups: repository '/work/math/lean/.lake/packages/tempered-fundamental-groups' has local changes\nwarning: oka: repository '/work/math/lean/.lake/packages/oka' has local changes\nwarning: orbicurve-cores: repository '/work/math/lean/.lake/packages/orbicurve-cores' has local changes\nwarning: pi1: repository '/work/math/lean/.lake/packages/pi1' has local changes\nwarning: heights: repository '/work/math/lean/.lake/packages/heights' has local changes\nwarning: genl: repository '/work/math/lean/.lake/packages/genl' has local changes\nwarning: tate-curves-theta: repository '/work/math/lean/.lake/packages/tate-curves-theta' has local changes\nwarning: iut: repository '/work/math/lean/.lake/packages/iut' has local changes\nwarning: rellich-kondrachov: repository '/work/math/lean/.lake/packages/rellich-kondrachov' has local changes\n"
+      },
+      "assessment": {
+        "verdict": "VALID",
+        "reason_code": "accepted",
+        "reason": "The file compiles, the declaration proves the independently stated target, and its transitive axioms are all allowed.",
+        "submitted_code_compiles": true,
+        "stated_target_matches": true,
+        "target_axioms": [
+          "propext"
+        ],
+        "witness_axioms": [
+          "propext"
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "lean-valid-02",
+      "imports": [
+        "Mathlib"
+      ],
+      "theorem": "Submission.claim",
+      "expected_type": "∀ n : Nat, n + 0 = n",
+      "code": "import Mathlib\n\nnamespace Submission\ntheorem claim : ∀ n : Nat, n + 0 = n := by\n  intro n\n  simp\nend Submission\n",
+      "code_sha256": "9e1956631b0b55271d1abbdd89a12d664faa4a309af44fb94e2f91442c289554",
+      "check_source_sha256": "1caf87a6cc8a6c09418a1adfcd1cb8ec578823c9ba8716384269adf9005bbab4",
+      "execution": {
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "stdout": "'Submission.claim' depends on axioms: [propext]\n'GoldWitness' depends on axioms: [propext]\n",
+        "stderr": "warning: belyi: repository '/work/math/lean/.lake/packages/belyi' has local changes\nwarning: formal-schemes: repository '/work/math/lean/.lake/packages/formal-schemes' has local changes\nwarning: elliptic-curves: repository '/work/math/lean/.lake/packages/elliptic-curves' has local changes\nwarning: tempered-fundamental-groups: repository '/work/math/lean/.lake/packages/tempered-fundamental-groups' has local changes\nwarning: oka: repository '/work/math/lean/.lake/packages/oka' has local changes\nwarning: orbicurve-cores: repository '/work/math/lean/.lake/packages/orbicurve-cores' has local changes\nwarning: pi1: repository '/work/math/lean/.lake/packages/pi1' has local changes\nwarning: heights: repository '/work/math/lean/.lake/packages/heights' has local changes\nwarning: genl: repository '/work/math/lean/.lake/packages/genl' has local changes\nwarning: tate-curves-theta: repository '/work/math/lean/.lake/packages/tate-curves-theta' has local changes\nwarning: iut: repository '/work/math/lean/.lake/packages/iut' has local changes\nwarning: rellich-kondrachov: repository '/work/math/lean/.lake/packages/rellich-kondrachov' has local changes\n"
+      },
+      "assessment": {
+        "verdict": "VALID",
+        "reason_code": "accepted",
+        "reason": "The file compiles, the declaration proves the independently stated target, and its transitive axioms are all allowed.",
+        "submitted_code_compiles": true,
+        "stated_target_matches": true,
+        "target_axioms": [
+          "propext"
+        ],
+        "witness_axioms": [
+          "propext"
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "lean-valid-03",
+      "imports": [
+        "Mathlib"
+      ],
+      "theorem": "Submission.claim",
+      "expected_type": "∀ xs : List Nat, xs.reverse.reverse = xs",
+      "code": "import Mathlib\n\nnamespace Submission\ntheorem claim : ∀ xs : List Nat, xs.reverse.reverse = xs := by\n  intro xs\n  simp\nend Submission\n",
+      "code_sha256": "e3480c44c1062f9fa9e3423178a6e03b1de4559695f5f33f3a86c2520b637d7e",
+      "check_source_sha256": "0607a868835e8c87d09397e8c4f5bd921ff3fec7357eecd8f4fd0b7486a6ec47",
+      "execution": {
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "stdout": "'Submission.claim' depends on axioms: [propext]\n'GoldWitness' depends on axioms: [propext]\n",
+        "stderr": "warning: belyi: repository '/work/math/lean/.lake/packages/belyi' has local changes\nwarning: formal-schemes: repository '/work/math/lean/.lake/packages/formal-schemes' has local changes\nwarning: elliptic-curves: repository '/work/math/lean/.lake/packages/elliptic-curves' has local changes\nwarning: tempered-fundamental-groups: repository '/work/math/lean/.lake/packages/tempered-fundamental-groups' has local changes\nwarning: oka: repository '/work/math/lean/.lake/packages/oka' has local changes\nwarning: orbicurve-cores: repository '/work/math/lean/.lake/packages/orbicurve-cores' has local changes\nwarning: pi1: repository '/work/math/lean/.lake/packages/pi1' has local changes\nwarning: heights: repository '/work/math/lean/.lake/packages/heights' has local changes\nwarning: genl: repository '/work/math/lean/.lake/packages/genl' has local changes\nwarning: tate-curves-theta: repository '/work/math/lean/.lake/packages/tate-curves-theta' has local changes\nwarning: iut: repository '/work/math/lean/.lake/packages/iut' has local changes\nwarning: rellich-kondrachov: repository '/work/math/lean/.lake/packages/rellich-kondrachov' has local changes\n"
+      },
+      "assessment": {
+        "verdict": "VALID",
+        "reason_code": "accepted",
+        "reason": "The file compiles, the declaration proves the independently stated target, and its transitive axioms are all allowed.",
+        "submitted_code_compiles": true,
+        "stated_target_matches": true,
+        "target_axioms": [
+          "propext"
+        ],
+        "witness_axioms": [
+          "propext"
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "lean-valid-04",
+      "imports": [
+        "Mathlib"
+      ],
+      "theorem": "Submission.claim",
+      "expected_type": "∀ s : Set Nat, s ∩ s = s",
+      "code": "import Mathlib\n\nnamespace Submission\ntheorem claim : ∀ s : Set Nat, s ∩ s = s := by\n  intro s\n  ext x\n  simp\nend Submission\n",
+      "code_sha256": "194ca107fe12e7d262a6053b0b7a5c5375c6c3b3bf1d9a45e92900d907826449",
+      "check_source_sha256": "48e2cabce730422bdcdb017667f001ccbe02125d5578650adadece7171f79992",
+      "execution": {
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "stdout": "'Submission.claim' depends on axioms: [propext, Quot.sound]\n'GoldWitness' depends on axioms: [propext, Quot.sound]\n",
+        "stderr": "warning: belyi: repository '/work/math/lean/.lake/packages/belyi' has local changes\nwarning: formal-schemes: repository '/work/math/lean/.lake/packages/formal-schemes' has local changes\nwarning: elliptic-curves: repository '/work/math/lean/.lake/packages/elliptic-curves' has local changes\nwarning: tempered-fundamental-groups: repository '/work/math/lean/.lake/packages/tempered-fundamental-groups' has local changes\nwarning: oka: repository '/work/math/lean/.lake/packages/oka' has local changes\nwarning: orbicurve-cores: repository '/work/math/lean/.lake/packages/orbicurve-cores' has local changes\nwarning: pi1: repository '/work/math/lean/.lake/packages/pi1' has local changes\nwarning: heights: repository '/work/math/lean/.lake/packages/heights' has local changes\nwarning: genl: repository '/work/math/lean/.lake/packages/genl' has local changes\nwarning: tate-curves-theta: repository '/work/math/lean/.lake/packages/tate-curves-theta' has local changes\nwarning: iut: repository '/work/math/lean/.lake/packages/iut' has local changes\nwarning: rellich-kondrachov: repository '/work/math/lean/.lake/packages/rellich-kondrachov' has local changes\n"
+      },
+      "assessment": {
+        "verdict": "VALID",
+        "reason_code": "accepted",
+        "reason": "The file compiles, the declaration proves the independently stated target, and its transitive axioms are all allowed.",
+        "submitted_code_compiles": true,
+        "stated_target_matches": true,
+        "target_axioms": [
+          "Quot.sound",
+          "propext"
+        ],
+        "witness_axioms": [
+          "Quot.sound",
+          "propext"
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "lean-valid-05",
+      "imports": [
+        "Mathlib"
+      ],
+      "theorem": "Submission.claim",
+      "expected_type": "∀ P Q : Prop, P ∧ Q → Q ∧ P",
+      "code": "import Mathlib\n\nnamespace Submission\ntheorem claim : ∀ P Q : Prop, P ∧ Q → Q ∧ P := by\n  intro P Q h\n  exact ⟨h.2, h.1⟩\nend Submission\n",
+      "code_sha256": "edd7f7deb9e1b47b9e3c8846a6c2544a0b09c2946c8808876a393b207040ca7a",
+      "check_source_sha256": "3d34b245aba860555c6804455729b8156af3f42e7e23edff5b8e8f8dbfe563a8",
+      "execution": {
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "stdout": "'Submission.claim' does not depend on any axioms\n'GoldWitness' does not depend on any axioms\n",
+        "stderr": "warning: belyi: repository '/work/math/lean/.lake/packages/belyi' has local changes\nwarning: formal-schemes: repository '/work/math/lean/.lake/packages/formal-schemes' has local changes\nwarning: elliptic-curves: repository '/work/math/lean/.lake/packages/elliptic-curves' has local changes\nwarning: tempered-fundamental-groups: repository '/work/math/lean/.lake/packages/tempered-fundamental-groups' has local changes\nwarning: oka: repository '/work/math/lean/.lake/packages/oka' has local changes\nwarning: orbicurve-cores: repository '/work/math/lean/.lake/packages/orbicurve-cores' has local changes\nwarning: pi1: repository '/work/math/lean/.lake/packages/pi1' has local changes\nwarning: heights: repository '/work/math/lean/.lake/packages/heights' has local changes\nwarning: genl: repository '/work/math/lean/.lake/packages/genl' has local changes\nwarning: tate-curves-theta: repository '/work/math/lean/.lake/packages/tate-curves-theta' has local changes\nwarning: iut: repository '/work/math/lean/.lake/packages/iut' has local changes\nwarning: rellich-kondrachov: repository '/work/math/lean/.lake/packages/rellich-kondrachov' has local changes\n"
+      },
+      "assessment": {
+        "verdict": "VALID",
+        "reason_code": "accepted",
+        "reason": "The file compiles, the declaration proves the independently stated target, and its transitive axioms are all allowed.",
+        "submitted_code_compiles": true,
+        "stated_target_matches": true,
+        "target_axioms": [],
+        "witness_axioms": [],
+        "errors": []
+      }
+    },
+    {
+      "id": "lean-invalid-01",
+      "imports": [
+        "Mathlib"
+      ],
+      "theorem": "Submission.claim",
+      "expected_type": "∀ n : Nat, n + 0 = n",
+      "code": "import Mathlib\n\nnamespace Submission\nlemma addition_identity : ∀ n : Nat, n + 0 = n := by\n  sorry\n\ntheorem claim : ∀ n : Nat, n + 0 = n := addition_identity\nend Submission\n",
+      "code_sha256": "def64ed4886274e297441e88278a24d291b6dfa29f98d7f96ab1650129127c01",
+      "check_source_sha256": "43de3e62c485c1edecf1a8cbb04af50b2098b2c8b139de78413181ca010cdfeb",
+      "execution": {
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "stdout": "/check/Check.lean:6:6: warning: declaration uses `sorry`\n'Submission.claim' depends on axioms: [sorryAx]\n'GoldWitness' depends on axioms: [sorryAx]\n",
+        "stderr": "warning: belyi: repository '/work/math/lean/.lake/packages/belyi' has local changes\nwarning: formal-schemes: repository '/work/math/lean/.lake/packages/formal-schemes' has local changes\nwarning: elliptic-curves: repository '/work/math/lean/.lake/packages/elliptic-curves' has local changes\nwarning: tempered-fundamental-groups: repository '/work/math/lean/.lake/packages/tempered-fundamental-groups' has local changes\nwarning: oka: repository '/work/math/lean/.lake/packages/oka' has local changes\nwarning: orbicurve-cores: repository '/work/math/lean/.lake/packages/orbicurve-cores' has local changes\nwarning: pi1: repository '/work/math/lean/.lake/packages/pi1' has local changes\nwarning: heights: repository '/work/math/lean/.lake/packages/heights' has local changes\nwarning: genl: repository '/work/math/lean/.lake/packages/genl' has local changes\nwarning: tate-curves-theta: repository '/work/math/lean/.lake/packages/tate-curves-theta' has local changes\nwarning: iut: repository '/work/math/lean/.lake/packages/iut' has local changes\nwarning: rellich-kondrachov: repository '/work/math/lean/.lake/packages/rellich-kondrachov' has local changes\n"
+      },
+      "assessment": {
+        "verdict": "INVALID",
+        "reason_code": "sorry-axiom",
+        "reason": "The helper addition_identity uses sorry; Submission.claim transitively depends on the forbidden axiom sorryAx despite compiling and matching the target.",
+        "submitted_code_compiles": true,
+        "stated_target_matches": true,
+        "target_axioms": [
+          "sorryAx"
+        ],
+        "witness_axioms": [
+          "sorryAx"
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "lean-invalid-02",
+      "imports": [
+        "Mathlib"
+      ],
+      "theorem": "Submission.claim",
+      "expected_type": "∀ n : Nat, n + 0 = n",
+      "code": "import Mathlib\n\nnamespace Submission\naxiom addition_identity : ∀ n : Nat, n + 0 = n\n\ntheorem claim : ∀ n : Nat, n + 0 = n := addition_identity\nend Submission\n",
+      "code_sha256": "636b5d1639091be5f876eb2daa9bba98909e13296f25a65c2a63021d7c2d4fc4",
+      "check_source_sha256": "85049d4c888da68acd4bcd1cf265fdd5b1924e0012f6f13216ba79d09829f40b",
+      "execution": {
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "stdout": "'Submission.claim' depends on axioms: [Submission.addition_identity]\n'GoldWitness' depends on axioms: [Submission.addition_identity]\n",
+        "stderr": "warning: belyi: repository '/work/math/lean/.lake/packages/belyi' has local changes\nwarning: formal-schemes: repository '/work/math/lean/.lake/packages/formal-schemes' has local changes\nwarning: elliptic-curves: repository '/work/math/lean/.lake/packages/elliptic-curves' has local changes\nwarning: tempered-fundamental-groups: repository '/work/math/lean/.lake/packages/tempered-fundamental-groups' has local changes\nwarning: oka: repository '/work/math/lean/.lake/packages/oka' has local changes\nwarning: orbicurve-cores: repository '/work/math/lean/.lake/packages/orbicurve-cores' has local changes\nwarning: pi1: repository '/work/math/lean/.lake/packages/pi1' has local changes\nwarning: heights: repository '/work/math/lean/.lake/packages/heights' has local changes\nwarning: genl: repository '/work/math/lean/.lake/packages/genl' has local changes\nwarning: tate-curves-theta: repository '/work/math/lean/.lake/packages/tate-curves-theta' has local changes\nwarning: iut: repository '/work/math/lean/.lake/packages/iut' has local changes\nwarning: rellich-kondrachov: repository '/work/math/lean/.lake/packages/rellich-kondrachov' has local changes\n"
+      },
+      "assessment": {
+        "verdict": "INVALID",
+        "reason_code": "extra-axiom",
+        "reason": "Submission.claim depends on the explicitly declared Submission.addition_identity axiom, which is outside the allowlist.",
+        "submitted_code_compiles": true,
+        "stated_target_matches": true,
+        "target_axioms": [
+          "Submission.addition_identity"
+        ],
+        "witness_axioms": [
+          "Submission.addition_identity"
+        ],
+        "errors": []
+      }
+    },
+    {
+      "id": "lean-invalid-03",
+      "imports": [
+        "Mathlib"
+      ],
+      "theorem": "Submission.claim",
+      "expected_type": "∀ n : Nat, n + 1 > n",
+      "code": "import Mathlib\n\nnamespace Submission\ntheorem claim : ∃ n : Nat, n + 1 > n := by\n  exact ⟨0, by decide⟩\nend Submission\n",
+      "code_sha256": "b98a422f3ce9238a91089721220a7cdd2ceb84793b488bfe30ba2d210e30ea8f",
+      "check_source_sha256": "c27b20864baceee79f4a8cc63c922f7ea31ec751bf94677311ffb9ad5ee553df",
+      "execution": {
+        "status": 1,
+        "signal": null,
+        "error": null,
+        "stdout": "'Submission.claim' does not depend on any axioms\n/check/Check.lean:10:38: error: Type mismatch\n  Submission.claim\nhas type\n  ∃ n, n + 1 > n\nbut is expected to have type\n  GoldExpected\n'GoldWitness' depends on axioms: [sorryAx]\n",
+        "stderr": "warning: belyi: repository '/work/math/lean/.lake/packages/belyi' has local changes\nwarning: formal-schemes: repository '/work/math/lean/.lake/packages/formal-schemes' has local changes\nwarning: elliptic-curves: repository '/work/math/lean/.lake/packages/elliptic-curves' has local changes\nwarning: tempered-fundamental-groups: repository '/work/math/lean/.lake/packages/tempered-fundamental-groups' has local changes\nwarning: oka: repository '/work/math/lean/.lake/packages/oka' has local changes\nwarning: orbicurve-cores: repository '/work/math/lean/.lake/packages/orbicurve-cores' has local changes\nwarning: pi1: repository '/work/math/lean/.lake/packages/pi1' has local changes\nwarning: heights: repository '/work/math/lean/.lake/packages/heights' has local changes\nwarning: genl: repository '/work/math/lean/.lake/packages/genl' has local changes\nwarning: tate-curves-theta: repository '/work/math/lean/.lake/packages/tate-curves-theta' has local changes\nwarning: iut: repository '/work/math/lean/.lake/packages/iut' has local changes\nwarning: rellich-kondrachov: repository '/work/math/lean/.lake/packages/rellich-kondrachov' has local changes\n"
+      },
+      "assessment": {
+        "verdict": "INVALID",
+        "reason_code": "target-mismatch",
+        "reason": "The declaration proves only an existential statement, not the requested universal statement; the independently typed target witness fails.",
+        "submitted_code_compiles": true,
+        "stated_target_matches": false,
+        "target_axioms": [],
+        "witness_axioms": [
+          "sorryAx"
+        ],
+        "errors": [
+          {
+            "line": 10,
+            "column": 38,
+            "message": "Type mismatch"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lean-invalid-04",
+      "imports": [
+        "Mathlib"
+      ],
+      "theorem": "Submission.claim",
+      "expected_type": "_root_.Monotone (fun n : Nat => 10 - n)",
+      "code": "import Mathlib\n\nnamespace Submission\ndef Monotone (f : Nat → Nat) : Prop := ∀ n, f n = f n\n\ntheorem claim : Monotone (fun n : Nat => 10 - n) := by\n  intro n\n  rfl\nend Submission\n",
+      "code_sha256": "29dab5f5c7d59408ee3a8402ed2fa91c501c9bc61b0e845c9b12e780c2fc8a9d",
+      "check_source_sha256": "e978299f139ac759e7daec5e166fe1fae08e4dc46a7220881a4eac0b14e74e9f",
+      "execution": {
+        "status": 1,
+        "signal": null,
+        "error": null,
+        "stdout": "'Submission.claim' does not depend on any axioms\n/check/Check.lean:13:38: error: Type mismatch\n  Submission.claim\nhas type\n  Submission.Monotone fun n => 10 - n\nbut is expected to have type\n  GoldExpected\n'GoldWitness' depends on axioms: [sorryAx]\n",
+        "stderr": "warning: belyi: repository '/work/math/lean/.lake/packages/belyi' has local changes\nwarning: formal-schemes: repository '/work/math/lean/.lake/packages/formal-schemes' has local changes\nwarning: elliptic-curves: repository '/work/math/lean/.lake/packages/elliptic-curves' has local changes\nwarning: tempered-fundamental-groups: repository '/work/math/lean/.lake/packages/tempered-fundamental-groups' has local changes\nwarning: oka: repository '/work/math/lean/.lake/packages/oka' has local changes\nwarning: orbicurve-cores: repository '/work/math/lean/.lake/packages/orbicurve-cores' has local changes\nwarning: pi1: repository '/work/math/lean/.lake/packages/pi1' has local changes\nwarning: heights: repository '/work/math/lean/.lake/packages/heights' has local changes\nwarning: genl: repository '/work/math/lean/.lake/packages/genl' has local changes\nwarning: tate-curves-theta: repository '/work/math/lean/.lake/packages/tate-curves-theta' has local changes\nwarning: iut: repository '/work/math/lean/.lake/packages/iut' has local changes\nwarning: rellich-kondrachov: repository '/work/math/lean/.lake/packages/rellich-kondrachov' has local changes\n"
+      },
+      "assessment": {
+        "verdict": "INVALID",
+        "reason_code": "shadowed-definition",
+        "reason": "Submission.Monotone shadows Mathlib Monotone with a reflexive identity; the declaration does not prove the independently stated _root_.Monotone target.",
+        "submitted_code_compiles": true,
+        "stated_target_matches": false,
+        "target_axioms": [],
+        "witness_axioms": [
+          "sorryAx"
+        ],
+        "errors": [
+          {
+            "line": 13,
+            "column": 38,
+            "message": "Type mismatch"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lean-invalid-05",
+      "imports": [
+        "Mathlib"
+      ],
+      "theorem": "Submission.claim",
+      "expected_type": "∀ n : Nat, n + 1 ≤ n",
+      "code": "import Mathlib\n\nnamespace Submission\ntheorem claim : ∀ n : Nat, n + 1 ≤ n := by\n  intro n\n  omega\nend Submission\n",
+      "code_sha256": "24264e46b02436ffe5529f974ef9e96f33c26be89690f6853205224d2350afc6",
+      "check_source_sha256": "46c6502f22cf498daf3d4f98e0a9d67e8327f5c0b64707597d4547db2faef998",
+      "execution": {
+        "status": 1,
+        "signal": null,
+        "error": null,
+        "stdout": "/check/Check.lean:8:2: error: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a ≥ 0\nwhere\n a := ↑n\n'Submission.claim' depends on axioms: [sorryAx]\n'GoldWitness' depends on axioms: [sorryAx]\n",
+        "stderr": "warning: belyi: repository '/work/math/lean/.lake/packages/belyi' has local changes\nwarning: formal-schemes: repository '/work/math/lean/.lake/packages/formal-schemes' has local changes\nwarning: elliptic-curves: repository '/work/math/lean/.lake/packages/elliptic-curves' has local changes\nwarning: tempered-fundamental-groups: repository '/work/math/lean/.lake/packages/tempered-fundamental-groups' has local changes\nwarning: oka: repository '/work/math/lean/.lake/packages/oka' has local changes\nwarning: orbicurve-cores: repository '/work/math/lean/.lake/packages/orbicurve-cores' has local changes\nwarning: pi1: repository '/work/math/lean/.lake/packages/pi1' has local changes\nwarning: heights: repository '/work/math/lean/.lake/packages/heights' has local changes\nwarning: genl: repository '/work/math/lean/.lake/packages/genl' has local changes\nwarning: tate-curves-theta: repository '/work/math/lean/.lake/packages/tate-curves-theta' has local changes\nwarning: iut: repository '/work/math/lean/.lake/packages/iut' has local changes\nwarning: rellich-kondrachov: repository '/work/math/lean/.lake/packages/rellich-kondrachov' has local changes\n"
+      },
+      "assessment": {
+        "verdict": "INVALID",
+        "reason_code": "compilation-failure",
+        "reason": "The reversed inequality is impossible for natural numbers; omega fails in the submitted declaration, so the file does not compile.",
+        "submitted_code_compiles": false,
+        "stated_target_matches": false,
+        "target_axioms": [
+          "sorryAx"
+        ],
+        "witness_axioms": [
+          "sorryAx"
+        ],
+        "errors": [
+          {
+            "line": 8,
+            "column": 2,
+            "message": "omega could not prove the goal:"
+          }
+        ]
+      }
+    }
+  ]
+}
