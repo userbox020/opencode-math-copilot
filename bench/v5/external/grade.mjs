@@ -113,6 +113,20 @@ export function gradeEpisode(episode, task, { symbolic = symbolicEquivalent } = 
   }
   const gold = task.grading.answer ?? task.answer;
   if (gold === null || gold === undefined) return verdict('unparseable', 'Evaluator gold unavailable');
+  if (task.grading.type === 'quote') {
+    // Retrieval tasks answer with a verbatim quote plus a locator. Search the
+    // whole answer after whitespace normalization; the locator is a separate
+    // audit, not a correctness condition.
+    const normalizeQuote = value => String(value).normalize('NFKC').replace(/\s+/gu, ' ').trim();
+    const expected = normalizeQuote(gold);
+    const text = normalizeQuote(episode.text);
+    if (!expected) return verdict('unparseable', 'Empty quote');
+    if (!text) return verdict('unparseable', 'No answer text');
+    const found = text.includes(expected);
+    return verdict(found ? 'correct' : 'incorrect',
+      found ? 'Whitespace-normalized quote present' : 'Whitespace-normalized quote absent',
+      found ? expected.slice(0, 240) : null);
+  }
   const extracted = extractFinal(episode.text);
   if (!extracted) return verdict('unparseable', 'Final answer not extractable');
   if (task.grading.type === 'integer') {

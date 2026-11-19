@@ -13,10 +13,11 @@ are separate from the completed v4 real-use studies and do not replace them.
 | MathArena 2026 pack | `bench/v5/packs/matharena-2026/` | AIME/HMMT/BRUMO/SMT exact answers | 146 tasks; 40-task pilot |
 | IMO-AnswerBench v2 pack | `bench/v5/packs/imo-answerbench-v2/` | 400 short-answer olympiad problems | 400 tasks; 40-task pilot |
 | MathConstruct pack | `bench/v5/packs/mathconstruct/` | Construction problems with executable validators | 121 tasks; 20-task pilot; validator bridge + capture/parse runner (50 tests); 2 positives accepted, 2 negatives rejected |
+| Tool-necessity retrieval pack | `bench/v5/packs/tool-necessity/` | Verbatim quote retrieval from 20 manuscripts; tool-necessary | 20 tasks; 10-task pilot running; 1/1 smoke ON-only |
 | ProofNet-Verified pack | `bench/v5/packs/proofnet-verified/` | Lean proving (367 tasks, Lean 4.34.0) | 367 tasks; 20-task pilot; 367 unverified controls; checker not yet bound |
 | ArXivMath pack | `bench/v5/packs/arxivmath/` | Paper-derived exact answers (closed-book) | 103 tasks; 20-task pilot |
 | Comparator pack | `bench/v5/comparator/` | Retrieval-assisted reproduction with Comparator | 8 tasks; real run blocked (Comparator/landrun/lean4export absent) |
-| Tool conformance | `bench/v5/tool-tests/` | SymPy, diagnostics, retrieval, checker coverage | 245 tests in `v5:test`, 222 pass, 23 skipped |
+| Tool conformance | `bench/v5/tool-tests/` | SymPy, diagnostics, retrieval, checker coverage | 299 tests in `v5:test`, 276 pass, 23 skipped |
 
 ## Clean benchmark workspace
 
@@ -24,8 +25,11 @@ The main workspace exposes `execute` Code Mode, which includes `fetch`; running
 benchmarks there would allow web/answer retrieval. The first two-task smoke in
 the main workspace was therefore discarded as a measurement of the plugin.
 
-The clean workspace is
-`C:\Users\MiPC\AppData\Local\Temp\opencode\math-bench-env-20261117`:
+The completed pilots used
+`C:\Users\MiPC\AppData\Local\Temp\opencode\math-bench-env-20261117`. That copy
+later lost its plugin entry wrapper and corpus junction; it was rebuilt as
+`...\math-bench-env-v2-20261118` with the same plugin/config. The tool-necessity
+run uses v2; older manifests record the old path and their tool events stand.
 
 - copied math-toolkit plugin; `codemode: true` → `false` so tools are direct;
 - `math` junction to the corpus;
@@ -38,7 +42,9 @@ Probes:
 
 - ON: direct `math_status` completed; no `execute`.
 - Denied: `webfetch`, `shell`, `execute` reported unavailable; no tool events.
-- Tool inventory after denial: math tools plus `question`, `wait_for_user`, `skill`.
+- v2 ON: direct `math_status` completed; the tool-necessity smoke used only math tools.
+- v2 tool inventory: math tools plus `question`/`wait_for_user`/`skill`; these
+  could not be denied without invalidating the config and hiding the math plugin.
 - OFF (`MATH_TOOLKIT_DISABLE=1`): `math_status` → `TOOLS_UNAVAILABLE`; no tool event.
 
 Residual risks: `math_status` prints host/index paths; the corpus junction is

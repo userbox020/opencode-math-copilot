@@ -1,28 +1,34 @@
 # v5 external math benchmarks — results
 
-**Status: MathArena, IMO, MathConstruct and ArXivMath pilots complete; ProofNet
-and Comparator are pack-only or blocked. Exploratory, not confirmatory.** One
-model, one repeat, one seed, deterministic graders. No causal or general
-mathematical-accuracy claim follows.
+**Status: MathArena, IMO, MathConstruct and ArXivMath pilots complete;
+tool-necessity retrieval pilot running. ProofNet and Comparator are pack-only or
+blocked. Exploratory, not confirmatory.** One model, one repeat, one seed,
+deterministic graders. No causal or general mathematical-accuracy claim follows.
 
 ## Clean benchmark workspace
 
 The main workspace exposes Code Mode `execute` (including `fetch`), so the first
-two-task smoke there was discarded as a plugin measurement. The clean workspace
-is `C:\Users\MiPC\AppData\Local\Temp\opencode\math-bench-env-20261117`:
+two-task smoke there was discarded as a plugin measurement.
 
-- copied math toolkit with `codemode:false` (direct tools);
-- `math` junction to the corpus;
-- `oh-my-opencode-slim` present only to register the `opencode-go` route;
-- `webfetch`, `websearch`, `execute`, `bash`, `shell`, `edit`, `write`, `read`,
-  `grep`, `glob`, `ast_grep_*`, `list`, `find`, `lsp`, `task_*`,
-  `external_directory` denied.
+The completed MathArena/IMO/MathConstruct/ArXivMath pilots used
+`C:\Users\MiPC\AppData\Local\Temp\opencode\math-bench-env-20261117`: copied math
+toolkit with `codemode:false`, corpus junction, slim plugin only for the
+`opencode-go` route, and denials for web/execute/shell/read/write/ast-grep/list/
+find/lsp/task/external-directory.
 
-Probes: ON exposes only math tools plus `question`/`wait_for_user`/`skill`;
-`math_status` completes directly; OFF returns `TOOLS_UNAVAILABLE`; web, shell,
-and execute are absent. Residual risks: diagnostics print host paths; the corpus
-junction is writable; `math_reindex`/`math_lean_build` can write; Lean/Docker
-process execution is not an OS sandbox.
+**Workspace note:** that copy later lost its plugin entry wrapper and corpus
+junction, and the model then saw only `question`/`skill`/`wait_for_user`. It was
+rebuilt as `...\math-bench-env-v2-20261118` with the same plugin/config and a
+verified `math_status` direct call. The tool-necessity run uses v2. Earlier
+manifests record the original workspace; their recorded tool events stand and no
+result is rewritten. Invalid `question`/`wait_for_user`/`skill` permission keys
+were also removed: they caused the config to fall back and the math plugin to
+disappear.
+
+Probes (v2): ON `math_status` completes directly; OFF returns
+`TOOLS_UNAVAILABLE`; web/shell/execute are absent. Residual risks: diagnostics
+print host paths; the corpus junction is writable; `math_reindex`/`math_lean_build`
+can write; Lean/Docker process execution is not an OS sandbox.
 
 ## MathArena 2026 — 40-task pilot
 
@@ -212,6 +218,27 @@ timed out in both arms; the 300 s budget is the binding constraint.
 - Correct tasks: `february-001`, `march-001` in both arms. The unparseable
   completion swaps are `december-001` (ON) and `march-031` (OFF).
 
+## Tool-necessity retrieval — first ON-only win
+
+This is the first benchmark where the answer is not derivable from the model's
+knowledge: a specific sentence in an obscure manuscript, with quote/locator
+gold.
+
+One-task smoke (v2 workspace):
+
+| Condition | Tools | Result |
+|---|---|---|
+| plugin-on | `math_search`, `math_grep`, `math_manuscript`, `math_pdf_search` | exact quote retrieved; **correct** |
+| plugin-off | none | quote absent; **incorrect** |
+
+The ON arm used five retrieval calls, including a path-scoped `math_grep`; the
+quote grader found the whitespace-normalized quote. The OFF arm had no retrieval
+tools and failed. This is the first ON-only win in the v5 suite.
+
+A 10-task pilot is running. Do not generalize from one task until it completes;
+the quote grader normalizes whitespace, and locator correctness is a separate
+audit, not a correctness condition.
+
 ## Other tracks
 
 | Track | State |
@@ -219,10 +246,11 @@ timed out in both arms; the 300 s budget is the binding constraint.
 | Clean two-task smoke | 2/2 both; ON used `math_compute`; OFF used no tools |
 | IMO-AnswerBench v2 | 400 tasks, 40-task pilot complete; see above |
 | MathConstruct | 20-task pilot complete; 4 accepted both, 12/13 unparseable, 4/3 timeouts; format-limited |
+| Tool-necessity retrieval | 20 tasks; 10-task pilot running; 1/1 smoke ON-only |
 | ProofNet-Verified | 367 Lean 4.34.0 tasks, 20-task pilot, 367 unverified controls; checker not bound |
 | ArXivMath | 20-task pilot complete; 2 correct both, 17 timeouts each; 10% pass scheduled |
 | Comparator | 8 tasks; real run blocked (Comparator/landrun/lean4export absent) |
-| Tool tests | `v5:test` 281 tests, 258 pass, 0 fail, 23 skipped; syntax 162 files |
+| Tool tests | `v5:test` 299 tests, 276 pass, 0 fail, 23 skipped; syntax 166 files |
 
 ## MathConstruct validator pilot
 

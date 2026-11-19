@@ -1,0 +1,156 @@
+{
+  "schema": "math-bench-baselines/v1",
+  "benchmark": "tool-necessity",
+  "model": "opencode-go/deepseek-v4.1-flash",
+  "external": [],
+  "note": "No published score for this exact model/version was found; use the paired plugin-off arm.",
+  "metadata": {
+    "corpus": "openai/math",
+    "corpus_manifest": "CONTENTS.md",
+    "corpus_manifest_sha256": "d39079f4512d0ce6c969820987983fa89eacc170766f9685b2c70c3a9278bba1",
+    "hash_scope": "Raw CONTENTS.md bytes and the 20 selected TeX/README files only; not a whole-corpus tree hash.",
+    "selected_sources_sha256": "48196a47aa25d474acee00ce291f7f23e974c52b9494dd968fac3f44ec5839cc",
+    "files": [
+      {
+        "manuscript_path": "preprints/A-sharp-entropy-bound-and-the-simplex-inequality-for-isotropic-constants-October-5-2026/build/manuscript/approximation.tex",
+        "family": "101",
+        "source_sha256": "378280bdea478f9228dc68186ed2faebecee7642961cd23c19d05cdf10c175d2",
+        "readme_path": "preprints/A-sharp-entropy-bound-and-the-simplex-inequality-for-isotropic-constants-October-5-2026/README.md",
+        "readme_sha256": "a2f2f13de01ab1d30fe875a531037aae567d0df5f5e0c67c52cf021f66920fdf"
+      },
+      {
+        "manuscript_path": "preprints/The-Unique-Games-Theorem-September-23-2026/build/appendices/finite-consequences.tex",
+        "family": "102",
+        "source_sha256": "1f82297643e8a787870f5eec453e03a20a45e42f0afd21e208db193ceff7c76d",
+        "readme_path": "preprints/The-Unique-Games-Theorem-September-23-2026/README.md",
+        "readme_sha256": "0985936ccf3bc7113b79d553ff2bd8749716059a81b7e3ebb805876168876c2e"
+      },
+      {
+        "manuscript_path": "preprints/Exact-Derandomization-of-Logarithmic-Space-L-equals-RL-equals-BPL-September-23-2026/build/sections/arithmetic.tex",
+        "family": "103",
+        "source_sha256": "cbb925fa3823313f6183d4432ee51dcd841b56e54556321e7d0bc14476f1edbe",
+        "readme_path": "preprints/Exact-Derandomization-of-Logarithmic-Space-L-equals-RL-equals-BPL-September-23-2026/README.md",
+        "readme_sha256": "a6e4fcd80351811ef5f220707086bab4398d898c92bb9e3e480f2d224e5d08cd"
+      },
+      {
+        "manuscript_path": "preprints/Turn-Based-Stochastic-Mean-Payoff-Games-in-Deterministic-Quasipolynomial-Time-October-5-2026/build/build/sections/application.tex",
+        "family": "104",
+        "source_sha256": "4b61cadf17863e950b0b1c2de8c934cb13f9becd27f16bca774f00a6052156b1",
+        "readme_path": "preprints/Turn-Based-Stochastic-Mean-Payoff-Games-in-Deterministic-Quasipolynomial-Time-October-5-2026/README.md",
+        "readme_sha256": "35a01cb29b8692a58a11eaf66185fb8fbf46ec8c2c63adeddf94e560c6200f41"
+      },
+      {
+        "manuscript_path": "preprints/Perfect-completeness-for-2-to-1-games-September-23-2026/build/00-introduction.tex",
+        "family": "105",
+        "source_sha256": "3da0038a0ef284a11da367412378dbb64df9724b481dbf124988817b0c4ba48e",
+        "readme_path": "preprints/Perfect-completeness-for-2-to-1-games-September-23-2026/README.md",
+        "readme_sha256": "6e411d8c488216ebfd9ba1237cd522a4a258d72d7f06dfb803a33b0a8450d72b"
+      },
+      {
+        "manuscript_path": "preprints/Hardness-of-finding-large-independent-sets-in-three-colorable-graphs-September-24-2026/build/source/sections/alignment-proof.tex",
+        "family": "106",
+        "source_sha256": "929eecd1d2981d08f5ac37dfd8c07391c7d08141d516d942dbd0cd627ccc0fd0",
+        "readme_path": "preprints/Hardness-of-finding-large-independent-sets-in-three-colorable-graphs-September-24-2026/README.md",
+        "readme_sha256": "56cd82202ae80ab02b23fd8e1a829432ca61179f84354da63abbfb96a9ebc4cd"
+      },
+      {
+        "manuscript_path": "preprints/Matrix-Multiplication-Nine-Fourths-October-2-2026/build/paper.tex",
+        "family": "107",
+        "source_sha256": "60e3ec55581eca5ecaaf0cdfb686cf1e98ced3c90490c60e937be16704fac93b",
+        "readme_path": "preprints/Matrix-Multiplication-Nine-Fourths-October-2-2026/README.md",
+        "readme_sha256": "1adf414fdf4b136174c5a72fdba7442f715be7edb62274e960cad4d0e298ca34"
+      },
+      {
+        "manuscript_path": "preprints/A-cubic-lower-bound-for-border-determinantal-complexity-of-the-permanent-September-24-2026/build/source/sections/adjugate.tex",
+        "family": "108",
+        "source_sha256": "ad993821a3d3492f993d748f926f105eb1bd821d4a01f9db39abe73a03063034",
+        "readme_path": "preprints/A-cubic-lower-bound-for-border-determinantal-complexity-of-the-permanent-September-24-2026/README.md",
+        "readme_sha256": "816fc5a473b2eb9eb1378e7f9f9c1cd9e6852f21c55bda3d4af01c1b1119a8c7"
+      },
+      {
+        "manuscript_path": "preprints/Integer-multiplication-below-n-log-n-September-23-2026/build/sections/00-introduction.tex",
+        "family": "109",
+        "source_sha256": "6fed8df2b8ad17053e7deca9ff230dfdc16620e5d329d5c20ff61d3b55c43511",
+        "readme_path": "preprints/Integer-multiplication-below-n-log-n-September-23-2026/README.md",
+        "readme_sha256": "c38fc4c105ac95fd42d5a883d966abd952aeb8b2cc9d16755f0bc28b2f65d03d"
+      },
+      {
+        "manuscript_path": "preprints/Squared-logarithmic-randomized-k-server-on-arbitrary-metrics-September-24-2026/build/source/latex/sections/01_introduction.tex",
+        "family": "110",
+        "source_sha256": "ba81f6e91caf729f636a6e1b08cf85b46f570cf487bacb256c6f7e21975ede10",
+        "readme_path": "preprints/Squared-logarithmic-randomized-k-server-on-arbitrary-metrics-September-24-2026/README.md",
+        "readme_sha256": "6a6f78c1a34d50ceb5d5c090574c57afa1873c28c579ad69898133e1714d96cc"
+      },
+      {
+        "manuscript_path": "preprints/One-Sample-Suffices-for-Matroid-Prophet-Inequalities-against-an-Almighty-Adversary-September-23-2026/build/sections/accounting.tex",
+        "family": "111",
+        "source_sha256": "9cce17460bf06994903a8bcc7adfa5fd8ba0be1ebb7e085937272d3899ea969b",
+        "readme_path": "preprints/One-Sample-Suffices-for-Matroid-Prophet-Inequalities-against-an-Almighty-Adversary-September-23-2026/README.md",
+        "readme_sha256": "fc2344e3529d73a1c90b55335cc9cd8b2ac9735e4bd2876af96fd63f7e6de8f5"
+      },
+      {
+        "manuscript_path": "preprints/Beyond-the-Square-Root-Exponent-for-Depth-Three-Boolean-Circuits-September-23-2026/build/latex/sections/00_introduction.tex",
+        "family": "112",
+        "source_sha256": "171e18d966a255a9f82ad2e2dfe69bf81619f60036bf595967dc9fbd8a422acd",
+        "readme_path": "preprints/Beyond-the-Square-Root-Exponent-for-Depth-Three-Boolean-Circuits-September-23-2026/README.md",
+        "readme_sha256": "5d79bc1cc154a7e72ecce4c16383d60b064d03e3ee7213f128e6310b5de87a31"
+      },
+      {
+        "manuscript_path": "preprints/A-Fully-Polynomial-Randomized-Approximation-Scheme-for-Perfect-Matchings-in-General-Graphs-September-23-2026/build/main.tex",
+        "family": "113",
+        "source_sha256": "c451eda605976adedad4f5cd169a0ef5c3ff562e604144d901310ee71253f0eb",
+        "readme_path": "preprints/A-Fully-Polynomial-Randomized-Approximation-Scheme-for-Perfect-Matchings-in-General-Graphs-September-23-2026/README.md",
+        "readme_sha256": "fac927d6dc0236ef82cb4d02bb77c248a932b3d882b1e0ddef10894199db0034"
+      },
+      {
+        "manuscript_path": "preprints/An-FPRAS-for-Common-Integer-Polymatroid-Bases-with-Binary-Capacities-October-5-2026/build/sections/counting.tex",
+        "family": "114",
+        "source_sha256": "c23869f2410663f444e8f3cb1413327a8713f984122af899c3c955da2d5ca4e0",
+        "readme_path": "preprints/An-FPRAS-for-Common-Integer-Polymatroid-Bases-with-Binary-Capacities-October-5-2026/README.md",
+        "readme_sha256": "607ac56ab0eea6335f0d497a8400b570be7e62d4ce073bc1a429fe2329d6e43e"
+      },
+      {
+        "manuscript_path": "preprints/Exact-Uniform-Sampling-of-Contingency-Tables-with-Arbitrary-Margins-September-24-2026/build/sections/algorithms.tex",
+        "family": "115",
+        "source_sha256": "1f6f6f89a3f5c289dcf6bd7af20cf834184d373792becfebaa3d53e69e05562b",
+        "readme_path": "preprints/Exact-Uniform-Sampling-of-Contingency-Tables-with-Arbitrary-Margins-September-24-2026/README.md",
+        "readme_sha256": "787daad35646457806dba020a128c3bbdfc6547242ed24f580883885c503343d"
+      },
+      {
+        "manuscript_path": "preprints/Uniform-Matrix-Hitting-Points-in-Every-Positive-Characteristic-October-4-2026/build/sections/construction.tex",
+        "family": "116",
+        "source_sha256": "ff500919f71d53aa9614d541b6fad8056d557ac2aa40526b13443b98df40d55f",
+        "readme_path": "preprints/Uniform-Matrix-Hitting-Points-in-Every-Positive-Characteristic-October-4-2026/README.md",
+        "readme_sha256": "878dd37ca714e72287da3cb6e48c70d2585f466213c71498f4c9da43caf765ea"
+      },
+      {
+        "manuscript_path": "preprints/Constant-factor-hardness-of-uniform-sparsest-cut-September-24-2026/build/source/sections/00-introduction.tex",
+        "family": "117",
+        "source_sha256": "d15cfe51c3b32f34152d67cf001ff96c5ffe13db4f6f23f3e791c15967092680",
+        "readme_path": "preprints/Constant-factor-hardness-of-uniform-sparsest-cut-September-24-2026/README.md",
+        "readme_sha256": "43b5ac647c7d3bb81dcad096ef4f0abb41a103da62e91a509a42b8c6848bf240"
+      },
+      {
+        "manuscript_path": "preprints/Additive-hardness-and-unbounded-configuration-gaps-in-bin-packing-September-24-2026/build/source/completeness.tex",
+        "family": "118",
+        "source_sha256": "f6a0308911522912dbcebd3f6d5b1ef424af0a33ebf633be5e2f46aad97dddc2",
+        "readme_path": "preprints/Additive-hardness-and-unbounded-configuration-gaps-in-bin-packing-September-24-2026/README.md",
+        "readme_sha256": "05492dacc540f4fc7f9f20dc11a5c5bcadee8d14af077ffb34484e725b6256e7"
+      },
+      {
+        "manuscript_path": "preprints/Sharp-binary-information-contraction-on-the-discrete-cube-September-24-2026/build/main.tex",
+        "family": "119",
+        "source_sha256": "63b2c1a857735c105e6e142a05537804c0da4ce9eb90b6f7de2dc5ccf27be811",
+        "readme_path": "preprints/Sharp-binary-information-contraction-on-the-discrete-cube-September-24-2026/README.md",
+        "readme_sha256": "2fd989d4c55396ed4b5836d6a61b5106e1b9136694c9fda2dff033e72a8b7486"
+      },
+      {
+        "manuscript_path": "preprints/Almost-Linear-Time-Maximum-Cardinality-Matching-in-Sparse-General-Graphs-September-24-2026/build/sections/01-introduction.tex",
+        "family": "120",
+        "source_sha256": "4c7ea14dbafdd4c2eea433bc0e5989d09d81436e0b35e53c7b9a9737a6768739",
+        "readme_path": "preprints/Almost-Linear-Time-Maximum-Cardinality-Matching-in-Sparse-General-Graphs-September-24-2026/README.md",
+        "readme_sha256": "9118f5e14947aaa9b174a8fe8ce95e745ebf63f21e1d84999c89dee950b32b3c"
+      }
+    ]
+  }
+}

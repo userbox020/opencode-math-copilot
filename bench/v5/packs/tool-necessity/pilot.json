@@ -1,0 +1,222 @@
+[
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "tool-necessity",
+    "id": "tool-text-01",
+    "prompt": "In the manuscript \"A sharp entropy bound and the simplex inequality for isotropic constants\", in the section \"Convex approximation with entropy convergence\", quote verbatim the sentence explaining what the elementary tail estimate supplies for the approximation and entropy. Use the raw LaTeX source text, preserving its punctuation and line breaks (including the source newline convention); do not paraphrase or render TeX. Give the exact quote, the file path, and the line number. Use any available manuscript-search or grep tool to locate the source; do not ask the user for the text. If no retrieval tool is available, state that you cannot access the source.",
+    "answer": "The elementary tail estimate below supplies a common integrable bound for\r\nthe approximation, including its entropy integrand.",
+    "grading": {
+      "type": "quote",
+      "answer": "The elementary tail estimate below supplies a common integrable bound for\r\nthe approximation, including its entropy integrand.",
+      "note": "Exact raw-source quote only, including original line breaks. Extract the quoted sentence before exact comparison; report the path and starting line separately. Locator correctness is a separate audit, not mathematical accuracy."
+    },
+    "metadata": {
+      "source": "https://github.com/openai/math/blob/main/preprints/A-sharp-entropy-bound-and-the-simplex-inequality-for-isotropic-constants-October-5-2026/build/manuscript/approximation.tex",
+      "license": "Source manuscript rights apply; license not independently verified.",
+      "kind": "text",
+      "manuscript_path": "preprints/A-sharp-entropy-bound-and-the-simplex-inequality-for-isotropic-constants-October-5-2026/build/manuscript/approximation.tex",
+      "line": 14,
+      "manuscript_title": "A sharp entropy bound and the simplex inequality for isotropic constants",
+      "section": "Convex approximation with entropy convergence",
+      "quote_sha256": "7d48e82f0dc478b376184afe21d284994a173dcf05ab80cead642656b6d635ad"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "tool-necessity",
+    "id": "tool-text-02",
+    "prompt": "In the manuscript \"The Unique Games Theorem\", in the section \"Finite formulations of the consequences\", quote verbatim the sentence explaining which three ingredients the composition specifies. Use the raw LaTeX source text, preserving its punctuation and line breaks (including the source newline convention); do not paraphrase or render TeX. Give the exact quote, the file path, and the line number. Use any available manuscript-search or grep tool to locate the source; do not ask the user for the text. If no retrieval tool is available, state that you cannot access the source.",
+    "answer": "The composition specifies the graph,\r\nthe independent neighbor choices, and the conversion to constraints on distinct\r\nvariables.",
+    "grading": {
+      "type": "quote",
+      "answer": "The composition specifies the graph,\r\nthe independent neighbor choices, and the conversion to constraints on distinct\r\nvariables.",
+      "note": "Exact raw-source quote only, including original line breaks. Extract the quoted sentence before exact comparison; report the path and starting line separately. Locator correctness is a separate audit, not mathematical accuracy."
+    },
+    "metadata": {
+      "source": "https://github.com/openai/math/blob/main/preprints/The-Unique-Games-Theorem-September-23-2026/build/appendices/finite-consequences.tex",
+      "license": "Source manuscript rights apply; license not independently verified.",
+      "kind": "text",
+      "manuscript_path": "preprints/The-Unique-Games-Theorem-September-23-2026/build/appendices/finite-consequences.tex",
+      "line": 12,
+      "manuscript_title": "The Unique Games Theorem",
+      "section": "Finite formulations of the consequences",
+      "quote_sha256": "c0302dbbc25eeaa4a79717dec00b31f791fb320ac47974b0064b06e686bdb67c"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "tool-necessity",
+    "id": "tool-text-03",
+    "prompt": "In the manuscript \"Exact Derandomization of Logarithmic Space: L = RL = BPL\", in the section \"Finite numerical queries with bounded suspended storage\", quote verbatim the sentence explaining how a descriptor-dependent clock overshoot is paid for. Use the raw LaTeX source text, preserving its punctuation and line breaks (including the source newline convention); do not paraphrase or render TeX. Give the exact quote, the file path, and the line number. Use any available manuscript-search or grep tool to locate the source; do not ask the user for the text. If no retrieval tool is available, state that you cannot access the source.",
+    "answer": "An operand clock may\r\nexceed the output clock by an amount proportional to descriptor size;\r\nthe structural term also pays for this overshoot.",
+    "grading": {
+      "type": "quote",
+      "answer": "An operand clock may\r\nexceed the output clock by an amount proportional to descriptor size;\r\nthe structural term also pays for this overshoot.",
+      "note": "Exact raw-source quote only, including original line breaks. Extract the quoted sentence before exact comparison; report the path and starting line separately. Locator correctness is a separate audit, not mathematical accuracy."
+    },
+    "metadata": {
+      "source": "https://github.com/openai/math/blob/main/preprints/Exact-Derandomization-of-Logarithmic-Space-L-equals-RL-equals-BPL-September-23-2026/build/sections/arithmetic.tex",
+      "license": "Source manuscript rights apply; license not independently verified.",
+      "kind": "text",
+      "manuscript_path": "preprints/Exact-Derandomization-of-Logarithmic-Space-L-equals-RL-equals-BPL-September-23-2026/build/sections/arithmetic.tex",
+      "line": 14,
+      "manuscript_title": "Exact Derandomization of Logarithmic Space: L = RL = BPL",
+      "section": "Finite numerical queries with bounded suspended storage",
+      "quote_sha256": "db2ab1cf6ac475ae08a3a8f6876cf4f9d3514be873278b35cab19bc6ba4e673c"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "tool-necessity",
+    "id": "tool-text-04",
+    "prompt": "In the manuscript \"Turn-Based Stochastic Mean-Payoff Games in Deterministic Quasipolynomial Time\", in the section \"Bit complexity and uniformity\", quote verbatim the sentence explaining the two remaining obligations concerning integer widths and local computations. Use the raw LaTeX source text, preserving its punctuation and line breaks (including the source newline convention); do not paraphrase or render TeX. Give the exact quote, the file path, and the line number. Use any available manuscript-search or grep tool to locate the source; do not ask the user for the text. If no retrieval tool is available, state that you cannot access the source.",
+    "answer": "It remains to show that the potentially large integer widths do not\r\nproduce a large recursion tree, and that every local computation has\r\npolynomial bit cost.",
+    "grading": {
+      "type": "quote",
+      "answer": "It remains to show that the potentially large integer widths do not\r\nproduce a large recursion tree, and that every local computation has\r\npolynomial bit cost.",
+      "note": "Exact raw-source quote only, including original line breaks. Extract the quoted sentence before exact comparison; report the path and starting line separately. Locator correctness is a separate audit, not mathematical accuracy."
+    },
+    "metadata": {
+      "source": "https://github.com/openai/math/blob/main/preprints/Turn-Based-Stochastic-Mean-Payoff-Games-in-Deterministic-Quasipolynomial-Time-October-5-2026/build/build/sections/application.tex",
+      "license": "Source manuscript rights apply; license not independently verified.",
+      "kind": "text",
+      "manuscript_path": "preprints/Turn-Based-Stochastic-Mean-Payoff-Games-in-Deterministic-Quasipolynomial-Time-October-5-2026/build/build/sections/application.tex",
+      "line": 179,
+      "manuscript_title": "Turn-Based Stochastic Mean-Payoff Games in Deterministic Quasipolynomial Time",
+      "section": "Bit complexity and uniformity",
+      "quote_sha256": "03cd4e1cd877a03fc7c94daad309f80505fd9398d3fe0264ce32be92e22bbe86"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "tool-necessity",
+    "id": "tool-text-05",
+    "prompt": "In the manuscript \"Perfect completeness for 2-to-1 games\", in the section \"Historical context and ingredients\", quote verbatim the sentence explaining the remaining obstacle after the cited Label Cover hardness result. Use the raw LaTeX source text, preserving its punctuation and line breaks (including the source newline convention); do not paraphrase or render TeX. Give the exact quote, the file path, and the line number. Use any available manuscript-search or grep tool to locate the source; do not ask the user for the text. If no retrieval tool is available, state that you cannot access the source.",
+    "answer": "The remaining issue was to make soundness arbitrarily small while retaining\r\nboth perfect completeness and two-element fibers.",
+    "grading": {
+      "type": "quote",
+      "answer": "The remaining issue was to make soundness arbitrarily small while retaining\r\nboth perfect completeness and two-element fibers.",
+      "note": "Exact raw-source quote only, including original line breaks. Extract the quoted sentence before exact comparison; report the path and starting line separately. Locator correctness is a separate audit, not mathematical accuracy."
+    },
+    "metadata": {
+      "source": "https://github.com/openai/math/blob/main/preprints/Perfect-completeness-for-2-to-1-games-September-23-2026/build/00-introduction.tex",
+      "license": "Source manuscript rights apply; license not independently verified.",
+      "kind": "text",
+      "manuscript_path": "preprints/Perfect-completeness-for-2-to-1-games-September-23-2026/build/00-introduction.tex",
+      "line": 57,
+      "manuscript_title": "Perfect completeness for 2-to-1 games",
+      "section": "Historical context and ingredients",
+      "quote_sha256": "0704f58a845558fb15509773e18af81278394c215bf5e563b06c8cbe34d5c89a"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "tool-necessity",
+    "id": "tool-text-06",
+    "prompt": "In the manuscript \"Hardness of finding large independent sets in three-colorable graphs\", in the section \"Proof of distributional alignment\", quote verbatim the sentence explaining which inputs the alignment argument needs and which kinds of hypotheses it avoids. Use the raw LaTeX source text, preserving its punctuation and line breaks (including the source newline convention); do not paraphrase or render TeX. Give the exact quote, the file path, and the line number. Use any available manuscript-search or grep tool to locate the source; do not ask the user for the text. If no retrieval tool is available, state that you cannot access the source.",
+    "answer": "The argument depends only on\r\nthe list bound and the order of the indices; it has no graph-theoretic\r\nor analytic hypotheses.",
+    "grading": {
+      "type": "quote",
+      "answer": "The argument depends only on\r\nthe list bound and the order of the indices; it has no graph-theoretic\r\nor analytic hypotheses.",
+      "note": "Exact raw-source quote only, including original line breaks. Extract the quoted sentence before exact comparison; report the path and starting line separately. Locator correctness is a separate audit, not mathematical accuracy."
+    },
+    "metadata": {
+      "source": "https://github.com/openai/math/blob/main/preprints/Hardness-of-finding-large-independent-sets-in-three-colorable-graphs-September-24-2026/build/source/sections/alignment-proof.tex",
+      "license": "Source manuscript rights apply; license not independently verified.",
+      "kind": "text",
+      "manuscript_path": "preprints/Hardness-of-finding-large-independent-sets-in-three-colorable-graphs-September-24-2026/build/source/sections/alignment-proof.tex",
+      "line": 5,
+      "manuscript_title": "Hardness of finding large independent sets in three-colorable graphs",
+      "section": "Proof of distributional alignment",
+      "quote_sha256": "ac9a9529e33529f024e6c89e9a7034c0ecc440d1a1af03fe191a0bf0e4f17f4b"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "tool-necessity",
+    "id": "tool-text-07",
+    "prompt": "In the manuscript \"An Upper Bound of 9/4 for the Matrix Multiplication Exponent\", in the section \"Introduction\", quote verbatim the sentence explaining which three techniques retain their earlier roles in the tensor construction. Use the raw LaTeX source text, preserving its punctuation and line breaks (including the source newline convention); do not paraphrase or render TeX. Give the exact quote, the file path, and the line number. Use any available manuscript-search or grep tool to locate the source; do not ask the user for the text. If no retrieval tool is available, state that you cannot access the source.",
+    "answer": "Interpolation, counting words\r\nwith prescribed frequencies, and balancing the tensor legs retain\r\ntheir roles from the earlier tensor-power methods.",
+    "grading": {
+      "type": "quote",
+      "answer": "Interpolation, counting words\r\nwith prescribed frequencies, and balancing the tensor legs retain\r\ntheir roles from the earlier tensor-power methods.",
+      "note": "Exact raw-source quote only, including original line breaks. Extract the quoted sentence before exact comparison; report the path and starting line separately. Locator correctness is a separate audit, not mathematical accuracy."
+    },
+    "metadata": {
+      "source": "https://github.com/openai/math/blob/main/preprints/Matrix-Multiplication-Nine-Fourths-October-2-2026/build/paper.tex",
+      "license": "Source manuscript rights apply; license not independently verified.",
+      "kind": "text",
+      "manuscript_path": "preprints/Matrix-Multiplication-Nine-Fourths-October-2-2026/build/paper.tex",
+      "line": 84,
+      "manuscript_title": "An Upper Bound of 9/4 for the Matrix Multiplication Exponent",
+      "section": "Introduction",
+      "quote_sha256": "c523484e6b34cdf45af62551fdc8c836da8d32484d3d0df3cc330cc24b8bd5c5"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "tool-necessity",
+    "id": "tool-text-08",
+    "prompt": "In the manuscript \"A cubic lower bound for border determinantal complexity of the permanent\", in the section \"The adjugate scheme in characteristic two\", quote verbatim the sentence explaining what the fixed distinct-root fiber has already established before the adjugate argument. Use the raw LaTeX source text, preserving its punctuation and line breaks (including the source newline convention); do not paraphrase or render TeX. Give the exact quote, the file path, and the line number. Use any available manuscript-search or grep tool to locate the source; do not ask the user for the text. If no retrieval tool is available, state that you cannot access the source.",
+    "answer": "The fixed distinct-root fiber has established reducedness and a finite\r\nflat, generically separable projection.",
+    "grading": {
+      "type": "quote",
+      "answer": "The fixed distinct-root fiber has established reducedness and a finite\r\nflat, generically separable projection.",
+      "note": "Exact raw-source quote only, including original line breaks. Extract the quoted sentence before exact comparison; report the path and starting line separately. Locator correctness is a separate audit, not mathematical accuracy."
+    },
+    "metadata": {
+      "source": "https://github.com/openai/math/blob/main/preprints/A-cubic-lower-bound-for-border-determinantal-complexity-of-the-permanent-September-24-2026/build/source/sections/adjugate.tex",
+      "license": "Source manuscript rights apply; license not independently verified.",
+      "kind": "text",
+      "manuscript_path": "preprints/A-cubic-lower-bound-for-border-determinantal-complexity-of-the-permanent-September-24-2026/build/source/sections/adjugate.tex",
+      "line": 119,
+      "manuscript_title": "A cubic lower bound for border determinantal complexity of the permanent",
+      "section": "The adjugate scheme in characteristic two",
+      "quote_sha256": "0cb88786ffac8d6a9030dc9351b4bdf4bad847586100fe749b8e5b0b68501c6a"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "tool-necessity",
+    "id": "tool-text-09",
+    "prompt": "In the manuscript \"Integer multiplication below n log n\", in the section \"The two tape operations\", quote verbatim the sentence explaining which operations comprise the transform calculation in the described representation. Use the raw LaTeX source text, preserving its punctuation and line breaks (including the source newline convention); do not paraphrase or render TeX. Give the exact quote, the file path, and the line number. Use any available manuscript-search or grep tool to locate the source; do not ask the user for the text. If no retrieval tool is available, state that you cannot access the source.",
+    "answer": "In this representation, the transform calculation consists of address\r\nrearrangements, signed shifts, and two-point butterfly operations.",
+    "grading": {
+      "type": "quote",
+      "answer": "In this representation, the transform calculation consists of address\r\nrearrangements, signed shifts, and two-point butterfly operations.",
+      "note": "Exact raw-source quote only, including original line breaks. Extract the quoted sentence before exact comparison; report the path and starting line separately. Locator correctness is a separate audit, not mathematical accuracy."
+    },
+    "metadata": {
+      "source": "https://github.com/openai/math/blob/main/preprints/Integer-multiplication-below-n-log-n-September-23-2026/build/sections/00-introduction.tex",
+      "license": "Source manuscript rights apply; license not independently verified.",
+      "kind": "text",
+      "manuscript_path": "preprints/Integer-multiplication-below-n-log-n-September-23-2026/build/sections/00-introduction.tex",
+      "line": 52,
+      "manuscript_title": "Integer multiplication below n log n",
+      "section": "The two tape operations",
+      "quote_sha256": "204c692579ab6861ef507fed3c89964fdb4ffb575fd624f519a1c27633403a0b"
+    }
+  },
+  {
+    "schema": "math-bench-task/v1",
+    "benchmark": "tool-necessity",
+    "id": "tool-text-10",
+    "prompt": "In the manuscript \"Squared-logarithmic randomized k-server on arbitrary metrics\", in the section \"Context and previous work\", quote verbatim the sentence explaining how the focus of this paper differs immediately after the discussion of Coester, Koutsoupias, and Zbysiński. Use the raw LaTeX source text, preserving its punctuation and line breaks (including the source newline convention); do not paraphrase or render TeX. Give the exact quote, the file path, and the line number. Use any available manuscript-search or grep tool to locate the source; do not ask the user for the text. If no retrieval tool is available, state that you cannot access the source.",
+    "answer": "The present paper concerns the different asymptotic behavior made\r\npossible by randomization against oblivious requests.",
+    "grading": {
+      "type": "quote",
+      "answer": "The present paper concerns the different asymptotic behavior made\r\npossible by randomization against oblivious requests.",
+      "note": "Exact raw-source quote only, including original line breaks. Extract the quoted sentence before exact comparison; report the path and starting line separately. Locator correctness is a separate audit, not mathematical accuracy."
+    },
+    "metadata": {
+      "source": "https://github.com/openai/math/blob/main/preprints/Squared-logarithmic-randomized-k-server-on-arbitrary-metrics-September-24-2026/build/source/latex/sections/01_introduction.tex",
+      "license": "Source manuscript rights apply; license not independently verified.",
+      "kind": "text",
+      "manuscript_path": "preprints/Squared-logarithmic-randomized-k-server-on-arbitrary-metrics-September-24-2026/build/source/latex/sections/01_introduction.tex",
+      "line": 51,
+      "manuscript_title": "Squared-logarithmic randomized k-server on arbitrary metrics",
+      "section": "Context and previous work",
+      "quote_sha256": "40ee2694610bf4d5a9eda4fd8c9c23d92593366a31a74b9ec66deccb307d608f"
+    }
+  }
+]

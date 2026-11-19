@@ -28,7 +28,7 @@ export function validateTasks(tasks) {
     if (seen.has(key)) throw new Error(`duplicate task id: ${key}`);
     seen.add(key);
     closedKeys(task.grading, ['type', 'answer', 'tolerance', 'note'], 'grading');
-    if (!['integer', 'exact', 'symbolic'].includes(task.grading.type)) throw new Error('unknown grading type');
+    if (!['integer', 'exact', 'symbolic', 'quote'].includes(task.grading.type)) throw new Error('unknown grading type');
     if (Object.hasOwn(task.grading, 'answer') && !nonempty(task.grading.answer)) throw new Error('invalid grading answer');
     if (Object.hasOwn(task.grading, 'note') && !nonempty(task.grading.note)) throw new Error('invalid grading note');
     if (task.answer !== null && task.grading.answer !== undefined && task.answer !== task.grading.answer) {
@@ -41,10 +41,15 @@ export function validateTasks(tasks) {
     if ((task.grading.tolerance ?? 0) !== 0) throw new Error('nonzero tolerance unsupported by exact graders');
     closedKeys(task.metadata, ['source', 'license', 'contest', 'year', 'problem_number', 'url',
       'problem_type', 'category', 'subcategory', 'difficulty', 'answer_in_prompt', 'review_note', 'source_text',
-      'arxiv_id', 'retrieval_assisted'], 'metadata');
+      'arxiv_id', 'retrieval_assisted', 'kind', 'manuscript_path', 'line', 'manuscript_title', 'section',
+      'quote_sha256'], 'metadata');
     for (const [name, value] of Object.entries(task.metadata)) {
       if (['year', 'problem_number'].includes(name)) {
         if (!Number.isSafeInteger(value)) throw new Error(`invalid metadata.${name}`);
+      } else if (name === 'line') {
+        if (!Number.isSafeInteger(value) || value < 1) throw new Error('invalid metadata.line');
+      } else if (name === 'quote_sha256') {
+        if (typeof value !== 'string' || !/^[a-f0-9]{64}$/.test(value)) throw new Error('invalid metadata.quote_sha256');
       } else if (name === 'problem_type') {
         if (!Array.isArray(value) || !value.length || !value.every(nonempty)) throw new Error('invalid metadata.problem_type');
       } else if (name === 'answer_in_prompt' || name === 'retrieval_assisted') {
