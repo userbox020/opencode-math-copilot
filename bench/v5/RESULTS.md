@@ -2,10 +2,10 @@
 
 **Status: MathArena, IMO, MathConstruct and ArXivMath pilots complete;
 tool-necessity 10/10 vs no-tools but 6/10 vs 9/10 with generic tools; PDF 4/5 vs
-5/5 with generic read; Lean 5/5 vs 4/5 (1 ON-only). ProofNet and Comparator are
-pack-only or blocked. Exploratory, not confirmatory.** One model, one repeat, one
-seed, deterministic graders. No causal or general mathematical-accuracy claim
-follows.
+5/5 with generic read; Lean 5/5 vs 4/5 (1 ON-only); narrowed ablation still
+worse on text retrieval. ProofNet and Comparator are pack-only or blocked.
+Exploratory, not confirmatory.** One model, one repeat, one seed, deterministic
+graders. No causal or general mathematical-accuracy claim follows.
 
 ## Clean benchmark workspace
 
@@ -311,13 +311,21 @@ This is the first capability where the plugin beats generic tools, but it is
 five tasks, one model, one repeat, and the bootstrap interval includes zero. It
 needs replication before being called a stable benefit.
 
-## Narrowed-plugin ablation — contaminated, not a result
+## Narrowed-plugin ablation — still worse with contamination removed
 
-The first smoke is invalid: OFF’s `grep` found the saved ON answer inside the
-workspace output directory. Both quote grades passed, but the comparison is
-contaminated. The narrowed plugin (`math_search`/`math_manuscript`/`math_grep`
-omitted) is built and inventoried; a clean re-run with output outside the
-workspace is pending. Do not claim a fix.
+A fresh narrow2 workspace omitted `math_search`, `math_manuscript`, and
+`math_grep`; both arms had generic `read`/`grep`/`glob`; output was written
+outside the workspace, so no answer could leak between arms.
+
+| Condition | Tools | Result |
+|---|---|---|
+| plugin-on (narrowed) | `math_status`, `math_pdf_corpus_search`, `glob`, `grep`, `read` | **incorrect** (quote absent) |
+| plugin-off (generic) | `grep`, `glob`, `read` | **correct** |
+
+The clean one-task result is negative: removing the three redundant tools did
+**not** restore parity. The remaining math surface still distracted the model
+from the simple grep/read path. The earlier contaminated smoke is superseded.
+No fix claim; the broad tool surface itself appears harmful for text retrieval.
 
 ## Other tracks
 
@@ -370,9 +378,13 @@ feasibility result, not an accuracy estimate. Tool use (ON): `math_compute` 5,
 - **Lean verification: ON 5/5 vs OFF 4/5; one ON-only (`lean-valid-01`); the
   only positive against a fair baseline.** Small sample (5 tasks, one model);
   bootstrap includes zero; replicate before claiming a stable benefit.
-- Product direction: keep Lean/compute/Comparator; remove or de-emphasize the
-  redundant text-retrieval and PDF tools; replicate Lean with more tasks/models.
-  If Lean does not replicate, narrow or retire the plugin.
+- Narrowed ablation: removing `math_search`/`math_manuscript`/`math_grep` did
+  **not** restore parity (clean one-task: ON incorrect, OFF correct); the
+  remaining tool surface still distracts. A checker-only plugin is the next
+  test; otherwise narrow or retire.
+- Product direction: keep Lean/compute/Comparator; remove the broad retrieval/
+  PDF/status surface; replicate Lean with more tasks/models. If Lean does not
+  replicate, narrow or retire the plugin.
 
 ## Caveats
 
