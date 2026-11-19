@@ -2,9 +2,10 @@
 
 **Status: MathArena, IMO, MathConstruct and ArXivMath pilots complete;
 tool-necessity 10/10 vs no-tools but 6/10 vs 9/10 with generic tools; PDF 4/5 vs
-5/5 with generic read. ProofNet and Comparator are pack-only or blocked.
-Exploratory, not confirmatory.** One model, one repeat, one seed, deterministic
-graders. No causal or general mathematical-accuracy claim follows.
+5/5 with generic read; Lean 5/5 vs 4/5 (1 ON-only). ProofNet and Comparator are
+pack-only or blocked. Exploratory, not confirmatory.** One model, one repeat, one
+seed, deterministic graders. No causal or general mathematical-accuracy claim
+follows.
 
 ## Clean benchmark workspace
 
@@ -289,6 +290,35 @@ The generic `read` tool extracted the PDF text; OFF solved all five tasks. The
 plugin’s PDF tool added no correctness and one timeout. There is no ON-only win;
 PDF extraction is not a plugin-specific capability against this baseline.
 
+## Lean verification — the only ON-only win against a fair baseline
+
+Five pilot tasks (valid/invalid mix); both arms get generic `read`/`grep`; ON
+adds the math toolkit.
+
+| Condition | Scheduled | Completed | Correct | Incorrect | Missing | Pass/scheduled |
+|---|---:|---:|---:|---:|---:|---:|
+| plugin-on | 5 | 5 | 5 | 0 | 0 | **100%** |
+| plugin-off | 5 | 5 | 4 | 1 | 0 | **80%** |
+
+Paired: **4 both, 1 ON-only (`lean-valid-01`), 0 OFF-only, 0 neither,
+0 ungraded**. ON−OFF **+20 pp**; bootstrap 95% **[0%, 60%]**; exact
+discordant-pair ON share 100% (95% binomial **2.50%–100%**). ON used
+`math_lean_verify` 15 call sites; OFF used 0 math tools. No timeouts.
+
+The checker corrected a valid proof the reading-only arm got wrong; the hidden
+`sorry`/extra-axiom/redefinition/wrong-target invalid cases were caught by both.
+This is the first capability where the plugin beats generic tools, but it is
+five tasks, one model, one repeat, and the bootstrap interval includes zero. It
+needs replication before being called a stable benefit.
+
+## Narrowed-plugin ablation — contaminated, not a result
+
+The first smoke is invalid: OFF’s `grep` found the saved ON answer inside the
+workspace output directory. Both quote grades passed, but the comparison is
+contaminated. The narrowed plugin (`math_search`/`math_manuscript`/`math_grep`
+omitted) is built and inventoried; a clean re-run with output outside the
+workspace is pending. Do not claim a fix.
+
 ## Other tracks
 
 | Track | State |
@@ -337,9 +367,12 @@ feasibility result, not an accuracy estimate. Tool use (ON): `math_compute` 5,
   grep/read**; the plugin is worse on the fair baseline and has no ON-only win.
 - PDF: **ON 4/5, OFF 5/5**; generic `read` extracts PDF text, so PDF is not a
   plugin-specific capability either. One ON timeout.
-- No measured plugin-specific improvement so far.
-- Only Lean verification and Comparator remain as potentially unique
-  capabilities; both need a fair generic baseline and independent gold.
+- **Lean verification: ON 5/5 vs OFF 4/5; one ON-only (`lean-valid-01`); the
+  only positive against a fair baseline.** Small sample (5 tasks, one model);
+  bootstrap includes zero; replicate before claiming a stable benefit.
+- Product direction: keep Lean/compute/Comparator; remove or de-emphasize the
+  redundant text-retrieval and PDF tools; replicate Lean with more tasks/models.
+  If Lean does not replicate, narrow or retire the plugin.
 
 ## Caveats
 
