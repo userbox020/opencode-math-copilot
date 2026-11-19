@@ -15,7 +15,7 @@ are separate from the completed v4 real-use studies and do not replace them.
 | MathConstruct pack | `bench/v5/packs/mathconstruct/` | Construction problems with executable validators | 121 tasks; 20-task pilot; validator bridge + capture/parse runner (50 tests); 2 positives accepted, 2 negatives rejected |
 | Tool-necessity retrieval pack | `bench/v5/packs/tool-necessity/` | Verbatim quote retrieval from 20 manuscripts; tool-necessary | 20 tasks; 10/10 vs no-tools; **6/10 vs 9/10 generic** |
 | PDF tool-necessity pack | `bench/v5/packs/pdf-necessity/` | Page-specific quotes from released PDFs; generic read cannot extract PDF text | 10 tasks; 5-task pilot complete; ON 4/5, OFF 5/5; no ON-only |
-| Lean verification pack | `bench/v5/packs/lean-necessity/` | 5 valid + 5 invalid proofs; independent Docker Lean gold | 10 tasks; 5-task pilot complete; ON 5/5, OFF 4/5; 1 ON-only |
+| Lean verification pack | `bench/v5/packs/lean-necessity/` | 5 valid + 5 invalid proofs; independent Docker Lean gold | 10 tasks; pilot ON 5/5 vs OFF 4/5; full 10/10 = 10/10; no ON-only; checker unreliable |
 | Narrowed-plugin ablation | `bench/v5/packs/tool-necessity/narrow/` | Remove redundant `math_search`/`math_manuscript`/`math_grep`; rerun text-retrieval smoke | clean one-task smoke: ON incorrect, OFF correct; removing three tools did not restore parity |
 | ProofNet-Verified pack | `bench/v5/packs/proofnet-verified/` | Lean proving (367 tasks, Lean 4.34.0) | 367 tasks; 20-task pilot; 367 unverified controls; checker not yet bound |
 | ArXivMath pack | `bench/v5/packs/arxivmath/` | Paper-derived exact answers (closed-book) | 103 tasks; 20-task pilot |
