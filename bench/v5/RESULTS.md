@@ -3,9 +3,11 @@
 **Status: MathArena, IMO, MathConstruct and ArXivMath pilots complete;
 tool-necessity 10/10 vs no-tools but 6/10 vs 9/10 with generic tools; PDF 4/5 vs
 5/5 with generic read; Lean pilot 5/5 vs 4/5 but full 10/10 = 10/10; narrowed
-ablation still worse on text retrieval. ProofNet and Comparator are pack-only or
-blocked. Exploratory, not confirmatory.** One model, one repeat, one seed,
-deterministic graders. No causal or general mathematical-accuracy claim follows.
+ablation still worse on text retrieval; checker-only text non-harm positive but
+Lean 5/5 = 5/5 with zero verified checker proofs. ProofNet and Comparator are
+pack-only or blocked. Exploratory, not confirmatory.** One model, one repeat, one
+seed, deterministic graders. No causal or general mathematical-accuracy claim
+follows.
 
 ## Clean benchmark workspace
 
@@ -321,6 +323,27 @@ The clean one-task result is negative: removing the three redundant tools did
 from the simple grep/read path. The earlier contaminated smoke is superseded.
 No fix claim; the broad tool surface itself appears harmful for text retrieval.
 
+## Checker-only plugin — text non-harm, no Lean benefit
+
+Workspace `C:\_Work\_bench-stable\checker-20261118` (outside Temp). The copied
+plugin registers exactly `math_lean_verify`, `math_compute`, `math_comparator`
+with `codemode:false`; both arms have generic `read`/`grep`/`glob`.
+
+| Check | plugin-on | plugin-off |
+|---|---|---|
+| Text `tool-text-01` | **correct**, zero math calls (glob 6, grep 2, read 4) | **correct** (glob 4, grep 6, read 3) |
+| Lean 5-task pilot | **5/5** (`math_lean_verify` 16 calls, **0 verified**) | **5/5** (read 2, glob 4, grep 1) |
+
+Paired Lean: **5 both, 0 condition-only**. ON answered by reading; host Lean is
+blocked by the AINTLIB path and the checker's Docker calls failed with exit 125
+or the `npipe` unavailable error. The checker-only surface avoids the text
+distraction, but no checker-assisted verification occurred and no unique Lean
+benefit is demonstrated.
+
+The earlier checker-only attempt in Temp was invalidated when its plugin entry,
+corpus junction, and staged cache disappeared mid-run; it is preserved separately
+and not pooled. See `packs/tool-necessity/checker-only/README.md`.
+
 ## Other tracks
 
 | Track | State |
@@ -375,10 +398,14 @@ feasibility result, not an accuracy estimate. Tool use (ON): `math_compute` 5,
 - Narrowed ablation: removing `math_search`/`math_manuscript`/`math_grep` did
   **not** restore parity (clean one-task: ON incorrect, OFF correct); the
   remaining tool surface still distracts.
+- Checker-only: text smoke **ON correct = OFF correct**, ON used zero math tools
+  (non-harm); Lean **5/5 = 5/5** with 16 checker calls and **0 verified** proofs.
+  The checker adds no demonstrated capability benefit and remains unreliable.
 - **No measured plugin-specific improvement in any tested capability.**
-- Product direction: keep Lean/compute/Comparator; remove the broad retrieval/
-  PDF/status surface; replicate Lean with more tasks/models. If Lean does not
-  replicate, narrow or retire the plugin.
+- Product direction: if shipping, ship the checker-only surface as a low-risk
+  convenience, not as a math-accuracy feature; do not claim general retrieval,
+  PDF, or reasoning gains. Retire the broad toolkit unless the checker is made
+  reliable and replicated.
 
 ## Caveats
 
