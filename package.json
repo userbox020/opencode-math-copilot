@@ -56,6 +56,6 @@
     "@opencode/plugin": "^2.0.29"
   },
   "dependencies": {
-    "unpdf": "^2.1.0"
+    "unpdf": "^2.2.1"
   }
 }
